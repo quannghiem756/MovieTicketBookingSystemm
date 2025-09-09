@@ -1,0 +1,119 @@
+Overall Blueprint: Multi-Channel Movie Ticket Booking System
+
+1. System Objectives
+
+To build a comprehensive, seamless, and user-friendly platform for managing and booking movie tickets. The system allows users to book tickets through multiple channels (Website, Mobile App, Chatbot, in-theater Kiosk) and provides the cinema management with effective operational tools.
+
+2. Core System Components
+
+    User Interface (Frontend):
+
+        Website: A comprehensive and intuitive interface for desktop users.
+
+        Mobile App: An optimized experience for iOS and Android, with features like push notifications and offline ticket saving.
+
+        Chatbot: A virtual assistant integrated into the Website, Facebook Messenger, and Zalo for quick consultations and bookings.
+
+        Self-service Kiosk: Located in the cinema lobby for customers to self-select movies, seats, and process payments.
+
+    Core System (Backend Server):
+
+        API Gateway: A single entry point that orchestrates requests from all user interfaces to the internal microservices.
+
+        Movie Service: Manages movie information (title, director, cast, trailer, poster, age rating).
+
+        Showtime Service: Manages show schedules, theaters, and cinema locations.
+
+        Booking Service: Handles core business logic: seat selection, temporary seat locking, and booking confirmation.
+
+        User Service: Manages user registration, login, transaction history, and loyalty programs.
+
+        Payment Gateway: Integrates with third-party payment partners (e-wallets like MoMo, ZaloPay, VNPay; bank cards).
+
+        Notification Service: Sends emails, SMS, and push notifications for booking confirmations and showtime reminders.
+
+    Database:
+
+        Stores all data related to users, movies, booking history, cinemas, seat maps, etc.
+
+    Admin Panel:
+
+        A dashboard for cinema staff and management to configure the system, manage movies, create showtimes, view revenue reports, and manage promotions.
+
+3. Primary User Flow
+
+Step 1: Discover and Select a Movie
+
+    User Action: The user accesses the system via the Website, Mobile App, or initiates a conversation with the Chatbot.
+
+    System Response:
+
+        Displays lists of "Now Showing" and "Coming Soon" movies with posters and basic information.
+
+        Provides a search tool (by movie title) and filters (by genre, cinema, 2D/3D format).
+
+        When a user selects a movie, the system displays a details page with a synopsis, trailer, and ratings.
+
+Step 2: Select a Showtime
+
+    User Action: On the movie details page, the user clicks the "Buy Ticket" button.
+
+    System Response:
+
+        Prompts the user to select a region/cinema and a date.
+
+        Based on the selection, the system queries the database and displays all available showtimes for that movie, at that cinema, on the selected date. Showtimes are grouped by format (2D, 3D) and language (Subtitled, Dubbed).
+
+Step 3: Select Seats and Concessions
+
+    User Action: The user chooses a specific showtime (e.g., 19:30).
+
+    System Response:
+
+        Displays the seat map for the corresponding theater. Occupied seats are marked.
+
+        When the user selects seats, the system temporarily locks them for a set period (e.g., 5-10 minutes) to prevent double booking.
+
+        Displays an optional screen to purchase concessions (popcorn/drinks combos) with available promotions.
+
+Step 4: Payment
+
+    User Action: The user reviews the order summary and proceeds to payment.
+
+    System Response:
+
+        Displays available payment methods.
+
+        Redirects the user to a third-party payment gateway (MoMo, ZaloPay, etc.) or prompts for card details.
+
+        The system awaits a success or failure response from the payment gateway.
+
+Step 5: Receive Ticket and Cinema Validation
+
+    System Response (upon successful payment):
+
+        Confirms the booking: Changes the status of the seats from "locked" to "sold."
+
+        Generates a ticket: Creates a unique ticket identifier (usually a QR code).
+
+        Delivers the ticket: Sends the ticket information with the QR code to the user via email, in-app notification, or chatbot message.
+
+        Saves the transaction to the user's booking history.
+
+    At the Cinema:
+
+        The user presents the QR code on their phone.
+
+        A ticket validator (staff member) uses a dedicated scanner (or an internal app) to scan the code.
+
+        The system validates the QR code, checking its legitimacy (correct movie, showtime, and not yet used), and grants the customer entry.
+
+4. Secondary Flows (Handling Scenarios)
+
+    Payment Failure: If the system receives an error from the payment gateway, it automatically releases the locked seats, making them available for other users, and informs the user that the transaction failed.
+
+    Ticket Cancellation: If a user requests a cancellation (and the cinema's policy allows it), the system checks the cancellation conditions (e.g., must be 2 hours before the showtime), processes a refund if applicable, and reopens the sold seats on the map.
+
+    Seat Lock Timeout: If the user does not complete the payment within the specified time, the system automatically releases the seats.
+
+    Showtime Update: If an admin changes the schedule (e.g., cancels or adds a show), the system immediately updates all interfaces and sends notifications to affected customers, offering them a ticket exchange or a refund.

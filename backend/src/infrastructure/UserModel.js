@@ -6,7 +6,8 @@ const userSchema = new mongoose.Schema({
   phone: { type: String },
   passwordHash: { type: String, required: true },
   dateOfBirth: { type: Date },
-  loyaltyPoints: { type: Number, default: 0 }
+  loyaltyPoints: { type: Number, default: 0 },
+  role: { type: String, enum: ['admin', 'user'], default: 'user' }
 }, {
   timestamps: true
 });

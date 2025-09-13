@@ -1,8 +1,10 @@
 const UserService = require('../../../application/UserService');
+const AuthService = require('../../../application/AuthService');
 
 class UserController {
-  constructor(userService) {
+  constructor(userService, authService) {
     this.userService = userService;
+    this.authService = authService;
   }
 
   async createUser(req, res) {
@@ -65,13 +67,28 @@ class UserController {
   async authenticateUser(req, res) {
     try {
       const { email, password } = req.body;
-      const user = await this.userService.authenticateUser(email, password);
-      if (!user) {
+      const result = await this.authService.authenticateUser(email, password);
+      console.log('AuthService result:', result); // Debug log
+      if (!result) {
         return res.status(401).json({ error: 'Invalid credentials' });
       }
-      res.json({ message: 'Authentication successful', user });
+      res.json(result);
     } catch (error) {
       res.status(500).json({ error: error.message });
+    }
+  }
+
+  async refreshToken(req, res) {
+    try {
+      const { refreshToken } = req.body;
+      if (!refreshToken) {
+        return res.status(400).json({ error: 'Refresh token is required' });
+      }
+
+      const tokens = await this.authService.refreshTokens(refreshToken);
+      res.json(tokens);
+    } catch (error) {
+      res.status(401).json({ error: 'Invalid refresh token' });
     }
   }
 }

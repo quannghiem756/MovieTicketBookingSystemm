@@ -1,9 +1,11 @@
 // components/MovieCard.js
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from '../contexts/I18nContext';
 
 const MovieCard = ({ movie }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleBookTicket = () => {
     navigate(`/movie/${movie.id}`);
@@ -19,12 +21,12 @@ const MovieCard = ({ movie }) => {
       <div className="p-4">
         <h3 className="text-lg font-semibold mb-2 truncate">{movie.title}</h3>
         <p className="text-gray-600 text-sm mb-1">{movie.rating}</p>
-        <p className="text-gray-600 text-sm mb-3">{movie.duration} mins</p>
+        <p className="text-gray-600 text-sm mb-3">{movie.duration} {t('movieCard.mins')}</p>
         <button 
           onClick={handleBookTicket}
           className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition-colors duration-300"
         >
-          Book Ticket
+          {t('movieCard.bookTicket')}
         </button>
       </div>
     </div>

@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <footer className="bg-gray-800 text-white py-6 mt-auto">
       <div className="container mx-auto px-4 text-center">
-        <p>&copy; 2023 MovieTicketBooking. All rights reserved.</p>
+        <p>&copy; 2025 MovieTicketBooking. All rights reserved.</p>
         <div className="flex justify-center gap-4 mt-2">
           <a href="/about" className="text-blue-400 hover:text-blue-300 transition-colors">About Us</a>
           <a href="/contact" className="text-blue-400 hover:text-blue-300 transition-colors">Contact</a>

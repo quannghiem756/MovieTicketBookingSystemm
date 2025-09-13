@@ -29,8 +29,8 @@ class MovieService {
     return await this.movieRepository.findById(id);
   }
 
-  async getAllMovies() {
-    return await this.movieRepository.findAll();
+  async getAllMovies(page, limit) {
+    return await this.movieRepository.findAll(page, limit);
   }
 
   async getNowShowing() {

@@ -26,10 +26,14 @@ class MovieController {
     }
   }
 
+  //Get all movies with pagination
   async getAllMovies(req, res) {
     try {
-      const movies = await this.movieService.getAllMovies();
-      res.json(movies);
+      let { page = 1, limit = 10 } = req.query;
+      page = parseInt(page);
+      limit = parseInt(limit);
+      const { movies, totalMovies, currentPage, totalPages } = await this.movieService.getAllMovies(page, limit);
+      res.json({ movies, totalMovies, currentPage, totalPages });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

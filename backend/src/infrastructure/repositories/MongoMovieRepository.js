@@ -42,9 +42,12 @@ class MongoMovieRepository extends MovieRepository {
     };
   }
 
-  async findAll() {
-    const movieDocs = await MovieModel.find();
-    return movieDocs.map(doc => ({
+  async findAll(page, limit) {
+    const skip = (page - 1) * limit;
+    const movieDocs = await MovieModel.find().skip(skip).limit(limit);
+    const totalMovies = await MovieModel.countDocuments();
+
+    const movies = movieDocs.map(doc => ({
       id: doc._id,
       title: doc.title,
       director: doc.director,
@@ -58,6 +61,13 @@ class MongoMovieRepository extends MovieRepository {
       releaseDate: doc.releaseDate,
       endDate: doc.endDate
     }));
+
+    return {
+      movies,
+      totalMovies,
+      currentPage: page,
+      totalPages: Math.ceil(totalMovies / limit)
+    };
   }
 
   async update(id, movie) {

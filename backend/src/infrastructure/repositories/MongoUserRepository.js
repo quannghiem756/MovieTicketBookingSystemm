@@ -9,7 +9,8 @@ class MongoUserRepository extends UserRepository {
       phone: user.phone,
       passwordHash: user.passwordHash,
       dateOfBirth: user.dateOfBirth,
-      loyaltyPoints: user.loyaltyPoints
+      loyaltyPoints: user.loyaltyPoints,
+      role: user.role || 'user'
     });
     
     const savedUser = await userDoc.save();
@@ -28,7 +29,8 @@ class MongoUserRepository extends UserRepository {
       phone: userDoc.phone,
       passwordHash: userDoc.passwordHash,
       dateOfBirth: userDoc.dateOfBirth,
-      loyaltyPoints: userDoc.loyaltyPoints
+      loyaltyPoints: userDoc.loyaltyPoints,
+      role: userDoc.role
     };
   }
 
@@ -43,7 +45,8 @@ class MongoUserRepository extends UserRepository {
       phone: userDoc.phone,
       passwordHash: userDoc.passwordHash,
       dateOfBirth: userDoc.dateOfBirth,
-      loyaltyPoints: userDoc.loyaltyPoints
+      loyaltyPoints: userDoc.loyaltyPoints,
+      role: userDoc.role
     };
   }
 
@@ -54,7 +57,8 @@ class MongoUserRepository extends UserRepository {
       phone: user.phone,
       passwordHash: user.passwordHash,
       dateOfBirth: user.dateOfBirth,
-      loyaltyPoints: user.loyaltyPoints
+      loyaltyPoints: user.loyaltyPoints,
+      role: userDoc.role
     }, { new: true });
     
     if (!updatedUser) return null;
@@ -66,7 +70,8 @@ class MongoUserRepository extends UserRepository {
       phone: updatedUser.phone,
       passwordHash: updatedUser.passwordHash,
       dateOfBirth: updatedUser.dateOfBirth,
-      loyaltyPoints: updatedUser.loyaltyPoints
+      loyaltyPoints: updatedUser.loyaltyPoints,
+      role: updatedUser.role
     };
   }
 

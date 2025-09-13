@@ -1,5 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import { I18nProvider } from './contexts/I18nContext';
+import ProtectedRoute from './components/ProtectedRoute';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -9,26 +12,62 @@ import MovieDetails from './pages/MovieDetails';
 import Bookings from './pages/Bookings';
 import Login from './pages/Login';
 import Register from './pages/Register';
+// Admin components
+import AdminLogin from './pages/admin/AdminLogin';
+import AdminLayout from './pages/admin/AdminLayout';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminMovies from './pages/admin/AdminMovies';
+import AdminShowtimes from './pages/admin/AdminShowtimes';
+import AdminBookings from './pages/admin/AdminBookings';
+import AdminUsers from './pages/admin/AdminUsers';
+import MovieForm from './pages/admin/MovieForm';
+import ShowtimeForm from './pages/admin/ShowtimeForm';
 
 function App() {
   return (
-    <Router>
-      <div className="flex flex-col min-h-screen">
-        <Header />
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/now-showing" element={<NowShowing />} />
-            <Route path="/coming-soon" element={<ComingSoon />} />
-            <Route path="/movie/:id" element={<MovieDetails />} />
-            <Route path="/bookings" element={<Bookings />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
+    <I18nProvider>
+      <AuthProvider>
+        <Router>
+          <div className="flex flex-col min-h-screen">
+            <Header />
+            <main className="flex-grow">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/now-showing" element={<NowShowing />} />
+                <Route path="/coming-soon" element={<ComingSoon />} />
+                <Route path="/movie/:id" element={<MovieDetails />} />
+                <Route path="/bookings" element={
+                  <ProtectedRoute>
+                    <Bookings />
+                  </ProtectedRoute>
+                } />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                
+                {/* Admin routes */}
+                {/* <Route path="/admin/login" element={<AdminLogin />} /> */}
+                <Route path="/admin" element={
+                  <ProtectedRoute adminOnly={true}>
+                    <AdminLayout />
+                  </ProtectedRoute>
+                }>
+                  <Route index element={<AdminDashboard />} />
+                  <Route path="movies" element={<AdminMovies />} />
+                  <Route path="movies/new" element={<MovieForm />} />
+                  <Route path="movies/:id" element={<MovieForm />} />
+                  <Route path="showtimes" element={<AdminShowtimes />} />
+                  <Route path="showtimes/new" element={<ShowtimeForm />} />
+                  <Route path="showtimes/:id" element={<ShowtimeForm />} />
+                  <Route path="bookings" element={<AdminBookings />} />
+                  <Route path="users" element={<AdminUsers />} />
+                </Route>
+              </Routes>
+            </main>
+            <Footer />
+          </div>
+        </Router>
+      </AuthProvider>
+    </I18nProvider>
   );
 }
 

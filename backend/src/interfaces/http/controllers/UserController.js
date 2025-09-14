@@ -12,6 +12,10 @@ class UserController {
       const user = await this.userService.createUser(req.body);
       res.status(201).json(user);
     } catch (error) {
+      // Check if it's a duplicate email error
+      if (error.code === 11000 && error.keyPattern && error.keyPattern.email) {
+        return res.status(400).json({ error: 'Email already exists' });
+      }
       res.status(400).json({ error: error.message });
     }
   }

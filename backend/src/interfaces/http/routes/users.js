@@ -4,6 +4,7 @@ const MongoUserRepository = require('../../../infrastructure/repositories/MongoU
 const UserService = require('../../../application/UserService');
 const AuthService = require('../../../application/AuthService');
 const { authenticate, authorizeAdmin } = require('../middleware/auth');
+const { registerValidationRules, loginValidationRules, validate } = require('../middleware/validation');
 
 // Initialize services and controller
 const userRepository = new MongoUserRepository();
@@ -14,8 +15,8 @@ const userController = new UserController(userService, authService);
 const router = express.Router();
 
 // Public routes
-router.post('/', (req, res) => userController.createUser(req, res));
-router.post('/login', (req, res) => userController.authenticateUser(req, res));
+router.post('/', registerValidationRules(), validate, (req, res) => userController.createUser(req, res));
+router.post('/login', loginValidationRules(), validate, (req, res) => userController.authenticateUser(req, res));
 router.post('/refresh-token', (req, res) => userController.refreshToken(req, res));
 
 // Protected routes

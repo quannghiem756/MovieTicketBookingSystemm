@@ -60,6 +60,7 @@ const vi = {
   'register.name': 'Họ và tên',
   'register.email': 'Địa chỉ email',
   'register.password': 'Mật khẩu',
+  'register.confirmPassword': 'Xác nhận mật khẩu',
   'register.phone': 'Số điện thoại',
   'register.dateOfBirth': 'Ngày sinh',
   'register.submit': 'Đăng ký',
@@ -67,6 +68,21 @@ const vi = {
   'register.hasAccount': 'Đã có tài khoản?',
   'register.login': 'Đăng nhập',
   'register.error': 'Đăng ký không thành công. Vui lòng thử lại.',
+  
+  // Validation errors
+  'validation.name.required': 'Tên không được để trống',
+  'validation.name.minLength': 'Tên phải có ít nhất 2 ký tự',
+  'validation.name.maxLength': 'Tên phải ít hơn 50 ký tự',
+  'validation.name.invalid': 'Tên chỉ được chứa chữ cái và khoảng trắng',
+  'validation.email.required': 'Email không được để trống',
+  'validation.email.invalid': 'Vui lòng nhập địa chỉ email hợp lệ',
+  'validation.email.exists': 'Email đã tồn tại',
+  'validation.password.required': 'Mật khẩu không được để trống',
+  'validation.password.minLength': 'Mật khẩu phải có ít nhất 8 ký tự',
+  'validation.password.invalid': 'Mật khẩu phải chứa ít nhất một chữ hoa, một chữ thường, một số và một ký tự đặc biệt',
+  'validation.password.mismatch': 'Mật khẩu không khớp',
+  'validation.phone.invalid': 'Vui lòng nhập số điện thoại hợp lệ',
+  'validation.dateOfBirth.age': 'Bạn phải ít nhất 13 tuổi',
   
   // Admin Sidebar
   'admin.sidebar.adminPanel': 'Bảng quản trị',

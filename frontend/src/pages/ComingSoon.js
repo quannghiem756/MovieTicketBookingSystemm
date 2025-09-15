@@ -2,10 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { getComingSoon } from '../services/api';
 import MovieCard from '../components/MovieCard';
+import Pagination from '../components/Pagination';
 import { useTranslation } from '../contexts/I18nContext';
 
 const ComingSoon = () => {
   const [movies, setMovies] = useState([]);
+  const [pagination, setPagination] = useState({ currentPage: 1, totalPages: 1 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { t } = useTranslation();
@@ -14,8 +16,12 @@ const ComingSoon = () => {
     const fetchMovies = async () => {
       try {
         setLoading(true);
-        const response = await getComingSoon();
-        setMovies(response.data);
+        const response = await getComingSoon(1, 12); // 12 movies per page
+        setMovies(response.data.movies);
+        setPagination({
+          currentPage: response.data.currentPage,
+          totalPages: response.data.totalPages
+        });
         setLoading(false);
       } catch (err) {
         setError(t('common.error'));
@@ -26,7 +32,24 @@ const ComingSoon = () => {
     fetchMovies();
   }, []);
 
-  if (loading) return <div className="text-center py-10 text-xl">{t('common.loading')}</div>;
+  const handlePageChange = async (page) => {
+    try {
+      setLoading(true);
+      const response = await getComingSoon(page, 12);
+      setMovies(response.data.movies);
+      setPagination({
+        currentPage: response.data.currentPage,
+        totalPages: response.data.totalPages
+      });
+      setLoading(false);
+    } catch (err) {
+      setError(t('common.error'));
+      setLoading(false);
+    }
+  };
+
+  if (loading && !movies.length) 
+    return <div className="text-center py-10 text-xl">{t('common.loading')}</div>;
   if (error) return <div className="text-center py-10 text-xl text-red-500">{error}</div>;
 
   return (
@@ -37,6 +60,11 @@ const ComingSoon = () => {
           <MovieCard key={movie.id} movie={movie} />
         ))}
       </div>
+      <Pagination 
+        currentPage={pagination.currentPage} 
+        totalPages={pagination.totalPages} 
+        onPageChange={handlePageChange} 
+      />
     </div>
   );
 };

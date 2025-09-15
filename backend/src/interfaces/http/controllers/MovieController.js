@@ -39,19 +39,27 @@ class MovieController {
     }
   }
 
+  // Get now showing movies with pagination
   async getNowShowing(req, res) {
     try {
-      const movies = await this.movieService.getNowShowing();
-      res.json(movies);
+      let { page = 1, limit = 10 } = req.query;
+      page = parseInt(page);
+      limit = parseInt(limit);
+      const { movies, totalMovies, currentPage, totalPages } = await this.movieService.getNowShowing(page, limit);
+      res.json({ movies, totalMovies, currentPage, totalPages });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   }
 
+  // Get coming soon movies with pagination
   async getComingSoon(req, res) {
     try {
-      const movies = await this.movieService.getComingSoon();
-      res.json(movies);
+      let { page = 1, limit = 10 } = req.query;
+      page = parseInt(page);
+      limit = parseInt(limit);
+      const { movies, totalMovies, currentPage, totalPages } = await this.movieService.getComingSoon(page, limit);
+      res.json({ movies, totalMovies, currentPage, totalPages });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

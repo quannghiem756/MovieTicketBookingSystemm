@@ -140,6 +140,10 @@ const vi = {
   'admin.movieForm.saving': 'Đang lưu...',
   'admin.movieForm.error': 'Lưu phim không thành công:',
   
+  // Pagination
+  'pagination.previous': 'Trước',
+  'pagination.next': 'Sau',
+  
   // Common
   'common.loading': 'Đang tải...',
   'common.error': 'Có lỗi xảy ra',

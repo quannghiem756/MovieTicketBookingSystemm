@@ -67,9 +67,9 @@ api.interceptors.response.use(
 );
 
 // Movies API
-export const getMovies = () => api.get('/movies');
-export const getNowShowing = () => api.get('/movies/now-showing');
-export const getComingSoon = () => api.get('/movies/coming-soon');
+export const getMovies = (page = 1, limit = 10) => api.get(`/movies?page=${page}&limit=${limit}`);
+export const getNowShowing = (page = 1, limit = 10) => api.get(`/movies/now-showing?page=${page}&limit=${limit}`);
+export const getComingSoon = (page = 1, limit = 10) => api.get(`/movies/coming-soon?page=${page}&limit=${limit}`);
 export const getMovieById = (id) => api.get(`/movies/${id}`);
 export const createMovie = (movie) => api.post('/movies', movie);
 export const updateMovie = (id, movie) => api.put(`/movies/${id}`, movie);

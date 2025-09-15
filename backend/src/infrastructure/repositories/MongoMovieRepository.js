@@ -128,14 +128,21 @@ class MongoMovieRepository extends MovieRepository {
     };
   }
 
-  async findNowShowing() {
+  async findNowShowing(page = 1, limit = 10) {
     const today = new Date();
+    const skip = (page - 1) * limit;
+    
     const movieDocs = await MovieModel.find({
       releaseDate: { $lte: today },
       endDate: { $gte: today }
-    });
+    }).skip(skip).limit(limit);
     
-    return movieDocs.map(doc => ({
+    const totalMovies = await MovieModel.countDocuments({
+      releaseDate: { $lte: today },
+      endDate: { $gte: today }
+    });
+
+    const movies = movieDocs.map(doc => ({
       id: doc._id,
       title: doc.title,
       director: doc.director,
@@ -149,15 +156,28 @@ class MongoMovieRepository extends MovieRepository {
       releaseDate: doc.releaseDate,
       endDate: doc.endDate
     }));
+
+    return {
+      movies,
+      totalMovies,
+      currentPage: page,
+      totalPages: Math.ceil(totalMovies / limit)
+    };
   }
 
-  async findComingSoon() {
+  async findComingSoon(page = 1, limit = 10) {
     const today = new Date();
+    const skip = (page - 1) * limit;
+    
     const movieDocs = await MovieModel.find({
       releaseDate: { $gt: today }
-    });
+    }).skip(skip).limit(limit);
     
-    return movieDocs.map(doc => ({
+    const totalMovies = await MovieModel.countDocuments({
+      releaseDate: { $gt: today }
+    });
+
+    const movies = movieDocs.map(doc => ({
       id: doc._id,
       title: doc.title,
       director: doc.director,
@@ -171,6 +191,13 @@ class MongoMovieRepository extends MovieRepository {
       releaseDate: doc.releaseDate,
       endDate: doc.endDate
     }));
+
+    return {
+      movies,
+      totalMovies,
+      currentPage: page,
+      totalPages: Math.ceil(totalMovies / limit)
+    };
   }
 }
 

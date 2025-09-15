@@ -140,6 +140,10 @@ const en = {
   'admin.movieForm.saving': 'Saving...',
   'admin.movieForm.error': 'Failed to save movie:',
   
+  // Pagination
+  'pagination.previous': 'Previous',
+  'pagination.next': 'Next',
+  
   // Common
   'common.loading': 'Loading...',
   'common.error': 'An error occurred',

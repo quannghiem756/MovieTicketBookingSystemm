@@ -33,12 +33,12 @@ class MovieService {
     return await this.movieRepository.findAll(page, limit);
   }
 
-  async getNowShowing() {
-    return await this.movieRepository.findNowShowing();
+  async getNowShowing(page, limit) {
+    return await this.movieRepository.findNowShowing(page, limit);
   }
 
-  async getComingSoon() {
-    return await this.movieRepository.findComingSoon();
+  async getComingSoon(page, limit) {
+    return await this.movieRepository.findComingSoon(page, limit);
   }
 
   async updateMovie(id, movieData) {

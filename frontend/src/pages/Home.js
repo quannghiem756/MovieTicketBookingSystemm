@@ -2,11 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import { getNowShowing, getComingSoon } from '../services/api';
 import MovieCard from '../components/MovieCard';
+import Pagination from '../components/Pagination';
 import { useTranslation } from '../contexts/I18nContext';
 
 const Home = () => {
   const [nowShowing, setNowShowing] = useState([]);
   const [comingSoon, setComingSoon] = useState([]);
+  const [nowShowingPagination, setNowShowingPagination] = useState({ currentPage: 1, totalPages: 1 });
+  const [comingSoonPagination, setComingSoonPagination] = useState({ currentPage: 1, totalPages: 1 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { t } = useTranslation();
@@ -15,10 +18,18 @@ const Home = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const nowShowingResponse = await getNowShowing();
-        const comingSoonResponse = await getComingSoon();
-        setNowShowing(nowShowingResponse.data);
-        setComingSoon(comingSoonResponse.data);
+        const nowShowingResponse = await getNowShowing(1, 8); // 8 movies per page
+        const comingSoonResponse = await getComingSoon(1, 8); // 8 movies per page
+        setNowShowing(nowShowingResponse.data.movies);
+        setComingSoon(comingSoonResponse.data.movies);
+        setNowShowingPagination({
+          currentPage: nowShowingResponse.data.currentPage,
+          totalPages: nowShowingResponse.data.totalPages
+        });
+        setComingSoonPagination({
+          currentPage: comingSoonResponse.data.currentPage,
+          totalPages: comingSoonResponse.data.totalPages
+        });
         setLoading(false);
       } catch (err) {
         setError(t('common.error'));
@@ -29,7 +40,40 @@ const Home = () => {
     fetchData();
   }, []);
 
-  if (loading) return <div className="text-center py-10 text-xl">{t('common.loading')}</div>;
+  const handleNowShowingPageChange = async (page) => {
+    try {
+      setLoading(true);
+      const response = await getNowShowing(page, 8);
+      setNowShowing(response.data.movies);
+      setNowShowingPagination({
+        currentPage: response.data.currentPage,
+        totalPages: response.data.totalPages
+      });
+      setLoading(false);
+    } catch (err) {
+      setError(t('common.error'));
+      setLoading(false);
+    }
+  };
+
+  const handleComingSoonPageChange = async (page) => {
+    try {
+      setLoading(true);
+      const response = await getComingSoon(page, 8);
+      setComingSoon(response.data.movies);
+      setComingSoonPagination({
+        currentPage: response.data.currentPage,
+        totalPages: response.data.totalPages
+      });
+      setLoading(false);
+    } catch (err) {
+      setError(t('common.error'));
+      setLoading(false);
+    }
+  };
+
+  if (loading && (!nowShowing.length && !comingSoon.length)) 
+    return <div className="text-center py-10 text-xl">{t('common.loading')}</div>;
   if (error) return <div className="text-center py-10 text-xl text-red-500">{error}</div>;
 
   return (
@@ -46,6 +90,11 @@ const Home = () => {
             <MovieCard key={movie.id} movie={movie} />
           ))}
         </div>
+        <Pagination 
+          currentPage={nowShowingPagination.currentPage} 
+          totalPages={nowShowingPagination.totalPages} 
+          onPageChange={handleNowShowingPageChange} 
+        />
       </section>
 
       <section>
@@ -55,6 +104,11 @@ const Home = () => {
             <MovieCard key={movie.id} movie={movie} />
           ))}
         </div>
+        <Pagination 
+          currentPage={comingSoonPagination.currentPage} 
+          totalPages={comingSoonPagination.totalPages} 
+          onPageChange={handleComingSoonPageChange} 
+        />
       </section>
     </div>
   );

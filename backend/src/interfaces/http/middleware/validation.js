@@ -24,14 +24,6 @@ const registerValidationRules = () => {
       .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
       .withMessage('Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'),
 
-    // Password confirmation validation
-    body('confirmPassword')
-      .custom((value, { req }) => {
-        if (value !== req.body.password) {
-          throw new Error('Passwords do not match');
-        }
-        return true;
-      }),
 
     // Phone validation (optional)
     body('phone')

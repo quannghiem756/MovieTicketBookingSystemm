@@ -1,6 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import api from '../../services/api';
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Grid,
+  CircularProgress,
+  Alert,
+  Paper,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl
+} from '@mui/material';
+import {
+  ArrowBack,
+  Save
+} from '@mui/icons-material';
+import { getMovies, getTheaters, getShowtimeById, createShowtime, updateShowtime } from '../../services/api';
 
 const ShowtimeForm = () => {
   const { id } = useParams();
@@ -18,11 +36,13 @@ const ShowtimeForm = () => {
   });
 
   const [movies, setMovies] = useState([]);
+  const [theaters, setTheaters] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
     fetchMovies();
+    fetchTheaters();
     if (isEdit) {
       fetchShowtime();
     }
@@ -30,16 +50,25 @@ const ShowtimeForm = () => {
 
   const fetchMovies = async () => {
     try {
-      const response = await api.get('/movies');
+      const response = await getMovies();
       setMovies(response.data);
     } catch (err) {
       console.error('Failed to fetch movies:', err);
     }
   };
 
+  const fetchTheaters = async () => {
+    try {
+      const response = await getTheaters();
+      setTheaters(response.data);
+    } catch (err) {
+      console.error('Failed to fetch theaters:', err);
+    }
+  };
+
   const fetchShowtime = async () => {
     try {
-      const response = await api.get(`/showtimes/${id}`);
+      const response = await getShowtimeById(id);
       const showtime = response.data;
       setFormData({
         movieId: showtime.movieId || '',
@@ -75,9 +104,9 @@ const ShowtimeForm = () => {
       };
 
       if (isEdit) {
-        await api.put(`/showtimes/${id}`, showtimeData);
+        await updateShowtime(id, showtimeData);
       } else {
-        await api.post('/showtimes', showtimeData);
+        await createShowtime(showtimeData);
       }
 
       navigate('/admin/showtimes');
@@ -89,153 +118,148 @@ const ShowtimeForm = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">
+    <Box sx={{ maxWidth: '1024px', mx: 'auto', p: 3 }}>
+      <Typography variant="h4" component="h1" gutterBottom>
         {isEdit ? 'Edit Showtime' : 'Add New Showtime'}
-      </h1>
+      </Typography>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
+        <Alert severity="error" sx={{ mb: 2 }}>
           {error}
-        </div>
+        </Alert>
       )}
 
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="movieId">
-              Movie
-            </label>
-            <select
-              id="movieId"
-              name="movieId"
-              value={formData.movieId}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
+      <Paper sx={{ p: 3, mx: 'auto' }}>
+        <form onSubmit={handleSubmit}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+              <FormControl fullWidth required>
+                <InputLabel>Movie</InputLabel>
+                <Select
+                  name="movieId"
+                  value={formData.movieId}
+                  onChange={handleChange}
+                  label="Movie"
+                >
+                  <MenuItem value="">
+                    <em>Select a movie</em>
+                  </MenuItem>
+                  {movies.map((movie) => (
+                    <MenuItem key={movie.id} value={movie.id}>
+                      {movie.title}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <FormControl fullWidth required>
+                <InputLabel>Theater</InputLabel>
+                <Select
+                  name="theaterId"
+                  value={formData.theaterId}
+                  onChange={handleChange}
+                  label="Theater"
+                >
+                  <MenuItem value="">
+                    <em>Select a theater</em>
+                  </MenuItem>
+                  {theaters.map((theater) => (
+                    <MenuItem key={theater.id} value={theater.id}>
+                      {theater.name} ({theater.location})
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                type="date"
+                label="Show Date"
+                name="showDate"
+                value={formData.showDate}
+                onChange={handleChange}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                required
+              />
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Show Time"
+                name="showTime"
+                value={formData.showTime}
+                onChange={handleChange}
+                placeholder="e.g., 7:30 PM"
+                required
+              />
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Format"
+                name="format"
+                value={formData.format}
+                onChange={handleChange}
+                placeholder="e.g., 2D, 3D, IMAX"
+              />
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Language"
+                name="language"
+                value={formData.language}
+                onChange={handleChange}
+                placeholder="e.g., English, Spanish"
+              />
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                type="number"
+                label="Price ($)"
+                name="price"
+                value={formData.price}
+                onChange={handleChange}
+                step="0.01"
+                InputProps={{
+                  inputProps: { min: 0 }
+                }}
+                required
+              />
+            </Grid>
+          </Grid>
+
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 3 }}>
+            <Button
+              variant="outlined"
+              startIcon={<ArrowBack />}
+              onClick={() => navigate('/admin/showtimes')}
             >
-              <option value="">Select a movie</option>
-              {movies.map((movie) => (
-                <option key={movie.id} value={movie.id}>
-                  {movie.title}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="theaterId">
-              Theater
-            </label>
-            <input
-              type="text"
-              id="theaterId"
-              name="theaterId"
-              value={formData.theaterId}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Theater ID"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="showDate">
-              Show Date
-            </label>
-            <input
-              type="date"
-              id="showDate"
-              name="showDate"
-              value={formData.showDate}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="showTime">
-              Show Time
-            </label>
-            <input
-              type="text"
-              id="showTime"
-              name="showTime"
-              value={formData.showTime}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="e.g., 7:30 PM"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="format">
-              Format
-            </label>
-            <input
-              type="text"
-              id="format"
-              name="format"
-              value={formData.format}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="e.g., 2D, 3D, IMAX"
-            />
-          </div>
-
-          <div>
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="language">
-              Language
-            </label>
-            <input
-              type="text"
-              id="language"
-              name="language"
-              value={formData.language}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="e.g., English, Spanish"
-            />
-          </div>
-
-          <div>
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="price">
-              Price ($)
-            </label>
-            <input
-              type="number"
-              id="price"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
-              step="0.01"
-              min="0"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-        </div>
-
-        <div className="flex justify-end space-x-4 mt-6">
-          <button
-            type="button"
-            onClick={() => navigate('/admin/showtimes')}
-            className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            disabled={loading}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
-          >
-            {loading ? 'Saving...' : 'Save Showtime'}
-          </button>
-        </div>
-      </form>
-    </div>
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              startIcon={loading ? <CircularProgress size={20} /> : <Save />}
+              disabled={loading}
+            >
+              {loading ? 'Saving...' : 'Save Showtime'}
+            </Button>
+          </Box>
+        </form>
+      </Paper>
+    </Box>
   );
 };
 

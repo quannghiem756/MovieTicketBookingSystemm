@@ -1,12 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
+import {
+  Box,
+  Typography,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  CircularProgress,
+  Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  DialogContentText
+} from '@mui/material';
+import {
+  Add,
+  Edit,
+  Delete
+} from '@mui/icons-material';
 
 const AdminShowtimes = () => {
   const [showtimes, setShowtimes] = useState([]);
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [showtimeToDelete, setShowtimeToDelete] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,15 +52,29 @@ const AdminShowtimes = () => {
     fetchData();
   }, []);
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this showtime?')) {
-      try {
-        await api.delete(`/showtimes/${id}`);
-        setShowtimes(showtimes.filter(showtime => showtime.id !== id));
-      } catch (err) {
-        alert('Failed to delete showtime');
-      }
+  const handleDeleteClick = (showtime) => {
+    setShowtimeToDelete(showtime);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!showtimeToDelete) return;
+    
+    try {
+      await api.delete(`/showtimes/${showtimeToDelete.id}`);
+      setShowtimes(showtimes.filter(showtime => showtime.id !== showtimeToDelete.id));
+      setDeleteDialogOpen(false);
+      setShowtimeToDelete(null);
+    } catch (err) {
+      alert('Failed to delete showtime');
+      setDeleteDialogOpen(false);
+      setShowtimeToDelete(null);
     }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false);
+    setShowtimeToDelete(null);
   };
 
   const getMovieTitle = (movieId) => {
@@ -42,70 +82,129 @@ const AdminShowtimes = () => {
     return movie ? movie.title : 'Unknown Movie';
   };
 
-  if (loading) return <div>Loading showtimes...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading) return (
+    <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
+      <CircularProgress />
+    </Box>
+  );
+  
+  if (error) return (
+    <Box sx={{ p: 3 }}>
+      <Alert severity="error">Error: {error}</Alert>
+    </Box>
+  );
 
   return (
-    <div className="admin-showtimes">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Manage Showtimes</h1>
-        <Link 
-          to="/admin/showtimes/new" 
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+    <Box sx={{ p: 3 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <Typography variant="h4" component="h1">
+          Manage Showtimes
+        </Typography>
+        <Button
+          component={Link}
+          to="/admin/showtimes/new"
+          variant="contained"
+          startIcon={<Add />}
         >
           Add New Showtime
-        </Link>
-      </div>
+        </Button>
+      </Box>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Movie</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Theater</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="showtimes table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Movie</TableCell>
+              <TableCell>Date</TableCell>
+              <TableCell>Time</TableCell>
+              <TableCell>Theater</TableCell>
+              <TableCell>Price</TableCell>
+              <TableCell>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {showtimes.map((showtime) => (
-              <tr key={showtime.id}>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">{getMovieTitle(showtime.movieId)}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-500">
+              <TableRow
+                key={showtime.id}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  <Typography variant="subtitle1" fontWeight="medium">
+                    {getMovieTitle(showtime.movieId)}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="body2" color="text.secondary">
                     {new Date(showtime.showDate).toLocaleDateString()}
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {showtime.showTime}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  Theater {showtime.theaterId}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  ${showtime.price}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <Link to={`/admin/showtimes/${showtime.id}`} className="text-indigo-600 hover:text-indigo-900 mr-4">
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="body2" color="text.secondary">
+                    {showtime.showTime}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="body2" color="text.secondary">
+                    Theater {showtime.theaterId}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="body2" color="text.secondary">
+                    ${showtime.price}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Button
+                    component={Link}
+                    to={`/admin/showtimes/${showtime.id}`}
+                    variant="outlined"
+                    size="small"
+                    startIcon={<Edit />}
+                    sx={{ mr: 1 }}
+                  >
                     Edit
-                  </Link>
-                  <button 
-                    onClick={() => handleDelete(showtime.id)}
-                    className="text-red-600 hover:text-red-900"
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    size="small"
+                    startIcon={<Delete />}
+                    onClick={() => handleDeleteClick(showtime)}
                   >
                     Delete
-                  </button>
-                </td>
-              </tr>
+                  </Button>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={handleDeleteCancel}
+        aria-labelledby="delete-dialog-title"
+        aria-describedby="delete-dialog-description"
+      >
+        <DialogTitle id="delete-dialog-title">
+          Confirm Delete
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-dialog-description">
+            {showtimeToDelete && `Are you sure you want to delete the showtime for "${getMovieTitle(showtimeToDelete.movieId)}"?`}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteCancel} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleDeleteConfirm} color="error" variant="contained">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
   );
 };
 

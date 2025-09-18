@@ -20,6 +20,7 @@ Based on the blueprint, the system includes:
 - Multi-channel booking (Website, Mobile App, Chatbot, Kiosk)
 - Movie management
 - Showtime scheduling
+- Theater management with seat customization
 - Seat selection and booking
 - Payment processing
 - User management

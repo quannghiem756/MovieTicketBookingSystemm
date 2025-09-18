@@ -2,17 +2,18 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import AdminSidebar from '../../components/AdminSidebar';
 import useAdminAuth from '../../hooks/useAdminAuth';
+import { Box } from '@mui/material';
 
 const AdminLayout = () => {
   useAdminAuth();
 
   return (
-    <div className="flex">
+    <Box sx={{ display: 'flex' }}>
       <AdminSidebar />
-      <div className="flex-1 p-8 bg-gray-100 min-h-screen">
+      <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: '#f3f4f6', minHeight: '100vh' }}>
         <Outlet />
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

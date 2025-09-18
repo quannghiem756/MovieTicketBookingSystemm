@@ -2,6 +2,31 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
 import { useTranslation } from '../../contexts/I18nContext';
+import {
+  Box,
+  Typography,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Pagination,
+  CircularProgress,
+  Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  DialogContentText
+} from '@mui/material';
+import {
+  Add,
+  Edit,
+  Delete
+} from '@mui/icons-material';
 
 const AdminMovies = () => {
   const [movies, setMovies] = useState([]);
@@ -11,6 +36,8 @@ const AdminMovies = () => {
   const [moviesPerPage] = useState(10); // You can adjust this value
   const [totalMovies, setTotalMovies] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [movieToDelete, setMovieToDelete] = useState(null);
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -29,112 +56,164 @@ const AdminMovies = () => {
     };
 
     fetchMovies();
-  }, [currentPage, moviesPerPage]);
+  }, [currentPage, moviesPerPage, t]);
 
-  const handleDelete = async (id) => {
-    if (window.confirm(t('admin.movies.deleteConfirm'))) {
-      try {
-        await api.delete(`/movies/${id}`);
-        // Re-fetch movies for the current page to ensure correct pagination
-        const response = await api.get(`/movies?page=${currentPage}&limit=${moviesPerPage}`);
-        setMovies(response.data.movies);
-        setTotalMovies(response.data.totalMovies);
-        setTotalPages(response.data.totalPages);
-      } catch (err) {
-        alert(t('admin.movies.deleteError'));
-      }
+  const handleDeleteClick = (movie) => {
+    setMovieToDelete(movie);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!movieToDelete) return;
+    
+    try {
+      await api.delete(`/movies/${movieToDelete.id}`);
+      // Re-fetch movies for the current page to ensure correct pagination
+      const response = await api.get(`/movies?page=${currentPage}&limit=${moviesPerPage}`);
+      setMovies(response.data.movies);
+      setTotalMovies(response.data.totalMovies);
+      setTotalPages(response.data.totalPages);
+      setDeleteDialogOpen(false);
+      setMovieToDelete(null);
+    } catch (err) {
+      alert(t('admin.movies.deleteError'));
+      setDeleteDialogOpen(false);
+      setMovieToDelete(null);
     }
   };
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false);
+    setMovieToDelete(null);
   };
 
-  if (loading) return <div>{t('common.loading')}</div>;
-  if (error) return <div>Error: {error}</div>;
+  const handlePageChange = (event, page) => {
+    setCurrentPage(page);
+  };
+
+  if (loading) return (
+    <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
+      <CircularProgress />
+    </Box>
+  );
+  
+  if (error) return (
+    <Box sx={{ p: 3 }}>
+      <Alert severity="error">{t('common.error')}</Alert>
+    </Box>
+  );
 
   return (
-    <div className="admin-movies">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">{t('admin.movies.title')}</h1>
-        <Link 
-          to="/admin/movies/new" 
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+    <Box sx={{ p: 3 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <Typography variant="h4" component="h1">
+          {t('admin.movies.title')}
+        </Typography>
+        <Button
+          component={Link}
+          to="/admin/movies/new"
+          variant="contained"
+          startIcon={<Add />}
         >
           {t('admin.movies.addNew')}
-        </Link>
-      </div>
+        </Button>
+      </Box>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('admin.movies.table.title')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('admin.movies.table.director')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('admin.movies.table.releaseDate')}</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('admin.movies.table.actions')}</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="movies table">
+          <TableHead>
+            <TableRow>
+              <TableCell>{t('admin.movies.table.title')}</TableCell>
+              <TableCell>{t('admin.movies.table.director')}</TableCell>
+              <TableCell>{t('admin.movies.table.releaseDate')}</TableCell>
+              <TableCell>{t('admin.movies.table.actions')}</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {movies.map((movie) => (
-              <tr key={movie.id}>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">{movie.title}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-500">{movie.director}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {new Date(movie.releaseDate).toLocaleDateString()}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <Link to={`/admin/movies/${movie.id}`} className="text-indigo-600 hover:text-indigo-900 mr-4">
+              <TableRow
+                key={movie.id}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  <Typography variant="subtitle1" fontWeight="medium">
+                    {movie.title}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="body2" color="text.secondary">
+                    {movie.director}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="body2" color="text.secondary">
+                    {new Date(movie.releaseDate).toLocaleDateString()}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Button
+                    component={Link}
+                    to={`/admin/movies/${movie.id}`}
+                    variant="outlined"
+                    size="small"
+                    startIcon={<Edit />}
+                    sx={{ mr: 1 }}
+                  >
                     {t('admin.movies.edit')}
-                  </Link>
-                  <button 
-                    onClick={() => handleDelete(movie.id)}
-                    className="text-red-600 hover:text-red-900"
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    size="small"
+                    startIcon={<Delete />}
+                    onClick={() => handleDeleteClick(movie)}
                   >
                     {t('admin.movies.delete')}
-                  </button>
-                </td>
-              </tr>
+                  </Button>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
-      </div>
+          </TableBody>
+        </Table>
+      </TableContainer>
 
       {/* Pagination Controls */}
-      <div className="flex justify-center mt-6">
-        <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-          >
-            {t('admin.movies.pagination.previous')}
-          </button>
-          {[...Array(totalPages)].map((_, i) => (
-            <button
-              key={i + 1}
-              onClick={() => handlePageChange(i + 1)}
-              className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium ${
-                currentPage === i + 1 ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600' : 'text-gray-700 hover:bg-gray-50'
-              }`}
-            >
-              {i + 1}
-            </button>
-          ))}
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-          >
-            {t('admin.movies.pagination.next')}
-          </button>
-        </nav>
-      </div>
-    </div>
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+        <Pagination
+          count={totalPages}
+          page={currentPage}
+          onChange={handlePageChange}
+          color="primary"
+          showFirstButton
+          showLastButton
+        />
+      </Box>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={handleDeleteCancel}
+        aria-labelledby="delete-dialog-title"
+        aria-describedby="delete-dialog-description"
+      >
+        <DialogTitle id="delete-dialog-title">
+          {t('admin.movies.deleteConfirm')}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-dialog-description">
+            {movieToDelete && `Are you sure you want to delete "${movieToDelete.title}"?`}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteCancel} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleDeleteConfirm} color="error" variant="contained">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
   );
 };
 

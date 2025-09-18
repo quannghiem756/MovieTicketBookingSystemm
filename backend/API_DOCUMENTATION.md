@@ -170,59 +170,54 @@ PUT /bookings/{id}/cancel
 ```
 Cancels an existing booking.
 
-## Users
+## Theaters
 
-### Create user
+### Get all theaters
 ```
-POST /users
+GET /theaters
 ```
-Registers a new user.
+Returns a list of all theaters.
+
+### Get theater by ID
+```
+GET /theaters/{id}
+```
+Returns details of a specific theater.
+
+### Create theater
+```
+POST /theaters
+```
+Creates a new theater.
 
 **Request Body:**
 ```json
 {
   "name": "string",
-  "email": "string",
-  "phone": "string",
-  "password": "string",
-  "dateOfBirth": "date"
+  "location": "string",
+  "totalSeats": "number",
+  "seatMap": [
+    [
+      {
+        "id": "string",
+        "row": "string",
+        "number": "number",
+        "type": "string",
+        "isAvailable": "boolean"
+      }
+    ]
+  ]
 }
 ```
 
-### Login user
+### Update theater
 ```
-POST /users/login
+PUT /theaters/{id}
 ```
-Authenticates a user.
+Updates an existing theater.
 
-**Request Body:**
-```json
-{
-  "email": "string",
-  "password": "string"
-}
+### Delete theater
 ```
-
-### Get user by ID
+DELETE /theaters/{id}
 ```
-GET /users/{id}
-```
-Returns details of a specific user.
-
-### Get user by email
-```
-GET /users/email/{email}
-```
-Returns details of a user by email.
-
-### Update user
-```
-PUT /users/{id}
-```
-Updates an existing user.
-
-### Delete user
-```
-DELETE /users/{id}
-```
-Deletes a user.
+Deletes a theater.

@@ -82,6 +82,13 @@ export const createShowtime = (showtime) => api.post('/showtimes', showtime);
 export const updateShowtime = (id, showtime) => api.put(`/showtimes/${id}`, showtime);
 export const deleteShowtime = (id) => api.delete(`/showtimes/${id}`);
 
+// Theaters API
+export const getTheaters = () => api.get('/theaters');
+export const getTheaterById = (id) => api.get(`/theaters/${id}`);
+export const createTheater = (theater) => api.post('/theaters', theater);
+export const updateTheater = (id, theater) => api.put(`/theaters/${id}`, theater);
+export const deleteTheater = (id) => api.delete(`/theaters/${id}`);
+
 // Bookings API
 export const getBookingsByUserId = (userId) => api.get(`/bookings/user/${userId}`);
 export const getBookingById = (id) => api.get(`/bookings/${id}`);

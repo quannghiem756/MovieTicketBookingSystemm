@@ -2,6 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
 import { useTranslation } from '../../contexts/I18nContext';
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  Grid,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+  Button
+} from '@mui/material';
+import {
+  LocalMovies,
+  Schedule,
+  ConfirmationNumber,
+  People,
+  Add,
+  AccessTime,
+  CheckCircle
+} from '@mui/icons-material';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -33,64 +54,188 @@ const AdminDashboard = () => {
   }, []);
 
   return (
-    <div className="admin-dashboard">
-      <h1 className="text-3xl font-bold mb-6">{t('admin.dashboard.title')}</h1>
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 3 }}>
+        {t('admin.dashboard.title')}
+      </Typography>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-blue-100 p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-2">{t('admin.dashboard.movies')}</h2>
-          <p className="text-3xl font-bold">{stats.movies}</p>
-          <Link to="/admin/movies" className="text-blue-600 hover:underline mt-2 inline-block">
-            {t('admin.dashboard.manageMovies')}
-          </Link>
-        </div>
+      <Grid container spacing={3} sx={{ mb: 4 }}>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <CardContent sx={{ flexGrow: 1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <LocalMovies sx={{ fontSize: 32, color: 'primary.main', mr: 1 }} />
+                <Typography variant="h6">
+                  {t('admin.dashboard.movies')}
+                </Typography>
+              </Box>
+              <Typography variant="h3" component="p" sx={{ mb: 2, fontWeight: 'bold' }}>
+                {stats.movies}
+              </Typography>
+              <Button 
+                component={Link} 
+                to="/admin/movies" 
+                variant="outlined" 
+                fullWidth
+                sx={{ mt: 1 }}
+              >
+                {t('admin.dashboard.manageMovies')}
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
         
-        <div className="bg-green-100 p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-2">{t('admin.dashboard.showtimes')}</h2>
-          <p className="text-3xl font-bold">{stats.showtimes}</p>
-          <Link to="/admin/showtimes" className="text-green-600 hover:underline mt-2 inline-block">
-            {t('admin.dashboard.manageShowtimes')}
-          </Link>
-        </div>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <CardContent sx={{ flexGrow: 1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <Schedule sx={{ fontSize: 32, color: 'success.main', mr: 1 }} />
+                <Typography variant="h6">
+                  {t('admin.dashboard.showtimes')}
+                </Typography>
+              </Box>
+              <Typography variant="h3" component="p" sx={{ mb: 2, fontWeight: 'bold' }}>
+                {stats.showtimes}
+              </Typography>
+              <Button 
+                component={Link} 
+                to="/admin/showtimes" 
+                variant="outlined" 
+                fullWidth
+                sx={{ mt: 1 }}
+              >
+                {t('admin.dashboard.manageShowtimes')}
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
         
-        <div className="bg-yellow-100 p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-2">{t('admin.dashboard.bookings')}</h2>
-          <p className="text-3xl font-bold">{stats.bookings}</p>
-          <Link to="/admin/bookings" className="text-yellow-600 hover:underline mt-2 inline-block">
-            {t('admin.dashboard.manageBookings')}
-          </Link>
-        </div>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <CardContent sx={{ flexGrow: 1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <ConfirmationNumber sx={{ fontSize: 32, color: 'warning.main', mr: 1 }} />
+                <Typography variant="h6">
+                  {t('admin.dashboard.theaters')}
+                </Typography>
+              </Box>
+              <Typography variant="h3" component="p" sx={{ mb: 2, fontWeight: 'bold' }}>
+                {stats.theaters || 0}
+              </Typography>
+              <Button 
+                component={Link} 
+                to="/admin/theaters" 
+                variant="outlined" 
+                fullWidth
+                sx={{ mt: 1 }}
+              >
+                {t('admin.dashboard.manageTheaters')}
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
         
-        <div className="bg-purple-100 p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-2">{t('admin.dashboard.users')}</h2>
-          <p className="text-3xl font-bold">{stats.users}</p>
-          <Link to="/admin/users" className="text-purple-600 hover:underline mt-2 inline-block">
-            {t('admin.dashboard.manageUsers')}
-          </Link>
-        </div>
-      </div>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <CardContent sx={{ flexGrow: 1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <ConfirmationNumber sx={{ fontSize: 32, color: 'warning.main', mr: 1 }} />
+                <Typography variant="h6">
+                  {t('admin.dashboard.bookings')}
+                </Typography>
+              </Box>
+              <Typography variant="h3" component="p" sx={{ mb: 2, fontWeight: 'bold' }}>
+                {stats.bookings}
+              </Typography>
+              <Button 
+                component={Link} 
+                to="/admin/bookings" 
+                variant="outlined" 
+                fullWidth
+                sx={{ mt: 1 }}
+              >
+                {t('admin.dashboard.manageBookings')}
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
+        
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <CardContent sx={{ flexGrow: 1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <People sx={{ fontSize: 32, color: 'secondary.main', mr: 1 }} />
+                <Typography variant="h6">
+                  {t('admin.dashboard.users')}
+                </Typography>
+              </Box>
+              <Typography variant="h3" component="p" sx={{ mb: 2, fontWeight: 'bold' }}>
+                {stats.users}
+              </Typography>
+              <Button 
+                component={Link} 
+                to="/admin/users" 
+                variant="outlined" 
+                fullWidth
+                sx={{ mt: 1 }}
+              >
+                {t('admin.dashboard.manageUsers')}
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
       
-      <div className="bg-white p-6 rounded-lg shadow mb-8">
-        <h2 className="text-2xl font-bold mb-4">{t('admin.dashboard.recentActivity')}</h2>
-        <div className="space-y-4">
-          <div className="border-b pb-4">
-            <p className="font-semibold">{t('admin.dashboard.newMovieAdded')}</p>
-            <p className="text-gray-600">"Inception" was added to the movie list</p>
-            <p className="text-sm text-gray-500">2 hours ago</p>
-          </div>
-          <div className="border-b pb-4">
-            <p className="font-semibold">{t('admin.dashboard.showtimeCreated')}</p>
-            <p className="text-gray-600">New showtime for "The Matrix" at 7:30 PM</p>
-            <p className="text-sm text-gray-500">4 hours ago</p>
-          </div>
-          <div className="border-b pb-4">
-            <p className="font-semibold">{t('admin.dashboard.bookingConfirmed')}</p>
-            <p className="text-gray-600">Booking #12345 for "Interstellar" was confirmed</p>
-            <p className="text-sm text-gray-500">1 day ago</p>
-          </div>
-        </div>
-      </div>
-    </div>
+      <Card>
+        <CardContent>
+          <Typography variant="h5" component="h2" gutterBottom sx={{ mb: 2 }}>
+            {t('admin.dashboard.recentActivity')}
+          </Typography>
+          <List>
+            <ListItem alignItems="flex-start" sx={{ flexDirection: 'column', alignItems: 'stretch' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                <Add sx={{ mr: 1, color: 'primary.main' }} />
+                <ListItemText 
+                  primary={t('admin.dashboard.newMovieAdded')} 
+                  secondary='"Inception" was added to the movie list'
+                />
+              </Box>
+              <Typography variant="caption" sx={{ alignSelf: 'flex-end', color: 'text.secondary' }}>
+                2 hours ago
+              </Typography>
+              <Divider sx={{ mt: 2 }} />
+            </ListItem>
+            
+            <ListItem alignItems="flex-start" sx={{ flexDirection: 'column', alignItems: 'stretch' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                <AccessTime sx={{ mr: 1, color: 'success.main' }} />
+                <ListItemText 
+                  primary={t('admin.dashboard.showtimeCreated')} 
+                  secondary='New showtime for "The Matrix" at 7:30 PM'
+                />
+              </Box>
+              <Typography variant="caption" sx={{ alignSelf: 'flex-end', color: 'text.secondary' }}>
+                4 hours ago
+              </Typography>
+              <Divider sx={{ mt: 2 }} />
+            </ListItem>
+            
+            <ListItem alignItems="flex-start" sx={{ flexDirection: 'column', alignItems: 'stretch' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                <CheckCircle sx={{ mr: 1, color: 'info.main' }} />
+                <ListItemText 
+                  primary={t('admin.dashboard.bookingConfirmed')} 
+                  secondary='Booking #12345 for "Interstellar" was confirmed'
+                />
+              </Box>
+              <Typography variant="caption" sx={{ alignSelf: 'flex-end', color: 'text.secondary' }}>
+                1 day ago
+              </Typography>
+            </ListItem>
+          </List>
+        </CardContent>
+      </Card>
+    </Box>
   );
 };
 

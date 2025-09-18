@@ -1,11 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
+import {
+  Box,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  CircularProgress,
+  Alert,
+  Chip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  DialogContentText,
+  Button
+} from '@mui/material';
+import {
+  Cancel
+} from '@mui/icons-material';
 
 const AdminBookings = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+  const [bookingToCancel, setBookingToCancel] = useState(null);
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -22,89 +47,157 @@ const AdminBookings = () => {
     fetchBookings();
   }, []);
 
-  const handleCancel = async (id) => {
-    if (window.confirm('Are you sure you want to cancel this booking?')) {
-      try {
-        await api.put(`/bookings/${id}/cancel`);
-        setBookings(bookings.map(booking => 
-          booking.id === id ? {...booking, status: 'cancelled'} : booking
-        ));
-      } catch (err) {
-        alert('Failed to cancel booking');
-      }
+  const handleCancelClick = (booking) => {
+    setBookingToCancel(booking);
+    setCancelDialogOpen(true);
+  };
+
+  const handleCancelConfirm = async () => {
+    if (!bookingToCancel) return;
+    
+    try {
+      await api.put(`/bookings/${bookingToCancel.id}/cancel`);
+      setBookings(bookings.map(booking => 
+        booking.id === bookingToCancel.id ? {...booking, status: 'cancelled'} : booking
+      ));
+      setCancelDialogOpen(false);
+      setBookingToCancel(null);
+    } catch (err) {
+      alert('Failed to cancel booking');
+      setCancelDialogOpen(false);
+      setBookingToCancel(null);
     }
   };
 
-  const getStatusClass = (status) => {
+  const handleCancelCancel = () => {
+    setCancelDialogOpen(false);
+    setBookingToCancel(null);
+  };
+
+  const getStatusColor = (status) => {
     switch (status) {
-      case 'confirmed': return 'bg-green-100 text-green-800';
-      case 'pending': return 'bg-yellow-100 text-yellow-800';
-      case 'cancelled': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'confirmed': return 'success';
+      case 'pending': return 'warning';
+      case 'cancelled': return 'error';
+      default: return 'default';
     }
   };
 
-  if (loading) return <div>Loading bookings...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading) return (
+    <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
+      <CircularProgress />
+    </Box>
+  );
+  
+  if (error) return (
+    <Box sx={{ p: 3 }}>
+      <Alert severity="error">Error: {error}</Alert>
+    </Box>
+  );
 
   return (
-    <div className="admin-bookings">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Manage Bookings</h1>
-      </div>
+    <Box sx={{ p: 3 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <Typography variant="h4" component="h1">
+          Manage Bookings
+        </Typography>
+      </Box>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Booking ID</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Movie</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Price</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="bookings table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Booking ID</TableCell>
+              <TableCell>User</TableCell>
+              <TableCell>Movie</TableCell>
+              <TableCell>Date</TableCell>
+              <TableCell>Total Price</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {bookings.map((booking) => (
-              <tr key={booking.id}>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">#{booking.id.substring(0, 8)}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-500">User {booking.userId.substring(0, 8)}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-500">Movie Title</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {new Date().toLocaleDateString()}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  ${booking.totalPrice}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusClass(booking.status)}`}>
-                    {booking.status}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+              <TableRow
+                key={booking.id}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  <Typography variant="subtitle1" fontWeight="medium">
+                    #{booking.id.substring(0, 8)}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="body2" color="text.secondary">
+                    User {booking.userId.substring(0, 8)}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="body2" color="text.secondary">
+                    Movie Title
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="body2" color="text.secondary">
+                    {new Date().toLocaleDateString()}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="body2" color="text.secondary">
+                    ${booking.totalPrice}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Chip 
+                    label={booking.status} 
+                    color={getStatusColor(booking.status)}
+                    size="small"
+                  />
+                </TableCell>
+                <TableCell>
                   {booking.status === 'pending' && (
-                    <button 
-                      onClick={() => handleCancel(booking.id)}
-                      className="text-red-600 hover:text-red-900"
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      size="small"
+                      startIcon={<Cancel />}
+                      onClick={() => handleCancelClick(booking)}
                     >
                       Cancel
-                    </button>
+                    </Button>
                   )}
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      {/* Cancel Confirmation Dialog */}
+      <Dialog
+        open={cancelDialogOpen}
+        onClose={handleCancelCancel}
+        aria-labelledby="cancel-dialog-title"
+        aria-describedby="cancel-dialog-description"
+      >
+        <DialogTitle id="cancel-dialog-title">
+          Confirm Cancel
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="cancel-dialog-description">
+            {bookingToCancel && `Are you sure you want to cancel booking #${bookingToCancel.id.substring(0, 8)}?`}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelCancel} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleCancelConfirm} color="error" variant="contained">
+            Confirm Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
   );
 };
 

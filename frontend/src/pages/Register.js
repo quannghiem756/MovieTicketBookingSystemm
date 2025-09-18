@@ -14,7 +14,8 @@ import {
   Paper,
   InputAdornment,
   IconButton,
-  Grid
+  Grid,
+  FormControl
 } from '@mui/material';
 import {
   Person,
@@ -310,7 +311,7 @@ const Register = () => {
                 }}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <FormControl xs={{ width: '100%' }} sx={{ width: "100%" }} >
               <TextField
                 fullWidth
                 id="phone"
@@ -330,7 +331,7 @@ const Register = () => {
                   ),
                 }}
               />
-            </Grid>
+            </FormControl>
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth

@@ -12,16 +12,19 @@ import MovieDetails from './pages/MovieDetails';
 import Bookings from './pages/Bookings';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Profile from './pages/Profile';
 // Admin components
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminLayout from './pages/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminMovies from './pages/admin/AdminMovies';
 import AdminShowtimes from './pages/admin/AdminShowtimes';
+import AdminTheaters from './pages/admin/AdminTheaters';
 import AdminBookings from './pages/admin/AdminBookings';
 import AdminUsers from './pages/admin/AdminUsers';
 import MovieForm from './pages/admin/MovieForm';
 import ShowtimeForm from './pages/admin/ShowtimeForm';
+import TheaterForm from './pages/admin/TheaterForm';
 
 function App() {
   return (
@@ -41,6 +44,11 @@ function App() {
                     <Bookings />
                   </ProtectedRoute>
                 } />
+                <Route path="/profile" element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                } />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 
@@ -58,6 +66,9 @@ function App() {
                   <Route path="showtimes" element={<AdminShowtimes />} />
                   <Route path="showtimes/new" element={<ShowtimeForm />} />
                   <Route path="showtimes/:id" element={<ShowtimeForm />} />
+                  <Route path="theaters" element={<AdminTheaters />} />
+                  <Route path="theaters/new" element={<TheaterForm />} />
+                  <Route path="theaters/:id" element={<TheaterForm />} />
                   <Route path="bookings" element={<AdminBookings />} />
                   <Route path="users" element={<AdminUsers />} />
                 </Route>

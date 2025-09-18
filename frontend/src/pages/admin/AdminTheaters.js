@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import api from '../../services/api';
+import { Link } from 'react-router-dom';
+import { useTranslation } from '../../contexts/I18nContext';
 import {
   Box,
   Typography,
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -17,57 +19,62 @@ import {
   DialogContent,
   DialogActions,
   DialogContentText,
-  Button
+  IconButton
 } from '@mui/material';
 import {
+  Add,
+  Edit,
   Delete
 } from '@mui/icons-material';
+import { getTheaters, deleteTheater } from '../../services/api';
 
-const AdminUsers = () => {
-  const [users, setUsers] = useState([]);
+const AdminTheaters = () => {
+  const [theaters, setTheaters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [userToDelete, setUserToDelete] = useState(null);
+  const [theaterToDelete, setTheaterToDelete] = useState(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchTheaters = async () => {
       try {
-        const response = await api.get('/users');
-        setUsers(response.data);
+        const response = await getTheaters();
+        setTheaters(response.data);
         setLoading(false);
       } catch (err) {
-        setError('Failed to fetch users');
+        console.error(err);
+        setError(t('common.error'));
         setLoading(false);
       }
     };
 
-    fetchUsers();
-  }, []);
+    fetchTheaters();
+  }, [t]);
 
-  const handleDeleteClick = (user) => {
-    setUserToDelete(user);
+  const handleDeleteClick = (theater) => {
+    setTheaterToDelete(theater);
     setDeleteDialogOpen(true);
   };
 
   const handleDeleteConfirm = async () => {
-    if (!userToDelete) return;
+    if (!theaterToDelete) return;
     
     try {
-      await api.delete(`/users/${userToDelete.id}`);
-      setUsers(users.filter(user => user.id !== userToDelete.id));
+      await deleteTheater(theaterToDelete.id);
+      setTheaters(theaters.filter(theater => theater.id !== theaterToDelete.id));
       setDeleteDialogOpen(false);
-      setUserToDelete(null);
+      setTheaterToDelete(null);
     } catch (err) {
-      alert('Failed to delete user');
+      alert(t('admin.theaters.deleteError'));
       setDeleteDialogOpen(false);
-      setUserToDelete(null);
+      setTheaterToDelete(null);
     }
   };
 
   const handleDeleteCancel = () => {
     setDeleteDialogOpen(false);
-    setUserToDelete(null);
+    setTheaterToDelete(null);
   };
 
   if (loading) return (
@@ -78,7 +85,7 @@ const AdminUsers = () => {
   
   if (error) return (
     <Box sx={{ p: 3 }}>
-      <Alert severity="error">Error: {error}</Alert>
+      <Alert severity="error">{error}</Alert>
     </Box>
   );
 
@@ -86,57 +93,66 @@ const AdminUsers = () => {
     <Box sx={{ p: 3 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Typography variant="h4" component="h1">
-          Manage Users
+          {t('admin.theaters.title')}
         </Typography>
+        <Button
+          component={Link}
+          to="/admin/theaters/new"
+          variant="contained"
+          startIcon={<Add />}
+        >
+          {t('admin.theaters.addNew')}
+        </Button>
       </Box>
 
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="users table">
+        <Table sx={{ minWidth: 650 }} aria-label="theaters table">
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Phone</TableCell>
-              <TableCell>Loyalty Points</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell>{t('admin.theaters.table.name')}</TableCell>
+              <TableCell>{t('admin.theaters.table.location')}</TableCell>
+              <TableCell>{t('admin.theaters.table.totalSeats')}</TableCell>
+              <TableCell>{t('admin.theaters.table.actions')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {users.map((user) => (
+            {theaters.map((theater) => (
               <TableRow
-                key={user.id}
+                key={theater.id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
                   <Typography variant="subtitle1" fontWeight="medium">
-                    {user.name}
+                    {theater.name}
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography variant="body2" color="text.secondary">
-                    {user.email}
+                    {theater.location}
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography variant="body2" color="text.secondary">
-                    {user.phone}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="body2" color="text.secondary">
-                    {user.loyaltyPoints}
+                    {theater.totalSeats}
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Button
+                    component={Link}
+                    to={`/admin/theaters/${theater.id}`}
                     variant="outlined"
-                    color="error"
                     size="small"
-                    startIcon={<Delete />}
-                    onClick={() => handleDeleteClick(user)}
+                    startIcon={<Edit />}
+                    sx={{ mr: 1 }}
                   >
-                    Delete
+                    {t('admin.theaters.edit')}
                   </Button>
+                  <IconButton 
+                    onClick={() => handleDeleteClick(theater)}
+                    color="error"
+                  >
+                    <Delete />
+                  </IconButton>
                 </TableCell>
               </TableRow>
             ))}
@@ -152,19 +168,19 @@ const AdminUsers = () => {
         aria-describedby="delete-dialog-description"
       >
         <DialogTitle id="delete-dialog-title">
-          Confirm Delete
+          {t('admin.theaters.deleteConfirm')}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="delete-dialog-description">
-            {userToDelete && `Are you sure you want to delete user "${userToDelete.name}"?`}
+            {theaterToDelete && `${t('admin.theaters.deleteMessage')} "${theaterToDelete.name}"?`}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDeleteCancel} color="primary">
-            Cancel
+            {t('admin.theaters.cancel')}
           </Button>
           <Button onClick={handleDeleteConfirm} color="error" variant="contained">
-            Delete
+            {t('admin.theaters.delete')}
           </Button>
         </DialogActions>
       </Dialog>
@@ -172,4 +188,4 @@ const AdminUsers = () => {
   );
 };
 
-export default AdminUsers;
+export default AdminTheaters;

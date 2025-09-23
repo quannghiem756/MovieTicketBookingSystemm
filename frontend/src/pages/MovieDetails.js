@@ -32,7 +32,7 @@ const MovieDetails = () => {
   }, [id]);
 
   const handleShowtimeSelect = (showtimeId) => {
-    // Navigate to seat selection page (to be implemented)
+    // Navigate to seat selection page
     navigate(`/book/${id}/${showtimeId}`);
   };
 

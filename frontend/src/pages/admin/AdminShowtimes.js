@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
+import { useTranslation } from '../../contexts/I18nContext';
 import {
   Box,
   Typography,
@@ -29,22 +30,26 @@ import {
 const AdminShowtimes = () => {
   const [showtimes, setShowtimes] = useState([]);
   const [movies, setMovies] = useState([]);
+  const [theaters, setTheaters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [showtimeToDelete, setShowtimeToDelete] = useState(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const showtimesResponse = await api.get('/showtimes');
         const moviesResponse = await api.get('/movies');
+        const theatersResponse = await api.get('/theaters');
         
         setShowtimes(showtimesResponse.data);
-        setMovies(moviesResponse.data);
+        setMovies(moviesResponse.data.movies || moviesResponse.data);
+        setTheaters(theatersResponse.data);
         setLoading(false);
       } catch (err) {
-        setError('Failed to fetch data');
+        setError(t('admin.showtimes.fetchError'));
         setLoading(false);
       }
     };
@@ -66,7 +71,7 @@ const AdminShowtimes = () => {
       setDeleteDialogOpen(false);
       setShowtimeToDelete(null);
     } catch (err) {
-      alert('Failed to delete showtime');
+      alert(t('admin.showtimes.deleteError'));
       setDeleteDialogOpen(false);
       setShowtimeToDelete(null);
     }
@@ -79,7 +84,12 @@ const AdminShowtimes = () => {
 
   const getMovieTitle = (movieId) => {
     const movie = movies.find(m => m.id === movieId);
-    return movie ? movie.title : 'Unknown Movie';
+    return movie ? movie.title : t('admin.showtimes.unknownMovie');
+  };
+
+  const getTheaterName = (theaterId) => {
+    const theater = theaters.find(t => t.id === theaterId);
+    return theater ? theater.name : t('admin.showtimes.unknownTheater');
   };
 
   if (loading) return (
@@ -90,7 +100,7 @@ const AdminShowtimes = () => {
   
   if (error) return (
     <Box sx={{ p: 3 }}>
-      <Alert severity="error">Error: {error}</Alert>
+      <Alert severity="error">{t('common.error')}: {error}</Alert>
     </Box>
   );
 
@@ -98,7 +108,7 @@ const AdminShowtimes = () => {
     <Box sx={{ p: 3 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Typography variant="h4" component="h1">
-          Manage Showtimes
+          {t('admin.showtimes.title')}
         </Typography>
         <Button
           component={Link}
@@ -106,20 +116,20 @@ const AdminShowtimes = () => {
           variant="contained"
           startIcon={<Add />}
         >
-          Add New Showtime
+          {t('admin.showtimes.addNew')}
         </Button>
       </Box>
 
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="showtimes table">
+        <Table sx={{ minWidth: 650 }} aria-label={t('admin.showtimes.table.ariaLabel')}>
           <TableHead>
             <TableRow>
-              <TableCell>Movie</TableCell>
-              <TableCell>Date</TableCell>
-              <TableCell>Time</TableCell>
-              <TableCell>Theater</TableCell>
-              <TableCell>Price</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell>{t('admin.showtimes.table.movie')}</TableCell>
+              <TableCell>{t('admin.showtimes.table.date')}</TableCell>
+              <TableCell>{t('admin.showtimes.table.time')}</TableCell>
+              <TableCell>{t('admin.showtimes.table.theater')}</TableCell>
+              <TableCell>{t('admin.showtimes.table.price')}</TableCell>
+              <TableCell>{t('admin.showtimes.table.actions')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -145,7 +155,7 @@ const AdminShowtimes = () => {
                 </TableCell>
                 <TableCell>
                   <Typography variant="body2" color="text.secondary">
-                    Theater {showtime.theaterId}
+                    {getTheaterName(showtime.theaterId)}
                   </Typography>
                 </TableCell>
                 <TableCell>
@@ -162,7 +172,7 @@ const AdminShowtimes = () => {
                     startIcon={<Edit />}
                     sx={{ mr: 1 }}
                   >
-                    Edit
+                    {t('admin.showtimes.edit')}
                   </Button>
                   <Button
                     variant="outlined"
@@ -171,7 +181,7 @@ const AdminShowtimes = () => {
                     startIcon={<Delete />}
                     onClick={() => handleDeleteClick(showtime)}
                   >
-                    Delete
+                    {t('admin.showtimes.delete')}
                   </Button>
                 </TableCell>
               </TableRow>
@@ -188,19 +198,19 @@ const AdminShowtimes = () => {
         aria-describedby="delete-dialog-description"
       >
         <DialogTitle id="delete-dialog-title">
-          Confirm Delete
+          {t('admin.showtimes.deleteConfirm')}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="delete-dialog-description">
-            {showtimeToDelete && `Are you sure you want to delete the showtime for "${getMovieTitle(showtimeToDelete.movieId)}"?`}
+            {showtimeToDelete && `${t('admin.showtimes.deleteMessage')} "${getMovieTitle(showtimeToDelete.movieId)}"?`}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDeleteCancel} color="primary">
-            Cancel
+            {t('admin.showtimes.cancel')}
           </Button>
           <Button onClick={handleDeleteConfirm} color="error" variant="contained">
-            Delete
+            {t('admin.showtimes.delete')}
           </Button>
         </DialogActions>
       </Dialog>

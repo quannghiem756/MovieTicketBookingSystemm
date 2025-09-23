@@ -9,6 +9,8 @@ import Home from './pages/Home';
 import NowShowing from './pages/NowShowing';
 import ComingSoon from './pages/ComingSoon';
 import MovieDetails from './pages/MovieDetails';
+import Booking from './pages/Booking';
+import BookingConfirmation from './pages/BookingConfirmation';
 import Bookings from './pages/Bookings';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -39,6 +41,16 @@ function App() {
                 <Route path="/now-showing" element={<NowShowing />} />
                 <Route path="/coming-soon" element={<ComingSoon />} />
                 <Route path="/movie/:id" element={<MovieDetails />} />
+                <Route path="/book/:movieId/:showtimeId" element={
+                  <ProtectedRoute>
+                    <Booking />
+                  </ProtectedRoute>
+                } />
+                <Route path="/booking-confirmation" element={
+                  <ProtectedRoute>
+                    <BookingConfirmation />
+                  </ProtectedRoute>
+                } />
                 <Route path="/bookings" element={
                   <ProtectedRoute>
                     <Bookings />

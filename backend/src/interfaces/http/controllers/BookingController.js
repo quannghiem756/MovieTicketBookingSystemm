@@ -14,6 +14,15 @@ class BookingController {
     }
   }
 
+  async getAllBookings(req, res) {
+    try {
+      const bookings = await this.bookingService.getAllBookings();
+      res.json(bookings);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
   async getBookingById(req, res) {
     try {
       const booking = await this.bookingService.getBookingById(req.params.id);

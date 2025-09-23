@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from '../../contexts/I18nContext';
 import api from '../../services/api';
 import {
   Box,
@@ -19,18 +20,26 @@ import {
   DialogContent,
   DialogActions,
   DialogContentText,
-  Button
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel
 } from '@mui/material';
 import {
-  Cancel
+  CheckCircle,
+  Cancel,
+  HourglassEmpty
 } from '@mui/icons-material';
 
 const AdminBookings = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
-  const [bookingToCancel, setBookingToCancel] = useState(null);
+  const [actionDialogOpen, setActionDialogOpen] = useState(false);
+  const [bookingToAction, setBookingToAction] = useState(null);
+  const [actionType, setActionType] = useState(''); // 'confirm' or 'cancel'
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -39,39 +48,50 @@ const AdminBookings = () => {
         setBookings(response.data);
         setLoading(false);
       } catch (err) {
-        setError('Failed to fetch bookings');
+        setError(t('admin.bookings.fetchError'));
         setLoading(false);
       }
     };
 
     fetchBookings();
-  }, []);
+  }, [t]);
 
-  const handleCancelClick = (booking) => {
-    setBookingToCancel(booking);
-    setCancelDialogOpen(true);
+  const handleActionClick = (booking, action) => {
+    setBookingToAction(booking);
+    setActionType(action);
+    setActionDialogOpen(true);
   };
 
-  const handleCancelConfirm = async () => {
-    if (!bookingToCancel) return;
+  const handleActionConfirm = async () => {
+    if (!bookingToAction) return;
     
     try {
-      await api.put(`/bookings/${bookingToCancel.id}/cancel`);
-      setBookings(bookings.map(booking => 
-        booking.id === bookingToCancel.id ? {...booking, status: 'cancelled'} : booking
-      ));
-      setCancelDialogOpen(false);
-      setBookingToCancel(null);
+      if (actionType === 'confirm') {
+        await api.put(`/bookings/${bookingToAction.id}/confirm`);
+        setBookings(bookings.map(booking => 
+          booking.id === bookingToAction.id ? {...booking, status: 'confirmed'} : booking
+        ));
+      } else if (actionType === 'cancel') {
+        await api.put(`/bookings/${bookingToAction.id}/cancel`);
+        setBookings(bookings.map(booking => 
+          booking.id === bookingToAction.id ? {...booking, status: 'cancelled'} : booking
+        ));
+      }
+      setActionDialogOpen(false);
+      setBookingToAction(null);
+      setActionType('');
     } catch (err) {
-      alert('Failed to cancel booking');
-      setCancelDialogOpen(false);
-      setBookingToCancel(null);
+      alert(t('admin.bookings.actionError', { action: actionType }));
+      setActionDialogOpen(false);
+      setBookingToAction(null);
+      setActionType('');
     }
   };
 
-  const handleCancelCancel = () => {
-    setCancelDialogOpen(false);
-    setBookingToCancel(null);
+  const handleActionCancel = () => {
+    setActionDialogOpen(false);
+    setBookingToAction(null);
+    setActionType('');
   };
 
   const getStatusColor = (status) => {
@@ -83,6 +103,24 @@ const AdminBookings = () => {
     }
   };
 
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case 'confirmed': return <CheckCircle />;
+      case 'pending': return <HourglassEmpty />;
+      case 'cancelled': return <Cancel />;
+      default: return null;
+    }
+  };
+
+  const getStatusText = (status) => {
+    switch (status) {
+      case 'confirmed': return t('bookings.status.confirmed');
+      case 'pending': return t('bookings.status.pending');
+      case 'cancelled': return t('bookings.status.cancelled');
+      default: return status;
+    }
+  };
+
   if (loading) return (
     <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
       <CircularProgress />
@@ -91,7 +129,7 @@ const AdminBookings = () => {
   
   if (error) return (
     <Box sx={{ p: 3 }}>
-      <Alert severity="error">Error: {error}</Alert>
+      <Alert severity="error">{t('common.error')}: {error}</Alert>
     </Box>
   );
 
@@ -99,21 +137,21 @@ const AdminBookings = () => {
     <Box sx={{ p: 3 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Typography variant="h4" component="h1">
-          Manage Bookings
+          {t('admin.bookings.title')}
         </Typography>
       </Box>
 
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="bookings table">
+        <Table sx={{ minWidth: 650 }} aria-label={t('admin.bookings.table.ariaLabel')}>
           <TableHead>
             <TableRow>
-              <TableCell>Booking ID</TableCell>
-              <TableCell>User</TableCell>
-              <TableCell>Movie</TableCell>
-              <TableCell>Date</TableCell>
-              <TableCell>Total Price</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell>{t('admin.bookings.table.bookingId')}</TableCell>
+              <TableCell>{t('admin.bookings.table.user')}</TableCell>
+              <TableCell>{t('admin.bookings.table.showtime')}</TableCell>
+              <TableCell>{t('admin.bookings.table.date')}</TableCell>
+              <TableCell>{t('admin.bookings.table.totalPrice')}</TableCell>
+              <TableCell>{t('admin.bookings.table.status')}</TableCell>
+              <TableCell>{t('admin.bookings.table.actions')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -129,17 +167,17 @@ const AdminBookings = () => {
                 </TableCell>
                 <TableCell>
                   <Typography variant="body2" color="text.secondary">
-                    User {booking.userId.substring(0, 8)}
+                    {t('admin.bookings.user')} {booking.userId.substring(0, 8)}
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography variant="body2" color="text.secondary">
-                    Movie Title
+                    {t('admin.bookings.showtime')} {booking.showtimeId.substring(0, 8)}
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography variant="body2" color="text.secondary">
-                    {new Date().toLocaleDateString()}
+                    {new Date(booking.bookingDate).toLocaleDateString()}
                   </Typography>
                 </TableCell>
                 <TableCell>
@@ -149,21 +187,45 @@ const AdminBookings = () => {
                 </TableCell>
                 <TableCell>
                   <Chip 
-                    label={booking.status} 
+                    icon={getStatusIcon(booking.status)}
+                    label={getStatusText(booking.status)} 
                     color={getStatusColor(booking.status)}
                     size="small"
                   />
                 </TableCell>
                 <TableCell>
                   {booking.status === 'pending' && (
+                    <>
+                      <Button
+                        variant="outlined"
+                        color="success"
+                        size="small"
+                        startIcon={<CheckCircle />}
+                        onClick={() => handleActionClick(booking, 'confirm')}
+                        sx={{ mr: 1 }}
+                      >
+                        {t('admin.bookings.confirm')}
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        size="small"
+                        startIcon={<Cancel />}
+                        onClick={() => handleActionClick(booking, 'cancel')}
+                      >
+                        {t('admin.bookings.cancel')}
+                      </Button>
+                    </>
+                  )}
+                  {booking.status === 'confirmed' && (
                     <Button
                       variant="outlined"
                       color="error"
                       size="small"
                       startIcon={<Cancel />}
-                      onClick={() => handleCancelClick(booking)}
+                      onClick={() => handleActionClick(booking, 'cancel')}
                     >
-                      Cancel
+                      {t('admin.bookings.cancel')}
                     </Button>
                   )}
                 </TableCell>
@@ -173,27 +235,32 @@ const AdminBookings = () => {
         </Table>
       </TableContainer>
 
-      {/* Cancel Confirmation Dialog */}
+      {/* Action Confirmation Dialog */}
       <Dialog
-        open={cancelDialogOpen}
-        onClose={handleCancelCancel}
-        aria-labelledby="cancel-dialog-title"
-        aria-describedby="cancel-dialog-description"
+        open={actionDialogOpen}
+        onClose={handleActionCancel}
+        aria-labelledby="action-dialog-title"
+        aria-describedby="action-dialog-description"
       >
-        <DialogTitle id="cancel-dialog-title">
-          Confirm Cancel
+        <DialogTitle id="action-dialog-title">
+          {actionType === 'confirm' ? t('admin.bookings.confirmConfirm') : t('admin.bookings.cancelConfirm')}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="cancel-dialog-description">
-            {bookingToCancel && `Are you sure you want to cancel booking #${bookingToCancel.id.substring(0, 8)}?`}
+          <DialogContentText id="action-dialog-description">
+            {bookingToAction && `${t('admin.bookings.actionMessage')} ${actionType} ${t('admin.bookings.booking')} #${bookingToAction.id.substring(0, 8)}?`}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCancelCancel} color="primary">
-            Cancel
+          <Button onClick={handleActionCancel} color="primary">
+            {t('admin.bookings.dialogCancel')}
           </Button>
-          <Button onClick={handleCancelConfirm} color="error" variant="contained">
-            Confirm Cancel
+          <Button 
+            onClick={handleActionConfirm} 
+            color={actionType === 'confirm' ? 'success' : 'error'} 
+            variant="contained"
+            startIcon={actionType === 'confirm' ? <CheckCircle /> : <Cancel />}
+          >
+            {actionType === 'confirm' ? t('admin.bookings.confirm') : t('admin.bookings.cancel')} {t('admin.bookings.booking')}
           </Button>
         </DialogActions>
       </Dialog>

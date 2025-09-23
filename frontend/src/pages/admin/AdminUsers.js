@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from '../../contexts/I18nContext';
 import api from '../../services/api';
 import {
   Box,
@@ -29,6 +30,7 @@ const AdminUsers = () => {
   const [error, setError] = useState(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -37,13 +39,13 @@ const AdminUsers = () => {
         setUsers(response.data);
         setLoading(false);
       } catch (err) {
-        setError('Failed to fetch users');
+        setError(t('admin.users.fetchError'));
         setLoading(false);
       }
     };
 
     fetchUsers();
-  }, []);
+  }, [t]);
 
   const handleDeleteClick = (user) => {
     setUserToDelete(user);
@@ -59,7 +61,7 @@ const AdminUsers = () => {
       setDeleteDialogOpen(false);
       setUserToDelete(null);
     } catch (err) {
-      alert('Failed to delete user');
+      alert(t('admin.users.deleteError'));
       setDeleteDialogOpen(false);
       setUserToDelete(null);
     }
@@ -78,7 +80,7 @@ const AdminUsers = () => {
   
   if (error) return (
     <Box sx={{ p: 3 }}>
-      <Alert severity="error">Error: {error}</Alert>
+      <Alert severity="error">{t('common.error')}: {error}</Alert>
     </Box>
   );
 
@@ -86,19 +88,19 @@ const AdminUsers = () => {
     <Box sx={{ p: 3 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Typography variant="h4" component="h1">
-          Manage Users
+          {t('admin.users.title')}
         </Typography>
       </Box>
 
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="users table">
+        <Table sx={{ minWidth: 650 }} aria-label={t('admin.users.table.ariaLabel')}>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Phone</TableCell>
-              <TableCell>Loyalty Points</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell>{t('admin.users.table.name')}</TableCell>
+              <TableCell>{t('admin.users.table.email')}</TableCell>
+              <TableCell>{t('admin.users.table.phone')}</TableCell>
+              <TableCell>{t('admin.users.table.loyaltyPoints')}</TableCell>
+              <TableCell>{t('admin.users.table.actions')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -135,7 +137,7 @@ const AdminUsers = () => {
                     startIcon={<Delete />}
                     onClick={() => handleDeleteClick(user)}
                   >
-                    Delete
+                    {t('admin.users.delete')}
                   </Button>
                 </TableCell>
               </TableRow>
@@ -152,19 +154,19 @@ const AdminUsers = () => {
         aria-describedby="delete-dialog-description"
       >
         <DialogTitle id="delete-dialog-title">
-          Confirm Delete
+          {t('admin.users.deleteConfirm')}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="delete-dialog-description">
-            {userToDelete && `Are you sure you want to delete user "${userToDelete.name}"?`}
+            {userToDelete && `${t('admin.users.deleteMessage')} "${userToDelete.name}"?`}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDeleteCancel} color="primary">
-            Cancel
+            {t('admin.users.cancel')}
           </Button>
           <Button onClick={handleDeleteConfirm} color="error" variant="contained">
-            Delete
+            {t('admin.users.delete')}
           </Button>
         </DialogActions>
       </Dialog>

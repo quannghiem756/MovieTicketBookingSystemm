@@ -21,6 +21,10 @@ class ShowtimeService {
     return await this.showtimeRepository.create(showtime);
   }
 
+  async getAllShowtimes() {
+    return await this.showtimeRepository.findAll();
+  }
+
   async getShowtimeById(id) {
     return await this.showtimeRepository.findById(id);
   }

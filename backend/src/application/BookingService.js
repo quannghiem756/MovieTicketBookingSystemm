@@ -20,6 +20,10 @@ class BookingService {
     return await this.bookingRepository.create(booking);
   }
 
+  async getAllBookings() {
+    return await this.bookingRepository.findAll();
+  }
+
   async getBookingById(id) {
     return await this.bookingRepository.findById(id);
   }

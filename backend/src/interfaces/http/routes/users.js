@@ -20,6 +20,7 @@ router.post('/login', loginValidationRules(), validate, (req, res) => userContro
 router.post('/refresh-token', (req, res) => userController.refreshToken(req, res));
 
 // Protected routes
+router.get('/', authenticate, authorizeAdmin, (req, res) => userController.getAllUsers(req, res));
 router.get('/:id', authenticate, (req, res) => userController.getUserById(req, res));
 router.get('/email/:email', authenticate, (req, res) => userController.getUserByEmail(req, res));
 router.put('/:id', authenticate, (req, res) => userController.updateUser(req, res));

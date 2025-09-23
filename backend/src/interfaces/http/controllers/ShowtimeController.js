@@ -14,6 +14,15 @@ class ShowtimeController {
     }
   }
 
+  async getAllShowtimes(req, res) {
+    try {
+      const showtimes = await this.showtimeService.getAllShowtimes();
+      res.json(showtimes);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
   async getShowtimeById(req, res) {
     try {
       const showtime = await this.showtimeService.getShowtimeById(req.params.id);

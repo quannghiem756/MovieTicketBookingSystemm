@@ -12,6 +12,7 @@ const showtimeController = new ShowtimeController(showtimeService);
 const router = express.Router();
 
 // Public routes
+router.get('/', (req, res) => showtimeController.getAllShowtimes(req, res));
 router.get('/movie/:movieId', (req, res) => showtimeController.getShowtimesByMovieId(req, res));
 router.get('/:id', (req, res) => showtimeController.getShowtimeById(req, res));
 

@@ -261,7 +261,7 @@ const TheaterForm = () => {
         {seatMap.length > 0 && (
           <Box sx={{ overflowX: 'auto' }}>
             <TableContainer>
-              <Table sx={{ minWidth: 650 }} aria-label="seat map">
+              <Table sx={{ minWidth: 650 }} aria-label={t('admin.theaterForm.seatMap.ariaLabel')}>
                 <TableHead>
                   <TableRow>
                     <TableCell>{t('admin.theaterForm.seatMap.row')}</TableCell>

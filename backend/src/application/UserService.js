@@ -30,6 +30,10 @@ class UserService {
     return await this.userRepository.create(user);
   }
 
+  async getAllUsers() {
+    return await this.userRepository.findAll();
+  }
+
   async getUserById(id) {
     return await this.userRepository.findById(id);
   }

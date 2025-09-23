@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from '../../contexts/I18nContext';
 import {
   Box,
   Typography,
@@ -24,6 +25,7 @@ const ShowtimeForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEdit = !!id;
+  const { t } = useTranslation();
 
   const [formData, setFormData] = useState({
     movieId: '',
@@ -51,9 +53,9 @@ const ShowtimeForm = () => {
   const fetchMovies = async () => {
     try {
       const response = await getMovies();
-      setMovies(response.data);
+      setMovies(response.data.movies || response.data);
     } catch (err) {
-      console.error('Failed to fetch movies:', err);
+      console.error(t('admin.showtimeForm.fetchMoviesError'), err);
     }
   };
 
@@ -62,7 +64,7 @@ const ShowtimeForm = () => {
       const response = await getTheaters();
       setTheaters(response.data);
     } catch (err) {
-      console.error('Failed to fetch theaters:', err);
+      console.error(t('admin.showtimeForm.fetchTheatersError'), err);
     }
   };
 
@@ -80,7 +82,7 @@ const ShowtimeForm = () => {
         price: showtime.price || ''
       });
     } catch (err) {
-      setError('Failed to fetch showtime');
+      setError(t('admin.showtimeForm.fetchError'));
     }
   };
 
@@ -111,7 +113,7 @@ const ShowtimeForm = () => {
 
       navigate('/admin/showtimes');
     } catch (err) {
-      setError('Failed to save showtime: ' + err.message);
+      setError(t('admin.showtimeForm.saveError') + err.message);
     } finally {
       setLoading(false);
     }
@@ -120,7 +122,7 @@ const ShowtimeForm = () => {
   return (
     <Box sx={{ maxWidth: '1024px', mx: 'auto', p: 3 }}>
       <Typography variant="h4" component="h1" gutterBottom>
-        {isEdit ? 'Edit Showtime' : 'Add New Showtime'}
+        {isEdit ? t('admin.showtimeForm.editTitle') : t('admin.showtimeForm.addTitle')}
       </Typography>
 
       {error && (
@@ -133,16 +135,16 @@ const ShowtimeForm = () => {
         <form onSubmit={handleSubmit}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
-              <FormControl fullWidth required>
-                <InputLabel>Movie</InputLabel>
+              <FormControl fullWidth required sx={{minWidth: 120}}>
+                <InputLabel>{t('admin.showtimeForm.movie')}</InputLabel>
                 <Select
                   name="movieId"
                   value={formData.movieId}
                   onChange={handleChange}
-                  label="Movie"
+                  label={t('admin.showtimeForm.movie')}
                 >
                   <MenuItem value="">
-                    <em>Select a movie</em>
+                    <em>{t('admin.showtimeForm.selectMovie')}</em>
                   </MenuItem>
                   {movies.map((movie) => (
                     <MenuItem key={movie.id} value={movie.id}>
@@ -155,15 +157,15 @@ const ShowtimeForm = () => {
 
             <Grid item xs={12} md={6}>
               <FormControl fullWidth required>
-                <InputLabel>Theater</InputLabel>
+                <InputLabel>{t('admin.showtimeForm.theater')}</InputLabel>
                 <Select
                   name="theaterId"
                   value={formData.theaterId}
                   onChange={handleChange}
-                  label="Theater"
+                  label={t('admin.showtimeForm.theater')}
                 >
                   <MenuItem value="">
-                    <em>Select a theater</em>
+                    <em>{t('admin.showtimeForm.selectTheater')}</em>
                   </MenuItem>
                   {theaters.map((theater) => (
                     <MenuItem key={theater.id} value={theater.id}>
@@ -178,7 +180,7 @@ const ShowtimeForm = () => {
               <TextField
                 fullWidth
                 type="date"
-                label="Show Date"
+                label={t('admin.showtimeForm.showDate')}
                 name="showDate"
                 value={formData.showDate}
                 onChange={handleChange}
@@ -192,11 +194,11 @@ const ShowtimeForm = () => {
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
-                label="Show Time"
+                label={t('admin.showtimeForm.showTime')}
                 name="showTime"
                 value={formData.showTime}
                 onChange={handleChange}
-                placeholder="e.g., 7:30 PM"
+                placeholder={t('admin.showtimeForm.timePlaceholder')}
                 required
               />
             </Grid>
@@ -204,22 +206,22 @@ const ShowtimeForm = () => {
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
-                label="Format"
+                label={t('admin.showtimeForm.format')}
                 name="format"
                 value={formData.format}
                 onChange={handleChange}
-                placeholder="e.g., 2D, 3D, IMAX"
+                placeholder={t('admin.showtimeForm.formatPlaceholder')}
               />
             </Grid>
 
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
-                label="Language"
+                label={t('admin.showtimeForm.language')}
                 name="language"
                 value={formData.language}
                 onChange={handleChange}
-                placeholder="e.g., English, Spanish"
+                placeholder={t('admin.showtimeForm.languagePlaceholder')}
               />
             </Grid>
 
@@ -227,7 +229,7 @@ const ShowtimeForm = () => {
               <TextField
                 fullWidth
                 type="number"
-                label="Price ($)"
+                label={t('admin.showtimeForm.price')}
                 name="price"
                 value={formData.price}
                 onChange={handleChange}
@@ -246,7 +248,7 @@ const ShowtimeForm = () => {
               startIcon={<ArrowBack />}
               onClick={() => navigate('/admin/showtimes')}
             >
-              Cancel
+              {t('admin.showtimeForm.cancel')}
             </Button>
             <Button
               type="submit"
@@ -254,7 +256,7 @@ const ShowtimeForm = () => {
               startIcon={loading ? <CircularProgress size={20} /> : <Save />}
               disabled={loading}
             >
-              {loading ? 'Saving...' : 'Save Showtime'}
+              {loading ? t('admin.showtimeForm.saving') : t('admin.showtimeForm.save')}
             </Button>
           </Box>
         </form>

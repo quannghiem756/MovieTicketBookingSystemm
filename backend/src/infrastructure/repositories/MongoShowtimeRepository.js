@@ -18,6 +18,20 @@ class MongoShowtimeRepository extends ShowtimeRepository {
     return showtime;
   }
 
+  async findAll() {
+    const showtimeDocs = await ShowtimeModel.find({});
+    return showtimeDocs.map(doc => ({
+      id: doc._id,
+      movieId: doc.movieId,
+      theaterId: doc.theaterId,
+      showDate: doc.showDate,
+      showTime: doc.showTime,
+      format: doc.format,
+      language: doc.language,
+      price: doc.price
+    }));
+  }
+
   async findById(id) {
     const showtimeDoc = await ShowtimeModel.findById(id);
     if (!showtimeDoc) return null;

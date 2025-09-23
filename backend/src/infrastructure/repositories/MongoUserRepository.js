@@ -18,6 +18,20 @@ class MongoUserRepository extends UserRepository {
     return user;
   }
 
+  async findAll() {
+    const userDocs = await UserModel.find({});
+    return userDocs.map(doc => ({
+      id: doc._id,
+      name: doc.name,
+      email: doc.email,
+      phone: doc.phone,
+      passwordHash: doc.passwordHash,
+      dateOfBirth: doc.dateOfBirth,
+      loyaltyPoints: doc.loyaltyPoints,
+      role: doc.role
+    }));
+  }
+
   async findById(id) {
     const userDoc = await UserModel.findById(id);
     if (!userDoc) return null;
@@ -58,7 +72,7 @@ class MongoUserRepository extends UserRepository {
       passwordHash: user.passwordHash,
       dateOfBirth: user.dateOfBirth,
       loyaltyPoints: user.loyaltyPoints,
-      role: userDoc.role
+      role: user.role
     }, { new: true });
     
     if (!updatedUser) return null;

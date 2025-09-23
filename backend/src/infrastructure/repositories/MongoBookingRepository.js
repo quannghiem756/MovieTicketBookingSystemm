@@ -17,6 +17,19 @@ class MongoBookingRepository extends BookingRepository {
     return booking;
   }
 
+  async findAll() {
+    const bookingDocs = await BookingModel.find({});
+    return bookingDocs.map(doc => ({
+      id: doc._id,
+      userId: doc.userId,
+      showtimeId: doc.showtimeId,
+      seatIds: doc.seatIds,
+      totalPrice: doc.totalPrice,
+      bookingDate: doc.bookingDate,
+      status: doc.status
+    }));
+  }
+
   async findById(id) {
     const bookingDoc = await BookingModel.findById(id);
     if (!bookingDoc) return null;

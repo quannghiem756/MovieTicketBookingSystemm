@@ -45,6 +45,38 @@ const vi = {
   'bookings.status.pending': 'Đang chờ',
   'bookings.status.cancelled': 'Đã hủy',
   
+  // Booking Page
+  'booking.title': 'Đặt vé',
+  'booking.perTicket': 'mỗi vé',
+  'booking.selectSeats': 'Chọn ghế',
+  'booking.screen': 'Màn hình',
+  'booking.available': 'Còn trống',
+  'booking.selected': 'Đã chọn',
+  'booking.unavailable': 'Không khả dụng',
+  'booking.seatUnavailable': 'Ghế không khả dụng',
+  'booking.noSeatsSelected': 'Chưa chọn ghế nào',
+  'booking.selectedSeats': 'Ghế đã chọn',
+  'booking.total': 'Tổng cộng',
+  'booking.confirmBooking': 'Xác nhận đặt vé',
+  'booking.processing': 'Đang xử lý...',
+  'booking.error': 'Đặt vé không thành công. Vui lòng thử lại.',
+  'booking.selectSeats': 'Vui lòng chọn ít nhất một ghế.',
+  
+  // Booking Confirmation Page
+  'booking.confirmation.title': 'Đặt vé thành công!',
+  'booking.confirmation.subtitle': 'Cảm ơn bạn đã đặt vé. Dưới đây là thông tin chi tiết về vé của bạn.',
+  'booking.confirmation.movie': 'Phim',
+  'booking.confirmation.theater': 'Phòng chiếu',
+  'booking.confirmation.date': 'Ngày',
+  'booking.confirmation.time': 'Giờ',
+  'booking.confirmation.seats': 'Ghế',
+  'booking.confirmation.total': 'Tổng cộng',
+  'booking.confirmation.bookingId': 'Mã đặt vé',
+  'booking.confirmation.info': 'Vui lòng giữ mã đặt vé để nhận vé tại quầy. Bạn có thể xem tất cả vé đã đặt trong trang "Vé của tôi".',
+  'booking.confirmation.viewBookings': 'Xem vé của tôi',
+  'booking.confirmation.bookMore': 'Đặt vé khác',
+  'booking.confirmation.invalid': 'Thông tin đặt vé không hợp lệ',
+  
   // Login Page
   'login.title': 'Đăng nhập vào tài khoản của bạn',
   'login.email': 'Địa chỉ email',
@@ -159,7 +191,51 @@ const vi = {
   'admin.movieForm.deleteShowtimeConfirm': 'Xác nhận xóa',
   'admin.movieForm.deleteShowtimeMessage': 'Bạn có chắc chắn muốn xóa lịch chiếu lúc',
 
-  // Quản lý phòng chiếu
+  // Admin Showtimes
+  'admin.showtimes.title': 'Quản lý lịch chiếu',
+  'admin.showtimes.addNew': 'Thêm lịch chiếu mới',
+  'admin.showtimes.table.ariaLabel': 'Bảng lịch chiếu',
+  'admin.showtimes.table.movie': 'Phim',
+  'admin.showtimes.table.date': 'Ngày',
+  'admin.showtimes.table.time': 'Giờ',
+  'admin.showtimes.table.theater': 'Phòng chiếu',
+  'admin.showtimes.table.price': 'Giá ($)',
+  'admin.showtimes.table.actions': 'Hành động',
+  'admin.showtimes.theater': 'Phòng',
+  'admin.showtimes.edit': 'Sửa',
+  'admin.showtimes.delete': 'Xóa',
+  'admin.showtimes.deleteConfirm': 'Xác nhận xóa',
+  'admin.showtimes.deleteMessage': 'Bạn có chắc chắn muốn xóa lịch chiếu cho phim',
+  'admin.showtimes.cancel': 'Hủy',
+  'admin.showtimes.unknownMovie': 'Phim không xác định',
+  'admin.showtimes.unknownTheater': 'Phòng chiếu không xác định',
+  'admin.showtimes.fetchError': 'Không thể tải dữ liệu',
+  'admin.showtimes.deleteError': 'Xóa lịch chiếu không thành công',
+  
+  // Showtime Form
+  'admin.showtimeForm.addTitle': 'Thêm lịch chiếu mới',
+  'admin.showtimeForm.editTitle': 'Sửa lịch chiếu',
+  'admin.showtimeForm.movie': 'Phim',
+  'admin.showtimeForm.theater': 'Phòng chiếu',
+  'admin.showtimeForm.showDate': 'Ngày chiếu',
+  'admin.showtimeForm.showTime': 'Giờ chiếu',
+  'admin.showtimeForm.format': 'Định dạng',
+  'admin.showtimeForm.language': 'Ngôn ngữ',
+  'admin.showtimeForm.price': 'Giá ($)',
+  'admin.showtimeForm.selectMovie': 'Chọn một phim',
+  'admin.showtimeForm.selectTheater': 'Chọn một phòng chiếu',
+  'admin.showtimeForm.timePlaceholder': 'Ví dụ: 7:30 PM',
+  'admin.showtimeForm.formatPlaceholder': 'Ví dụ: 2D, 3D, IMAX',
+  'admin.showtimeForm.languagePlaceholder': 'Ví dụ: Tiếng Anh, Tiếng Tây Ban Nha',
+  'admin.showtimeForm.cancel': 'Hủy',
+  'admin.showtimeForm.save': 'Lưu lịch chiếu',
+  'admin.showtimeForm.saving': 'Đang lưu...',
+  'admin.showtimeForm.fetchMoviesError': 'Không thể tải danh sách phim:',
+  'admin.showtimeForm.fetchTheatersError': 'Không thể tải danh sách phòng chiếu:',
+  'admin.showtimeForm.fetchError': 'Không thể tải thông tin lịch chiếu',
+  'admin.showtimeForm.saveError': 'Lưu lịch chiếu không thành công:',
+
+    // Quản lý phòng chiếu
   'admin.theaters.title': 'Quản lý phòng chiếu',
   'admin.theaters.addNew': 'Thêm phòng chiếu mới',
   'admin.theaters.table.name': 'Tên',
@@ -173,6 +249,7 @@ const vi = {
   'admin.theaters.cancel': 'Hủy',
   'admin.theaters.deleteError': 'Xóa phòng chiếu không thành công',
 
+
   // Form phòng chiếu
   'admin.theaterForm.addTitle': 'Thêm phòng chiếu mới',
   'admin.theaterForm.editTitle': 'Sửa phòng chiếu',
@@ -185,6 +262,7 @@ const vi = {
   'admin.theaterForm.saving': 'Đang lưu...',
   'admin.theaterForm.error': 'Lưu phòng chiếu không thành công:',
   'admin.theaterForm.seatMapTitle': 'Sơ đồ ghế',
+  'admin.theaterForm.seatMap.ariaLabel': 'Sơ đồ ghế',
   'admin.theaterForm.seatMap.row': 'Hàng',
   // Loại ghế
   'admin.theaterForm.seatType.legend': 'Loại ghế:',
@@ -192,14 +270,42 @@ const vi = {
   'admin.theaterForm.seatType.premium': 'Cao cấp',
   'admin.theaterForm.seatType.vip': 'VIP',
   
-  // Pagination
-  'pagination.previous': 'Trước',
-  'pagination.next': 'Sau',
+  // Admin Users
+  'admin.users.title': 'Quản lý người dùng',
+  'admin.users.table.ariaLabel': 'Bảng người dùng',
+  'admin.users.table.name': 'Tên',
+  'admin.users.table.email': 'Email',
+  'admin.users.table.phone': 'Điện thoại',
+  'admin.users.table.loyaltyPoints': 'Điểm thưởng',
+  'admin.users.table.actions': 'Hành động',
+  'admin.users.delete': 'Xóa',
+  'admin.users.deleteConfirm': 'Xác nhận xóa',
+  'admin.users.deleteMessage': 'Bạn có chắc chắn muốn xóa người dùng',
+  'admin.users.cancel': 'Hủy',
+  'admin.users.fetchError': 'Không thể tải danh sách người dùng',
+  'admin.users.deleteError': 'Xóa người dùng không thành công',
   
-  // Common
-  'common.loading': 'Đang tải...',
-  'common.error': 'Có lỗi xảy ra',
-  'common.movieNotFound': 'Không tìm thấy phim'
+  // Admin Bookings
+  'admin.bookings.title': 'Quản lý vé đặt',
+  'admin.bookings.table.ariaLabel': 'Bảng vé đặt',
+  'admin.bookings.table.bookingId': 'Mã đặt vé',
+  'admin.bookings.table.user': 'Người dùng',
+  'admin.bookings.table.showtime': 'Lịch chiếu',
+  'admin.bookings.table.date': 'Ngày',
+  'admin.bookings.table.totalPrice': 'Tổng giá',
+  'admin.bookings.table.status': 'Trạng thái',
+  'admin.bookings.table.actions': 'Hành động',
+  'admin.bookings.user': 'Người dùng',
+  'admin.bookings.showtime': 'Lịch chiếu',
+  'admin.bookings.confirm': 'Xác nhận',
+  'admin.bookings.cancel': 'Hủy',
+  'admin.bookings.fetchError': 'Không thể tải danh sách vé đặt',
+  'admin.bookings.actionError': 'Không thể {{action}} vé đặt',
+  'admin.bookings.confirmConfirm': 'Xác nhận xác nhận',
+  'admin.bookings.cancelConfirm': 'Xác nhận hủy',
+  'admin.bookings.actionMessage': 'Bạn có chắc chắn muốn',
+  'admin.bookings.booking': 'Vé đặt',
+  'admin.bookings.dialogCancel': 'Hủy',
 };
 
 export default vi;

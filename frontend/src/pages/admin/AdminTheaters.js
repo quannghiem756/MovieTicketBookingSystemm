@@ -85,7 +85,7 @@ const AdminTheaters = () => {
   
   if (error) return (
     <Box sx={{ p: 3 }}>
-      <Alert severity="error">{error}</Alert>
+      <Alert severity="error">{t('common.error')}: {error}</Alert>
     </Box>
   );
 
@@ -106,7 +106,7 @@ const AdminTheaters = () => {
       </Box>
 
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="theaters table">
+        <Table sx={{ minWidth: 650 }} aria-label={t('admin.theaters.table.ariaLabel')}>
           <TableHead>
             <TableRow>
               <TableCell>{t('admin.theaters.table.name')}</TableCell>

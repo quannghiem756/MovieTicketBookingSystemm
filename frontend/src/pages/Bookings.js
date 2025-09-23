@@ -1,22 +1,21 @@
 // pages/Bookings.js
 import React, { useState, useEffect } from 'react';
 import { getBookingsByUserId } from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
 import { useTranslation } from '../contexts/I18nContext';
 
 const Bookings = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { user } = useAuth();
   const { t } = useTranslation();
 
   useEffect(() => {
-    // In a real app, you would get the user ID from auth context
-    const userId = 'user-id'; // Placeholder
-    
     const fetchBookings = async () => {
       try {
         setLoading(true);
-        const response = await getBookingsByUserId(userId);
+        const response = await getBookingsByUserId(user.id);
         setBookings(response.data);
         setLoading(false);
       } catch (err) {
@@ -25,8 +24,10 @@ const Bookings = () => {
       }
     };
 
-    fetchBookings();
-  }, []);
+    if (user) {
+      fetchBookings();
+    }
+  }, [user]);
 
   if (loading) return <div className="text-center py-10 text-xl">{t('common.loading')}</div>;
   if (error) return <div className="text-center py-10 text-xl text-red-500">{error}</div>;

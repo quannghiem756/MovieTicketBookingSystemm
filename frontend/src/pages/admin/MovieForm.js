@@ -34,7 +34,7 @@ import {
   Delete,
   Add as AddIcon
 } from '@mui/icons-material';
-import { getTheaters,getShowtimesByMovieId } from '../../services/api';
+import { getTheaters, getShowtimesByMovieId, createShowtime, updateShowtime, deleteShowtime } from '../../services/api';
 
 const MovieForm = () => {
   const { id } = useParams();
@@ -173,10 +173,10 @@ const MovieForm = () => {
       
       if (editingShowtimeId) {
         // Update existing showtime
-        await api.updateShowtime(editingShowtimeId, showtimeData);
+        await updateShowtime(editingShowtimeId, showtimeData);
       } else {
         // Create new showtime
-        await api.createShowtime(showtimeData);
+        await createShowtime(showtimeData);
       }
       
       // Refresh showtimes
@@ -196,7 +196,7 @@ const MovieForm = () => {
     if (!showtimeToDelete) return;
     
     try {
-      await api.deleteShowtime(showtimeToDelete.id);
+      await deleteShowtime(showtimeToDelete.id);
       await fetchShowtimes();
       setDeleteDialogOpen(false);
       setShowtimeToDelete(null);
@@ -329,7 +329,7 @@ const MovieForm = () => {
             </Grid>
 
             <Grid item xs={12} md={3}>
-              <FormControl fullWidth sx={{ width: "100%" }}>
+              <FormControl fullWidth sx={{ width: "100%", minWidth:120 }}>
                 <InputLabel>{t('admin.movieForm.rating')}</InputLabel>
                 <Select
                   name="rating"
@@ -520,7 +520,7 @@ const MovieForm = () => {
           <Box component="form" onSubmit={handleShowtimeSubmit} sx={{ mt: 2 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
-                <FormControl fullWidth required>
+                <FormControl fullWidth required sx={{minWidth:120}}>
                   <InputLabel>{t('admin.movieForm.theater')}</InputLabel>
                   <Select
                     name="theaterId"

@@ -311,7 +311,7 @@ const Register = () => {
                 }}
               />
             </Grid>
-            <FormControl xs={{ width: '100%' }} sx={{ width: "100%" }} >
+            <FormControl >
               <TextField
                 fullWidth
                 id="phone"

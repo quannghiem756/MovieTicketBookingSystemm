@@ -1,7 +1,7 @@
 // pages/Booking.js
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getMovieById, getShowtimeById, createBooking } from '../services/api';
+import { getMovieById, getShowtimeById, getTheaterById, createBooking } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import { useTranslation } from '../contexts/I18nContext';
 
@@ -100,13 +100,22 @@ const Booking = () => {
       
       const response = await createBooking(bookingData);
       
+      // Fetch theater name for confirmation page
+      let theaterName = `Theater ${showtime.theaterId}`;
+      try {
+        const theaterResponse = await getTheaterById(showtime.theaterId);
+        theaterName = theaterResponse.data.name;
+      } catch (err) {
+        console.error('Failed to fetch theater name:', err);
+      }
+      
       // Navigate to confirmation page with booking data
       navigate('/booking-confirmation', {
         state: {
           bookingData: {
             bookingId: response.data.id,
             movieTitle: movie.title,
-            theaterName: `Theater ${showtime.theaterId}`, // In a real app, this would be the actual theater name
+            theaterName: theaterName,
             showDate: showtime.showDate,
             showTime: showtime.showTime,
             seatIds: selectedSeats,

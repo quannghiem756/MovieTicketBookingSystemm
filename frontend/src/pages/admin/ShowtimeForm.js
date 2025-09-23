@@ -156,7 +156,7 @@ const ShowtimeForm = () => {
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <FormControl fullWidth required>
+              <FormControl fullWidth required sx={{minWidth: 150}}>
                 <InputLabel>{t('admin.showtimeForm.theater')}</InputLabel>
                 <Select
                   name="theaterId"

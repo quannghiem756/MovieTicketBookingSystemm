@@ -1,4 +1,3 @@
-// translations/vi.js
 const vi = {
   // Header
   'header.home': 'Trang chủ',
@@ -8,7 +7,6 @@ const vi = {
   'header.admin': 'Quản trị',
   'header.logout': 'Đăng xuất',
   'header.login': 'Đăng nhập',
-  'header.profile': 'Hồ sơ',
   
   // Home Page
   'home.welcomeTitle': 'Chào mừng đến với MovieTicketBooking',
@@ -117,24 +115,6 @@ const vi = {
   'validation.password.mismatch': 'Mật khẩu không khớp',
   'validation.phone.invalid': 'Vui lòng nhập số điện thoại hợp lệ',
   'validation.dateOfBirth.age': 'Bạn phải ít nhất 13 tuổi',
-  
-  // Common
-  'common.loading': 'Đang tải...',
-  'common.error': 'Đã xảy ra lỗi',
-  'common.movieNotFound': 'Không tìm thấy phim',
-  
-  // Pagination
-  'pagination.previous': 'Trước',
-  'pagination.next': 'Sau',
-  
-  // Profile Page
-  'profile.title': 'Hồ sơ của tôi',
-  'profile.edit': 'Chỉnh sửa hồ sơ',
-  'profile.save': 'Lưu thay đổi',
-  'profile.cancel': 'Hủy',
-  'profile.saving': 'Đang lưu...',
-  'profile.updateSuccess': 'Cập nhật hồ sơ thành công',
-  'profile.updateError': 'Cập nhật hồ sơ không thành công',
   
   // Admin Sidebar
   'admin.sidebar.adminPanel': 'Bảng điều khiển',

@@ -21,14 +21,7 @@ class AuthService {
   async updateUser(id, userData) {
     return api.put(`/users/${id}`, userData);
   }
-
-  async getUsers() {
-    return api.get('/users');
-  }
-
-  async deleteUser(id) {
-    return api.delete(`/users/${id}`);
-  }
 }
 
-export default new AuthService();
+const authService = new AuthService();
+export default authService;

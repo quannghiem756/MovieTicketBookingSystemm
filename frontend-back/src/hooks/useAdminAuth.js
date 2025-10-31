@@ -1,5 +1,4 @@
-// hooks/useAdminAuth.js
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 

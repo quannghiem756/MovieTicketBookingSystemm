@@ -1,4 +1,3 @@
-// translations/en.js
 const en = {
   // Header
   'header.home': 'Home',
@@ -126,15 +125,6 @@ const en = {
   'validation.password.mismatch': 'Passwords do not match',
   'validation.phone.invalid': 'Please enter a valid phone number',
   'validation.dateOfBirth.age': 'You must be at least 13 years old',
-  
-  // Common
-  'common.loading': 'Loading...',
-  'common.error': 'An error occurred',
-  'common.movieNotFound': 'Movie not found',
-  
-  // Pagination
-  'pagination.previous': 'Previous',
-  'pagination.next': 'Next',
   
   // Admin Sidebar
   'admin.sidebar.adminPanel': 'Admin Panel',
@@ -326,6 +316,11 @@ const en = {
   'admin.bookings.actionMessage': 'Are you sure you want to',
   'admin.bookings.booking': 'Booking',
   'admin.bookings.dialogCancel': 'Cancel',
+  
+  // Common
+  'common.loading': 'Loading...',
+  'common.error': 'An error occurred',
+  'common.movieNotFound': 'Movie not found'
 };
 
 export default en;

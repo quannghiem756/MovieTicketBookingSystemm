@@ -6,7 +6,6 @@ import {
   Card,
   CardContent,
   Typography,
-  Grid,
   List,
   ListItem,
   ListItemText,
@@ -164,8 +163,8 @@ const AdminDashboard = () => {
       </Box>
       
       {/* Stats Cards */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={4} lg={2}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 4 }}>
+        <Box sx={{ flex: '1 1 calc(50% - 12px)', minWidth: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(33.333% - 12px)', lg: 'calc(16.666% - 12px)' } }}>
           <Card 
             sx={{ 
               height: '100%', 
@@ -192,9 +191,9 @@ const AdminDashboard = () => {
               </Typography>
             </CardContent>
           </Card>
-        </Grid>
+        </Box>
         
-        <Grid item xs={12} sm={6} md={4} lg={2}>
+        <Box sx={{ flex: '1 1 calc(50% - 12px)', minWidth: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(33.333% - 12px)', lg: 'calc(16.666% - 12px)' } }}>
           <Card 
             sx={{ 
               height: '100%', 
@@ -221,9 +220,9 @@ const AdminDashboard = () => {
               </Typography>
             </CardContent>
           </Card>
-        </Grid>
+        </Box>
         
-        <Grid item xs={12} sm={6} md={4} lg={2}>
+        <Box sx={{ flex: '1 1 calc(50% - 12px)', minWidth: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(33.333% - 12px)', lg: 'calc(16.666% - 12px)' } }}>
           <Card 
             sx={{ 
               height: '100%', 
@@ -250,9 +249,9 @@ const AdminDashboard = () => {
               </Typography>
             </CardContent>
           </Card>
-        </Grid>
+        </Box>
         
-        <Grid item xs={12} sm={6} md={4} lg={2}>
+        <Box sx={{ flex: '1 1 calc(50% - 12px)', minWidth: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(33.333% - 12px)', lg: 'calc(16.666% - 12px)' } }}>
           <Card 
             sx={{ 
               height: '100%', 
@@ -279,9 +278,9 @@ const AdminDashboard = () => {
               </Typography>
             </CardContent>
           </Card>
-        </Grid>
+        </Box>
         
-        <Grid item xs={12} sm={6} md={4} lg={2}>
+        <Box sx={{ flex: '1 1 calc(50% - 12px)', minWidth: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(33.333% - 12px)', lg: 'calc(16.666% - 12px)' } }}>
           <Card 
             sx={{ 
               height: '100%', 
@@ -308,9 +307,9 @@ const AdminDashboard = () => {
               </Typography>
             </CardContent>
           </Card>
-        </Grid>
+        </Box>
         
-        <Grid item xs={12} sm={6} md={4} lg={2}>
+        <Box sx={{ flex: '1 1 calc(50% - 12px)', minWidth: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(33.333% - 12px)', lg: 'calc(16.666% - 12px)' } }}>
           <Card 
             sx={{ 
               height: '100%', 
@@ -337,13 +336,13 @@ const AdminDashboard = () => {
               </Typography>
             </CardContent>
           </Card>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
       
       {/* Quick Actions */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 4 }}>
         {quickActions.map((action, index) => (
-          <Grid item xs={6} sm={3} key={index}>
+          <Box key={index} sx={{ flex: '1 1 calc(50% - 12px)', minWidth: { xs: 'calc(50% - 12px)', sm: 'calc(25% - 12px)' } }}>
             <Card 
               component={Link}
               to={action.link}
@@ -377,14 +376,14 @@ const AdminDashboard = () => {
                 </Typography>
               </CardContent>
             </Card>
-          </Grid>
+          </Box>
         ))}
-      </Grid>
+      </Box>
       
       {/* Main Content */}
-      <Grid container spacing={4}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
         {/* Recent Activity */}
-        <Grid item xs={12} md={6}>
+        <Box sx={{ flex: '1 1 100%', minWidth: { xs: '100%', md: 'calc(50% - 24px)' }, width: { xs: '100%', md: 'calc(50% - 24px)' } }}>
           <Card 
             sx={{ 
               height: '100%',
@@ -428,10 +427,10 @@ const AdminDashboard = () => {
               </List>
             </CardContent>
           </Card>
-        </Grid>
+        </Box>
         
         {/* Performance Stats */}
-        <Grid item xs={12} md={6}>
+        <Box sx={{ flex: '1 1 100%', minWidth: { xs: '100%', md: 'calc(50% - 24px)' }, width: { xs: '100%', md: 'calc(50% - 24px)' } }}>
           <Card 
             sx={{ 
               height: '100%',
@@ -544,8 +543,8 @@ const AdminDashboard = () => {
               </Box>
             </CardContent>
           </Card>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
     </Box>
   );
 };

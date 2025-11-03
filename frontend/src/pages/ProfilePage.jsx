@@ -14,7 +14,6 @@ import {
   Alert,
   CircularProgress,
   Avatar,
-  Grid,
   Card,
   CardContent,
   Chip,
@@ -123,9 +122,9 @@ const ProfilePage = () => {
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Grid container spacing={4}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
         {/* Profile Header */}
-        <Grid item xs={12}>
+        <Box sx={{ width: '100%' }}>
           <Paper 
             sx={{ 
               p: 4, 
@@ -250,26 +249,31 @@ const ProfilePage = () => {
               </Box>
             </Box>
           </Paper>
-        </Grid>
+        </Box>
         
-        {/* Profile Form */}
-        <Grid item xs={12} md={8}>
-          <Card 
-            sx={{ 
-              borderRadius: 4,
-              border: '1px solid rgba(255,255,255,0.1)',
-              background: 'rgba(30,30,30,0.7)',
-              backdropFilter: 'blur(10px)',
-              overflow: 'hidden'
-            }}
-          >
-            <CardContent sx={{ p: 4 }}>
-              {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
-              {success && <Alert severity="success" sx={{ mb: 3 }}>{success}</Alert>}
-              
-              <form onSubmit={handleSubmit}>
-                <Grid container spacing={3}>
-                  <Grid item xs={12}>
+        {/* Profile Form and User Stats - Responsive Layout */}
+        <Box sx={{ 
+          display: 'grid',
+          gridTemplateColumns: { xs: '1fr', md: '2fr 1fr' },
+          gap: 4
+        }}>
+          {/* Profile Form */}
+          <Box sx={{ width: '100%' }}>
+            <Card 
+              sx={{ 
+                borderRadius: 4,
+                border: '1px solid rgba(255,255,255,0.1)',
+                background: 'rgba(30,30,30,0.7)',
+                backdropFilter: 'blur(10px)',
+                overflow: 'hidden'
+              }}
+            >
+              <CardContent sx={{ p: 4 }}>
+                {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
+                {success && <Alert severity="success" sx={{ mb: 3 }}>{success}</Alert>}
+                
+                <form onSubmit={handleSubmit}>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                     <TextField
                       fullWidth
                       label={t('register.name')}
@@ -307,9 +311,7 @@ const ProfilePage = () => {
                         }
                       }}
                     />
-                  </Grid>
-                  
-                  <Grid item xs={12}>
+                    
                     <TextField
                       fullWidth
                       label={t('register.email')}
@@ -348,156 +350,158 @@ const ProfilePage = () => {
                         }
                       }}
                     />
-                  </Grid>
-                  
-                  <Grid item xs={12} md={6}>
-                    <TextField
-                      fullWidth
-                      label={t('register.phone')}
-                      name="phone"
-                      value={userData.phone}
-                      onChange={handleInputChange}
-                      disabled={!editMode}
-                      InputProps={{
-                        startAdornment: (
-                          <Phone sx={{ mr: 1, my: 0.5, color: 'primary.main' }} />
-                        ),
-                        sx: { 
-                          borderRadius: 3,
-                          '& .MuiInputBase-input': {
-                            py: 1.5
+                    
+                    <Box sx={{ 
+                      display: 'grid',
+                      gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' },
+                      gap: 3
+                    }}>
+                      <TextField
+                        fullWidth
+                        label={t('register.phone')}
+                        name="phone"
+                        value={userData.phone}
+                        onChange={handleInputChange}
+                        disabled={!editMode}
+                        InputProps={{
+                          startAdornment: (
+                            <Phone sx={{ mr: 1, my: 0.5, color: 'primary.main' }} />
+                          ),
+                          sx: { 
+                            borderRadius: 3,
+                            '& .MuiInputBase-input': {
+                              py: 1.5
+                            }
                           }
-                        }
-                      }}
-                      InputLabelProps={{
-                        sx: {
-                          fontWeight: 600
-                        }
-                      }}
-                      sx={{ 
-                        '& .MuiOutlinedInput-root': {
-                          '& fieldset': {
-                            borderColor: 'rgba(255,255,255,0.3)',
-                          },
-                          '&:hover fieldset': {
-                            borderColor: 'rgba(255,255,255,0.5)',
-                          },
-                          '&.Mui-focused fieldset': {
-                            borderColor: 'primary.main',
-                          },
-                        }
-                      }}
-                    />
-                  </Grid>
-                  
-                  <Grid item xs={12} md={6}>
-                    <TextField
-                      fullWidth
-                      label={t('register.dateOfBirth')}
-                      name="dateOfBirth"
-                      type="date"
-                      value={userData.dateOfBirth}
-                      onChange={handleInputChange}
-                      disabled={!editMode}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      InputProps={{
-                        startAdornment: (
-                          <CalendarToday sx={{ mr: 1, my: 0.5, color: 'primary.main' }} />
-                        ),
-                        sx: { 
-                          borderRadius: 3,
-                          '& .MuiInputBase-input': {
-                            py: 1.5
+                        }}
+                        InputLabelProps={{
+                          sx: {
+                            fontWeight: 600
                           }
-                        }
-                      }}
-                      InputLabelProps={{
-                        sx: {
-                          fontWeight: 600
-                        }
-                      }}
-                      sx={{ 
-                        '& .MuiOutlinedInput-root': {
-                          '& fieldset': {
-                            borderColor: 'rgba(255,255,255,0.3)',
-                          },
-                          '&:hover fieldset': {
-                            borderColor: 'rgba(255,255,255,0.5)',
-                          },
-                          '&.Mui-focused fieldset': {
-                            borderColor: 'primary.main',
-                          },
-                        }
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-              </form>
-            </CardContent>
-          </Card>
-        </Grid>
-        
-        {/* User Stats */}
-        <Grid item xs={12} md={4}>
-          <Card 
-            sx={{ 
-              borderRadius: 4,
-              border: '1px solid rgba(255,255,255,0.1)',
-              background: 'rgba(30,30,30,0.7)',
-              backdropFilter: 'blur(10px)',
-              height: '100%'
-            }}
-          >
-            <CardContent sx={{ p: 4 }}>
-              <Typography variant="h6" sx={{ fontWeight: 700, mb: 3, display: 'flex', alignItems: 'center' }}>
-                <AccountBalanceWallet sx={{ mr: 1, color: 'primary.main' }} />
-                {t('profile.accountOverview')}
-              </Typography>
-              
-              <Box sx={{ mb: 3 }}>
-                <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
-                  {t('profile.memberSince')}
+                        }}
+                        sx={{ 
+                          '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                              borderColor: 'rgba(255,255,255,0.3)',
+                            },
+                            '&:hover fieldset': {
+                              borderColor: 'rgba(255,255,255,0.5)',
+                            },
+                            '&.Mui-focused fieldset': {
+                              borderColor: 'primary.main',
+                            },
+                          }
+                        }}
+                      />
+                      
+                      <TextField
+                        fullWidth
+                        label={t('register.dateOfBirth')}
+                        name="dateOfBirth"
+                        type="date"
+                        value={userData.dateOfBirth}
+                        onChange={handleInputChange}
+                        disabled={!editMode}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        InputProps={{
+                          startAdornment: (
+                            <CalendarToday sx={{ mr: 1, my: 0.5, color: 'primary.main' }} />
+                          ),
+                          sx: { 
+                            borderRadius: 3,
+                            '& .MuiInputBase-input': {
+                              py: 1.5
+                            }
+                          }
+                        }}
+                        InputLabelProps={{
+                          sx: {
+                            fontWeight: 600
+                          }
+                        }}
+                        sx={{ 
+                          '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                              borderColor: 'rgba(255,255,255,0.3)',
+                            },
+                            '&:hover fieldset': {
+                              borderColor: 'rgba(255,255,255,0.5)',
+                            },
+                            '&.Mui-focused fieldset': {
+                              borderColor: 'primary.main',
+                            },
+                          }
+                        }}
+                      />
+                    </Box>
+                  </Box>
+                </form>
+              </CardContent>
+            </Card>
+          </Box>
+          
+          {/* User Stats */}
+          <Box sx={{ width: '100%', height: '100%' }}>
+            <Card 
+              sx={{ 
+                borderRadius: 4,
+                border: '1px solid rgba(255,255,255,0.1)',
+                background: 'rgba(30,30,30,0.7)',
+                backdropFilter: 'blur(10px)',
+                height: '100%'
+              }}
+            >
+              <CardContent sx={{ p: 4 }}>
+                <Typography variant="h6" sx={{ fontWeight: 700, mb: 3, display: 'flex', alignItems: 'center' }}>
+                  <AccountBalanceWallet sx={{ mr: 1, color: 'primary.main' }} />
+                  {t('profile.accountOverview')}
                 </Typography>
-                <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                  {new Date(userData.joinDate).toLocaleDateString('en-US', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                  })}
-                </Typography>
-              </Box>
-              
-              <Box sx={{ mb: 3 }}>
-                <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
-                  {t('profile.role')}
-                </Typography>
-                <Chip
-                  label={userData.role.charAt(0).toUpperCase() + userData.role.slice(1)}
-                  color={userData.role === 'admin' ? 'error' : 'primary'}
-                  sx={{ borderRadius: 3, fontWeight: 600 }}
-                />
-              </Box>
-              
-              <Divider sx={{ my: 2, borderColor: 'rgba(255,255,255,0.1)' }} />
-              
-              <Box>
-                <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
-                  {t('profile.profileStatus')}
-                </Typography>
-                <Chip
-                  icon={<VerifiedUser />}
-                  label={t('profile.verified')}
-                  color="success"
-                  variant="outlined"
-                  sx={{ borderRadius: 3, fontWeight: 600 }}
-                />
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+                
+                <Box sx={{ mb: 3 }}>
+                  <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
+                    {t('profile.memberSince')}
+                  </Typography>
+                  <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                    {new Date(userData.joinDate).toLocaleDateString('en-US', { 
+                      year: 'numeric', 
+                      month: 'long', 
+                      day: 'numeric' 
+                    })}
+                  </Typography>
+                </Box>
+                
+                <Box sx={{ mb: 3 }}>
+                  <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
+                    {t('profile.role')}
+                  </Typography>
+                  <Chip
+                    label={userData.role.charAt(0).toUpperCase() + userData.role.slice(1)}
+                    color={userData.role === 'admin' ? 'error' : 'primary'}
+                    sx={{ borderRadius: 3, fontWeight: 600 }}
+                  />
+                </Box>
+                
+                <Divider sx={{ my: 2, borderColor: 'rgba(255,255,255,0.1)' }} />
+                
+                <Box>
+                  <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
+                    {t('profile.profileStatus')}
+                  </Typography>
+                  <Chip
+                    icon={<VerifiedUser />}
+                    label={t('profile.verified')}
+                    color="success"
+                    variant="outlined"
+                    sx={{ borderRadius: 3, fontWeight: 600 }}
+                  />
+                </Box>
+              </CardContent>
+            </Card>
+          </Box>
+        </Box>
+      </Box>
     </Container>
   );
 };

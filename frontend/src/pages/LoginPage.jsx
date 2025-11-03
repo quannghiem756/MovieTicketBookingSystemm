@@ -203,114 +203,110 @@ const LoginPage = () => {
           {serverError && <Alert severity="error" sx={{ mb: 3 }}>{serverError}</Alert>}
           
           <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <TextField
-                  variant='outlined'
-                  fullWidth
-                  id="email"
-                  label={t('login.email')}
-                  name="email"
-                  autoComplete="email"
-                  autoFocus
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  onBlur={handleBlur}
-                  error={!!errors.email}
-                  helperText={errors.email}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Email sx={{ color: 'primary.main' }} />
-                      </InputAdornment>
-                    ),
-                    sx: { 
-                      borderRadius: 3,
-                      '& .MuiInputBase-input': {
-                        py: 1.2
-                      }
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+              <TextField
+                variant='outlined'
+                fullWidth
+                id="email"
+                label={t('login.email')}
+                name="email"
+                autoComplete="email"
+                autoFocus
+                value={formData.email}
+                onChange={handleInputChange}
+                onBlur={handleBlur}
+                error={!!errors.email}
+                helperText={errors.email}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Email sx={{ color: 'primary.main' }} />
+                    </InputAdornment>
+                  ),
+                  sx: { 
+                    borderRadius: 3,
+                    '& .MuiInputBase-input': {
+                      py: 1.2
                     }
-                  }}
-                  InputLabelProps={{
-                    sx: {
-                      fontWeight: 600
+                  }
+                }}
+                InputLabelProps={{
+                  sx: {
+                    fontWeight: 600
+                  }
+                }}
+                sx={{ 
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: 'rgba(255,255,255,0.3)',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: 'rgba(255,255,255,0.5)',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: 'primary.main',
+                    },
+                  }
+                }}
+              />
+              <TextField
+                variant='outlined'
+                fullWidth
+                name="password"
+                label={t('login.password')}
+                type={showPassword ? 'text' : 'password'}
+                id="password"
+                autoComplete="current-password"
+                value={formData.password}
+                onChange={handleInputChange}
+                onBlur={handleBlur}
+                error={!!errors.password}
+                helperText={errors.password}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Lock sx={{ color: 'primary.main' }} />
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        edge="end"
+                        sx={{ color: 'text.secondary' }}
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                  sx: { 
+                    borderRadius: 3,
+                    '& .MuiInputBase-input': {
+                      py: 1.5
                     }
-                  }}
-                  sx={{ 
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': {
-                        borderColor: 'rgba(255,255,255,0.3)',
-                      },
-                      '&:hover fieldset': {
-                        borderColor: 'rgba(255,255,255,0.5)',
-                      },
-                      '&.Mui-focused fieldset': {
-                        borderColor: 'primary.main',
-                      },
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  variant='outlined'
-                  fullWidth
-                  name="password"
-                  label={t('login.password')}
-                  type={showPassword ? 'text' : 'password'}
-                  id="password"
-                  autoComplete="current-password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  onBlur={handleBlur}
-                  error={!!errors.password}
-                  helperText={errors.password}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Lock sx={{ color: 'primary.main' }} />
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          edge="end"
-                          sx={{ color: 'text.secondary' }}
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                    sx: { 
-                      borderRadius: 3,
-                      '& .MuiInputBase-input': {
-                        py: 1.5
-                      }
-                    }
-                  }}
-                  InputLabelProps={{
-                    sx: {
-                      fontWeight: 600
-                    }
-                  }}
-                  sx={{ 
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': {
-                        borderColor: 'rgba(255,255,255,0.3)',
-                      },
-                      '&:hover fieldset': {
-                        borderColor: 'rgba(255,255,255,0.5)',
-                      },
-                      '&.Mui-focused fieldset': {
-                        borderColor: 'primary.main',
-                      },
-                    }
-                  }}
-                />
-              </Grid>
-            </Grid>
+                  }
+                }}
+                InputLabelProps={{
+                  sx: {
+                    fontWeight: 600
+                  }
+                }}
+                sx={{ 
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: 'rgba(255,255,255,0.3)',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: 'rgba(255,255,255,0.5)',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: 'primary.main',
+                    },
+                  }
+                }}
+              />
+            </Box>
             
             <Button
               type="submit"

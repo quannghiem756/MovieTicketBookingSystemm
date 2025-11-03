@@ -262,8 +262,8 @@ const MovieForm = () => {
 
       <Paper sx={{ p: 3, mx: 'auto', mb: 4 }}>
         <form onSubmit={handleSubmit}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' }, gap: 3 }}>
               <FormControl fullWidth sx={{ width: "100%" }}>
                 <TextField
                   fullWidth
@@ -274,9 +274,7 @@ const MovieForm = () => {
                   required
                 />
               </FormControl>
-            </Grid>
 
-            <Grid item xs={12} md={6}>
               <FormControl fullWidth sx={{ width: "100%" }}>
                 <TextField
                   fullWidth
@@ -287,22 +285,20 @@ const MovieForm = () => {
                   required
                 />
               </FormControl>
-            </Grid>
+            </Box>
 
-            <Grid item xs={12} md={12}>
-              <FormControl fullWidth sx={{ width: "100%" }}>
-                <TextField
-                  fullWidth
-                  label={t('admin.movieForm.cast')}
-                  name="cast"
-                  value={formData.cast}
-                  onChange={handleChange}
-                  placeholder="Actor 1, Actor 2, Actor 3"
-                />
-              </FormControl>
-            </Grid>
+            <FormControl fullWidth sx={{ width: "100%" }}>
+              <TextField
+                fullWidth
+                label={t('admin.movieForm.cast')}
+                name="cast"
+                value={formData.cast}
+                onChange={handleChange}
+                placeholder="Actor 1, Actor 2, Actor 3"
+              />
+            </FormControl>
 
-            <Grid item xs={12} md={3} >
+            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(4, 1fr)' }, gap: 3 }}>
               <FormControl fullWidth sx={{ width: "100%" }}>
                 <TextField
                   fullWidth
@@ -314,9 +310,7 @@ const MovieForm = () => {
                   required
                 />
               </FormControl>
-            </Grid>
 
-            <Grid item xs={12} md={3} >
               <FormControl fullWidth sx={{ width: "100%" }}>
                 <TextField
                   fullWidth
@@ -327,9 +321,7 @@ const MovieForm = () => {
                   placeholder="Action, Adventure, Sci-Fi"
                 />
               </FormControl>
-            </Grid>
 
-            <Grid item xs={12} md={3}>
               <FormControl fullWidth sx={{ width: "100%", minWidth:120 }}>
                 <InputLabel>{t('admin.movieForm.rating')}</InputLabel>
                 <Select
@@ -345,9 +337,7 @@ const MovieForm = () => {
                   <MenuItem value="NC-17">NC-17</MenuItem>
                 </Select>
               </FormControl>
-            </Grid>
 
-            <Grid item xs={12} md={3}>
               <FormControl fullWidth sx={{ width: "100%" }}>
                 <TextField
                   fullWidth
@@ -362,9 +352,9 @@ const MovieForm = () => {
                   required
                 />
               </FormControl>
-            </Grid>
+            </Box>
 
-            <Grid item xs={12} md={3}>
+            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(4, 1fr)' }, gap: 3 }}>
               <FormControl fullWidth sx={{ width: "100%" }}>
                 <TextField
                   fullWidth
@@ -378,23 +368,21 @@ const MovieForm = () => {
                   }}
                 />
               </FormControl>
-            </Grid>
+            </Box>
 
-            <Grid item xs={12}>
-              <FormControl fullWidth sx={{ width: "100%" }}>
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={4}
-                  label={t('admin.movieForm.synopsis')}
-                  name="synopsis"
-                  value={formData.synopsis}
-                  onChange={handleChange}
-                />
-              </FormControl>
-            </Grid>
+            <FormControl fullWidth sx={{ width: "100%" }}>
+              <TextField
+                fullWidth
+                multiline
+                rows={4}
+                label={t('admin.movieForm.synopsis')}
+                name="synopsis"
+                value={formData.synopsis}
+                onChange={handleChange}
+              />
+            </FormControl>
 
-            <Grid item xs={12} md={6}>
+            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' }, gap: 3 }}>
               <FormControl fullWidth sx={{ width: "100%" }}>
                 <TextField
                   fullWidth
@@ -404,9 +392,7 @@ const MovieForm = () => {
                   onChange={handleChange}
                 />
               </FormControl>
-            </Grid>
 
-            <Grid item xs={12} md={6}>
               <FormControl fullWidth sx={{ width: "100%" }}>
                 <TextField
                   fullWidth
@@ -416,8 +402,8 @@ const MovieForm = () => {
                   onChange={handleChange}
                 />
               </FormControl>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
 
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 3 }}>
             <Button
@@ -519,8 +505,8 @@ const MovieForm = () => {
         </DialogTitle>
         <DialogContent>
           <Box component="form" onSubmit={handleShowtimeSubmit} sx={{ mt: 2 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' }, gap: 2 }}>
                 <FormControl fullWidth required sx={{minWidth:120}}>
                   <InputLabel>{t('admin.movieForm.theater')}</InputLabel>
                   <Select
@@ -539,8 +525,6 @@ const MovieForm = () => {
                     ))}
                   </Select>
                 </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   type="date"
@@ -553,8 +537,8 @@ const MovieForm = () => {
                   }}
                   required
                 />
-              </Grid>
-              <Grid item xs={12} sm={6}>
+              </Box>
+              <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' }, gap: 2 }}>
                 <TextField
                   fullWidth
                   label={t('admin.movieForm.showtimeTime')}
@@ -564,8 +548,6 @@ const MovieForm = () => {
                   placeholder="e.g., 7:30 PM"
                   required
                 />
-              </Grid>
-              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   label={t('admin.movieForm.showtimeFormat')}
@@ -574,8 +556,8 @@ const MovieForm = () => {
                   onChange={handleShowtimeFormChange}
                   placeholder="e.g., 2D, 3D, IMAX"
                 />
-              </Grid>
-              <Grid item xs={12} sm={6}>
+              </Box>
+              <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' }, gap: 2 }}>
                 <TextField
                   fullWidth
                   label={t('admin.movieForm.showtimeLanguage')}
@@ -584,8 +566,6 @@ const MovieForm = () => {
                   onChange={handleShowtimeFormChange}
                   placeholder="e.g., English, Spanish"
                 />
-              </Grid>
-              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   type="number"
@@ -599,8 +579,8 @@ const MovieForm = () => {
                   }}
                   required
                 />
-              </Grid>
-            </Grid>
+              </Box>
+            </Box>
           </Box>
         </DialogContent>
         <DialogActions>

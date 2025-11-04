@@ -245,30 +245,30 @@ const Home = () => {
         />
         
         {loading ? (
-          <Grid container spacing={4}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
             {[...Array(4)].map((_, index) => (
-              <Grid item key={index} xs={12} sm={6} md={3}>
+              <Box key={index} sx={{ flex: '1 1 calc(25% - 12px)', minWidth: 250, maxWidth: 'calc(25% - 12px)' }}>
                 <Skeleton variant="rectangular" height={400} sx={{ borderRadius: 4 }} />
-              </Grid>
+              </Box>
             ))}
-          </Grid>
+          </Box>
         ) : (
-          <Grid container spacing={4}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
             {Array.isArray(nowShowing) && nowShowing.slice(0, 8).map((movie) => (
-              <Grid item key={movie.id} xs={12} sm={6} md={3}>
+              <Box key={movie.id} sx={{ flex: '1 1 calc(25% - 12px)', minWidth: 250, maxWidth: 'calc(25% - 12px)' }}>
                 <MovieCard movie={movie} />
-              </Grid>
+              </Box>
             ))}
             {nowShowing.length === 0 && (
-              <Grid item xs={12}>
+              <Box sx={{ width: '100%' }}>
                 <Paper sx={{ p: 4, textAlign: 'center' }}>
                   <Typography variant="h6" color="textSecondary">
                     {t('home.noMovies')}
                   </Typography>
                 </Paper>
-              </Grid>
+              </Box>
             )}
-          </Grid>
+          </Box>
         )}
       </Container>
 
@@ -288,22 +288,22 @@ const Home = () => {
           subtitle={t('home.comingSoonSubtitle')} 
         />
         
-        <Grid container spacing={4}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
           {Array.isArray(comingSoon) && comingSoon.slice(0, 8).map((movie) => (
-            <Grid item key={movie.id} xs={12} sm={6} md={3}>
+            <Box key={movie.id} sx={{ flex: '1 1 calc(25% - 12px)', minWidth: 250, maxWidth: 'calc(25% - 12px)' }}>
               <MovieCard movie={movie} />
-            </Grid>
+            </Box>
           ))}
           {comingSoon.length === 0 && !loading && (
-            <Grid item xs={12}>
+            <Box sx={{ width: '100%' }}>
               <Paper sx={{ p: 4, textAlign: 'center' }}>
                 <Typography variant="h6" color="textSecondary">
                   {t('home.noComingSoon')}
                 </Typography>
               </Paper>
-            </Grid>
+            </Box>
           )}
-        </Grid>
+        </Box>
       </Container>
     </Container>
   );

@@ -255,7 +255,14 @@ const Home = () => {
         ) : (
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
             {Array.isArray(nowShowing) && nowShowing.slice(0, 8).map((movie) => (
-              <Box key={movie.id} sx={{ flex: '1 1 calc(25% - 12px)', minWidth: 250, maxWidth: 'calc(25% - 12px)' }}>
+              <Box
+  key={movie.id}
+  sx={{
+    flex: '1 1 calc(25% - 24px)', // <-- Correct math for 32px gap
+    maxWidth: 'calc(25% - 24px)', // <-- Must match
+    minWidth: 220 // <-- Lower this so it doesn't wrap so early
+  }}
+>
                 <MovieCard movie={movie} />
               </Box>
             ))}

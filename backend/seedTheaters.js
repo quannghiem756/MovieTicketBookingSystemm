@@ -61,7 +61,7 @@ function generateSeatMap(rows, seatsPerRow, defaultType = 'standard') {
     for (let s = 0; s < seatsPerRow; s++) {
       // Make some seats premium or VIP for variety
       let type = defaultType;
-      if (r < 2) type = 'premium'; // First 2 rows are premium
+      if (r < 2) type = 'standard'; // First 2 rows are premium
       if (r === 0) type = 'vip'; // First row is VIP
       
       row.push({

@@ -111,16 +111,16 @@ const SeatSelection = () => {
                     variant={selectedSeats.includes(seat.id) ? 'contained' : seat.isAvailable ? 'outlined' : 'text'}
                     color={selectedSeats.includes(seat.id) ? 'primary' : 'default'}
                     size="small"
-                    disabled={!seat.isAvailable}
+                    disabled={!seat.isAvailable || seat.isDisabled}
                     onClick={() => toggleSeat(seat.id)}
                     sx={{
                       minWidth: 40,
                       height: 40,
                       fontSize: '0.75rem',
                       margin: 0.5,
-                      backgroundColor: !seat.isAvailable ? '#f5f5f5' : selectedSeats.includes(seat.id) ? '#1976d2' : 'white',
-                      color: !seat.isAvailable ? '#999' : selectedSeats.includes(seat.id) ? 'white' : 'inherit',
-                      border: !seat.isAvailable ? '1px solid #ddd' : '1px solid rgba(0,0,0,0.23)'
+                      backgroundColor: seat.isDisabled ? '#bdbdbd' : !seat.isAvailable ? '#f5f5f5' : selectedSeats.includes(seat.id) ? '#1976d2' : 'white',
+                      color: seat.isDisabled ? '#666' : !seat.isAvailable ? '#999' : selectedSeats.includes(seat.id) ? 'white' : 'inherit',
+                      border: seat.isDisabled ? '1px solid #999' : !seat.isAvailable ? '1px solid #ddd' : '1px solid rgba(0,0,0,0.23)'
                     }}
                   >
                     {seat.row}{seat.number}

@@ -68,7 +68,8 @@ const TheaterForm = () => {
             row: rowLabel,
             number: s + 1,
             type: 'standard',
-            isAvailable: true
+            isAvailable: true,
+            isDisabled: false  // New property to track if seat is disabled
           });
         }
         newSeatMap.push(row);
@@ -113,6 +114,16 @@ const TheaterForm = () => {
     setSeatMap(newSeatMap);
   };
 
+  const handleToggleSeatDisabled = (rowIndex, seatIndex) => {
+    const newSeatMap = [...seatMap];
+    newSeatMap[rowIndex][seatIndex].isDisabled = !newSeatMap[rowIndex][seatIndex].isDisabled;
+    // When a seat is disabled, it should also be unavailable
+    if (newSeatMap[rowIndex][seatIndex].isDisabled) {
+      newSeatMap[rowIndex][seatIndex].isAvailable = false;
+    }
+    setSeatMap(newSeatMap);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -145,7 +156,7 @@ const TheaterForm = () => {
 
   const getSeatTypeColor = (type) => {
     switch (type) {
-      case 'premium': return 'secondary';
+      case 'double': return 'warning'; // Use warning color for double seats
       case 'vip': return 'error';
       default: return 'primary';
     }
@@ -153,7 +164,7 @@ const TheaterForm = () => {
 
   const getSeatTypeLabel = (type) => {
     switch (type) {
-      case 'premium': return t('admin.theaterForm.seatType.premium');
+      case 'double': return t('admin.theaterForm.seatType.double');
       case 'vip': return t('admin.theaterForm.seatType.vip');
       default: return t('admin.theaterForm.seatType.standard');
     }
@@ -282,16 +293,28 @@ const TheaterForm = () => {
                           <Tooltip title={`${seat.row}${seat.number} - ${getSeatTypeLabel(seat.type)}`}>
                             <Chip
                               label={`${seat.row}${seat.number}`}
-                              color={getSeatTypeColor(seat.type)}
-                              variant={seat.type === 'standard' ? 'outlined' : 'filled'}
+                              color={seat.isDisabled ? 'default' : getSeatTypeColor(seat.type)}
+                              variant={seat.isDisabled ? 'outlined' : (seat.type === 'standard' ? 'outlined' : 'filled')}
                               onClick={() => {
-                                // Cycle through seat types: standard -> premium -> vip -> standard
-                                const types = ['standard', 'premium', 'vip'];
-                                const currentIndex = types.indexOf(seat.type);
-                                const nextType = types[(currentIndex + 1) % types.length];
-                                handleSeatTypeChange(rowIndex, seatIndex, nextType);
+                                if (!seat.isDisabled) {
+                                  // Cycle through seat types: standard -> double -> vip -> standard
+                                  const types = ['standard', 'double', 'vip'];
+                                  const currentIndex = types.indexOf(seat.type);
+                                  const nextType = types[(currentIndex + 1) % types.length];
+                                  handleSeatTypeChange(rowIndex, seatIndex, nextType);
+                                } else {
+                                  // If seat is disabled, toggle the disabled state
+                                  handleToggleSeatDisabled(rowIndex, seatIndex);
+                                }
                               }}
-                              sx={{ cursor: 'pointer', minWidth: 60 }}
+                              onDelete={seat.isDisabled ? undefined : () => handleToggleSeatDisabled(rowIndex, seatIndex)}
+                              deleteIcon={seat.isDisabled ? <AddIcon /> : <DeleteIcon />}
+                              sx={{ 
+                                cursor: seat.isDisabled ? 'not-allowed' : 'pointer', 
+                                minWidth: 60,
+                                opacity: seat.isDisabled ? 0.5 : 1,
+                                backgroundColor: seat.isDisabled ? '#e0e0e0' : undefined
+                              }}
                             />
                           </Tooltip>
                         </TableCell>
@@ -316,8 +339,8 @@ const TheaterForm = () => {
               variant="outlined" 
             />
             <Chip 
-              label={t('admin.theaterForm.seatType.premium')} 
-              color="secondary" 
+              label={t('admin.theaterForm.seatType.double')} 
+              color="warning" 
               variant="filled" 
             />
             <Chip 

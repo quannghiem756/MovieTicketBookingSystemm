@@ -287,7 +287,7 @@ const vi = {
   // Loại ghế
   'admin.theaterForm.seatType.legend': 'Loại ghế:',
   'admin.theaterForm.seatType.standard': 'Tiêu chuẩn',
-  'admin.theaterForm.seatType.premium': 'Cao cấp',
+  'admin.theaterForm.seatType.double': 'Đôi',
   'admin.theaterForm.seatType.vip': 'VIP',
   
   // Admin Users

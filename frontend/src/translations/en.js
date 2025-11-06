@@ -287,7 +287,7 @@ const en = {
   // Seat Types
   'admin.theaterForm.seatType.legend': 'Seat Types:',
   'admin.theaterForm.seatType.standard': 'Standard',
-  'admin.theaterForm.seatType.premium': 'Premium',
+  'admin.theaterForm.seatType.double': 'Double',
   'admin.theaterForm.seatType.vip': 'VIP',
   
   // Admin Users

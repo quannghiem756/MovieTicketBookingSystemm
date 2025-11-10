@@ -86,7 +86,7 @@ const BookingPage = () => {
                 id: `${String.fromCharCode(65 + r)}${s + 1}`,
                 row: String.fromCharCode(65 + r),
                 number: s + 1,
-                type: Math.random() > 0.8 ? 'premium' : 'regular', // Random premium seats
+                type: 'standard', // Default to standard type
                 isAvailable: Math.random() > 0.3, // Randomly mark some seats as unavailable
                 isSelected: false
               });
@@ -106,16 +106,31 @@ const BookingPage = () => {
     fetchBookingData();
   }, [movieId, showtimeId]);
 
+  const getSeatPrice = (seatId) => {
+    const seat = seatMap.flat().find(s => s.id === seatId);
+    const basePrice = showtime?.price || 0;
+    
+    if (!seat) return basePrice;
+    
+    switch (seat.type) {
+      case 'vip':
+        return basePrice * 1.5; // VIP seats cost 50% more
+      case 'double':
+        return basePrice * 1.2; // Double seats cost 20% more
+      case 'standard':
+      default:
+        return basePrice;
+    }
+  };
+
   useEffect(() => {
     // Calculate total price when selected seats change
     let total = 0;
     selectedSeats.forEach(seatId => {
-      // In a real app, we'd get the seat type and price from the seat map
-      // For now, we'll use the showtime price for all seats
-      total += showtime?.price || 0;
+      total += getSeatPrice(seatId);
     });
     setTotalPrice(total);
-  }, [selectedSeats, showtime]);
+  }, [selectedSeats, showtime, seatMap]);
 
   const handleSeatClick = (seatId) => {
     const isSelected = selectedSeats.includes(seatId);
@@ -403,8 +418,10 @@ const BookingPage = () => {
                 } else if (status === 'unavailable') {
                   bgColor = 'grey.600';
                   borderColor = 'grey.600';
-                } else if (status === 'available' && seat.type === 'premium') {
-                  bgColor = '#FF6F00'; // Premium seat color
+                } else if (status === 'available' && seat.type === 'vip') {
+                  bgColor = 'error.main'; // VIP seat color
+                } else if (status === 'available' && seat.type === 'double') {
+                  bgColor = 'warning.main'; // Double seat color
                 }
                 
                 return (
@@ -450,7 +467,21 @@ const BookingPage = () => {
                       >
                         {parseInt(seat.id.substring(1))}
                       </Typography>
-                      {seat.type === 'premium' && (
+                      {seat.type === 'vip' && (
+                        <Box
+                          sx={{
+                            position: 'absolute',
+                            top: -4,
+                            right: -4,
+                            width: 12,
+                            height: 12,
+                            borderRadius: '50%',
+                            bgcolor: 'error.main',
+                            border: '1px solid white'
+                          }}
+                        />
+                      )}
+                      {seat.type === 'double' && (
                         <Box
                           sx={{
                             position: 'absolute',
@@ -526,11 +557,11 @@ const BookingPage = () => {
           </Stack>
           
           <Stack direction="row" alignItems="center" spacing={1}>
-            <Box sx={{ 
-              width: 24, 
-              height: 24, 
+            <Box sx={{
+              width: 24,
+              height: 24,
               borderRadius: 1,
-              bgcolor: '#FF6F00',
+              bgcolor: 'primary.main',
               border: '2px solid',
               borderColor: 'divider',
               display: 'flex',
@@ -538,7 +569,25 @@ const BookingPage = () => {
               justifyContent: 'center',
               position: 'relative'
             }}>
-              <Typography variant="caption" sx={{ fontSize: '0.6rem', color: 'white' }}>1</Typography>
+              <Typography variant="caption" sx={{ fontSize: '0.6rem', color: 'white' }}>S</Typography>
+            </Box>
+            <Typography variant="body2">{t('booking.standard')}</Typography>
+          </Stack>
+
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <Box sx={{
+              width: 24,
+              height: 24,
+              borderRadius: 1,
+              bgcolor: 'warning.main',
+              border: '2px solid',
+              borderColor: 'divider',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative'
+            }}>
+              <Typography variant="caption" sx={{ fontSize: '0.6rem', color: 'white' }}>D</Typography>
               <Box
                 sx={{
                   position: 'absolute',
@@ -552,7 +601,37 @@ const BookingPage = () => {
                 }}
               />
             </Box>
-            <Typography variant="body2">{t('booking.premium')}</Typography>
+            <Typography variant="body2">{t('booking.double')}</Typography>
+          </Stack>
+
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <Box sx={{
+              width: 24,
+              height: 24,
+              borderRadius: 1,
+              bgcolor: 'error.main',
+              border: '2px solid',
+              borderColor: 'divider',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative'
+            }}>
+              <Typography variant="caption" sx={{ fontSize: '0.6rem', color: 'white' }}>V</Typography>
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: -2,
+                  right: -2,
+                  width: 8,
+                  height: 8,
+                  borderRadius: '50%',
+                  bgcolor: 'error.main',
+                  border: '1px solid white'
+                }}
+              />
+            </Box>
+            <Typography variant="body2">{t('booking.vip')}</Typography>
           </Stack>
         </Box>
       </Paper>
@@ -601,7 +680,19 @@ const BookingPage = () => {
               {selectedSeats.length > 0 && (
                 <Box>
                   <Typography variant="body1" color="textSecondary">
-                    <strong>{t('booking.seatPrice')}:</strong> ${showtime.price} × {selectedSeats.length} = ${(showtime.price * selectedSeats.length).toFixed(2)}
+                    <strong>{t('booking.seatPrice')}:</strong> 
+                    {selectedSeats.map((seatId, index) => {
+                      const seat = seatMap.flat().find(s => s.id === seatId);
+                      const seatPrice = getSeatPrice(seatId);
+                      return (
+                        <div key={seatId}>
+                          Seat {seatId} ({seat?.type || 'standard'}): ${seatPrice.toFixed(2)}
+                        </div>
+                      );
+                    })}
+                    <div>
+                      <strong>Total:</strong> ${totalPrice.toFixed(2)}
+                    </div>
                   </Typography>
                 </Box>
               )}

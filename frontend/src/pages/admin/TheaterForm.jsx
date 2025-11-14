@@ -10,33 +10,14 @@ import {
   Grid,
   CircularProgress,
   Alert,
-  Paper,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
-  IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Chip,
-  Tooltip
+  Paper
 } from '@mui/material';
 import {
   ArrowBack,
-  Save,
-  Add as AddIcon,
-  Edit as EditIcon,
-  Delete as DeleteIcon
+  Save
 } from '@mui/icons-material';
 import { getTheaterById, createTheater, updateTheater } from '../../services/api';
+import SeatmapEditor from './components/SeatmapEditor';
 
 const TheaterForm = () => {
   const { id } = useParams();
@@ -46,37 +27,91 @@ const TheaterForm = () => {
 
   const [formData, setFormData] = useState({
     name: '',
-    location: '',
-    rows: 10,
-    seatsPerRow: 10
+    location: ''
   });
 
-  const [seatMap, setSeatMap] = useState([]);
+  const [seatMap, setSeatMap] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Initialize seat map when rows or seatsPerRow change
-  useEffect(() => {
-    if (formData.rows > 0 && formData.seatsPerRow > 0) {
-      const newSeatMap = [];
-      for (let r = 0; r < formData.rows; r++) {
-        const row = [];
-        const rowLabel = String.fromCharCode(65 + r); // A, B, C, ...
-        for (let s = 0; s < formData.seatsPerRow; s++) {
-          row.push({
-            id: `${rowLabel}${s + 1}`,
-            row: rowLabel,
-            number: s + 1,
-            type: 'standard',
-            isAvailable: true,
-            isDisabled: false  // New property to track if seat is disabled
-          });
+  // Convert old seatmap format to new format used by SeatmapEditor
+  const convertSeatMapToNewFormat = (oldSeatMap) => {
+    if (!oldSeatMap || !Array.isArray(oldSeatMap) || oldSeatMap.length === 0) {
+      // Initialize with default rows if no seatmap
+      return [
+        {
+          name: 'A',
+          seats: Array(10).fill(null).map((_, i) => ({
+            id: `A${i + 1}`,
+            row: 'A',
+            label: (i + 1).toString(),
+            type: 'seat'
+          }))
+        },
+        {
+          name: 'B',
+          seats: Array(10).fill(null).map((_, i) => ({
+            id: `B${i + 1}`,
+            row: 'B',
+            label: (i + 1).toString(),
+            type: 'seat'
+          }))
         }
-        newSeatMap.push(row);
-      }
-      setSeatMap(newSeatMap);
+      ];
     }
-  }, [formData.rows, formData.seatsPerRow]);
+
+    // Convert old format to new format
+    return oldSeatMap.map((row, index) => {
+      let rowName = '';
+      if (row.row) {
+        rowName = row.row;
+      } else if (row[0] && row[0].row) {
+        rowName = row[0].row;
+      } else {
+        rowName = String.fromCharCode(65 + index);
+      }
+
+      const seats = row.seats
+        ? row.seats.map(seat => ({
+            id: seat.id || `${rowName}${seat.label || seat.number || (row.seats.findIndex(s => s === seat) + 1)}`,
+            row: seat.row || rowName,
+            label: seat.label || seat.number || (row.seats.findIndex(s => s === seat) + 1).toString(),
+            type: seat.type === 'standard' ? 'seat' : (seat.type || 'seat')
+          }))
+        : row.map((seat, seatIndex) => ({
+            id: seat.id || `${rowName}${seat.number || (seatIndex + 1)}`,
+            row: seat.row || rowName,
+            label: seat.number || (seatIndex + 1).toString(),
+            type: seat.type === 'standard' ? 'seat' : (seat.type || 'seat')
+          }));
+
+      return {
+        name: rowName,
+        seats: seats
+      };
+    });
+  };
+
+  // Convert new seatmap format back to old format for saving
+  const convertSeatMapToOldFormat = (newSeatMap) => {
+    if (!newSeatMap || !newSeatMap.rows) {
+      return [];
+    }
+
+    return newSeatMap.rows.map(row => {
+      return {
+        row: row.name,
+        seats: row.seats.map(seat => ({
+          id: seat.id,
+          row: seat.row,
+          number: seat.label,
+          type: seat.type === 'seat' ? 'standard' : seat.type,
+          isAvailable: true,
+          isDisabled: false
+        }))
+      };
+    });
+  };
 
   // Fetch theater data when editing
   useEffect(() => {
@@ -89,13 +124,19 @@ const TheaterForm = () => {
     try {
       const response = await getTheaterById(id);
       const theater = response.data;
+
       setFormData({
         name: theater.name || '',
-        location: theater.location || '',
-        rows: theater.seatMap.length || 10,
-        seatsPerRow: theater.seatMap[0]?.length || 10
+        location: theater.location || ''
       });
-      setSeatMap(theater.seatMap || []);
+
+      // Convert the existing seatmap format to the new format expected by SeatmapEditor
+      const formattedSeatMap = convertSeatMapToNewFormat(theater.seatMap || []);
+      setSeatMap({
+        name: theater.name || 'Theater Seatmap',
+        stageText: 'STAGE', // Default stage text if not available in the data
+        rows: formattedSeatMap
+      });
     } catch (err) {
       setError(t('common.error'));
     }
@@ -108,36 +149,23 @@ const TheaterForm = () => {
     });
   };
 
-  const handleSeatTypeChange = (rowIndex, seatIndex, type) => {
-    const newSeatMap = [...seatMap];
-    newSeatMap[rowIndex][seatIndex].type = type;
-    setSeatMap(newSeatMap);
-  };
-
-  const handleToggleSeatDisabled = (rowIndex, seatIndex) => {
-    const newSeatMap = [...seatMap];
-    newSeatMap[rowIndex][seatIndex].isDisabled = !newSeatMap[rowIndex][seatIndex].isDisabled;
-    // When a seat is disabled, it should also be unavailable
-    if (newSeatMap[rowIndex][seatIndex].isDisabled) {
-      newSeatMap[rowIndex][seatIndex].isAvailable = false;
-    }
-    setSeatMap(newSeatMap);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
     try {
+      // Convert seatmap back to the old format expected by the backend
+      const formattedSeatMap = convertSeatMapToOldFormat(seatMap);
+
       // Calculate total seats
-      const totalSeats = seatMap.reduce((total, row) => total + row.length, 0);
-      
+      const totalSeats = formattedSeatMap.reduce((total, row) => total + row.seats.length, 0);
+
       const theaterData = {
         name: formData.name,
         location: formData.location,
         totalSeats: totalSeats,
-        seatMap: seatMap
+        seatMap: formattedSeatMap
       };
 
       if (isEdit) {
@@ -154,20 +182,8 @@ const TheaterForm = () => {
     }
   };
 
-  const getSeatTypeColor = (type) => {
-    switch (type) {
-      case 'double': return 'warning'; // Use warning color for double seats
-      case 'vip': return 'error';
-      default: return 'primary';
-    }
-  };
-
-  const getSeatTypeLabel = (type) => {
-    switch (type) {
-      case 'double': return t('admin.theaterForm.seatType.double');
-      case 'vip': return t('admin.theaterForm.seatType.vip');
-      default: return t('admin.theaterForm.seatType.standard');
-    }
+  const handleSeatMapUpdate = (updatedSeatMap) => {
+    setSeatMap(updatedSeatMap);
   };
 
   return (
@@ -186,170 +202,59 @@ const TheaterForm = () => {
         <form onSubmit={handleSubmit}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
-              <FormControl fullWidth sx={{ width: "100%" }}>
-                <TextField
-                  fullWidth
-                  label={t('admin.theaterForm.name')}
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
-              </FormControl>
+              <TextField
+                fullWidth
+                label={t('admin.theaterForm.name')}
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                sx={{ width: "100%", mb: 2 }}
+              />
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <FormControl fullWidth sx={{ width: "100%" }}>
-                <TextField
-                  fullWidth
-                  label={t('admin.theaterForm.location')}
-                  name="location"
-                  value={formData.location}
-                  onChange={handleChange}
-                  required
-                />
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <FormControl fullWidth sx={{ width: "100%" }}>
-                <TextField
-                  fullWidth
-                  type="number"
-                  label={t('admin.theaterForm.rows')}
-                  name="rows"
-                  value={formData.rows}
-                  onChange={handleChange}
-                  InputProps={{ inputProps: { min: 1, max: 26 } }}
-                  required
-                />
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <FormControl fullWidth sx={{ width: "100%" }}>
-                <TextField
-                  fullWidth
-                  type="number"
-                  label={t('admin.theaterForm.seatsPerRow')}
-                  name="seatsPerRow"
-                  value={formData.seatsPerRow}
-                  onChange={handleChange}
-                  InputProps={{ inputProps: { min: 1, max: 50 } }}
-                  required
-                />
-              </FormControl>
+              <TextField
+                fullWidth
+                label={t('admin.theaterForm.location')}
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
+                required
+                sx={{ width: "100%", mb: 2 }}
+              />
             </Grid>
           </Grid>
 
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 3 }}>
+          <Box sx={{ mt: 4 }}>
+            <Typography variant="h6" gutterBottom>
+              {t('admin.theaterForm.seatmap')}
+            </Typography>
+            <SeatmapEditor
+              seatmap={seatMap}
+              onUpdate={handleSeatMapUpdate}
+              theaterName={formData.name}
+            />
+          </Box>
+
+          <Box sx={{ mt: 3, display: 'flex', justifyContent: 'space-between' }}>
             <Button
               variant="outlined"
               startIcon={<ArrowBack />}
               onClick={() => navigate('/admin/theaters')}
             >
-              {t('admin.theaterForm.cancel')}
+              {t('common.back')}
             </Button>
             <Button
               type="submit"
               variant="contained"
-              startIcon={loading ? <CircularProgress size={20} /> : <Save />}
+              startIcon={<Save />}
               disabled={loading}
             >
-              {loading ? t('admin.theaterForm.saving') : t('admin.theaterForm.save')}
+              {loading ? <CircularProgress size={24} /> : t('common.save')}
             </Button>
           </Box>
         </form>
-      </Paper>
-
-      {/* Seat Map Visualization */}
-      <Paper sx={{ p: 3, mx: 'auto' }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-          <Typography variant="h5" component="h2">
-            {t('admin.theaterForm.seatMapTitle')}
-          </Typography>
-        </Box>
-
-        {seatMap.length > 0 && (
-          <Box sx={{ overflowX: 'auto' }}>
-            <TableContainer>
-              <Table sx={{ minWidth: 650 }} aria-label={t('admin.theaterForm.seatMap.ariaLabel')}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>{t('admin.theaterForm.seatMap.row')}</TableCell>
-                    {seatMap[0] && seatMap[0].map((seat, index) => (
-                      <TableCell key={index} align="center">{seat.number}</TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {seatMap.map((row, rowIndex) => (
-                    <TableRow key={rowIndex}>
-                      <TableCell component="th" scope="row">
-                        <strong>{row[0]?.row}</strong>
-                      </TableCell>
-                      {row.map((seat, seatIndex) => (
-                        <TableCell key={seatIndex} align="center">
-                          <Tooltip title={`${seat.row}${seat.number} - ${getSeatTypeLabel(seat.type)}`}>
-                            <Chip
-                              label={`${seat.row}${seat.number}`}
-                              color={seat.isDisabled ? 'default' : getSeatTypeColor(seat.type)}
-                              variant={seat.isDisabled ? 'outlined' : (seat.type === 'standard' ? 'outlined' : 'filled')}
-                              onClick={() => {
-                                if (!seat.isDisabled) {
-                                  // Cycle through seat types: standard -> double -> vip -> standard
-                                  const types = ['standard', 'double', 'vip'];
-                                  const currentIndex = types.indexOf(seat.type);
-                                  const nextType = types[(currentIndex + 1) % types.length];
-                                  handleSeatTypeChange(rowIndex, seatIndex, nextType);
-                                } else {
-                                  // If seat is disabled, toggle the disabled state
-                                  handleToggleSeatDisabled(rowIndex, seatIndex);
-                                }
-                              }}
-                              onDelete={seat.isDisabled ? undefined : () => handleToggleSeatDisabled(rowIndex, seatIndex)}
-                              deleteIcon={seat.isDisabled ? <AddIcon /> : <DeleteIcon />}
-                              sx={{ 
-                                cursor: seat.isDisabled ? 'not-allowed' : 'pointer', 
-                                minWidth: 60,
-                                opacity: seat.isDisabled ? 0.5 : 1,
-                                backgroundColor: seat.isDisabled ? '#e0e0e0' : undefined
-                              }}
-                            />
-                          </Tooltip>
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Box>
-        )}
-
-        {/* Seat Type Legend */}
-        <Box sx={{ mt: 3 }}>
-          <Typography variant="subtitle1" gutterBottom>
-            {t('admin.theaterForm.seatType.legend')}
-          </Typography>
-          <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-            <Chip 
-              label={t('admin.theaterForm.seatType.standard')} 
-              color="primary" 
-              variant="outlined" 
-            />
-            <Chip 
-              label={t('admin.theaterForm.seatType.double')} 
-              color="warning" 
-              variant="filled" 
-            />
-            <Chip 
-              label={t('admin.theaterForm.seatType.vip')} 
-              color="error" 
-              variant="filled" 
-            />
-          </Box>
-        </Box>
       </Paper>
     </Box>
   );

@@ -326,6 +326,38 @@ const vi = {
   'admin.bookings.actionMessage': 'Bạn có chắc chắn muốn',
   'admin.bookings.booking': 'Vé đặt',
   'admin.bookings.dialogCancel': 'Hủy',
+
+  // Theater Form
+  'admin.theaterForm.seatTooltip': '{{seatId}} - {{seatType}}',
+
+  // Seatmap Editor
+  'admin.seatmapEditor.title': 'Trình chỉnh sửa sơ đồ ghế',
+  'admin.seatmapEditor.theaterSeatmap': 'Sơ đồ ghế phòng chiếu',
+  'admin.seatmapEditor.theater': 'Phòng chiếu',
+  'admin.seatmapEditor.defaultBlockName': 'Khối A',
+  'admin.seatmapEditor.stage': 'SÂN KHẤU',
+  'admin.seatmapEditor.seatType.standard': 'Tiêu chuẩn',
+  'admin.seatmapEditor.seatType.double': 'Đôi',
+  'admin.seatmapEditor.seatType.vip': 'VIP',
+  'admin.seatmapEditor.seatType.space': 'Khoảng trống',
+  'admin.seatmapEditor.seatTypesLabel': 'Loại ghế',
+  'admin.seatmapEditor.promptEnterRowName': 'Nhập tên hàng:',
+  'admin.seatmapEditor.addEmptyRow': 'Thêm hàng trống',
+  'admin.seatmapEditor.addSeatedRow': 'Thêm hàng có ghế',
+  'admin.seatmapEditor.saveChanges': 'Lưu thay đổi',
+  'admin.seatmapEditor.reset': 'Đặt lại',
+  'admin.seatmapEditor.totalSeats': 'Tổng số ghế',
+  'admin.seatmapEditor.promptEnterSeatLabel': 'Nhập nhãn ghế mới:',
+  'admin.seatmapEditor.changeSeatType': 'Thay đổi loại ghế',
+  'admin.seatmapEditor.maxRowsReached': 'Đã đạt đến giới hạn hàng ghế tối đa',
+  'admin.seatmapEditor.rowNameExists': 'Tên hàng đã tồn tại',
+  'admin.seatmapEditor.minRowsReached': 'Phải có ít nhất một hàng ghế',
+  'admin.seatmapEditor.seatNameExists': 'Tên ghế "{{name}}" đã tồn tại',
+  'admin.seatmapEditor.rowNameRequired': 'Tên hàng không được để trống',
+  'admin.seatmapEditor.editSeat': 'Sửa ghế',
+  'admin.seatmapEditor.addSeatLeft': 'Thêm ghế bên trái',
+  'admin.seatmapEditor.addSeatRight': 'Thêm ghế bên phải',
+  'admin.seatmapEditor.deleteSeat': 'Xóa ghế',
 };
 
 export default vi;

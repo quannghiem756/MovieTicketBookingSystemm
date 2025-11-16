@@ -9,7 +9,7 @@ const theaterSchema = new mongoose.Schema({
       id: String,
       row: String,
       number: Number,
-      type: { type: String, enum: ['standard', 'double', 'vip'], default: 'standard' },
+      type: { type: String, enum: ['standard', 'double', 'vip', 'space'], default: 'standard' },
       isAvailable: { type: Boolean, default: true },
       isDisabled: { type: Boolean, default: false }
     }]],

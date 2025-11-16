@@ -34,12 +34,12 @@ const SeatmapEditor = ({ seatmap, onUpdate, theaterName }) => {
   // State equivalent to useCreatorPage hook
   const [seatMapData, setSeatMapData] = useState({
     id: 'theater-seatmap',
-    name: theaterName || 'Theater Seatmap',
+    name: theaterName || t('admin.seatmapEditor.theaterSeatmap'),
     venueId: 1,
-    venueName: theaterName || 'Theater',
+    venueName: theaterName || t('admin.seatmapEditor.theater'),
     blockId: 1,
-    blockName: 'Block A',
-    stageText: 'STAGE'
+    blockName: t('admin.seatmapEditor.defaultBlockName'),
+    stageText: t('admin.seatmapEditor.stage')
   });
   const [seatData, setSeatData] = useState(new Map());
   const [loading, setLoading] = useState(false);
@@ -92,10 +92,10 @@ const SeatmapEditor = ({ seatmap, onUpdate, theaterName }) => {
 
   // Define seat types based on backend model
   const seatTypes = [
-    { name: 'standard', label: 'Standard', color: '#4CAF50' },
-    { name: 'double', label: 'Double', color: '#2196F3' },
-    { name: 'vip', label: 'VIP', color: '#FF9800' },
-    { name: 'space', label: 'Space', color: '#BDBDBD' }
+    { name: 'standard', label: t('admin.seatmapEditor.seatType.standard'), color: '#4CAF50' },
+    { name: 'double', label: t('admin.seatmapEditor.seatType.double'), color: '#2196F3' },
+    { name: 'vip', label: t('admin.seatmapEditor.seatType.vip'), color: '#FF9800' },
+    { name: 'space', label: t('admin.seatmapEditor.seatType.space'), color: '#BDBDBD' }
   ];
 
   // Create a new seat object
@@ -113,7 +113,7 @@ const SeatmapEditor = ({ seatmap, onUpdate, theaterName }) => {
   const getTotalSeats = useCallback(() => {
     let count = 0;
     seatData.forEach(seats => {
-      count += seats.filter(seat => seat.type === 'seat').length;
+      count += seats.filter(seat => seat.type === 'standard' || seat.type === 'double' || seat.type === 'vip').length;
     });
     return count;
   }, [seatData]);
@@ -148,7 +148,7 @@ const SeatmapEditor = ({ seatmap, onUpdate, theaterName }) => {
 
     setSeatData(prev => {
       const newMap = new Map(prev);
-      newMap.set(rowName, [{ id: `${rowName}-1`, row: rowName, label: '1', type: 'seat' }]);
+      newMap.set(rowName, [{ id: `${rowName}-1`, row: rowName, label: '1', type: 'standard' }]);
       return newMap;
     });
     setError('');
@@ -177,17 +177,16 @@ const SeatmapEditor = ({ seatmap, onUpdate, theaterName }) => {
       const seatIndex = seatsInRow.findIndex(seat => seat.id === seatId);
 
       if (seatIndex !== -1) {
-        // Generate new label for seat
+        // Calculate new seat label based on the highest existing number
         let newLabel;
-        if (type !== 'space') {
-          // Get the highest current seat number in the row and increment it
+        if (type === 'space') {
+          newLabel = '0';
+        } else {
           const existingSeatNumbers = seatsInRow
             .filter(seat => seat.type !== 'space')
             .map(seat => parseInt(seat.label) || 0);
           const maxNumber = existingSeatNumbers.length > 0 ? Math.max(...existingSeatNumbers) : 0;
           newLabel = (maxNumber + 1).toString();
-        } else {
-          newLabel = '0';
         }
 
         const newSeat = {
@@ -197,9 +196,11 @@ const SeatmapEditor = ({ seatmap, onUpdate, theaterName }) => {
           type: type
         };
 
+        // Insert the new seat at the correct position based on direction
         const insertIndex = direction === 'right' ? seatIndex + 1 : seatIndex;
         const updatedSeats = [...seatsInRow];
         updatedSeats.splice(insertIndex, 0, newSeat);
+
         newMap.set(rowId, updatedSeats);
       }
 
@@ -318,10 +319,10 @@ const SeatmapEditor = ({ seatmap, onUpdate, theaterName }) => {
   // Reset to initial state
   const resetData = () => {
     const defaultSeatData = new Map();
-    defaultSeatData.set('A', Array(10).fill(null).map((_, i) => createSeat('A', (i + 1).toString())));
-    defaultSeatData.set('B', Array(10).fill(null).map((_, i) => createSeat('B', (i + 1).toString())));
+    defaultSeatData.set('A', Array(10).fill(null).map((_, i) => createSeat('A', (i + 1).toString(), 'standard')));
+    defaultSeatData.set('B', Array(10).fill(null).map((_, i) => createSeat('B', (i + 1).toString(), 'standard')));
     setSeatData(defaultSeatData);
-    setSeatMapData(prev => ({ ...prev, stageText: 'STAGE', name: theaterName || 'Theater Seatmap' }));
+    setSeatMapData(prev => ({ ...prev, stageText: t('admin.seatmapEditor.stage'), name: theaterName || t('admin.seatmapEditor.theaterSeatmap') }));
     setError('');
   };
 
@@ -357,7 +358,7 @@ const SeatmapEditor = ({ seatmap, onUpdate, theaterName }) => {
   return (
     <Box sx={{ maxWidth: '1200px', mx: 'auto', p: 3 }}>
       <Typography variant="h4" component="h1" gutterBottom>
-        {seatMapData.name || 'Seatmap Editor'}
+        {seatMapData.name || t('admin.seatmapEditor.title')}
       </Typography>
 
       {error && (
@@ -369,7 +370,7 @@ const SeatmapEditor = ({ seatmap, onUpdate, theaterName }) => {
       <Paper sx={{ p: 3, mx: 'auto', mb: 4 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2, py: 1, bgcolor: '#7a0404', color: 'white', borderRadius: 1 }}>
           <Typography variant="h6" sx={{ letterSpacing: '20px' }}>
-            {seatMapData.stageText || 'STAGE'}
+            {seatMapData.stageText || t('admin.seatmapEditor.stage')}
           </Typography>
         </Box>
 
@@ -452,38 +453,54 @@ const SeatmapEditor = ({ seatmap, onUpdate, theaterName }) => {
                               );
                             })}
                           </Box>
-                          <Box sx={{ ml: 1, display: 'flex', gap: 0.5 }}>
-                            <Button
-                              variant="outlined"
-                              size="small"
-                              onClick={() => addSeat(row, seatsInRow[seatsInRow.length - 1]?.id || '', 'seat', 'right')}
-                              startIcon={<AddIcon />}
-                              sx={{ minWidth: 'auto', px: 1, py: 0.5 }}
+                          <Box sx={{ ml: 1, display: 'flex', gap: 1.5 , mr: 1}}>
+                            <IconButton
+                              onClick={() => addSeat(row, seatsInRow[seatsInRow.length - 1]?.id || '', 'standard', 'right')}
+                              sx={{
+                                width: 32,
+                                height: 32,
+                                border: '1px solid rgba(255, 0, 0, 0.23)',
+                                borderRadius: 2,
+                                '&:hover': {
+                                  backgroundColor: 'action.hover'
+                                }
+                              }}
                             >
                               <AddIcon fontSize="small" />
-                            </Button>
-                            <Button
-                              variant="outlined"
-                              size="small"
+                            </IconButton>
+                            <IconButton
                               onClick={() => deleteRow(row)}
-                              startIcon={<DeleteIcon />}
-                              color="error"
-                              sx={{ minWidth: 'auto', px: 1, py: 0.5 }}
+                              sx={{
+                                width: 32,
+                                height: 32,
+                                border: '1px solid rgba(255, 0, 0, 0.23)',
+                                color: 'error.main',
+                                borderRadius: 2,
+                                '&:hover': {
+                                  backgroundColor: 'error.light',
+                                  color: 'error.contrastText'
+                                }
+                              }}
                             >
                               <DeleteIcon fontSize="small" />
-                            </Button>
-                            <Button
-                              variant="outlined"
-                              size="small"
+                            </IconButton>
+                            <IconButton
                               onClick={() => {
                                 const newName = prompt('Enter new row name:', row);
                                 if (newName) editRowName(row, newName);
                               }}
-                              startIcon={<EditIcon />}
-                              sx={{ minWidth: 'auto', px: 1, py: 0.5 }}
+                              sx={{
+                                width: 32,
+                                height: 32,
+                                border: '1px solid rgba(255, 0, 0, 0.23)',
+                                borderRadius: 2,
+                                '&:hover': {
+                                  backgroundColor: 'action.hover'
+                                }
+                              }}
                             >
                               <EditIcon fontSize="small" />
-                            </Button>
+                            </IconButton>
                           </Box>
                         </div>
                       )}
@@ -504,10 +521,10 @@ const SeatmapEditor = ({ seatmap, onUpdate, theaterName }) => {
           gap: 2,
           mt: 2,
           p: 2,
-          bgcolor: '#f5f5f5',
+          bgcolor: '#530e0eff',
           borderRadius: 1
         }}>
-          <Typography variant="subtitle2" sx={{ mr: 2 }}>Seat Types:</Typography>
+          <Typography variant="subtitle2" sx={{ mr: 2 }}>{t('admin.seatmapEditor.seatTypesLabel')}:</Typography>
           {seatTypes.map((seatType) => (
             <Box key={seatType.name} sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
               <Box
@@ -530,17 +547,17 @@ const SeatmapEditor = ({ seatmap, onUpdate, theaterName }) => {
             onClick={addEmptyRow}
             startIcon={<AddIcon />}
           >
-            Add Empty Row
+            {t('admin.seatmapEditor.addEmptyRow')}
           </Button>
           <Button
             variant="contained"
             onClick={() => {
-              const newRowName = prompt('Enter row name:');
+              const newRowName = prompt(t('admin.seatmapEditor.promptEnterRowName'));
               if (newRowName) addSeatedRow(newRowName);
             }}
             startIcon={<AddIcon />}
           >
-            Add Seated Row
+            {t('admin.seatmapEditor.addSeatedRow')}
           </Button>
           <Button
             variant="contained"
@@ -548,17 +565,17 @@ const SeatmapEditor = ({ seatmap, onUpdate, theaterName }) => {
             startIcon={<SaveIcon />}
             color="success"
           >
-            Save Changes
+            {t('admin.seatmapEditor.saveChanges')}
           </Button>
           <Button
             variant="outlined"
             onClick={resetData}
             startIcon={<CancelIcon />}
           >
-            Reset
+            {t('admin.seatmapEditor.reset')}
           </Button>
           <Typography variant="body1" sx={{ ml: 'auto', alignSelf: 'center' }}>
-            Total Seats: {getTotalSeats()}
+            {t('admin.seatmapEditor.totalSeats')}: {getTotalSeats()}
           </Typography>
         </Stack>
       </Paper>
@@ -576,7 +593,7 @@ const SeatmapEditor = ({ seatmap, onUpdate, theaterName }) => {
         onClick={handleClose}
       >
         <MenuItem onClick={() => {
-          const newName = prompt('Enter new seat label:', contextMenu.seat?.label);
+          const newName = prompt(t('admin.seatmapEditor.promptEnterSeatLabel'), contextMenu.seat?.label);
           if (newName) {
             editSeatName(contextMenu.row, contextMenu.seat?.id, newName);
           }
@@ -603,7 +620,7 @@ const SeatmapEditor = ({ seatmap, onUpdate, theaterName }) => {
           <ListItemText>{t('admin.seatmapEditor.addSeatRight')}</ListItemText>
         </MenuItem>
         <MenuItem disabled sx={{ backgroundColor: '#f5f5f5', fontWeight: 'bold', fontSize: '0.875rem' }}>
-          Change Seat Type
+          {t('admin.seatmapEditor.changeSeatType')}
         </MenuItem>
         {seatTypes.map((seatType) => (
           <MenuItem

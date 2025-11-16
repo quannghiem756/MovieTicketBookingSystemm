@@ -326,6 +326,38 @@ const en = {
   'admin.bookings.actionMessage': 'Are you sure you want to',
   'admin.bookings.booking': 'Booking',
   'admin.bookings.dialogCancel': 'Cancel',
+
+  // Theater Form
+  'admin.theaterForm.seatTooltip': '{{seatId}} - {{seatType}}',
+
+  // Seatmap Editor
+  'admin.seatmapEditor.title': 'Seatmap Editor',
+  'admin.seatmapEditor.theaterSeatmap': 'Theater Seatmap',
+  'admin.seatmapEditor.theater': 'Theater',
+  'admin.seatmapEditor.defaultBlockName': 'Block A',
+  'admin.seatmapEditor.stage': 'STAGE',
+  'admin.seatmapEditor.seatType.standard': 'Standard',
+  'admin.seatmapEditor.seatType.double': 'Double',
+  'admin.seatmapEditor.seatType.vip': 'VIP',
+  'admin.seatmapEditor.seatType.space': 'Space',
+  'admin.seatmapEditor.seatTypesLabel': 'Seat Types',
+  'admin.seatmapEditor.promptEnterRowName': 'Enter row name:',
+  'admin.seatmapEditor.addEmptyRow': 'Add Empty Row',
+  'admin.seatmapEditor.addSeatedRow': 'Add Seated Row',
+  'admin.seatmapEditor.saveChanges': 'Save Changes',
+  'admin.seatmapEditor.reset': 'Reset',
+  'admin.seatmapEditor.totalSeats': 'Total Seats',
+  'admin.seatmapEditor.promptEnterSeatLabel': 'Enter new seat label:',
+  'admin.seatmapEditor.changeSeatType': 'Change Seat Type',
+  'admin.seatmapEditor.maxRowsReached': 'Maximum number of rows reached',
+  'admin.seatmapEditor.rowNameExists': 'Row name already exists',
+  'admin.seatmapEditor.minRowsReached': 'There must be at least one row',
+  'admin.seatmapEditor.seatNameExists': 'Seat name "{{name}}" already exists',
+  'admin.seatmapEditor.rowNameRequired': 'Row name is required',
+  'admin.seatmapEditor.editSeat': 'Edit Seat',
+  'admin.seatmapEditor.addSeatLeft': 'Add Seat Left',
+  'admin.seatmapEditor.addSeatRight': 'Add Seat Right',
+  'admin.seatmapEditor.deleteSeat': 'Delete Seat',
 };
 
 export default en;

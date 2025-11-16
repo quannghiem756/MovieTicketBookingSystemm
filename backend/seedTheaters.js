@@ -34,7 +34,7 @@ db.once('open', async () => {
       name: 'IMAX Theater',
       location: 'Premium Building, Floor 2',
       totalSeats: 150,
-      seatMap: generateSeatMap(10, 15, 'premium')
+      seatMap: generateSeatMap(10, 15, 'vip')
     }
   ];
   

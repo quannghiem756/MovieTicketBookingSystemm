@@ -38,6 +38,7 @@ import {
 } from '@mui/icons-material';
 import { getMovieById, getShowtimesByMovieId } from '../services/api';
 import { useTranslation } from '../context/I18nContext';
+import { formatCurrency } from '../utils/currency';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -432,7 +433,7 @@ const MovieDetails = () => {
                         <strong>{t('movieDetails.language')}:</strong> {showtime.language}
                       </Typography>
                       <Typography variant="h6" fontWeight="bold" color="primary.main" sx={{ mt: 1 }}>
-                        {t('movieDetails.price')}: ${showtime.price.toFixed(2)}
+                        {t('movieDetails.price')}: {formatCurrency(showtime.price)}
                       </Typography>
                     </CardContent>
                     <Box sx={{ p: 2, borderTop: '1px solid rgba(255,255,255,0.1)' }}>

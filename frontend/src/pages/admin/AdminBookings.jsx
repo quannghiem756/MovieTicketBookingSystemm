@@ -32,6 +32,7 @@ import {
   Cancel,
   HourglassEmpty
 } from '@mui/icons-material';
+import { formatCurrency } from '../../utils/currency';
 
 const AdminBookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -183,7 +184,7 @@ const AdminBookings = () => {
                 </TableCell>
                 <TableCell>
                   <Typography variant="body2" color="text.secondary">
-                    ${booking.totalPrice}
+                    {formatCurrency(booking.totalPrice)}
                   </Typography>
                 </TableCell>
                 <TableCell>

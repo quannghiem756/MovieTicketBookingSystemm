@@ -376,7 +376,7 @@ const en = {
   'admin.seatmapEditor.theaterSeatmap': 'Theater Seatmap',
   'admin.seatmapEditor.theater': 'Theater',
   'admin.seatmapEditor.defaultBlockName': 'Block A',
-  'admin.seatmapEditor.stage': 'STAGE',
+  'admin.seatmapEditor.stage': 'SCREEN',
   'admin.seatmapEditor.seatType.standard': 'Standard',
   'admin.seatmapEditor.seatType.double': 'Double',
   'admin.seatmapEditor.seatType.vip': 'VIP',

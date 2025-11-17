@@ -3,6 +3,7 @@ import { useNavigate, useParams, Link } from 'react-router-dom';
 import { getBookingById } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from '../context/I18nContext';
+import { formatCurrency } from '../utils/currency';
 import {
   Container,
   Typography,
@@ -344,7 +345,7 @@ const BookingDetailsPage = () => {
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <AttachMoney sx={{ color: 'primary.main', fontSize: '1.2rem' }} />
                   <Typography variant="body1">
-                    <strong>{t('bookings.details.total')}:</strong> ${booking.totalPrice?.toFixed(2) || booking.totalPrice}
+                    <strong>{t('bookings.details.total')}:</strong> {formatCurrency(booking.totalPrice || 0)}
                   </Typography>
                 </Box>
               </Stack>

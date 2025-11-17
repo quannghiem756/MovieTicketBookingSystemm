@@ -43,7 +43,7 @@ router.get('/vnpay/callback', async (req, res) => {
     if (isValid) {
       const orderId = vnp_Params['vnp_TxnRef'];
       const vnp_ResponseCode = vnp_Params['vnp_ResponseCode'];
-      const vnp_Amount = vnp_Params['vnp_Amount'] / 100; // Convert back from pennies
+      const vnp_Amount = Math.round(vnp_Params['vnp_Amount'] / 100); // Convert back from VND (divided by 100 as sent by VNPAY)
 
       if (vnp_ResponseCode === '00') {
         // Payment successful

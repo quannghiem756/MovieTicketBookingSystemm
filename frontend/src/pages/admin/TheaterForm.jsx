@@ -84,7 +84,7 @@ const TheaterForm = () => {
 
       return {
         name: 'Theater Seatmap',
-        stageText: 'STAGE',
+        stageText: t('admin.seatmapEditor.stage'),
         rows: rows
       };
     }

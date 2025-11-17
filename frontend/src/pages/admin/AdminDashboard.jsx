@@ -40,6 +40,7 @@ import {
   BarChart,
   PieChart
 } from '@mui/icons-material';
+import { formatCurrency } from '../../utils/currency';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -302,7 +303,7 @@ const AdminDashboard = () => {
                 </Typography>
               </Box>
               <Typography variant="h4" component="p" sx={{ fontWeight: 700 }}>
-                ${stats.revenue.toLocaleString()}
+                {formatCurrency(stats.revenue)}
               </Typography>
             </CardContent>
           </Card>

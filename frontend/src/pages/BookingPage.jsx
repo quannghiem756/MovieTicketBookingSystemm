@@ -31,6 +31,7 @@ import {
 import { getMovieById, getShowtimeById, getTheaterById, createBooking, createVnPayPayment } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from '../context/I18nContext';
+import { formatCurrency } from '../utils/currency';
 
 const BookingPage = () => {
   const { movieId, showtimeId } = useParams();
@@ -298,7 +299,7 @@ const BookingPage = () => {
               />
 
               <Chip
-                label={`${t('booking.price')}: $${showtime.price}`}
+                label={`${t('booking.price')}: ${formatCurrency(showtime.price)}`}
                 size="small"
                 sx={{
                   backgroundColor: 'rgba(76, 175, 80, 0.2)',
@@ -310,7 +311,7 @@ const BookingPage = () => {
             </Stack>
 
             <Typography variant="body1" color="textSecondary">
-              {t('booking.selectedSeats')}: {selectedSeats.length} ({t('booking.total')}: ${totalPrice.toFixed(2)})
+              {t('booking.selectedSeats')}: {selectedSeats.length} ({t('booking.total')}: {formatCurrency(totalPrice)})
             </Typography>
           </Grid>
         </Grid>
@@ -690,12 +691,12 @@ const BookingPage = () => {
                       const seatPrice = getSeatPrice(seatId);
                       return (
                         <div key={seatId}>
-                          {t('booking.seatTranslation')} {seatId} ({seat?.type || 'standard'}): ${seatPrice.toFixed(2)}
+                          {t('booking.seatTranslation')} {seatId} ({seat?.type || 'standard'}): {formatCurrency(seatPrice)}
                         </div>
                       );
                     })}
                     <div>
-                      <strong>Total:</strong> ${totalPrice.toFixed(2)}
+                      <strong>Total:</strong> {formatCurrency(totalPrice)}
                     </div>
                   </Typography>
                 </Box>
@@ -714,7 +715,7 @@ const BookingPage = () => {
                 {t('booking.total')}:
               </Typography>
               <Typography variant="h4" component="div" sx={{ fontWeight: 800, color: 'primary.main' }}>
-                ${totalPrice.toFixed(2)}
+                {formatCurrency(totalPrice)}
               </Typography>
             </Box>
           </Grid>
@@ -751,7 +752,7 @@ const BookingPage = () => {
                     {t('booking.processing')}
                   </Box>
                 ) : (
-                  `${t('booking.confirmBooking')} - $${totalPrice.toFixed(2)}`
+                  `${t('booking.confirmBooking')} - ${formatCurrency(totalPrice)}`
                 )}
               </Button>
             </Box>

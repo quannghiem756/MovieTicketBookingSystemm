@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getBookingsByUserId } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from '../context/I18nContext';
+import { formatCurrency } from '../utils/currency';
 import {
   Container,
   Typography,
@@ -250,7 +251,7 @@ const BookingsPage = () => {
                       // order: { xs: 3, md: 'unset' }
                     }}>
                       <Typography variant="h6" sx={{ fontWeight: 700, color: 'primary.main', mb: 1 }}>
-                        ${booking.totalPrice?.toFixed(2) || booking.totalPrice}
+                        {formatCurrency(booking.totalPrice || 0)}
                       </Typography>
                       <Chip
                         label={

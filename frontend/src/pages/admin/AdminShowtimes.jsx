@@ -27,6 +27,7 @@ import {
   Edit,
   Delete
 } from '@mui/icons-material';
+import { formatCurrency } from '../../utils/currency';
 
 const AdminShowtimes = () => {
   const [showtimes, setShowtimes] = useState([]);
@@ -161,7 +162,7 @@ const AdminShowtimes = () => {
                 </TableCell>
                 <TableCell>
                   <Typography variant="body2" color="text.secondary">
-                    ${showtime.price}
+                    {formatCurrency(showtime.price)}
                   </Typography>
                 </TableCell>
                 <TableCell>

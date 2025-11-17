@@ -43,7 +43,8 @@ const createVnPayPaymentUrl = async (bookingId, clientIp) => {
     vnp_Params['vnp_TxnRef'] = bookingId.toString();
     vnp_Params['vnp_OrderInfo'] = orderInfo;
     vnp_Params['vnp_OrderType'] = 'ticket';
-    vnp_Params['vnp_Amount'] = amount * 100; // Convert to VND pennies
+    // VNPAY requires amount to be in the lowest currency unit (for VND, this is still VND, but multiplied by 100 for consistency)
+    vnp_Params['vnp_Amount'] = Math.round(amount) * 100; // Convert to VND (multiplied by 100 as required by VNPAY)
     vnp_Params['vnp_ReturnUrl'] = returnUrl;
     vnp_Params['vnp_IpAddr'] = ipAddr;
     vnp_Params['vnp_CreateDate'] = createDate;

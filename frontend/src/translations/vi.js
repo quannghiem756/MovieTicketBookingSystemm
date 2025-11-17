@@ -193,6 +193,7 @@ const vi = {
   'common.error': 'Đã xảy ra lỗi',
   'common.movieNotFound': 'Không tìm thấy phim',
   'common.back': 'Quay lại',
+  'common.save': 'Lưu',
   
   // Pagination
   'pagination.previous': 'Trước',
@@ -412,7 +413,7 @@ const vi = {
   'admin.seatmapEditor.theaterSeatmap': 'Sơ đồ ghế phòng chiếu',
   'admin.seatmapEditor.theater': 'Phòng chiếu',
   'admin.seatmapEditor.defaultBlockName': 'Khối A',
-  'admin.seatmapEditor.stage': 'SÂN KHẤU',
+  'admin.seatmapEditor.stage': 'MÀN HÌNH',
   'admin.seatmapEditor.seatType.standard': 'Tiêu chuẩn',
   'admin.seatmapEditor.seatType.double': 'Đôi',
   'admin.seatmapEditor.seatType.vip': 'VIP',

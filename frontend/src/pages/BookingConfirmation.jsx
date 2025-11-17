@@ -14,6 +14,7 @@ import {
 import { Link, useLocation } from 'react-router-dom';
 import { CheckCircle, Movie, CalendarToday, AccessTime, ConfirmationNumber, LocationOn } from '@mui/icons-material';
 import { useTranslation } from '../context/I18nContext';
+import { formatCurrency } from '../utils/currency';
 
 const BookingConfirmation = () => {
   const location = useLocation();
@@ -187,7 +188,7 @@ const BookingConfirmation = () => {
                       {t('booking.confirmation.total')}
                     </Typography>
                     <Typography variant="h5" color="primary.main" sx={{ fontWeight: 700 }}>
-                      ${bookingData.totalPrice.toFixed(2)}
+                      {formatCurrency(bookingData.totalPrice)}
                     </Typography>
                   </Box>
                 </Stack>

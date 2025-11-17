@@ -36,6 +36,7 @@ import {
   Add as AddIcon
 } from '@mui/icons-material';
 import { getTheaters, getShowtimesByMovieId, createShowtime, updateShowtime, deleteShowtime } from '../../services/api';
+import { formatCurrency } from '../../utils/currency';
 
 const MovieForm = () => {
   const { id } = useParams();
@@ -468,7 +469,7 @@ const MovieForm = () => {
                       <TableCell>{t('admin.movieForm.theater')} {showtime.theaterId}</TableCell>
                       <TableCell>{showtime.format}</TableCell>
                       <TableCell>{showtime.language}</TableCell>
-                      <TableCell>${showtime.price}</TableCell>
+                      <TableCell>{formatCurrency(showtime.price)}</TableCell>
                       <TableCell>
                         <IconButton 
                           onClick={() => openShowtimeForm(showtime)}

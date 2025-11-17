@@ -166,10 +166,11 @@ const BookingsPage = () => {
                     </Box>
 
                     <Box sx={{
-                      flex: { xs: '0 0 100%', md: '0 0 33.333%' },
-                      width: { xs: '100%', md: 'auto' },
-                      maxWidth: { md: '40.333%' },
-                      order: { xs: 1, md: 'unset' }
+                      // flex: { xs: '0 0 100%', md: '0 0 33.333%' },
+                      // width: { xs: '100%', md: 'auto' },
+                      // maxWidth: { md: '40.333%' },
+                      // textAlign: { xs: 'center', md: 'left' },
+                      // order: { xs: 1, md: 'unset' }
                     }}>
                       <Typography
                         variant="h5"
@@ -212,10 +213,10 @@ const BookingsPage = () => {
                     </Box>
 
                     <Box sx={{
-                      flex: { xs: '0 0 100%', md: '0 0 25%' },
-                      width: { xs: '100%', md: 'auto' },
-                      maxWidth: { md: '10%' },
-                      order: { xs: 2, md: 'unset' }
+                      // flex: { xs: '0 0 100%', md: '0 0 25%' },
+                      // width: { xs: '100%', md: 'auto' },
+                      // maxWidth: { md: '10%' },
+                      // order: { xs: 2, md: 'unset' }
                     }}>
                       <Stack spacing={1}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -242,11 +243,11 @@ const BookingsPage = () => {
                     </Box>
 
                     <Box sx={{
-                      flex: { xs: '0 0 100%', md: '0 0 16.666%' },
-                      width: { xs: '100%', md: 'auto' },
-                      maxWidth: { md: '16.666%' },
-                      textAlign: { xs: 'left', md: 'center' },
-                      order: { xs: 3, md: 'unset' }
+                      // flex: { xs: '0 0 100%', md: '0 0 16.666%' },
+                      // width: { xs: '100%', md: 'auto' },
+                      // maxWidth: { md: '16.666%' },
+                      // textAlign: { xs: 'left', md: 'center' },
+                      // order: { xs: 3, md: 'unset' }
                     }}>
                       <Typography variant="h6" sx={{ fontWeight: 700, color: 'primary.main', mb: 1 }}>
                         ${booking.totalPrice?.toFixed(2) || booking.totalPrice}
@@ -275,15 +276,15 @@ const BookingsPage = () => {
                     </Box>
 
                     <Box sx={{
-                      flex: { xs: '0 0 100%', md: '0 0 8.333%' },
-                      width: { xs: '100%', md: 'auto' },
-                      maxWidth: { md: '8.333%' },
-                      textAlign: { xs: 'left', md: 'center' },
-                      display: 'flex',
-                      justifyContent: { xs: 'flex-start', md: 'center' },
-                      alignItems: 'center',
-                      order: { xs: 4, md: 'unset' },
-                      mt: { xs: 2, md: 0 }
+                      // flex: { xs: '0 0 100%', md: '0 0 8.333%' },
+                      // width: { xs: '100%', md: 'auto' },
+                      // maxWidth: { md: '8.333%' },
+                      // textAlign: { xs: 'left', md: 'center' },
+                      // display: 'flex',
+                      // justifyContent: { xs: 'flex-start', md: 'center' },
+                      // alignItems: 'center',
+                      // order: { xs: 4, md: 'unset' },
+                      // mt: { xs: 2, md: 0 }
                     }}>
                       <Button
                         variant="outlined"

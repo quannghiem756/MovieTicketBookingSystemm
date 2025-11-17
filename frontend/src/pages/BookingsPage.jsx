@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { getBookingsByUserId } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from '../context/I18nContext';
-import { 
-  Container, 
-  Typography, 
-  Box, 
-  Paper, 
-  Grid, 
+import {
+  Container,
+  Typography,
+  Box,
+  Paper,
+  Grid,
   Chip,
   CircularProgress,
   Alert,
@@ -21,6 +21,7 @@ import {
   useMediaQuery,
   Avatar
 } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 import { 
   Movie, 
   AccessTime, 
@@ -259,7 +260,9 @@ const BookingsPage = () => {
                         variant="outlined"
                         size="small"
                         endIcon={<ArrowForward />}
-                        sx={{ 
+                        component={RouterLink}
+                        to={`/bookings/${booking.id}`}
+                        sx={{
                           borderRadius: 3,
                           textTransform: 'none',
                           fontWeight: 600,

@@ -66,7 +66,31 @@ const vi = {
   'bookings.status.confirmed': 'Đã xác nhận',
   'bookings.status.pending': 'Đang chờ',
   'bookings.status.cancelled': 'Đã hủy',
-  
+  'bookings.movieTitle': 'Tên phim',
+
+  // Booking Details Page
+  'bookings.details.title': 'Chi tiết đặt vé',
+  'bookings.details.subtitle': 'Xem thông tin chi tiết về vé đã đặt của bạn',
+  'bookings.details.id': 'Mã đặt vé',
+  'bookings.details.bookingInfo': 'Thông tin đặt vé',
+  'bookings.details.date': 'Ngày chiếu',
+  'bookings.details.time': 'Giờ chiếu',
+  'bookings.details.theater': 'Phòng chiếu',
+  'bookings.details.location': 'Vị trí',
+  'bookings.details.seats': 'Ghế đã chọn',
+  'bookings.details.total': 'Tổng cộng',
+  'bookings.details.bookingDate': 'Ngày đặt vé',
+  'bookings.details.director': 'Đạo diễn',
+  'bookings.details.cast': 'Dàn diễn viên',
+  'bookings.details.duration': 'Thời lượng',
+  'bookings.details.minutes': 'phút',
+  'bookings.details.standard': 'Ghế thường',
+  'bookings.details.notAvailable': 'Không có sẵn',
+  'bookings.details.noSynopsis': 'Không có tóm tắt',
+  'bookings.details.qrCodeTitle': 'Mã QR vé của bạn',
+  'bookings.details.qrCodeSubtitle': 'Quét mã này tại quầy để nhận vé của bạn',
+  'bookings.details.qrCodeHint': 'Mang theo mã này khi đến rạp để nhận vé của bạn',
+
   // Booking Page
   'booking.title': 'Đặt vé',
   'booking.perTicket': 'mỗi vé',

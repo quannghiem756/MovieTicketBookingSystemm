@@ -12,6 +12,7 @@ import NowShowingPage from './pages/NowShowingPage';
 import ComingSoonPage from './pages/ComingSoonPage';
 import BookingPage from './pages/BookingPage';
 import BookingsPage from './pages/BookingsPage';
+import BookingDetailsPage from './pages/BookingDetailsPage';
 import ProfilePage from './pages/ProfilePage';
 import ShowtimesPage from './pages/ShowtimesPage';
 // Admin components
@@ -50,6 +51,11 @@ const AppRouter = () => {
           <Route path="/bookings" element={
             <ProtectedRoute>
               <BookingsPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/bookings/:bookingId" element={
+            <ProtectedRoute>
+              <BookingDetailsPage />
             </ProtectedRoute>
           } />
           <Route path="/profile" element={

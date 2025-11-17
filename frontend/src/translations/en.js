@@ -72,6 +72,12 @@ const en = {
   'booking.processing': 'Processing...',
   'booking.error': 'Booking failed. Please try again.',
   'booking.selectSeats': 'Please select at least one seat.',
+  'booking.standard': 'Standard Seat',
+  'booking.double': 'Double Seat',
+  'booking.vip': 'VIP Seat',
+  'booking.numberOfSeats': 'Number of seats selected: ',
+  'booking.summary': 'Booking Summary',
+  'booking.price': 'Ticket Price',
   
   // Booking Confirmation Page
   'booking.confirmation.title': 'Booking Successful!',
@@ -131,6 +137,7 @@ const en = {
   'common.loading': 'Loading...',
   'common.error': 'An error occurred',
   'common.movieNotFound': 'Movie not found',
+  'common.back': 'Back',
   
   // Pagination
   'pagination.previous': 'Previous',
@@ -161,6 +168,12 @@ const en = {
   'admin.dashboard.newMovieAdded': 'New movie added',
   'admin.dashboard.showtimeCreated': 'Showtime created',
   'admin.dashboard.bookingConfirmed': 'Booking confirmed',
+  'admin.dashboard.subtitle': 'Quick Overview',
+  'admin.dashboard.revenue': 'Revenue',
+  'admin.dashboard.upcomingShowtimes': 'Upcoming Showtimes',
+  'admin.dashboard.addShowtime': 'Add Showtime',
+  'admin.dashboard.addMovie': 'Add Movie',
+  'admin.dashboard.addTheater': 'Add Theater',
   
   // Admin Movies
   'admin.movies.title': 'Manage Movies',

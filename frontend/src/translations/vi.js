@@ -56,13 +56,19 @@ const vi = {
   'booking.selected': 'Đã chọn',
   'booking.unavailable': 'Không khả dụng',
   'booking.seatUnavailable': 'Ghế không khả dụng',
-  'booking.noSeatsSelected': 'Chưa chọn ghế nào',
-  'booking.selectedSeats': 'Ghế đã chọn',
+  'booking.noSeatsSelected': ' Chưa chọn ghế nào',
+  'booking.selectedSeats': 'Ghế đã chọn ',
   'booking.total': 'Tổng cộng',
   'booking.confirmBooking': 'Xác nhận đặt vé',
   'booking.processing': 'Đang xử lý...',
   'booking.error': 'Đặt vé không thành công. Vui lòng thử lại.',
   'booking.selectSeats': 'Vui lòng chọn ít nhất một ghế.',
+  'booking.standard': 'Ghế thường',
+  'booking.double': 'Ghế Đôi',
+  'booking.vip': 'Ghế VIP',
+  'booking.numberOfSeats': 'Số ghế đã chọn ',
+  'booking.summary': 'Xác nhận đặt vé',
+  'booking.price': 'Giá vé',
   
   // Booking Confirmation Page
   'booking.confirmation.title': 'Đặt vé thành công!',
@@ -122,6 +128,7 @@ const vi = {
   'common.loading': 'Đang tải...',
   'common.error': 'Đã xảy ra lỗi',
   'common.movieNotFound': 'Không tìm thấy phim',
+  'common.back': 'Quay lại',
   
   // Pagination
   'pagination.previous': 'Trước',
@@ -161,6 +168,12 @@ const vi = {
   'admin.dashboard.newMovieAdded': 'Phim mới được thêm',
   'admin.dashboard.showtimeCreated': 'Lịch chiếu được tạo',
   'admin.dashboard.bookingConfirmed': 'Vé được xác nhận',
+  'admin.dashboard.subtitle': 'Tổng quan nhanh',
+  'admin.dashboard.revenue': 'Doanh thu',
+  'admin.dashboard.upcomingShowtimes': 'Lịch chiếu sắp tới',
+  'admin.dashboard.addShowtime': 'Thêm lịch chiếu',
+  'admin.dashboard.addMovie': 'Thêm phim',
+  'admin.dashboard.addTheater': 'Thêm phòng chiếu',
   
   // Admin Movies
   'admin.movies.title': 'Quản lý phim',

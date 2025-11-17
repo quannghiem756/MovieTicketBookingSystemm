@@ -135,7 +135,6 @@ const AdminDashboard = () => {
     { 
       title: t('admin.dashboard.manageUsers'), 
       icon: <People />, 
-      color: 'secondary', 
       link: '/admin/users' 
     }
   ];
@@ -266,7 +265,7 @@ const AdminDashboard = () => {
           >
             <CardContent sx={{ p: 3, flex: 1 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Avatar sx={{ bgcolor: 'secondary.main', width: 48, height: 48, mr: 2 }}>
+                <Avatar sx={{  width: 48, height: 48, mr: 2 }}>
                   <People />
                 </Avatar>
                 <Typography variant="h6" sx={{ fontWeight: 600 }}>
@@ -328,7 +327,7 @@ const AdminDashboard = () => {
                   <Event />
                 </Avatar>
                 <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                  {t('admin.dashboard.upcomingShows')}
+                  {t('admin.dashboard.upcomingShowtimes')}
                 </Typography>
               </Box>
               <Typography variant="h4" component="p" sx={{ fontWeight: 700 }}>

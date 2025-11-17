@@ -319,7 +319,7 @@ const BookingPage = () => {
             </Stack>
 
             <Typography variant="body1" color="textSecondary">
-              {t('booking.selectedSeats')}: {selectedSeats.length} {t('booking.seats')} ({t('booking.total')}: ${totalPrice.toFixed(2)})
+              {t('booking.selectedSeats')}: {selectedSeats.length} ({t('booking.total')}: ${totalPrice.toFixed(2)})
             </Typography>
           </Grid>
         </Grid>

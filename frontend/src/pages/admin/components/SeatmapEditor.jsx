@@ -45,6 +45,10 @@ const SeatmapEditor = ({ seatmap, onUpdate, theaterName }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  // Store original state for reset
+  const [originalSeatMapData, setOriginalSeatMapData] = useState(null);
+  const [originalSeatData, setOriginalSeatData] = useState(null);
+
   // Context menu state
   const [contextMenu, setContextMenu] = useState({
     mouseX: null,
@@ -64,6 +68,17 @@ const SeatmapEditor = ({ seatmap, onUpdate, theaterName }) => {
         });
         setSeatData(newSeatData);
 
+        // Store original state for reset
+        const originalSeatDataMap = new Map();
+        seatmap.rows.forEach(row => {
+          originalSeatDataMap.set(row.name, row.seats || []);
+        });
+        setOriginalSeatData(originalSeatDataMap);
+        setOriginalSeatMapData({
+          name: seatmap.name || (theaterName || t('admin.seatmapEditor.theaterSeatmap')),
+          stageText: seatmap.stageText || t('admin.seatmapEditor.stage')
+        });
+
         // Update seatMapData with name and stageText if available
         setSeatMapData(prev => ({
           ...prev,
@@ -78,15 +93,42 @@ const SeatmapEditor = ({ seatmap, onUpdate, theaterName }) => {
           newSeatData.set(rowName, row.seats || []);
         });
         setSeatData(newSeatData);
+
+        // Store original state for reset
+        const originalSeatDataMap = new Map();
+        seatmap.forEach((row, index) => {
+          const rowName = row.row || row.name || String.fromCharCode(65 + index);
+          originalSeatDataMap.set(rowName, row.seats || []);
+        });
+        setOriginalSeatData(originalSeatDataMap);
+        setOriginalSeatMapData({
+          name: (theaterName || t('admin.seatmapEditor.theaterSeatmap')),
+          stageText: t('admin.seatmapEditor.stage')
+        });
       } else {
         setSeatData(new Map());
+        setOriginalSeatData(new Map());
+        setOriginalSeatMapData({
+          name: (theaterName || t('admin.seatmapEditor.theaterSeatmap')),
+          stageText: t('admin.seatmapEditor.stage')
+        });
       }
     } else {
       // Initialize with default rows if no seatmap
       const defaultSeatData = new Map();
-      defaultSeatData.set('A', Array(10).fill(null).map((_, i) => createSeat('A', (i + 1).toString())));
-      defaultSeatData.set('B', Array(10).fill(null).map((_, i) => createSeat('B', (i + 1).toString())));
+      defaultSeatData.set('A', Array(10).fill(null).map((_, i) => ({ id: `A${i + 1}`, row: 'A', label: (i + 1).toString(), type: 'standard' })));
+      defaultSeatData.set('B', Array(10).fill(null).map((_, i) => ({ id: `B${i + 1}`, row: 'B', label: (i + 1).toString(), type: 'standard' })));
       setSeatData(defaultSeatData);
+
+      // Store original state for reset
+      const originalSeatDataMap = new Map();
+      originalSeatDataMap.set('A', Array(10).fill(null).map((_, i) => ({ id: `A${i + 1}`, row: 'A', label: (i + 1).toString(), type: 'standard' })));
+      originalSeatDataMap.set('B', Array(10).fill(null).map((_, i) => ({ id: `B${i + 1}`, row: 'B', label: (i + 1).toString(), type: 'standard' })));
+      setOriginalSeatData(originalSeatDataMap);
+      setOriginalSeatMapData({
+        name: (theaterName || t('admin.seatmapEditor.theaterSeatmap')),
+        stageText: t('admin.seatmapEditor.stage')
+      });
     }
   }, [seatmap]);
 
@@ -128,7 +170,7 @@ const SeatmapEditor = ({ seatmap, onUpdate, theaterName }) => {
     const nextRowName = String.fromCharCode(65 + rows.length);
     setSeatData(prev => {
       const newMap = new Map(prev);
-      newMap.set(nextRowName, [{ id: `${nextRowName}-1`, row: nextRowName, label: '0', type: 'space' }]);
+      newMap.set(nextRowName, [{ id: `${nextRowName}0`, row: nextRowName, label: '0', type: 'space' }]);
       return newMap;
     });
     setError('');
@@ -148,7 +190,7 @@ const SeatmapEditor = ({ seatmap, onUpdate, theaterName }) => {
 
     setSeatData(prev => {
       const newMap = new Map(prev);
-      newMap.set(rowName, [{ id: `${rowName}-1`, row: rowName, label: '1', type: 'standard' }]);
+      newMap.set(rowName, [{ id: `${rowName}1`, row: rowName, label: '1', type: 'standard' }]);
       return newMap;
     });
     setError('');
@@ -190,7 +232,7 @@ const SeatmapEditor = ({ seatmap, onUpdate, theaterName }) => {
         }
 
         const newSeat = {
-          id: `${rowId}-${Date.now()}`,
+          id: type === 'space' ? `${rowId}0` : `${rowId}${newLabel}`,
           row: rowId,
           label: newLabel,
           type: type
@@ -218,7 +260,20 @@ const SeatmapEditor = ({ seatmap, onUpdate, theaterName }) => {
         seat.id === seatId ? { ...seat, type: newType } : seat
       );
 
-      newMap.set(rowId, updatedSeats);
+      // Renumber all seats in the row to ensure proper sequential numbering (ignoring space seats)
+      let counter = 1;
+      const recalculatedSeats = updatedSeats.map(seat => {
+        if (seat.type === 'space') {
+          // Space seats get label '0' and ID 'row0'
+          return { ...seat, label: '0', id: `${seat.row}0` };
+        } else {
+          // Non-space seats get sequential numbers starting from 1 and matching ID
+          const newLabel = (counter++).toString();
+          return { ...seat, label: newLabel, id: `${seat.row}${newLabel}` };
+        }
+      });
+
+      newMap.set(rowId, recalculatedSeats);
       return newMap;
     });
   };
@@ -318,11 +373,22 @@ const SeatmapEditor = ({ seatmap, onUpdate, theaterName }) => {
 
   // Reset to initial state
   const resetData = () => {
-    const defaultSeatData = new Map();
-    defaultSeatData.set('A', Array(10).fill(null).map((_, i) => createSeat('A', (i + 1).toString(), 'standard')));
-    defaultSeatData.set('B', Array(10).fill(null).map((_, i) => createSeat('B', (i + 1).toString(), 'standard')));
-    setSeatData(defaultSeatData);
-    setSeatMapData(prev => ({ ...prev, stageText: t('admin.seatmapEditor.stage'), name: theaterName || t('admin.seatmapEditor.theaterSeatmap') }));
+    if (originalSeatData && originalSeatMapData) {
+      // Use the original state that was stored when the component mounted
+      setSeatData(new Map(originalSeatData));
+      setSeatMapData(prev => ({
+        ...prev,
+        name: originalSeatMapData.name,
+        stageText: originalSeatMapData.stageText
+      }));
+    } else {
+      // Fallback to default state if original state is not available
+      const defaultSeatData = new Map();
+      defaultSeatData.set('A', Array(10).fill(null).map((_, i) => ({ id: `A${i + 1}`, row: 'A', label: (i + 1).toString(), type: 'standard' })));
+      defaultSeatData.set('B', Array(10).fill(null).map((_, i) => ({ id: `B${i + 1}`, row: 'B', label: (i + 1).toString(), type: 'standard' })));
+      setSeatData(defaultSeatData);
+      setSeatMapData(prev => ({ ...prev, stageText: t('admin.seatmapEditor.stage'), name: theaterName || t('admin.seatmapEditor.theaterSeatmap') }));
+    }
     setError('');
   };
 
@@ -424,33 +490,61 @@ const SeatmapEditor = ({ seatmap, onUpdate, theaterName }) => {
                           </IconButton>
                           <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: 0.5, flex: 1 }}>
                             {seatsInRow?.map((seat) => {
-                              const seatTypeConfig = seatTypes.find(st => st.name === seat.type) || seatTypes[0];
-                              return (
-                                <Box
-                                  key={seat.id}
-                                  sx={{
-                                    width: 35,
-                                    height: 35,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    fontSize: '12px',
-                                    fontWeight: 'bold',
-                                    border: seat.type === 'space' ? '1px solid transparent' : '1px solid #222',
-                                    borderBottom: seat.type === 'space' ? '1px solid transparent' : '5px solid #222',
-                                    borderRadius: '5px',
-                                    backgroundColor: seatTypeConfig.color,
-                                    color: seat.type === 'space' ? '#666' : '#fff',
-                                    cursor: 'pointer',
-                                    '&:hover': {
-                                      opacity: 0.8
-                                    }
-                                  }}
-                                  onContextMenu={(e) => handleContextMenu(e, row, seat)}
-                                >
-                                  {seat.type !== 'space' ? seat.label : ''}
-                                </Box>
-                              );
+                              if (seat.type === 'space') {
+                                // Render space type as an invisible element with the same size as other seats
+                                return (
+                                  <Box
+                                    key={seat.id}
+                                    sx={{
+                                      width: 35,
+                                      height: 35,
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      fontSize: '12px',
+                                      fontWeight: 'bold',
+                                      border: '1px solid transparent',
+                                      backgroundColor: 'transparent',
+                                      color: 'transparent',
+                                      cursor: 'pointer',
+                                      '&:hover': {
+                                        backgroundColor: 'rgba(0, 0, 0, 0.05)'
+                                      }
+                                    }}
+                                    onContextMenu={(e) => handleContextMenu(e, row, seat)}
+                                  >
+                                    {seat.label}
+                                  </Box>
+                                );
+                              } else {
+                                const seatTypeConfig = seatTypes.find(st => st.name === seat.type) || seatTypes[0];
+                                return (
+                                  <Box
+                                    key={seat.id}
+                                    sx={{
+                                      width: 35,
+                                      height: 35,
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      fontSize: '12px',
+                                      fontWeight: 'bold',
+                                      border: '1px solid #222',
+                                      borderBottom: '5px solid #222',
+                                      borderRadius: '5px',
+                                      backgroundColor: seatTypeConfig.color,
+                                      color: '#fff',
+                                      cursor: 'pointer',
+                                      '&:hover': {
+                                        opacity: 0.8
+                                      }
+                                    }}
+                                    onContextMenu={(e) => handleContextMenu(e, row, seat)}
+                                  >
+                                    {seat.label}
+                                  </Box>
+                                );
+                              }
                             })}
                           </Box>
                           <Box sx={{ ml: 1, display: 'flex', gap: 1.5 , mr: 1}}>

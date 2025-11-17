@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { 
-  Container, 
-  Typography, 
-  Box, 
-  Paper, 
-  Grid, 
-  Button, 
+import {
+  Container,
+  Typography,
+  Box,
+  Paper,
+  Grid,
+  Button,
   Chip,
   CircularProgress,
   Alert,
@@ -18,8 +18,8 @@ import {
   Tooltip,
   Skeleton
 } from '@mui/material';
-import { 
-  ArrowBack, 
+import {
+  ArrowBack,
   Info,
   LocalCafe,
   AccessibilityNew,
@@ -39,7 +39,7 @@ const BookingPage = () => {
   const { t } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  
+
   const [movie, setMovie] = useState(null);
   const [showtime, setShowtime] = useState(null);
   const [theater, setTheater] = useState(null);
@@ -57,20 +57,20 @@ const BookingPage = () => {
     const fetchBookingData = async () => {
       try {
         setLoading(true);
-        
+
         // Fetch movie and showtime data
         const [movieResponse, showtimeResponse] = await Promise.all([
           getMovieById(movieId),
           getShowtimeById(showtimeId)
         ]);
-        
+
         setMovie(movieResponse.data);
         setShowtime(showtimeResponse.data);
-        
+
         // Fetch theater data
         const theaterResponse = await getTheaterById(showtimeResponse.data.theaterId);
         setTheater(theaterResponse.data);
-        
+
         // Create seat map from theater data
         if (theaterResponse.data.seatMap) {
           setSeatMap(theaterResponse.data.seatMap);
@@ -109,9 +109,9 @@ const BookingPage = () => {
   const getSeatPrice = (seatId) => {
     const seat = seatMap.flat().find(s => s.id === seatId);
     const basePrice = showtime?.price || 0;
-    
+
     if (!seat) return basePrice;
-    
+
     switch (seat.type) {
       case 'vip':
         return basePrice * 1.5; // VIP seats cost 50% more
@@ -134,7 +134,7 @@ const BookingPage = () => {
 
   const handleSeatClick = (seatId) => {
     const isSelected = selectedSeats.includes(seatId);
-    
+
     if (isSelected) {
       // Deselect seat
       setSelectedSeats(selectedSeats.filter(id => id !== seatId));
@@ -144,7 +144,7 @@ const BookingPage = () => {
         setError(t('booking.maxSeatsSelected'));
         return;
       }
-      
+
       // Select seat
       setSelectedSeats([...selectedSeats, seatId]);
     }
@@ -161,7 +161,7 @@ const BookingPage = () => {
       setError(t('booking.selectSeats'));
       return;
     }
-    
+
     if (!user) {
       navigate('/login');
       return;
@@ -176,9 +176,9 @@ const BookingPage = () => {
         seatIds: selectedSeats,
         totalPrice
       };
-      
+
       const response = await createBooking(bookingData);
-      
+
       // Navigate to confirmation page with booking data
       navigate('/booking/confirmation', {
         state: {
@@ -202,11 +202,11 @@ const BookingPage = () => {
     }
   };
 
-  if (loading) 
+  if (loading)
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 3 }}>
-          <Button 
+          <Button
             onClick={() => navigate(-1)}
             startIcon={<ArrowBack />}
             variant="outlined"
@@ -220,8 +220,8 @@ const BookingPage = () => {
         <Skeleton variant="rectangular" height={150} sx={{ borderRadius: 4 }} />
       </Container>
     );
-    
-  if (error && !movie && !showtime) 
+
+  if (error && !movie && !showtime)
     return (
       <Container maxWidth="lg">
         <Box sx={{ textAlign: 'center', py: 10 }}>
@@ -229,8 +229,8 @@ const BookingPage = () => {
         </Box>
       </Container>
     );
-    
-  if (!movie || !showtime) 
+
+  if (!movie || !showtime)
     return (
       <Container maxWidth="lg">
         <Box sx={{ textAlign: 'center', py: 10 }}>
@@ -242,7 +242,7 @@ const BookingPage = () => {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 3 }}>
-        <Button 
+        <Button
           onClick={() => navigate(-1)}
           startIcon={<ArrowBack />}
           variant="outlined"
@@ -253,9 +253,9 @@ const BookingPage = () => {
       </Box>
 
       {/* Movie and showtime info */}
-      <Paper 
-        sx={{ 
-          p: 4, 
+      <Paper
+        sx={{
+          p: 4,
           mb: 4,
           borderRadius: 4,
           border: '1px solid rgba(255,255,255,0.1)',
@@ -276,10 +276,10 @@ const BookingPage = () => {
             <Typography variant="h4" component="h3" gutterBottom sx={{ fontWeight: 800 }}>
               {movie.title}
             </Typography>
-            
-            <Stack 
-              direction={{ xs: 'column', sm: 'row' }} 
-              spacing={2} 
+
+            <Stack
+              direction={{ xs: 'column', sm: 'row' }}
+              spacing={2}
               alignItems={{ xs: 'flex-start', sm: 'center' }}
               sx={{ mb: 2 }}
             >
@@ -294,7 +294,7 @@ const BookingPage = () => {
                   fontWeight: 500,
                 }}
               />
-              
+
               <Chip
                 label={`${new Date(showtime.showDate).toDateString()} at ${showtime.showTime}`}
                 size="small"
@@ -305,7 +305,7 @@ const BookingPage = () => {
                   fontWeight: 500,
                 }}
               />
-              
+
               <Chip
                 label={`${t('booking.price')}: $${showtime.price}`}
                 size="small"
@@ -317,18 +317,18 @@ const BookingPage = () => {
                 }}
               />
             </Stack>
-            
+
             <Typography variant="body1" color="textSecondary">
               {t('booking.selectedSeats')}: {selectedSeats.length} {t('booking.seats')} ({t('booking.total')}: ${totalPrice.toFixed(2)})
             </Typography>
           </Grid>
         </Grid>
       </Paper>
-      
+
       {/* Seat selection */}
-      <Paper 
-        sx={{ 
-          p: 4, 
+      <Paper
+        sx={{
+          p: 4,
           mb: 4,
           borderRadius: 4,
           border: '1px solid rgba(255,255,255,0.1)',
@@ -336,12 +336,12 @@ const BookingPage = () => {
           backdropFilter: 'blur(10px)'
         }}
       >
-        <Typography 
-          variant="h5" 
-          component="h3" 
-          gutterBottom 
-          sx={{ 
-            fontWeight: 700, 
+        <Typography
+          variant="h5"
+          component="h3"
+          gutterBottom
+          sx={{
+            fontWeight: 700,
             mb: 3,
             display: 'flex',
             alignItems: 'center'
@@ -350,15 +350,15 @@ const BookingPage = () => {
           <AccessibilityNew sx={{ mr: 1, color: 'primary.main' }} />
           {t('booking.selectSeats')}
         </Typography>
-        
+
         {/* Screen */}
         <Box sx={{ textAlign: 'center', mb: 6 }}>
-          <Box sx={{ 
-            display: 'inline-block', 
-            bgcolor: 'grey.800', 
-            color: 'white', 
-            px: 6, 
-            py: 1.5, 
+          <Box sx={{
+            display: 'inline-block',
+            bgcolor: 'grey.800',
+            color: 'white',
+            px: 6,
+            py: 1.5,
             borderRadius: '12px 12px 0 0',
             mb: 1,
             fontWeight: 700,
@@ -367,36 +367,36 @@ const BookingPage = () => {
           }}>
             {t('booking.screen')}
           </Box>
-          <Box sx={{ 
-            width: '100%', 
-            height: '20px', 
-            bgcolor: 'rgba(128,128,128,0.3)', 
+          <Box sx={{
+            width: '100%',
+            height: '20px',
+            bgcolor: 'rgba(128,128,128,0.3)',
             borderRadius: '0 0 12px 12px',
             boxShadow: 3
           }} />
         </Box>
-        
+
         {/* Seat map */}
-        <Box sx={{ 
-          display: 'flex', 
-          flexDirection: 'column', 
-          alignItems: 'center', 
+        <Box sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
           mb: 3,
           overflowX: 'auto',
           py: 2
         }}>
           {seatMap.map((row, rowIndex) => (
-            <Box key={rowIndex} sx={{ 
-              display: 'flex', 
-              justifyContent: 'center', 
-              mb: 1.5, 
+            <Box key={rowIndex} sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              mb: 1.5,
               width: '100%',
               minWidth: 'max-content'
             }}>
-              <Box sx={{ 
-                minWidth: '40px', 
-                textAlign: 'center', 
-                fontWeight: 'bold', 
+              <Box sx={{
+                minWidth: '40px',
+                textAlign: 'center',
+                fontWeight: 'bold',
                 color: 'text.secondary',
                 display: 'flex',
                 alignItems: 'center',
@@ -406,11 +406,24 @@ const BookingPage = () => {
                 {String.fromCharCode(65 + rowIndex)}
               </Box>
               {row.map((seat) => {
+                // Handle space type seats as invisible elements                                                
+                if (seat.type === 'space') {
+                  return (
+                    <Box
+                      key={seat.id}
+                      sx={{
+                        width: 36,
+                        mx: 0.5,
+                        visibility: 'hidden'
+                      }}
+                    />
+                  );
+                }
                 const status = getSeatStatus(seat);
                 let bgColor = 'grey.700';
                 let borderColor = 'divider';
                 let textColor = 'text.primary';
-                
+
                 if (status === 'selected') {
                   bgColor = 'success.main';
                   borderColor = 'success.main';
@@ -423,17 +436,17 @@ const BookingPage = () => {
                 } else if (status === 'available' && seat.type === 'double') {
                   bgColor = 'warning.main'; // Double seat color
                 }
-                
+
                 return (
-                  <Tooltip 
+                  <Tooltip
                     title={status === 'unavailable' ? t('booking.seatUnavailable') : seat.id}
                     key={seat.id}
                   >
                     <Box
                       onClick={() => seat.isAvailable && handleSeatClick(seat.id)}
-                      sx={{ 
-                        width: 36, 
-                        height: 36, 
+                      sx={{
+                        width: 36,
+                        height: 36,
                         mx: 0.5,
                         borderRadius: 1,
                         bgcolor: bgColor,
@@ -446,26 +459,26 @@ const BookingPage = () => {
                         transition: 'all 0.2s',
                         '&:hover': {
                           transform: seat.isAvailable ? 'scale(1.1)' : 'none',
-                          bgcolor: status === 'selected' 
-                            ? 'success.dark' 
-                            : status === 'unavailable' 
-                              ? 'grey.600' 
-                              : seat.type === 'premium' 
-                                ? '#E65100' 
+                          bgcolor: status === 'selected'
+                            ? 'success.dark'
+                            : status === 'unavailable'
+                              ? 'grey.600'
+                              : seat.type === 'vip'
+                                ? '#E65100'
                                 : 'grey.500',
                         },
                         position: 'relative'
                       }}
                     >
-                      <Typography 
-                        variant="caption" 
-                        sx={{ 
+                      <Typography
+                        variant="caption"
+                        sx={{
                           fontWeight: 'bold',
                           color: textColor,
                           fontSize: '0.7rem'
                         }}
                       >
-                        {parseInt(seat.id.substring(1))}
+                        {seat.number}
                       </Typography>
                       {seat.type === 'vip' && (
                         <Box
@@ -502,13 +515,13 @@ const BookingPage = () => {
             </Box>
           ))}
         </Box>
-        
+
         {/* Seat legend */}
         <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 3, mt: 2 }}>
           <Stack direction="row" alignItems="center" spacing={1}>
-            <Box sx={{ 
-              width: 24, 
-              height: 24, 
+            <Box sx={{
+              width: 24,
+              height: 24,
               borderRadius: 1,
               bgcolor: 'grey.700',
               border: '2px solid',
@@ -521,11 +534,11 @@ const BookingPage = () => {
             </Box>
             <Typography variant="body2">{t('booking.available')}</Typography>
           </Stack>
-          
+
           <Stack direction="row" alignItems="center" spacing={1}>
-            <Box sx={{ 
-              width: 24, 
-              height: 24, 
+            <Box sx={{
+              width: 24,
+              height: 24,
               borderRadius: 1,
               bgcolor: 'success.main',
               border: '2px solid',
@@ -538,11 +551,11 @@ const BookingPage = () => {
             </Box>
             <Typography variant="body2">{t('booking.selected')}</Typography>
           </Stack>
-          
+
           <Stack direction="row" alignItems="center" spacing={1}>
-            <Box sx={{ 
-              width: 24, 
-              height: 24, 
+            <Box sx={{
+              width: 24,
+              height: 24,
               borderRadius: 1,
               bgcolor: 'grey.600',
               border: '2px solid',
@@ -555,7 +568,7 @@ const BookingPage = () => {
             </Box>
             <Typography variant="body2">{t('booking.unavailable')}</Typography>
           </Stack>
-          
+
           <Stack direction="row" alignItems="center" spacing={1}>
             <Box sx={{
               width: 24,
@@ -635,10 +648,10 @@ const BookingPage = () => {
           </Stack>
         </Box>
       </Paper>
-      
+
       {/* Booking summary */}
-      <Paper 
-        sx={{ 
+      <Paper
+        sx={{
           p: 4,
           borderRadius: 4,
           border: '1px solid rgba(255,255,255,0.1)',
@@ -646,12 +659,12 @@ const BookingPage = () => {
           backdropFilter: 'blur(10px)'
         }}
       >
-        <Typography 
-          variant="h5" 
-          component="h3" 
-          gutterBottom 
-          sx={{ 
-            fontWeight: 700, 
+        <Typography
+          variant="h5"
+          component="h3"
+          gutterBottom
+          sx={{
+            fontWeight: 700,
             mb: 3,
             display: 'flex',
             alignItems: 'center'
@@ -660,27 +673,27 @@ const BookingPage = () => {
           <ShoppingCart sx={{ mr: 1, color: 'primary.main' }} />
           {t('booking.summary')}
         </Typography>
-        
+
         <Grid container spacing={3}>
           <Grid item xs={12} md={8}>
             <Stack spacing={2} sx={{ mb: 2 }}>
               <Box>
                 <Typography variant="body1" color="textSecondary">
-                  <strong>{t('booking.selectedSeats')}:</strong> 
+                  <strong>{t('booking.selectedSeats')}:</strong>
                   {selectedSeats.length > 0 ? selectedSeats.join(', ') : t('booking.noSeatsSelected')}
                 </Typography>
               </Box>
-              
+
               <Box>
                 <Typography variant="body1" color="textSecondary">
                   <strong>{t('booking.numberOfSeats')}:</strong> {selectedSeats.length}
                 </Typography>
               </Box>
-              
+
               {selectedSeats.length > 0 && (
                 <Box>
                   <Typography variant="body1" color="textSecondary">
-                    <strong>{t('booking.seatPrice')}:</strong> 
+                    <strong>{t('booking.seatPrice')}:</strong>
                     {selectedSeats.map((seatId, index) => {
                       const seat = seatMap.flat().find(s => s.id === seatId);
                       const seatPrice = getSeatPrice(seatId);
@@ -697,12 +710,12 @@ const BookingPage = () => {
                 </Box>
               )}
             </Stack>
-            
+
             <Divider sx={{ my: 2 }} />
-            
-            <Box sx={{ 
-              display: 'flex', 
-              justifyContent: 'space-between', 
+
+            <Box sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
               alignItems: 'center',
               py: 2
             }}>
@@ -714,25 +727,25 @@ const BookingPage = () => {
               </Typography>
             </Box>
           </Grid>
-          
+
           <Grid item xs={12} md={4}>
-            <Box sx={{ 
-              height: '100%', 
-              display: 'flex', 
+            <Box sx={{
+              height: '100%',
+              display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center'
             }}>
               {error && (
                 <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>
               )}
-              
+
               <Button
                 variant="contained"
                 color="primary"
                 onClick={handleBooking}
                 disabled={bookingLoading || selectedSeats.length === 0}
                 startIcon={bookingLoading ? <CircularProgress size={20} /> : <Done />}
-                sx={{ 
+                sx={{
                   mt: 2,
                   py: 2,
                   borderRadius: 3,

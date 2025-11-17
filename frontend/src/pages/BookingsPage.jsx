@@ -7,7 +7,6 @@ import {
   Typography,
   Box,
   Paper,
-  Grid,
   Chip,
   CircularProgress,
   Alert,
@@ -123,9 +122,9 @@ const BookingsPage = () => {
       </Box>
       
       {bookings.length > 0 ? (
-        <Grid container spacing={4}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
           {bookings.map(booking => (
-            <Grid item xs={12} key={booking.id}>
+            <Box key={booking.id} sx={{ flex: '1 1 auto' }}>
               <Card 
                 sx={{ 
                   borderRadius: 4,
@@ -141,11 +140,17 @@ const BookingsPage = () => {
                 }}
               >
                 <CardContent sx={{ p: { xs: 3, md: 4 } }}>
-                  <Grid container spacing={3} alignItems="center">
-                    <Grid item xs={12} md={2}>
-                      <Box sx={{ 
-                        width: 80, 
-                        height: 80, 
+                  <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3, alignItems: 'center' }}>
+                    <Box sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      flex: { xs: '0 0 100%', md: '0 0 16.666%' },
+                      width: { xs: '100%', md: 'auto' },
+                      maxWidth: { md: '16.666%' }
+                    }}>
+                      <Box sx={{
+                        width: 80,
+                        height: 80,
                         borderRadius: 2,
                         overflow: 'hidden',
                         border: '2px solid rgba(255,255,255,0.2)',
@@ -158,14 +163,19 @@ const BookingsPage = () => {
                           sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
                       </Box>
-                    </Grid>
-                    
-                    <Grid item xs={12} md={4}>
-                      <Typography 
-                        variant="h5" 
+                    </Box>
+
+                    <Box sx={{
+                      flex: { xs: '0 0 100%', md: '0 0 33.333%' },
+                      width: { xs: '100%', md: 'auto' },
+                      maxWidth: { md: '33.333%' },
+                      order: { xs: 1, md: 'unset' }
+                    }}>
+                      <Typography
+                        variant="h5"
                         component="h3"
-                        sx={{ 
-                          fontWeight: 700, 
+                        sx={{
+                          fontWeight: 700,
                           mb: 1,
                           display: '-webkit-box',
                           WebkitLineClamp: 2,
@@ -175,13 +185,13 @@ const BookingsPage = () => {
                       >
                         {booking.movie?.title || t('bookings.movieTitle')}
                       </Typography>
-                      
+
                       <Stack direction="row" spacing={1} sx={{ mb: 1 }}>
                         <Chip
                           icon={<Movie />}
                           label={booking.movie?.format || booking.movie?.genre?.[0] || 'Standard'}
                           size="small"
-                          sx={{ 
+                          sx={{
                             backgroundColor: 'rgba(211, 47, 47, 0.2)',
                             color: 'white',
                             backdropFilter: 'blur(10px)',
@@ -191,7 +201,7 @@ const BookingsPage = () => {
                         <Chip
                           label={booking.movie?.rating || 'PG-13'}
                           size="small"
-                          sx={{ 
+                          sx={{
                             backgroundColor: 'rgba(255, 255, 255, 0.1)',
                             color: 'white',
                             backdropFilter: 'blur(10px)',
@@ -199,9 +209,14 @@ const BookingsPage = () => {
                           }}
                         />
                       </Stack>
-                    </Grid>
-                    
-                    <Grid item xs={12} md={3}>
+                    </Box>
+
+                    <Box sx={{
+                      flex: { xs: '0 0 100%', md: '0 0 25%' },
+                      width: { xs: '100%', md: 'auto' },
+                      maxWidth: { md: '10%' },
+                      order: { xs: 2, md: 'unset' }
+                    }}>
                       <Stack spacing={1}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                           <CalendarToday sx={{ color: 'primary.main', fontSize: '1.2rem' }} />
@@ -209,14 +224,14 @@ const BookingsPage = () => {
                             {new Date(booking.showtime?.showDate || booking.showDate).toLocaleDateString()}
                           </Typography>
                         </Box>
-                        
+
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                           <Schedule sx={{ color: 'primary.main', fontSize: '1.2rem' }} />
                           <Typography variant="body1">
                             {booking.showtime?.showTime || booking.showTime}
                           </Typography>
                         </Box>
-                        
+
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                           <LocalCafe sx={{ color: 'primary.main', fontSize: '1.2rem' }} />
                           <Typography variant="body1">
@@ -224,38 +239,52 @@ const BookingsPage = () => {
                           </Typography>
                         </Box>
                       </Stack>
-                    </Grid>
-                    
-                    <Grid item xs={12} md={2}>
-                      <Box sx={{ textAlign: { xs: 'left', md: 'center' } }}>
-                        <Typography variant="h6" sx={{ fontWeight: 700, color: 'primary.main', mb: 1 }}>
-                          ${booking.totalPrice?.toFixed(2) || booking.totalPrice}
-                        </Typography>
-                        <Chip 
-                          label={
-                            booking.status === 'confirmed' ? t('bookings.status.confirmed') : 
-                            booking.status === 'pending' ? t('bookings.status.pending') : 
-                            booking.status === 'cancelled' ? t('bookings.status.cancelled') :
-                            booking.status
-                          }
-                          color={
-                            booking.status === 'confirmed' ? 'success' : 
-                            booking.status === 'pending' ? 'warning' : 
-                            'error'
-                          }
-                          size="small"
-                          sx={{ 
-                            mb: 1,
-                            fontWeight: 600
-                          }}
-                        />
-                        <Typography variant="body2" color="textSecondary">
-                          {t('bookings.seats')} {booking.seatIds?.join(', ') || booking.seats?.join(', ') || t('bookings.unknownSeats')}
-                        </Typography>
-                      </Box>
-                    </Grid>
-                    
-                    <Grid item xs={12} md={1} sx={{ textAlign: 'center' }}>
+                    </Box>
+
+                    <Box sx={{
+                      flex: { xs: '0 0 100%', md: '0 0 16.666%' },
+                      width: { xs: '100%', md: 'auto' },
+                      maxWidth: { md: '16.666%' },
+                      textAlign: { xs: 'left', md: 'center' },
+                      order: { xs: 3, md: 'unset' }
+                    }}>
+                      <Typography variant="h6" sx={{ fontWeight: 700, color: 'primary.main', mb: 1 }}>
+                        ${booking.totalPrice?.toFixed(2) || booking.totalPrice}
+                      </Typography>
+                      <Chip
+                        label={
+                          booking.status === 'confirmed' ? t('bookings.status.confirmed') :
+                          booking.status === 'pending' ? t('bookings.status.pending') :
+                          booking.status === 'cancelled' ? t('bookings.status.cancelled') :
+                          booking.status
+                        }
+                        color={
+                          booking.status === 'confirmed' ? 'success' :
+                          booking.status === 'pending' ? 'warning' :
+                          'error'
+                        }
+                        size="small"
+                        sx={{
+                          mb: 1,
+                          fontWeight: 600
+                        }}
+                      />
+                      <Typography variant="body2" color="textSecondary">
+                        {t('bookings.seats')} {booking.seatIds?.join(', ') || booking.seats?.join(', ') || t('bookings.unknownSeats')}
+                      </Typography>
+                    </Box>
+
+                    <Box sx={{
+                      flex: { xs: '0 0 100%', md: '0 0 8.333%' },
+                      width: { xs: '100%', md: 'auto' },
+                      maxWidth: { md: '8.333%' },
+                      textAlign: { xs: 'left', md: 'center' },
+                      display: 'flex',
+                      justifyContent: { xs: 'flex-start', md: 'center' },
+                      alignItems: 'center',
+                      order: { xs: 4, md: 'unset' },
+                      mt: { xs: 2, md: 0 }
+                    }}>
                       <Button
                         variant="outlined"
                         size="small"
@@ -268,6 +297,9 @@ const BookingsPage = () => {
                           fontWeight: 600,
                           borderColor: 'rgba(255,255,255,0.3)',
                           color: 'white',
+                          minWidth: 'auto',
+                          px: 1.5,
+                          py: 0.5,
                           '&:hover': {
                             borderColor: 'white',
                             backgroundColor: 'rgba(255,255,255,0.1)',
@@ -276,8 +308,8 @@ const BookingsPage = () => {
                       >
                         {t('bookings.view')}
                       </Button>
-                    </Grid>
-                  </Grid>
+                    </Box>
+                  </Box>
                   
                   <Divider sx={{ my: 3, borderColor: 'rgba(255,255,255,0.1)' }} />
                   
@@ -302,9 +334,9 @@ const BookingsPage = () => {
                   </Box>
                 </CardContent>
               </Card>
-            </Grid>
+            </Box>
           ))}
-        </Grid>
+        </Box>
       ) : (
         <Paper 
           sx={{ 

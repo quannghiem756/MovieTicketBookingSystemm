@@ -1,11 +1,10 @@
 import React from 'react';
-import { 
-  Typography, 
-  Button, 
+import {
+  Typography,
+  Button,
   Container,
   Paper,
   Box,
-  Grid,
   Chip,
   Divider,
   useTheme,
@@ -90,7 +89,7 @@ const BookingConfirmation = () => {
             height: 100,
             bgcolor: 'success.main',
             opacity: 0.1,
-            borderRadius: '100% 0 0 0',
+            borderRadius: '0 100% 0 0',
           }}
         />
         
@@ -120,8 +119,8 @@ const BookingConfirmation = () => {
             </Typography>
           </Box>
           
-          <Grid container spacing={4}>
-            <Grid item xs={12} md={6}>
+          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 4 }}>
+            <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 50%' } }}>
               <Paper 
                 sx={{ 
                   p: 4, 
@@ -193,9 +192,9 @@ const BookingConfirmation = () => {
                   </Box>
                 </Stack>
               </Paper>
-            </Grid>
-            
-            <Grid item xs={12} md={6}>
+            </Box>
+
+            <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 50%' } }}>
               <Paper 
                 sx={{ 
                   p: 4, 
@@ -267,8 +266,8 @@ const BookingConfirmation = () => {
                   </Typography>
                 </Box>
               </Paper>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
           
           <Divider sx={{ my: 4, borderColor: 'rgba(255,255,255,0.1)' }} />
           

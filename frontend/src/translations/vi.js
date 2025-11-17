@@ -14,7 +14,13 @@ const vi = {
   'home.welcomeTitle': 'Chào mừng đến với MovieTicketBooking',
   'home.welcomeText': 'Đặt vé xem phim trực tuyến nhanh chóng và dễ dàng',
   'home.nowShowing': 'Đang chiếu',
+  'home.nowShowingSubtitle': 'Xem những bộ phim mới nhất đang chiếu tại rạp',
+  'home.watchTrailer': 'Xem trailer',
+  'home.bookTicket': 'Đặt vé',
   'home.comingSoon': 'Sắp chiếu',
+  'home.comingSoonSubtitle': 'Những bộ phim sắp ra mắt mà bạn không nên bỏ lỡ',
+  'home.noMovies': 'Hiện không có phim nào đang chiếu.',
+  'home.noComingSoon': 'Hiện không có phim sắp chiếu.',
   
   // Movie Card
   'movieCard.bookTicket': 'Đặt vé',
@@ -28,15 +34,29 @@ const vi = {
   
   // Movie Details Page
   'movieDetails.director': 'Đạo diễn:',
-  'movieDetails.cast': 'Diễn viên:',
+  'movieDetails.cast': 'Dàn diễn viên',
   'movieDetails.genres': 'Thể loại:',
   'movieDetails.synopsis': 'Tóm tắt',
   'movieDetails.showtimes': 'Lịch chiếu',
   'movieDetails.noShowtimes': 'Không có lịch chiếu cho phim này.',
   'movieDetails.select': 'Chọn',
+  'movieDetails.watchTrailer': 'Xem trailer',
+  'movieDetails.bookTicket': 'Đặt vé',
+  'movieDetails.releaseDate': 'Ngày phát hành:',
+  'movieDetails.overview': 'Tổng quan',
+  'movieDetails.actor': 'Diễn viên',
+  'movieDetails.time': 'Thời gian bắt đầu: ',
+  'movieDetails.format': 'Định dạng: ',
+  'movieDetails.language': 'Ngôn ngữ: ',
+  'movieDetails.price': 'Giá vé: ',
+
   
   // Bookings Page
   'bookings.title': 'Vé của tôi',
+  'bookings.noBookingsTitle': 'Chưa có vé đặt',
+  'bookings.noBookingsSubtitle': 'Bạn chưa đặt vé nào. Hãy quay lại trang chủ để đặt vé ngay!',
+  'bookings.startBooking': 'Đặt vé ngay',
+  'bookings.subtitle': 'Xem và quản lý các vé đã đặt của bạn',
   'bookings.bookingId': 'Mã đặt vé:',
   'bookings.status': 'Trạng thái:',
   'bookings.totalPrice': 'Tổng giá:',
@@ -69,6 +89,9 @@ const vi = {
   'booking.numberOfSeats': 'Số ghế đã chọn ',
   'booking.summary': 'Xác nhận đặt vé',
   'booking.price': 'Giá vé',
+  'booking.totalPrice': 'Tổng giá',
+  'booking.seatTranslation': 'Ghế',
+  'booking.seatPrice': 'Giá ghế',
   
   // Booking Confirmation Page
   'booking.confirmation.title': 'Đặt vé thành công!',
@@ -84,6 +107,10 @@ const vi = {
   'booking.confirmation.viewBookings': 'Xem vé của tôi',
   'booking.confirmation.bookMore': 'Đặt vé khác',
   'booking.confirmation.invalid': 'Thông tin đặt vé không hợp lệ',
+  'booking.confirmation.bookingDetails': 'Chi tiết đặt vé',
+  'booking.confirmation.bookingDate': 'Ngày đặt vé',
+  "booking.confirmation.qrCodeTitle": "Mã QR vé của bạn",
+  "booking.confirmation.qrCodeSubtitle": "Quét mã này tại quầy để nhận vé của bạn.",
   
   // Login Page
   'login.title': 'Đăng nhập vào tài khoản của bạn',

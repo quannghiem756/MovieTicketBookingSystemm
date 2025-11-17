@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Typography, 
-  Grid, 
-  Box, 
-  Container, 
+import {
+  Typography,
+  Grid,
+  Box,
+  Container,
   Paper,
   CircularProgress,
   Button,
@@ -25,10 +25,10 @@ const HeroSection = ({ movie }) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  
+
   return (
-    <Box 
-      sx={{ 
+    <Box
+      sx={{
         position: 'relative',
         height: { xs: 400, sm: 500, md: 600 },
         borderRadius: 4,
@@ -89,11 +89,11 @@ const HeroSection = ({ movie }) => {
               }
             }}
           />
-          <Typography 
-            variant={isMobile ? 'h3' : 'h2'} 
-            component="h1" 
+          <Typography
+            variant={isMobile ? 'h3' : 'h2'}
+            component="h1"
             gutterBottom
-            sx={{ 
+            sx={{
               color: 'white',
               fontWeight: 700,
               textShadow: '0 2px 10px rgba(0,0,0,0.8)',
@@ -102,10 +102,10 @@ const HeroSection = ({ movie }) => {
           >
             {movie?.title || t('home.heroTitle')}
           </Typography>
-          <Typography 
-            variant="h6" 
+          <Typography
+            variant="h6"
             color="textSecondary"
-            sx={{ 
+            sx={{
               color: 'rgba(255,255,255,0.85)',
               mb: 3,
               textShadow: '0 1px 5px rgba(0,0,0,0.8)',
@@ -120,9 +120,9 @@ const HeroSection = ({ movie }) => {
               color="primary"
               size="large"
               startIcon={<PlayArrow />}
-              sx={{ 
-                borderRadius: 3, 
-                px: 3, 
+              sx={{
+                borderRadius: 3,
+                px: 3,
                 py: 1.5,
                 fontWeight: 600
               }}
@@ -134,9 +134,9 @@ const HeroSection = ({ movie }) => {
               color="secondary"
               size="large"
               endIcon={<ArrowForward />}
-              sx={{ 
-                borderRadius: 3, 
-                px: 3, 
+              sx={{
+                borderRadius: 3,
+                px: 3,
                 py: 1.5,
                 fontWeight: 600,
                 borderColor: 'rgba(255,255,255,0.3)',
@@ -159,11 +159,11 @@ const HeroSection = ({ movie }) => {
 
 const SectionTitle = ({ title, subtitle }) => (
   <Box sx={{ mb: 6, textAlign: { xs: 'center', md: 'left' } }}>
-    <Typography 
-      variant="h3" 
-      component="h2" 
-      sx={{ 
-        fontWeight: 700, 
+    <Typography
+      variant="h3"
+      component="h2"
+      sx={{
+        fontWeight: 700,
         mb: 1,
         background: 'linear-gradient(90deg, #ffffff 0%, #b3b3b3 100%)',
         backgroundClip: 'text',
@@ -174,8 +174,8 @@ const SectionTitle = ({ title, subtitle }) => (
       {title}
     </Typography>
     {subtitle && (
-      <Typography 
-        variant="h6" 
+      <Typography
+        variant="h6"
         color="textSecondary"
         sx={{ opacity: 0.7 }}
       >
@@ -198,14 +198,14 @@ const Home = () => {
           getNowShowing(1, 8),
           getComingSoon(1, 8)
         ]);
-        
+
         if (nowShowingResponse.status === 'fulfilled') {
           setNowShowing(nowShowingResponse.value.data?.movies || []);
         } else {
           console.error('Error fetching now showing movies:', nowShowingResponse.reason);
           setNowShowing([]);
         }
-        
+
         if (comingSoonResponse.status === 'fulfilled') {
           setComingSoon(comingSoonResponse.value.data?.movies || []);
         } else {
@@ -236,14 +236,14 @@ const Home = () => {
     <Container maxWidth="lg" sx={{ py: 4 }}>
       {/* Hero Section */}
       <HeroSection movie={nowShowing[0]} />
-      
+
       {/* Now Showing Section */}
       <Container maxWidth="lg" sx={{ mb: 8 }}>
-        <SectionTitle 
-          title={t('home.nowShowing')} 
-          subtitle={t('home.nowShowingSubtitle')} 
+        <SectionTitle
+          title={t('home.nowShowing')}
+          subtitle={t('home.nowShowingSubtitle')}
         />
-        
+
         {loading ? (
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
             {[...Array(4)].map((_, index) => (
@@ -256,13 +256,13 @@ const Home = () => {
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
             {Array.isArray(nowShowing) && nowShowing.slice(0, 8).map((movie) => (
               <Box
-  key={movie.id}
-  sx={{
-    flex: '1 1 calc(25% - 24px)', // <-- Correct math for 32px gap
-    maxWidth: 'calc(25% - 24px)', // <-- Must match
-    minWidth: 220 // <-- Lower this so it doesn't wrap so early
-  }}
->
+                key={movie.id}
+                sx={{
+                  flex: '1 1 calc(25% - 24px)', // <-- Correct math for 32px gap
+                  maxWidth: 'calc(25% - 24px)', // <-- Must match
+                  minWidth: 220 // <-- Lower this so it doesn't wrap so early
+                }}
+              >
                 <MovieCard movie={movie} />
               </Box>
             ))}
@@ -280,21 +280,21 @@ const Home = () => {
       </Container>
 
       {/* Divider */}
-      <Divider 
-        sx={{ 
-          my: 6, 
+      <Divider
+        sx={{
+          my: 6,
           borderColor: 'rgba(255,255,255,0.1)',
           borderWidth: '1px'
-        }} 
+        }}
       />
 
       {/* Coming Soon Section */}
       <Container maxWidth="lg">
-        <SectionTitle 
-          title={t('home.comingSoon')} 
-          subtitle={t('home.comingSoonSubtitle')} 
+        <SectionTitle
+          title={t('home.comingSoon')}
+          subtitle={t('home.comingSoonSubtitle')}
         />
-        
+
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
           {Array.isArray(comingSoon) && comingSoon.slice(0, 8).map((movie) => (
             <Box key={movie.id} sx={{ flex: '1 1 calc(25% - 12px)', minWidth: 250, maxWidth: 'calc(25% - 12px)' }}>

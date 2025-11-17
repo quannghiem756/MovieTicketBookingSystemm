@@ -23,7 +23,13 @@ const en = {
   'home.welcomeTitle': 'Welcome to MovieTicketBooking',
   'home.welcomeText': 'Book movie tickets online quickly and easily',
   'home.nowShowing': 'Now Showing',
+  'home.nowShowingSubtitle': 'Check out the latest movies currently in theaters',
+  'home.watchTrailer': 'Watch Trailer',
+  'home.bookTicket': 'Book Ticket',
   'home.comingSoon': 'Coming Soon',
+  'home.comingSoonSubtitle': 'Upcoming movies you don\'t want to miss',
+  'home.noMovies': 'No movies are currently showing.',
+  'home.noComingSoon': 'No upcoming movies at the moment.',
   
   // Movie Card
   'movieCard.bookTicket': 'Book Ticket',
@@ -43,9 +49,18 @@ const en = {
   'movieDetails.showtimes': 'Showtimes',
   'movieDetails.noShowtimes': 'No showtimes available for this movie.',
   'movieDetails.select': 'Select',
+  'movieDetails.watchTrailer': 'Watch Trailer',
+  'movieDetails.bookTicket': 'Book Ticket',
+  'movieDetails.releaseDate': 'Release Date:',
+  'movieDetails.overview': 'Overview',
+  'movieDetails.actor': 'Actor',
   
   // Bookings Page
   'bookings.title': 'My Bookings',
+  'bookings.noBookingsTitle': 'No Bookings Yet',
+  'bookings.noBookingsSubtitle': 'You have not made any bookings yet. Go back to the home page to book your tickets now!',
+  'bookings.startBooking': 'Start Booking',
+  'bookings.subtitle': 'View and manage your booked tickets',
   'bookings.bookingId': 'Booking ID:',
   'bookings.status': 'Status:',
   'bookings.totalPrice': 'Total Price:',

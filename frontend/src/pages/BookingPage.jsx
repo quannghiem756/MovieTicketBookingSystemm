@@ -699,7 +699,7 @@ const BookingPage = () => {
                       const seatPrice = getSeatPrice(seatId);
                       return (
                         <div key={seatId}>
-                          Seat {seatId} ({seat?.type || 'standard'}): ${seatPrice.toFixed(2)}
+                          {t('booking.seatTranslation')} {seatId} ({seat?.type || 'standard'}): ${seatPrice.toFixed(2)}
                         </div>
                       );
                     })}

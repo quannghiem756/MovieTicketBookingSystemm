@@ -249,7 +249,7 @@ const BookingsPage = () => {
                           }}
                         />
                         <Typography variant="body2" color="textSecondary">
-                          {t('bookings.seats')}: {booking.seatIds?.join(', ') || booking.seats?.join(', ') || t('bookings.unknownSeats')}
+                          {t('bookings.seats')} {booking.seatIds?.join(', ') || booking.seats?.join(', ') || t('bookings.unknownSeats')}
                         </Typography>
                       </Box>
                     </Grid>

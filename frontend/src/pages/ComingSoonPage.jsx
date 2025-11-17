@@ -4,10 +4,9 @@ import { getComingSoon } from '../services/api';
 import MovieCard from '../components/MovieCard';
 import Pagination from '../components/Pagination';
 import { useTranslation } from '../context/I18nContext';
-import { 
-  Container, 
-  Typography, 
-  Grid, 
+import {
+  Container,
+  Typography,
   Box,
   CircularProgress
 } from '@mui/material';
@@ -78,13 +77,28 @@ const ComingSoonPage = () => {
       <Typography variant="h4" component="h2" gutterBottom sx={{ mb: 4, fontWeight: 'bold' }}>
         {t('comingSoon.title')}
       </Typography>
-      <Grid container spacing={4}>
-        {movies.map(movie => (
-          <Grid item key={movie.id} xs={12} sm={6} md={4} lg={3}>
-            <MovieCard movie={movie} />
-          </Grid>
-        ))}
-      </Grid>
+      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 4 }}>
+        {/* Left Column */}
+        <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 50%' } }}>
+          {movies
+            .filter((_, index) => index % 2 === 0) // Even indices (0, 2, 4, ...)
+            .map(movie => (
+              <Box key={movie.id} sx={{ mb: 4 }}>
+                <MovieCard movie={movie} />
+              </Box>
+            ))}
+        </Box>
+        {/* Right Column */}
+        <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 50%' } }}>
+          {movies
+            .filter((_, index) => index % 2 === 1) // Odd indices (1, 3, 5, ...)
+            .map(movie => (
+              <Box key={movie.id} sx={{ mb: 4 }}>
+                <MovieCard movie={movie} />
+              </Box>
+            ))}
+        </Box>
+      </Box>
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
         <Pagination 
           currentPage={pagination.currentPage} 

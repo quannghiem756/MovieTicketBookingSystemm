@@ -168,7 +168,7 @@ const BookingsPage = () => {
                     <Box sx={{
                       flex: { xs: '0 0 100%', md: '0 0 33.333%' },
                       width: { xs: '100%', md: 'auto' },
-                      maxWidth: { md: '33.333%' },
+                      maxWidth: { md: '40.333%' },
                       order: { xs: 1, md: 'unset' }
                     }}>
                       <Typography
@@ -297,6 +297,7 @@ const BookingsPage = () => {
                           fontWeight: 600,
                           borderColor: 'rgba(255,255,255,0.3)',
                           color: 'white',
+                          whiteSpace: 'nowrap',
                           minWidth: 'auto',
                           px: 1.5,
                           py: 0.5,
@@ -316,10 +317,10 @@ const BookingsPage = () => {
                   <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 2 }}>
                     <Box sx={{ textAlign: 'right' }}>
                       <Typography variant="body2" color="textSecondary">
-                        {t('bookings.bookingId')}: {booking.id}
+                        {t('bookings.bookingId')} {booking.id}
                       </Typography>
                       <Typography variant="body2" color="textSecondary">
-                        {t('bookings.bookingDate')}: {new Date(booking.bookingDate).toLocaleString()}
+                        {t('bookings.bookingDate')} {new Date(booking.bookingDate).toLocaleString()}
                       </Typography>
                     </Box>
                     <Avatar 

@@ -166,7 +166,7 @@ class MongoMovieRepository extends MovieRepository {
   }
 
   async findComingSoon(page = 1, limit = 10) {
-    const today = new Date();
+    const today = new Date().setHours(0, 0, 0, 0);
     const skip = (page - 1) * limit;
     
     const movieDocs = await MovieModel.find({

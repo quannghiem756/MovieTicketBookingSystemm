@@ -70,6 +70,7 @@ const en = {
   'bookings.status.confirmed': 'Confirmed',
   'bookings.status.pending': 'Pending',
   'bookings.status.cancelled': 'Cancelled',
+  'bookings.view': 'View Details',
   
   // Booking Page
   'booking.title': 'Book Tickets',

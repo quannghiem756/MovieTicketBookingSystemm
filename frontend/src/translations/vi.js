@@ -90,6 +90,7 @@ const vi = {
   'bookings.details.qrCodeTitle': 'Mã QR vé của bạn',
   'bookings.details.qrCodeSubtitle': 'Quét mã này tại quầy để nhận vé của bạn',
   'bookings.details.qrCodeHint': 'Mang theo mã này khi đến rạp để nhận vé của bạn',
+  'bookings.view': 'Xem chi tiết ',
 
   // Booking Page
   'booking.title': 'Đặt vé',

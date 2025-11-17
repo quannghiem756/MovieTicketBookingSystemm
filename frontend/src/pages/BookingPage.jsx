@@ -28,7 +28,7 @@ import {
   ShoppingCart,
   Done
 } from '@mui/icons-material';
-import { getMovieById, getShowtimeById, getTheaterById, createBooking } from '../services/api';
+import { getMovieById, getShowtimeById, getTheaterById, createBooking, createVnPayPayment } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from '../context/I18nContext';
 
@@ -179,21 +179,12 @@ const BookingPage = () => {
 
       const response = await createBooking(bookingData);
 
-      // Navigate to confirmation page with booking data
-      navigate('/booking/confirmation', {
-        state: {
-          bookingData: {
-            bookingId: response.data.id,
-            movieTitle: movie.title,
-            theaterName: theater?.name || `Theater ${showtime.theaterId}`,
-            showDate: showtime.showDate,
-            showTime: showtime.showTime,
-            seatIds: selectedSeats,
-            totalPrice: totalPrice,
-            bookingDate: response.data.bookingDate
-          }
-        }
-      });
+      // Redirect to VNPAY for payment
+      const paymentResponse = await createVnPayPayment(response.data.id);
+      const paymentUrl = paymentResponse.data.data;
+
+      // Redirect to VNPAY
+      window.location.href = paymentUrl;
     } catch (err) {
       setError(t('booking.error'));
       console.error('Booking error:', err);

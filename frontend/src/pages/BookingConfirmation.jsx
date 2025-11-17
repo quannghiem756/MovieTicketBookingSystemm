@@ -275,35 +275,42 @@ const BookingConfirmation = () => {
             <Typography variant="body1" color="textSecondary" sx={{ mb: 3 }}>
               {t('booking.confirmation.info')}
             </Typography>
-            
+
             <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, flexWrap: 'wrap' }}>
-              <Button 
-                variant="outlined" 
-                component={Link} 
-                to="/bookings" 
-                sx={{ 
-                  borderRadius: 3, 
-                  textTransform: 'none', 
+              <Button
+                variant="outlined"
+                component={Link}
+                to="/bookings"
+                sx={{
+                  borderRadius: 3,
+                  textTransform: 'none',
                   px: 4,
                   py: 1.5
                 }}
               >
                 {t('booking.confirmation.viewBookings')}
               </Button>
-              
-              <Button 
-                variant="contained" 
-                component={Link} 
-                to="/" 
-                sx={{ 
-                  borderRadius: 3, 
-                  textTransform: 'none', 
+
+              <Button
+                variant="contained"
+                component={Link}
+                to="/"
+                sx={{
+                  borderRadius: 3,
+                  textTransform: 'none',
                   px: 4,
                   py: 1.5
                 }}
               >
                 {t('booking.confirmation.bookMore')}
               </Button>
+            </Box>
+
+            {/* Payment Status - Could be added if needed */}
+            <Box sx={{ mt: 3, p: 2, borderRadius: 2, bgcolor: 'rgba(76, 175, 80, 0.1)', border: '1px solid rgba(76, 175, 80, 0.2)' }}>
+              <Typography variant="body1" color="success.main" sx={{ fontWeight: 600 }}>
+                {t('booking.confirmation.bookingConfirmed')}
+              </Typography>
             </Box>
           </Box>
         </Box>

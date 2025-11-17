@@ -13,6 +13,7 @@ import ComingSoonPage from './pages/ComingSoonPage';
 import BookingPage from './pages/BookingPage';
 import BookingsPage from './pages/BookingsPage';
 import BookingDetailsPage from './pages/BookingDetailsPage';
+import PaymentResult from './pages/PaymentResult';
 import ProfilePage from './pages/ProfilePage';
 import ShowtimesPage from './pages/ShowtimesPage';
 // Admin components
@@ -56,6 +57,11 @@ const AppRouter = () => {
           <Route path="/bookings/:bookingId" element={
             <ProtectedRoute>
               <BookingDetailsPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/payment/result" element={
+            <ProtectedRoute>
+              <PaymentResult />
             </ProtectedRoute>
           } />
           <Route path="/profile" element={

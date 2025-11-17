@@ -6,7 +6,7 @@ const bookingSchema = new mongoose.Schema({
   seatIds: [{ type: String }], // Array of selected seat IDs
   totalPrice: { type: Number, required: true },
   bookingDate: { type: Date, default: Date.now },
-  status: { type: String, enum: ['pending', 'confirmed', 'cancelled'], default: 'pending' },
+  status: { type: String, enum: ['pending', 'confirmed', 'cancelled', 'paid'], default: 'pending' },
   paymentId: { type: String } // Reference to payment transaction
 }, {
   timestamps: true

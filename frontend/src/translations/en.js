@@ -109,6 +109,18 @@ const en = {
   'booking.confirmation.viewBookings': 'View My Bookings',
   'booking.confirmation.bookMore': 'Book More Tickets',
   'booking.confirmation.invalid': 'Invalid booking information',
+  'booking.confirmation.bookingConfirmed': 'Booking Confirmed',
+  'booking.confirmation.paymentStatus': 'Payment Status:',
+  'booking.confirmation.paymentSuccess': 'Payment Successful',
+  'payment.result.failedTitle': 'Payment Failed',
+  'payment.result.failedSubtitle': 'Your payment could not be processed. Please try again.',
+  'payment.result.paymentSuccess': 'Payment Successful',
+  'payment.result.paymentFailed': 'Payment Failed',
+  'payment.result.successMessage': 'Your booking is confirmed and payment has been processed successfully.',
+  'payment.result.failedMessage': 'Your booking could not be confirmed due to payment failure.',
+  'payment.result.movieNotAvailable': 'Movie information not available',
+  'payment.result.theaterNotAvailable': 'Theater information not available',
+  'payment.result.seatsNotAvailable': 'Seat information not available',
   
   // Login Page
   'login.title': 'Sign in to your account',

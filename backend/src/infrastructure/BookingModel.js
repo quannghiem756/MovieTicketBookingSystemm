@@ -7,7 +7,8 @@ const bookingSchema = new mongoose.Schema({
   totalPrice: { type: Number, required: true },
   bookingDate: { type: Date, default: Date.now },
   status: { type: String, enum: ['pending', 'confirmed', 'cancelled', 'paid'], default: 'pending' },
-  paymentId: { type: String } // Reference to payment transaction
+  paymentId: { type: String }, // Reference to payment transaction
+  paymentMethod: { type: String, enum: ['vnpay', 'cash'], default: 'vnpay' } // Payment method used
 }, {
   timestamps: true
 });

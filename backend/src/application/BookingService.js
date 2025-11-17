@@ -14,9 +14,10 @@ class BookingService {
       bookingData.seatIds,
       bookingData.totalPrice,
       new Date(),
-      'pending' // initial status
+      bookingData.paymentMethod === 'cash' ? 'confirmed' : 'pending', // For cash payments, immediately confirm
+      bookingData.paymentMethod // payment method
     );
-    
+
     return await this.bookingRepository.create(booking);
   }
 

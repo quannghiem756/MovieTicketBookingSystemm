@@ -117,6 +117,9 @@ const vi = {
   'booking.totalPrice': 'Tổng giá',
   'booking.seatTranslation': 'Ghế',
   'booking.seatPrice': 'Giá ghế',
+  'booking.paymentMethod': 'Phương thức thanh toán',
+  'booking.cash': 'Tiền mặt',
+  'booking.vnpay': 'VNPAY',
   
   // Booking Confirmation Page
   'booking.confirmation.title': 'Đặt vé thành công!',

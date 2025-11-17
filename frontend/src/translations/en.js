@@ -94,6 +94,9 @@ const en = {
   'booking.numberOfSeats': 'Number of seats selected: ',
   'booking.summary': 'Booking Summary',
   'booking.price': 'Ticket Price',
+  'booking.paymentMethod': 'Payment Method',
+  'booking.cash': 'Cash',
+  'booking.vnpay': 'VNPAY',
   
   // Booking Confirmation Page
   'booking.confirmation.title': 'Booking Successful!',

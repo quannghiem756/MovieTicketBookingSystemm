@@ -9,9 +9,10 @@ class MongoBookingRepository extends BookingRepository {
       seatIds: booking.seatIds,
       totalPrice: booking.totalPrice,
       bookingDate: booking.bookingDate,
-      status: booking.status
+      status: booking.status,
+      paymentMethod: booking.paymentMethod
     });
-    
+
     const savedBooking = await bookingDoc.save();
     booking.id = savedBooking._id;
     return booking;
@@ -270,7 +271,8 @@ class MongoBookingRepository extends BookingRepository {
       seatIds: booking.seatIds,
       totalPrice: booking.totalPrice,
       bookingDate: booking.bookingDate,
-      status: booking.status
+      status: booking.status,
+      paymentMethod: booking.paymentMethod
     }, { new: true })
     .populate({
       path: 'showtimeId',
@@ -296,6 +298,7 @@ class MongoBookingRepository extends BookingRepository {
       totalPrice: updatedBooking.totalPrice,
       bookingDate: updatedBooking.bookingDate,
       status: updatedBooking.status,
+      paymentMethod: updatedBooking.paymentMethod,
       showtime: {
         showDate: updatedBooking.showtimeId.showDate,
         showTime: updatedBooking.showtimeId.showTime,

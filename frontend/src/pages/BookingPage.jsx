@@ -49,6 +49,7 @@ const BookingPage = () => {
   const [loading, setLoading] = useState(true);
   const [bookingLoading, setBookingLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState('vnpay'); // Default to VNPAY
 
   // For this example, we'll create a more detailed seat map
   // In a real application, this would come from the theater data
@@ -175,17 +176,43 @@ const BookingPage = () => {
         showtimeId,
         movieId,
         seatIds: selectedSeats,
-        totalPrice
+        totalPrice,
+        paymentMethod // Add payment method to booking data
       };
 
       const response = await createBooking(bookingData);
 
-      // Redirect to VNPAY for payment
-      const paymentResponse = await createVnPayPayment(response.data.id);
-      const paymentUrl = paymentResponse.data.data;
+      if (paymentMethod === 'vnpay') {
+        // Redirect to VNPAY for payment
+        const paymentResponse = await createVnPayPayment(response.data.id);
+        const paymentUrl = paymentResponse.data.data;
 
-      // Redirect to VNPAY
-      window.location.href = paymentUrl;
+        // Redirect to VNPAY
+        window.location.href = paymentUrl;
+      } else if (paymentMethod === 'cash') {
+        // For cash payment, navigate directly to confirmation
+        navigate('/booking/confirmation', {
+          state: {
+            bookingData: {
+              bookingId: response.data.id,
+              movieTitle: movie.title,
+              theaterName: theater?.name || `Theater ${showtime.theaterId}`,
+              showDate: showtime.showDate,
+              showTime: showtime.showTime,
+              seatIds: selectedSeats,
+              totalPrice: totalPrice,
+              bookingDate: response.data.bookingDate
+            }
+          }
+        });
+      } else {
+        // Default to VNPAY if unknown payment method
+        const paymentResponse = await createVnPayPayment(response.data.id);
+        const paymentUrl = paymentResponse.data.data;
+
+        // Redirect to VNPAY
+        window.location.href = paymentUrl;
+      }
     } catch (err) {
       setError(t('booking.error'));
       console.error('Booking error:', err);
@@ -666,67 +693,114 @@ const BookingPage = () => {
           {t('booking.summary')}
         </Typography>
 
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={8}>
-            <Stack spacing={2} sx={{ mb: 2 }}>
-              <Box>
-                <Typography variant="body1" color="textSecondary">
-                  <strong>{t('booking.selectedSeats')}:</strong>
-                  {selectedSeats.length > 0 ? selectedSeats.join(', ') : t('booking.noSeatsSelected')}
-                </Typography>
-              </Box>
-
-              <Box>
-                <Typography variant="body1" color="textSecondary">
-                  <strong>{t('booking.numberOfSeats')}:</strong> {selectedSeats.length}
-                </Typography>
-              </Box>
-
-              {selectedSeats.length > 0 && (
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 4 }}>
+          {/* Booking Summary Section */}
+          <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 66.66%' } }}>
+            <Paper
+              sx={{
+                p: 4,
+                borderRadius: 4,
+                border: '1px solid rgba(255,255,255,0.1)',
+                background: 'rgba(30,30,30,0.7)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <Stack spacing={2} sx={{ mb: 2 }}>
                 <Box>
                   <Typography variant="body1" color="textSecondary">
-                    <strong>{t('booking.seatPrice')}:</strong>
-                    {selectedSeats.map((seatId, index) => {
-                      const seat = seatMap.flat().find(s => s.id === seatId);
-                      const seatPrice = getSeatPrice(seatId);
-                      return (
-                        <div key={seatId}>
-                          {t('booking.seatTranslation')} {seatId} ({seat?.type || 'standard'}): {formatCurrency(seatPrice)}
-                        </div>
-                      );
-                    })}
-                    <div>
-                      <strong>Total:</strong> {formatCurrency(totalPrice)}
-                    </div>
+                    <strong>{t('booking.selectedSeats')}:</strong>
+                    {selectedSeats.length > 0 ? selectedSeats.join(', ') : t('booking.noSeatsSelected')}
                   </Typography>
                 </Box>
-              )}
-            </Stack>
 
-            <Divider sx={{ my: 2 }} />
+                <Box>
+                  <Typography variant="body1" color="textSecondary">
+                    <strong>{t('booking.numberOfSeats')}:</strong> {selectedSeats.length}
+                  </Typography>
+                </Box>
 
-            <Box sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              py: 2
-            }}>
-              <Typography variant="h5" component="div" sx={{ fontWeight: 700 }}>
-                {t('booking.total')}:
-              </Typography>
-              <Typography variant="h4" component="div" sx={{ fontWeight: 800, color: 'primary.main' }}>
-                {formatCurrency(totalPrice)}
-              </Typography>
-            </Box>
-          </Grid>
+                {selectedSeats.length > 0 && (
+                  <Box>
+                    <Typography variant="body1" color="textSecondary">
+                      <strong>{t('booking.seatPrice')}:</strong>
+                      {selectedSeats.map((seatId, index) => {
+                        const seat = seatMap.flat().find(s => s.id === seatId);
+                        const seatPrice = getSeatPrice(seatId);
+                        return (
+                          <div key={seatId}>
+                            {t('booking.seatTranslation')} {seatId} ({seat?.type || 'standard'}): {formatCurrency(seatPrice)}
+                          </div>
+                        );
+                      })}
+                      <div>
+                        <strong>Total:</strong> {formatCurrency(totalPrice)}
+                      </div>
+                    </Typography>
+                  </Box>
+                )}
+              </Stack>
+            </Paper>
+          </Box>
 
-          <Grid item xs={12} md={4}>
-            <Box sx={{
-              height: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center'
-            }}>
+          {/* Payment Method and Total Section */}
+          <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 33.33%' } }}>
+            <Paper
+              sx={{
+                p: 4,
+                borderRadius: 4,
+                border: '1px solid rgba(255,255,255,0.1)',
+                background: 'rgba(30,30,30,0.7)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <Box sx={{ mb: 3 }}>
+                <Typography variant="h5" component="div" sx={{ fontWeight: 700, mb: 1 }}>
+                  {t('booking.total')}:
+                </Typography>
+                <Typography variant="h4" component="div" sx={{ fontWeight: 800, color: 'primary.main' }}>
+                  {formatCurrency(totalPrice)}
+                </Typography>
+              </Box>
+
+              {/* Payment Method Selection */}
+              <Box sx={{ mb: 3 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1 }}>
+                  {t('booking.paymentMethod')}
+                </Typography>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                  <Button
+                    variant={paymentMethod === 'vnpay' ? 'contained' : 'outlined'}
+                    onClick={() => setPaymentMethod('vnpay')}
+                    sx={{
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                      px: 2,
+                      py: 1.5,
+                      borderRadius: 3,
+                      textTransform: 'none'
+                    }}
+                  >
+                    <Box component="img" src="https://vnpay.vn/images/vnpay-logo.png" alt="VNPAY" sx={{ height: 24, mr: 1 }} />
+                    VNPAY
+                  </Button>
+                  <Button
+                    variant={paymentMethod === 'cash' ? 'contained' : 'outlined'}
+                    onClick={() => setPaymentMethod('cash')}
+                    sx={{
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                      px: 2,
+                      py: 1.5,
+                      borderRadius: 3,
+                      textTransform: 'none'
+                    }}
+                  >
+                    <LocalCafe sx={{ mr: 1 }} />
+                    {t('booking.cash')}
+                  </Button>
+                </Box>
+              </Box>
+
               {error && (
                 <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>
               )}
@@ -738,12 +812,12 @@ const BookingPage = () => {
                 disabled={bookingLoading || selectedSeats.length === 0}
                 startIcon={bookingLoading ? <CircularProgress size={20} /> : <Done />}
                 sx={{
-                  mt: 2,
                   py: 2,
                   borderRadius: 3,
                   fontWeight: 700,
                   fontSize: '1.1rem',
-                  textTransform: 'none'
+                  textTransform: 'none',
+                  width: '100%'
                 }}
               >
                 {bookingLoading ? (
@@ -752,12 +826,12 @@ const BookingPage = () => {
                     {t('booking.processing')}
                   </Box>
                 ) : (
-                  `${t('booking.confirmBooking')} - ${formatCurrency(totalPrice)}`
+                  `${t('booking.confirmBooking')}`
                 )}
               </Button>
-            </Box>
-          </Grid>
-        </Grid>
+            </Paper>
+          </Box>
+        </Box>
       </Paper>
     </Container>
   );

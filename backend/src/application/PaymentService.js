@@ -28,21 +28,21 @@ const createVnPayPaymentUrl = async (bookingId, clientIp) => {
     const secretKey = process.env.VNP_SECRET_KEY;
     const locale = 'vn';
     const currCode = 'VND';
-    const returnUrl = process.env.VNP_RETURN_URL || 'http://localhost:3004/api/payments/vnpay/callback'; // Backend callback URL to process payment result
+    const returnUrl = process.env.VNP_RETURN_URL || 'http://localhost:5000/api/payments/vnpay/callback'; // Backend callback URL to process payment result
     const amount = booking.totalPrice; // Total price from booking
     const createDate = moment().tz('Asia/Ho_Chi_Minh').format('YYYYMMDDHHmmss');
     const orderInfo = `Thanh toan cho don dat ve phim ${bookingId.toString()}`;
-    const ipAddr = clientIp || '127.0.0.1';
+    const ipAddr ='127.0.0.1';
     
     let vnp_Params = {};
-    vnp_Params['vnp_Version'] = '2.1.0';
+    vnp_Params['vnp_Version'] = '2.1.1';
     vnp_Params['vnp_Command'] = 'pay';
     vnp_Params['vnp_TmnCode'] = tmnCode;
     vnp_Params['vnp_Locale'] = locale;
     vnp_Params['vnp_CurrCode'] = currCode;
     vnp_Params['vnp_TxnRef'] = bookingId.toString();
     vnp_Params['vnp_OrderInfo'] = orderInfo;
-    vnp_Params['vnp_OrderType'] = 'ticket';
+    vnp_Params['vnp_OrderType'] = '190000';
     // VNPAY requires amount to be in the lowest currency unit (for VND, this is still VND, but multiplied by 100 for consistency)
     vnp_Params['vnp_Amount'] = Math.round(amount) * 100; // Convert to VND (multiplied by 100 as required by VNPAY)
     vnp_Params['vnp_ReturnUrl'] = returnUrl;

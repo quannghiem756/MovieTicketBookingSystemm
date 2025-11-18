@@ -780,7 +780,7 @@ const BookingPage = () => {
                       textTransform: 'none'
                     }}
                   >
-                    <Box component="img" src="https://vnpay.vn/images/vnpay-logo.png" alt="VNPAY" sx={{ height: 24, mr: 1 }} />
+                    <Box component="img" src="https://chieuphimquocgia.com.vn/images/vnpay.svg" alt="VNPAY" sx={{ height: 24, mr: 1 }} />
                     VNPAY
                   </Button>
                   <Button

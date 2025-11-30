@@ -8,7 +8,7 @@ class Booking {
     this.totalPrice = totalPrice;
     this.bookingDate = bookingDate;
     this.status = status; // pending, confirmed, cancelled, paid
-    this.paymentMethod = paymentMethod || 'vnpay'; // Default to vnpay
+    this.paymentMethod = paymentMethod || 'momo'; // Default to momo, can be 'momo' or 'cash'
   }
 }
 

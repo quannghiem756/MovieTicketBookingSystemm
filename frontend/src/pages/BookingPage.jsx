@@ -28,7 +28,7 @@ import {
   ShoppingCart,
   Done
 } from '@mui/icons-material';
-import { getMovieById, getShowtimeById, getTheaterById, createBooking, createVnPayPayment } from '../services/api';
+import { getMovieById, getShowtimeById, getTheaterById, createBooking, createMomoPayment } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from '../context/I18nContext';
 import { formatCurrency } from '../utils/currency';
@@ -49,7 +49,7 @@ const BookingPage = () => {
   const [loading, setLoading] = useState(true);
   const [bookingLoading, setBookingLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [paymentMethod, setPaymentMethod] = useState('vnpay'); // Default to VNPAY
+  const [paymentMethod, setPaymentMethod] = useState('momo'); // Default to MoMo
 
   // For this example, we'll create a more detailed seat map
   // In a real application, this would come from the theater data
@@ -182,12 +182,12 @@ const BookingPage = () => {
 
       const response = await createBooking(bookingData);
 
-      if (paymentMethod === 'vnpay') {
-        // Redirect to VNPAY for payment
-        const paymentResponse = await createVnPayPayment(response.data.id);
+      if (paymentMethod === 'momo') {
+        // Redirect to MoMo for payment
+        const paymentResponse = await createMomoPayment(response.data.id);
         const paymentUrl = paymentResponse.data.data;
 
-        // Redirect to VNPAY
+        // Redirect to MoMo
         window.location.href = paymentUrl;
       } else if (paymentMethod === 'cash') {
         // For cash payment, navigate directly to confirmation
@@ -206,11 +206,11 @@ const BookingPage = () => {
           }
         });
       } else {
-        // Default to VNPAY if unknown payment method
-        const paymentResponse = await createVnPayPayment(response.data.id);
+        // Default to MoMo if unknown payment method
+        const paymentResponse = await createMomoPayment(response.data.id);
         const paymentUrl = paymentResponse.data.data;
 
-        // Redirect to VNPAY
+        // Redirect to MoMo
         window.location.href = paymentUrl;
       }
     } catch (err) {
@@ -425,7 +425,7 @@ const BookingPage = () => {
                 {String.fromCharCode(65 + rowIndex)}
               </Box>
               {row.map((seat) => {
-                // Handle space type seats as invisible elements                                                
+                // Handle space type seats as invisible elements
                 if (seat.type === 'space') {
                   return (
                     <Box
@@ -769,8 +769,8 @@ const BookingPage = () => {
                 </Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                   <Button
-                    variant={paymentMethod === 'vnpay' ? 'contained' : 'outlined'}
-                    onClick={() => setPaymentMethod('vnpay')}
+                    variant={paymentMethod === 'momo' ? 'contained' : 'outlined'}
+                    onClick={() => setPaymentMethod('momo')}
                     sx={{
                       justifyContent: 'flex-start',
                       alignItems: 'center',
@@ -780,8 +780,8 @@ const BookingPage = () => {
                       textTransform: 'none'
                     }}
                   >
-                    <Box component="img" src="https://chieuphimquocgia.com.vn/images/vnpay.svg" alt="VNPAY" sx={{ height: 24, mr: 1 }} />
-                    VNPAY
+                    <Box component="img" src="https://mcdn.coolmate.me/image/October2024/mceclip1_171.png" alt="MoMo" sx={{ height: 24, mr: 1 }} />
+                    Ví điện tử MoMo
                   </Button>
                   <Button
                     variant={paymentMethod === 'cash' ? 'contained' : 'outlined'}

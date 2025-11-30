@@ -9,7 +9,7 @@ const en = {
   'header.logout': 'Logout',
   'header.login': 'Login',
   'header.profile': 'Profile',
-  
+
   // Profile Page
   'profile.title': 'My Profile',
   'profile.edit': 'Edit Profile',
@@ -18,7 +18,7 @@ const en = {
   'profile.saving': 'Saving...',
   'profile.updateSuccess': 'Profile updated successfully',
   'profile.updateError': 'Failed to update profile',
-  
+
   // Home Page
   'home.welcomeTitle': 'Welcome to MovieTicketBooking',
   'home.welcomeText': 'Book movie tickets online quickly and easily',
@@ -30,17 +30,17 @@ const en = {
   'home.comingSoonSubtitle': 'Upcoming movies you don\'t want to miss',
   'home.noMovies': 'No movies are currently showing.',
   'home.noComingSoon': 'No upcoming movies at the moment.',
-  
+
   // Movie Card
   'movieCard.bookTicket': 'Book Ticket',
   'movieCard.mins': 'mins',
-  
+
   // Now Showing Page
   'nowShowing.title': 'Now Showing Movies',
-  
+
   // Coming Soon Page
   'comingSoon.title': 'Coming Soon Movies',
-  
+
   // Movie Details Page
   'movieDetails.director': 'Director:',
   'movieDetails.cast': 'Cast:',
@@ -54,7 +54,7 @@ const en = {
   'movieDetails.releaseDate': 'Release Date:',
   'movieDetails.overview': 'Overview',
   'movieDetails.actor': 'Actor',
-  
+
   // Bookings Page
   'bookings.title': 'My Bookings',
   'bookings.noBookingsTitle': 'No Bookings Yet',
@@ -71,7 +71,7 @@ const en = {
   'bookings.status.pending': 'Pending',
   'bookings.status.cancelled': 'Cancelled',
   'bookings.view': 'View Details',
-  
+
   // Booking Page
   'booking.title': 'Book Tickets',
   'booking.perTicket': 'per ticket',
@@ -96,8 +96,8 @@ const en = {
   'booking.price': 'Ticket Price',
   'booking.paymentMethod': 'Payment Method',
   'booking.cash': 'Cash',
-  'booking.vnpay': 'VNPAY',
-  
+  'booking.momo': 'MoMo',
+
   // Booking Confirmation Page
   'booking.confirmation.title': 'Booking Successful!',
   'booking.confirmation.subtitle': 'Thank you for your booking. Below are the details of your booking.',
@@ -124,7 +124,7 @@ const en = {
   'payment.result.movieNotAvailable': 'Movie information not available',
   'payment.result.theaterNotAvailable': 'Theater information not available',
   'payment.result.seatsNotAvailable': 'Seat information not available',
-  
+
   // Login Page
   'login.title': 'Sign in to your account',
   'login.email': 'Email address',
@@ -134,7 +134,7 @@ const en = {
   'login.noAccount': 'Don\'t have an account?',
   'login.register': 'Register here',
   'login.error': 'Login failed. Please try again.',
-  
+
   // Register Page
   'register.title': 'Create a new account',
   'register.name': 'Full name',
@@ -148,7 +148,7 @@ const en = {
   'register.hasAccount': 'Already have an account?',
   'register.login': 'Sign in',
   'register.error': 'Registration failed. Please try again.',
-  
+
   // Validation errors
   'validation.name.required': 'Name is required',
   'validation.name.minLength': 'Name must be at least 2 characters',
@@ -163,17 +163,17 @@ const en = {
   'validation.password.mismatch': 'Passwords do not match',
   'validation.phone.invalid': 'Please enter a valid phone number',
   'validation.dateOfBirth.age': 'You must be at least 13 years old',
-  
+
   // Common
   'common.loading': 'Loading...',
   'common.error': 'An error occurred',
   'common.movieNotFound': 'Movie not found',
   'common.back': 'Back',
-  
+
   // Pagination
   'pagination.previous': 'Previous',
   'pagination.next': 'Next',
-  
+
   // Admin Sidebar
   'admin.sidebar.adminPanel': 'Admin Panel',
   'admin.sidebar.dashboard': 'Dashboard',
@@ -182,7 +182,7 @@ const en = {
   'admin.sidebar.theaters': 'Theaters',
   'admin.sidebar.bookings': 'Bookings',
   'admin.sidebar.users': 'Users',
-  
+
   // Admin Dashboard
   'admin.dashboard.title': 'Admin Dashboard',
   'admin.dashboard.movies': 'Movies',
@@ -205,7 +205,7 @@ const en = {
   'admin.dashboard.addShowtime': 'Add Showtime',
   'admin.dashboard.addMovie': 'Add Movie',
   'admin.dashboard.addTheater': 'Add Theater',
-  
+
   // Admin Movies
   'admin.movies.title': 'Manage Movies',
   'admin.movies.addNew': 'Add New Movie',
@@ -219,7 +219,7 @@ const en = {
   'admin.movies.deleteError': 'Failed to delete movie',
   'admin.movies.pagination.previous': 'Previous',
   'admin.movies.pagination.next': 'Next',
-  
+
   // Movie Form
   'admin.movieForm.addTitle': 'Add New Movie',
   'admin.movieForm.editTitle': 'Edit Movie',
@@ -269,7 +269,7 @@ const en = {
   'admin.theaters.deleteMessage': 'Are you sure you want to delete theater',
   'admin.theaters.cancel': 'Cancel',
   'admin.theaters.deleteError': 'Failed to delete theater',
-  
+
   // Admin Showtimes
   'admin.showtimes.title': 'Manage Showtimes',
   'admin.showtimes.addNew': 'Add New Showtime',
@@ -290,7 +290,7 @@ const en = {
   'admin.showtimes.unknownTheater': 'Unknown Theater',
   'admin.showtimes.fetchError': 'Failed to fetch data',
   'admin.showtimes.deleteError': 'Failed to delete showtime',
-  
+
   // Showtime Form
   'admin.showtimeForm.addTitle': 'Add New Showtime',
   'admin.showtimeForm.editTitle': 'Edit Showtime',
@@ -333,7 +333,7 @@ const en = {
   'admin.theaterForm.seatType.standard': 'Standard',
   'admin.theaterForm.seatType.double': 'Double',
   'admin.theaterForm.seatType.vip': 'VIP',
-  
+
   // Admin Users
   'admin.users.title': 'Manage Users',
   'admin.users.table.ariaLabel': 'Users table',
@@ -348,7 +348,7 @@ const en = {
   'admin.users.cancel': 'Cancel',
   'admin.users.fetchError': 'Failed to fetch users',
   'admin.users.deleteError': 'Failed to delete user',
-  
+
   // Admin Bookings
   'admin.bookings.title': 'Manage Bookings',
   'admin.bookings.table.ariaLabel': 'Bookings table',

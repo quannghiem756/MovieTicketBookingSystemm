@@ -9,7 +9,7 @@ const vi = {
   'header.logout': 'Đăng xuất',
   'header.login': 'Đăng nhập',
   'header.profile': 'Hồ sơ',
-  
+
   // Home Page
   'home.welcomeTitle': 'Chào mừng đến với MovieTicketBooking',
   'home.welcomeText': 'Đặt vé xem phim trực tuyến nhanh chóng và dễ dàng',
@@ -21,17 +21,17 @@ const vi = {
   'home.comingSoonSubtitle': 'Những bộ phim sắp ra mắt mà bạn không nên bỏ lỡ',
   'home.noMovies': 'Hiện không có phim nào đang chiếu.',
   'home.noComingSoon': 'Hiện không có phim sắp chiếu.',
-  
+
   // Movie Card
   'movieCard.bookTicket': 'Đặt vé',
   'movieCard.mins': 'phút',
-  
+
   // Now Showing Page
   'nowShowing.title': 'Phim đang chiếu',
-  
+
   // Coming Soon Page
   'comingSoon.title': 'Phim sắp chiếu',
-  
+
   // Movie Details Page
   'movieDetails.director': 'Đạo diễn:',
   'movieDetails.cast': 'Dàn diễn viên',
@@ -50,7 +50,7 @@ const vi = {
   'movieDetails.language': 'Ngôn ngữ: ',
   'movieDetails.price': 'Giá vé: ',
 
-  
+
   // Bookings Page
   'bookings.title': 'Vé của tôi',
   'bookings.noBookingsTitle': 'Chưa có vé đặt',
@@ -119,8 +119,8 @@ const vi = {
   'booking.seatPrice': 'Giá ghế',
   'booking.paymentMethod': 'Phương thức thanh toán',
   'booking.cash': 'Tiền mặt',
-  'booking.vnpay': 'VNPAY',
-  
+  'booking.momo': 'MoMo',
+
   // Booking Confirmation Page
   'booking.confirmation.title': 'Đặt vé thành công!',
   'booking.confirmation.subtitle': 'Cảm ơn bạn đã đặt vé. Dưới đây là thông tin chi tiết về vé của bạn.',
@@ -151,7 +151,7 @@ const vi = {
   'booking.confirmation.bookingDate': 'Ngày đặt vé',
   "booking.confirmation.qrCodeTitle": "Mã QR vé của bạn",
   "booking.confirmation.qrCodeSubtitle": "Quét mã này tại quầy để nhận vé của bạn.",
-  
+
   // Login Page
   'login.title': 'Đăng nhập vào tài khoản của bạn',
   'login.email': 'Địa chỉ email',
@@ -161,7 +161,7 @@ const vi = {
   'login.noAccount': 'Chưa có tài khoản?',
   'login.register': 'Đăng ký tại đây',
   'login.error': 'Đăng nhập không thành công. Vui lòng thử lại.',
-  
+
   // Register Page
   'register.title': 'Tạo tài khoản mới',
   'register.name': 'Họ và tên',
@@ -175,7 +175,7 @@ const vi = {
   'register.hasAccount': 'Đã có tài khoản?',
   'register.login': 'Đăng nhập',
   'register.error': 'Đăng ký không thành công. Vui lòng thử lại.',
-  
+
   // Validation errors
   'validation.name.required': 'Tên không được để trống',
   'validation.name.minLength': 'Tên phải có ít nhất 2 ký tự',
@@ -190,18 +190,18 @@ const vi = {
   'validation.password.mismatch': 'Mật khẩu không khớp',
   'validation.phone.invalid': 'Vui lòng nhập số điện thoại hợp lệ',
   'validation.dateOfBirth.age': 'Bạn phải ít nhất 13 tuổi',
-  
+
   // Common
   'common.loading': 'Đang tải...',
   'common.error': 'Đã xảy ra lỗi',
   'common.movieNotFound': 'Không tìm thấy phim',
   'common.back': 'Quay lại',
   'common.save': 'Lưu',
-  
+
   // Pagination
   'pagination.previous': 'Trước',
   'pagination.next': 'Sau',
-  
+
   // Profile Page
   'profile.title': 'Hồ sơ của tôi',
   'profile.edit': 'Chỉnh sửa hồ sơ',
@@ -210,7 +210,7 @@ const vi = {
   'profile.saving': 'Đang lưu...',
   'profile.updateSuccess': 'Cập nhật hồ sơ thành công',
   'profile.updateError': 'Cập nhật hồ sơ không thành công',
-  
+
   // Admin Sidebar
   'admin.sidebar.adminPanel': 'Bảng điều khiển',
   'admin.sidebar.dashboard': 'Tổng quan',
@@ -219,7 +219,7 @@ const vi = {
   'admin.sidebar.theaters': 'Phòng chiếu',
   'admin.sidebar.bookings': 'Vé đặt',
   'admin.sidebar.users': 'Người dùng',
-  
+
   // Admin Dashboard
   'admin.dashboard.title': 'Bảng điều khiển',
   'admin.dashboard.movies': 'Phim',
@@ -242,7 +242,7 @@ const vi = {
   'admin.dashboard.addShowtime': 'Thêm lịch chiếu',
   'admin.dashboard.addMovie': 'Thêm phim',
   'admin.dashboard.addTheater': 'Thêm phòng chiếu',
-  
+
   // Admin Movies
   'admin.movies.title': 'Quản lý phim',
   'admin.movies.addNew': 'Thêm phim mới',
@@ -256,7 +256,7 @@ const vi = {
   'admin.movies.deleteError': 'Xóa phim không thành công',
   'admin.movies.pagination.previous': 'Trước',
   'admin.movies.pagination.next': 'Sau',
-  
+
   // Movie Form
   'admin.movieForm.addTitle': 'Thêm phim mới',
   'admin.movieForm.editTitle': 'Sửa phim',
@@ -312,7 +312,7 @@ const vi = {
   'admin.showtimes.unknownTheater': 'Phòng chiếu không xác định',
   'admin.showtimes.fetchError': 'Không thể tải dữ liệu',
   'admin.showtimes.deleteError': 'Xóa lịch chiếu không thành công',
-  
+
   // Showtime Form
   'admin.showtimeForm.addTitle': 'Thêm lịch chiếu mới',
   'admin.showtimeForm.editTitle': 'Sửa lịch chiếu',
@@ -370,7 +370,7 @@ const vi = {
   'admin.theaterForm.seatType.standard': 'Tiêu chuẩn',
   'admin.theaterForm.seatType.double': 'Đôi',
   'admin.theaterForm.seatType.vip': 'VIP',
-  
+
   // Admin Users
   'admin.users.title': 'Quản lý người dùng',
   'admin.users.table.ariaLabel': 'Bảng người dùng',
@@ -385,7 +385,7 @@ const vi = {
   'admin.users.cancel': 'Hủy',
   'admin.users.fetchError': 'Không thể tải danh sách người dùng',
   'admin.users.deleteError': 'Xóa người dùng không thành công',
-  
+
   // Admin Bookings
   'admin.bookings.title': 'Quản lý vé đặt',
   'admin.bookings.table.ariaLabel': 'Bảng vé đặt',

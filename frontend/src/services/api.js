@@ -31,26 +31,26 @@ api.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
-    
+
     // If error is 401 and we haven't retried yet
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      
+
       try {
         const refreshToken = localStorage.getItem('refreshToken');
         if (!refreshToken) {
           throw new Error('No refresh token');
         }
-        
+
         const response = await axios.post(`${API_BASE_URL}/users/refresh-token`, {
           refreshToken
         });
-        
+
         const { accessToken } = response.data;
         localStorage.setItem('accessToken', accessToken);
         api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-        
+
         return api(originalRequest);
       } catch (refreshError) {
         // Refresh failed, logout user
@@ -61,7 +61,7 @@ api.interceptors.response.use(
         return Promise.reject(refreshError);
       }
     }
-    
+
     return Promise.reject(error);
   }
 );
@@ -97,7 +97,7 @@ export const confirmBooking = (id) => api.put(`/bookings/${id}/confirm`);
 export const cancelBooking = (id) => api.put(`/bookings/${id}/cancel`);
 
 // Payment API
-export const createVnPayPayment = (bookingId) => api.post(`/payments/create/${bookingId}`);
+export const createMomoPayment = (bookingId) => api.post(`/payments/create-momo/${bookingId}`);
 
 // Users API
 export const createUser = (user) => api.post('/users', user);

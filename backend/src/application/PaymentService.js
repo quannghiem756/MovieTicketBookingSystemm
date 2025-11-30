@@ -1,21 +1,9 @@
 const BookingRepository = require('../infrastructure/repositories/MongoBookingRepository');
 const bookingRepository = new BookingRepository();
 const crypto = require('crypto');
-const qs = require('qs');
-const moment = require('moment-timezone');
 
-// Utility function to sort object properties
-const sortObject = (obj) => {
-  const sorted = {};
-  const keys = Object.keys(obj).sort();
-  for (const key of keys) {
-    sorted[key] = obj[key];
-  }
-  return sorted;
-};
-
-// Create VNPAY payment URL for movie booking
-const createVnPayPaymentUrl = async (bookingId, clientIp) => {
+// Create MoMo payment URL for movie booking
+const createMomoPaymentUrl = async (bookingId) => {
   try {
     // Get the booking information
     const booking = await bookingRepository.findById(bookingId);
@@ -24,71 +12,89 @@ const createVnPayPaymentUrl = async (bookingId, clientIp) => {
       throw new Error('Booking not found');
     }
 
-    const tmnCode = process.env.VNP_TMN_CODE;
-    const secretKey = process.env.VNP_SECRET_KEY;
-    const locale = 'vn';
-    const currCode = 'VND';
-    const returnUrl = process.env.VNP_RETURN_URL || 'http://localhost:5000/api/payments/vnpay/callback'; // Backend callback URL to process payment result
-    const amount = booking.totalPrice; // Total price from booking
-    const createDate = moment().tz('Asia/Ho_Chi_Minh').format('YYYYMMDDHHmmss');
+    // MoMo payment configuration
+    const partnerCode = process.env.MOMO_PARTNER_CODE || 'MOMO';
+    const accessKey = process.env.MOMO_ACCESS_KEY || 'access_key';
+    const secretKey = process.env.MOMO_SECRET_KEY || 'secret_key';
+    const requestId = `${bookingId}-${Date.now()}`;
+    const orderId = bookingId.toString();
     const orderInfo = `Thanh toan cho don dat ve phim ${bookingId.toString()}`;
-    const ipAddr ='127.0.0.1';
-    
-    let vnp_Params = {};
-    vnp_Params['vnp_Version'] = '2.1.1';
-    vnp_Params['vnp_Command'] = 'pay';
-    vnp_Params['vnp_TmnCode'] = tmnCode;
-    vnp_Params['vnp_Locale'] = locale;
-    vnp_Params['vnp_CurrCode'] = currCode;
-    vnp_Params['vnp_TxnRef'] = bookingId.toString();
-    vnp_Params['vnp_OrderInfo'] = orderInfo;
-    vnp_Params['vnp_OrderType'] = '190000';
-    // VNPAY requires amount to be in the lowest currency unit (for VND, this is still VND, but multiplied by 100 for consistency)
-    vnp_Params['vnp_Amount'] = Math.round(amount) * 100; // Convert to VND (multiplied by 100 as required by VNPAY)
-    vnp_Params['vnp_ReturnUrl'] = returnUrl;
-    vnp_Params['vnp_IpAddr'] = ipAddr;
-    vnp_Params['vnp_CreateDate'] = createDate;
-    
-    // Optional: Set expiry date for payment (e.g., 1 day from now)
-    // vnp_Params['vnp_ExpireDate'] = moment().add(1, 'days').tz('Asia/Ho_Chi_Minh').format('YYYYMMDDHHmmss');
-    
-    vnp_Params = sortObject(vnp_Params);
+    const redirectUrl = process.env.MOMO_REDIRECT_URL || `${process.env.API_BASE_URL || 'http://localhost:5000'}/api/payments/momo/return`;
+    const ipnUrl = process.env.MOMO_IPN_URL || `${process.env.API_BASE_URL || 'http://localhost:5000'}/api/payments/momo/callback`;
+    const amount = booking.totalPrice.toString(); // Amount in VND
+    const requestType = 'payWithMethod';
+    const extraData = ''; // Pass empty value if not using extraData
 
-    let signData = qs.stringify(vnp_Params, { encode: false });
-    let hmac = crypto.createHmac("sha512", secretKey);
-    let signed = hmac.update(Buffer.from(signData, 'utf-8')).digest("hex");
-    vnp_Params['vnp_SecureHash'] = signed;
-    
-    console.log('VNPAY Parameters:', qs.stringify(vnp_Params, { encode: false }));
+    // Construct the raw signature
+    const rawSignature = `accessKey=${accessKey}&amount=${amount}&extraData=${extraData}&ipnUrl=${ipnUrl}&orderId=${orderId}&orderInfo=${orderInfo}&partnerCode=${partnerCode}&redirectUrl=${redirectUrl}&requestId=${requestId}&requestType=${requestType}`;
 
-    const vnpUrl = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
-    const paymentUrl = `${vnpUrl}?${qs.stringify(vnp_Params, { encode: false })}`;
+    // Create signature
+    const signature = crypto.createHmac('sha256', secretKey)
+      .update(rawSignature)
+      .digest('hex');
 
-    return paymentUrl;
+    // Create request object
+    const requestBody = {
+      partnerCode: partnerCode,
+      accessKey: accessKey,
+      requestId: requestId,
+      amount: amount,
+      orderId: orderId,
+      orderInfo: orderInfo,
+      redirectUrl: redirectUrl,
+      ipnUrl: ipnUrl,
+      requestType: requestType,
+      signature: signature,
+      extraData: extraData
+    };
+
+    // Make request to MoMo API
+    const response = await fetch('https://test-payment.momo.vn/v2/gateway/api/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+      },
+      body: JSON.stringify(requestBody)
+    });
+
+    const data = await response.json();
+
+    if (data.payUrl) {
+      console.log('MoMo payment URL created successfully:', data);
+      return data.payUrl;
+    } else {
+      console.error('Error creating MoMo payment URL:', data);
+      throw new Error(data.message || 'Failed to create MoMo payment URL');
+    }
   } catch (error) {
-    console.error('Error creating VNPAY payment URL:', error);
+    console.error('Error creating MoMo payment URL:', error);
     throw error;
   }
 };
 
-// Verify VNPAY response
-const verifyVnPayResponse = (vnp_Params) => {
-  const secretKey = process.env.VNP_SECRET_KEY;
-  let secureHash = vnp_Params['vnp_SecureHash'];
-  
-  delete vnp_Params['vnp_SecureHash'];
-  delete vnp_Params['vnp_SecureHashType'];
+// Verify MoMo payment response
+const verifyMomoResponse = (momoResponse) => {
+  const secretKey = process.env.MOMO_SECRET_KEY || 'secret_key';
 
-  vnp_Params = sortObject(vnp_Params);
+  // Extract required parameters for signature verification
+  const { partnerCode, orderId, requestId, amount, orderInfo, orderType, transId, message, responseTime, resultCode, extraData, signature } = momoResponse;
 
-  let signData = qs.stringify(vnp_Params, { encode: false });
-  let hmac = crypto.createHmac("sha512", secretKey);
-  let signed = hmac.update(Buffer.from(signData, 'utf-8')).digest("hex");
+  // Create raw signature string in alphabetical order
+  const rawSignature = `accessKey=${process.env.MOMO_ACCESS_KEY || 'access_key'}&amount=${amount || ''}&extraData=${extraData || ''}&message=${message || ''}&orderId=${orderId || ''}&orderInfo=${orderInfo || ''}&orderType=${orderType || ''}&partnerCode=${partnerCode || ''}&requestId=${requestId || ''}&responseTime=${responseTime || ''}&resultCode=${resultCode || ''}&transId=${transId || ''}`;
 
-  return secureHash === signed;
+  // Create signature to compare
+  const computedSignature = crypto.createHmac('sha256', secretKey)
+    .update(rawSignature)
+    .digest('hex');
+
+  console.log('MoMo verification - provided signature:', signature);
+  console.log('MoMo verification - computed signature:', computedSignature);
+
+  return computedSignature === signature;
 };
 
 module.exports = {
-  createVnPayPaymentUrl,
-  verifyVnPayResponse
+  createMomoPaymentUrl,
+  verifyMomoResponse
 };

@@ -26,10 +26,18 @@ const PaymentResult = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Get parameters from VNPAY response
-  const code = searchParams.get('vnp_ResponseCode');
-  // Check if booking ID comes from the URL parameter or VNPAY parameter
-  const bookingId = searchParams.get('bookingId') || searchParams.get('vnp_TxnRef');
+  // Get parameters from payment response (MoMo only)
+  const momoCode = searchParams.get('resultCode');
+  const paymentMethod = searchParams.get('paymentMethod') || 'momo'; // Default to momo
+
+  // Determine success based on payment method
+  const code = momoCode;
+  const isSuccess = paymentMethod === 'momo'
+    ? momoCode === '0'
+    : true; // For cash payments, we consider them successful
+
+  // Check if booking ID comes from the URL parameter or the payment system parameter
+  const bookingId = searchParams.get('bookingId');
 
   useEffect(() => {
     const fetchBooking = async () => {
@@ -51,7 +59,6 @@ const PaymentResult = () => {
     fetchBooking();
   }, [bookingId]);
 
-  const isSuccess = code === '00';
 
   if (loading) {
     return (
@@ -120,7 +127,7 @@ const PaymentResult = () => {
             ) : (
               <Cancel sx={{ fontSize: 80, color: 'error.main', mb: 3 }} />
             )}
-            
+
             <Typography
               variant="h3"
               component="h1"
@@ -133,11 +140,11 @@ const PaymentResult = () => {
                 WebkitTextFillColor: 'transparent',
               }}
             >
-              {isSuccess 
-                ? t('booking.confirmation.title') 
+              {isSuccess
+                ? t('booking.confirmation.title')
                 : t('payment.result.failedTitle')}
             </Typography>
-            
+
             <Typography
               variant="h6"
               color="textSecondary"
@@ -267,6 +274,17 @@ const PaymentResult = () => {
                         {new Date(booking.bookingDate).toLocaleString()}
                       </Typography>
                     </Box>
+
+                    <Box sx={{ mt: 2 }}>
+                      <Typography variant="body2" color="textSecondary">
+                        {t('booking.confirmation.paymentMethod')}
+                      </Typography>
+                      <Typography variant="body1">
+                        {paymentMethod === 'momo' ? t('booking.momo') :
+                         paymentMethod === 'cash' ? t('booking.cash') :
+                         paymentMethod}
+                      </Typography>
+                    </Box>
                   </Box>
 
                   <Box sx={{
@@ -274,14 +292,14 @@ const PaymentResult = () => {
                     p: 3,
                     borderRadius: 2,
                     bgcolor: isSuccess ? 'rgba(76, 175, 80, 0.1)' : 'rgba(244, 67, 54, 0.1)',
-                    border: isSuccess 
-                      ? '1px solid rgba(76, 175, 80, 0.2)' 
+                    border: isSuccess
+                      ? '1px solid rgba(76, 175, 80, 0.2)'
                       : '1px solid rgba(244, 67, 54, 0.2)',
                     textAlign: 'center'
                   }}>
                     <Typography variant="body2" color={isSuccess ? "success.main" : "error.main"} sx={{ mb: 1, fontWeight: 600 }}>
-                      {isSuccess 
-                        ? t('payment.result.paymentSuccess') 
+                      {isSuccess
+                        ? t('payment.result.paymentSuccess')
                         : t('payment.result.paymentFailed')}
                     </Typography>
                     <Typography variant="caption" color="textSecondary" sx={{ display: 'block' }}>

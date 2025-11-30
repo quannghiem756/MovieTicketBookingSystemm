@@ -28,7 +28,7 @@ To build a comprehensive, seamless, and user-friendly platform for managing and 
 
         User Service: Manages user registration, login, transaction history, and loyalty programs.
 
-        Payment Gateway: Integrates with third-party payment partners (e-wallets like MoMo, ZaloPay, VNPay; bank cards).
+        Payment Gateway: Integrates with third-party payment partners (e-wallets like MoMo, ZaloPay; bank cards).
 
         Notification Service: Sends emails, SMS, and push notifications for booking confirmations and showtime reminders.
 

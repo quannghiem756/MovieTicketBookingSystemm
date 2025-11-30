@@ -396,144 +396,147 @@ const BookingPage = () => {
         </Box>
 
         {/* Seat map */}
-        <Box sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          mb: 3,
-          overflowX: 'auto',
-          py: 2
-        }}>
-          {seatMap.map((row, rowIndex) => (
-            <Box key={rowIndex} sx={{
+        <Grid container justifyContent="center" alignItems="center" sx={{ mb: 3 }}>
+          <Grid item>
+            <Box sx={{
               display: 'flex',
-              justifyContent: 'center',
-              mb: 1.5,
-              width: '100%',
-              minWidth: 'max-content'
+              flexDirection: 'column',
+              alignItems: 'flex_start',
+              overflowX: 'auto',
+              py: 2
             }}>
-              <Box sx={{
-                minWidth: '40px',
-                textAlign: 'center',
-                fontWeight: 'bold',
-                color: 'text.secondary',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                mr: 2
-              }}>
-                {String.fromCharCode(65 + rowIndex)}
-              </Box>
-              {row.map((seat) => {
-                // Handle space type seats as invisible elements
-                if (seat.type === 'space') {
-                  return (
-                    <Box
-                      key={seat.id}
-                      sx={{
-                        width: 36,
-                        mx: 0.5,
-                        visibility: 'hidden'
-                      }}
-                    />
-                  );
-                }
-                const status = getSeatStatus(seat);
-                let bgColor = 'grey.700';
-                let borderColor = 'divider';
-                let textColor = 'text.primary';
+              {seatMap.map((row, rowIndex) => (
+                <Box key={rowIndex} sx={{
+                  display: 'flex',
+                  justifyContent: 'flex-start',
+                  mb: 1.5,
+                  width: '100%',
+                  minWidth: 'max-content'
+                }}>
+                  <Box sx={{
+                    minWidth: '40px',
+                    textAlign: 'center',
+                    fontWeight: 'bold',
+                    color: 'text.secondary',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    mr: 2
+                  }}>
+                    {String.fromCharCode(65 + rowIndex)}
+                  </Box>
+                  {row.map((seat) => {
+                    // Handle space type seats as invisible elements
+                    if (seat.type === 'space') {
+                      return (
+                        <Box
+                          key={seat.id}
+                          sx={{
+                            width: 36,
+                            mx: 0.5,
+                            visibility: 'hidden'
+                          }}
+                        />
+                      );
+                    }
+                    const status = getSeatStatus(seat);
+                    let bgColor = 'grey.700';
+                    let borderColor = 'divider';
+                    let textColor = 'text.primary';
 
-                if (status === 'selected') {
-                  bgColor = 'success.main';
-                  borderColor = 'success.main';
-                  textColor = 'white';
-                } else if (status === 'unavailable') {
-                  bgColor = 'grey.600';
-                  borderColor = 'grey.600';
-                } else if (status === 'available' && seat.type === 'vip') {
-                  bgColor = 'error.main'; // VIP seat color
-                } else if (status === 'available' && seat.type === 'double') {
-                  bgColor = 'warning.main'; // Double seat color
-                }
+                    if (status === 'selected') {
+                      bgColor = 'success.main';
+                      borderColor = 'success.main';
+                      textColor = 'white';
+                    } else if (status === 'unavailable') {
+                      bgColor = 'grey.600';
+                      borderColor = 'grey.600';
+                    } else if (status === 'available' && seat.type === 'vip') {
+                      bgColor = 'error.main'; // VIP seat color
+                    } else if (status === 'available' && seat.type === 'double') {
+                      bgColor = 'warning.main'; // Double seat color
+                    }
 
-                return (
-                  <Tooltip
-                    title={status === 'unavailable' ? t('booking.seatUnavailable') : seat.id}
-                    key={seat.id}
-                  >
-                    <Box
-                      onClick={() => seat.isAvailable && handleSeatClick(seat.id)}
-                      sx={{
-                        width: 36,
-                        height: 36,
-                        mx: 0.5,
-                        borderRadius: 1,
-                        bgcolor: bgColor,
-                        borderColor: borderColor,
-                        border: '2px solid',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: seat.isAvailable ? 'pointer' : 'not-allowed',
-                        transition: 'all 0.2s',
-                        '&:hover': {
-                          transform: seat.isAvailable ? 'scale(1.1)' : 'none',
-                          bgcolor: status === 'selected'
-                            ? 'success.dark'
-                            : status === 'unavailable'
-                              ? 'grey.600'
-                              : seat.type === 'vip'
-                                ? '#E65100'
-                                : 'grey.500',
-                        },
-                        position: 'relative'
-                      }}
-                    >
-                      <Typography
-                        variant="caption"
-                        sx={{
-                          fontWeight: 'bold',
-                          color: textColor,
-                          fontSize: '0.7rem'
-                        }}
+                    return (
+                      <Tooltip
+                        title={status === 'unavailable' ? t('booking.seatUnavailable') : seat.id}
+                        key={seat.id}
                       >
-                        {seat.number}
-                      </Typography>
-                      {seat.type === 'vip' && (
                         <Box
+                          onClick={() => seat.isAvailable && handleSeatClick(seat.id)}
                           sx={{
-                            position: 'absolute',
-                            top: -4,
-                            right: -4,
-                            width: 12,
-                            height: 12,
-                            borderRadius: '50%',
-                            bgcolor: 'error.main',
-                            border: '1px solid white'
+                            width: 36,
+                            height: 36,
+                            mx: 0.5,
+                            borderRadius: 1,
+                            bgcolor: bgColor,
+                            borderColor: borderColor,
+                            border: '2px solid',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: seat.isAvailable ? 'pointer' : 'not-allowed',
+                            transition: 'all 0.2s',
+                            '&:hover': {
+                              transform: seat.isAvailable ? 'scale(1.1)' : 'none',
+                              bgcolor: status === 'selected'
+                                ? 'success.dark'
+                                : status === 'unavailable'
+                                  ? 'grey.600'
+                                  : seat.type === 'vip'
+                                    ? '#E65100'
+                                    : 'grey.500',
+                            },
+                            position: 'relative'
                           }}
-                        />
-                      )}
-                      {seat.type === 'double' && (
-                        <Box
-                          sx={{
-                            position: 'absolute',
-                            top: -4,
-                            right: -4,
-                            width: 12,
-                            height: 12,
-                            borderRadius: '50%',
-                            bgcolor: 'warning.main',
-                            border: '1px solid white'
-                          }}
-                        />
-                      )}
-                    </Box>
-                  </Tooltip>
-                );
-              })}
+                        >
+                          <Typography
+                            variant="caption"
+                            sx={{
+                              fontWeight: 'bold',
+                              color: textColor,
+                              fontSize: '0.7rem'
+                            }}
+                          >
+                            {seat.number}
+                          </Typography>
+                          {seat.type === 'vip' && (
+                            <Box
+                              sx={{
+                                position: 'absolute',
+                                top: -4,
+                                right: -4,
+                                width: 12,
+                                height: 12,
+                                borderRadius: '50%',
+                                bgcolor: 'error.main',
+                                border: '1px solid white'
+                              }}
+                            />
+                          )}
+                          {seat.type === 'double' && (
+                            <Box
+                              sx={{
+                                position: 'absolute',
+                                top: -4,
+                                right: -4,
+                                width: 12,
+                                height: 12,
+                                borderRadius: '50%',
+                                bgcolor: 'warning.main',
+                                border: '1px solid white'
+                              }}
+                            />
+                          )}
+                        </Box>
+                      </Tooltip>
+                    );
+                  })}
+                </Box>
+              ))}
             </Box>
-          ))}
-        </Box>
+          </Grid>
+        </Grid>
 
         {/* Seat legend */}
         <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 3, mt: 2 }}>

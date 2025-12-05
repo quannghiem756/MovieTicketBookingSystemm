@@ -413,6 +413,21 @@ const vi = {
 
   // Seatmap Editor
   'admin.seatmapEditor.title': 'Trình chỉnh sửa sơ đồ ghế',
+
+  // Movie Recommendation Chat
+  'recommendation.welcomeMessage': "Xin chào! Tôi là trợ lý đề xuất phim được hỗ trợ bởi AI. Hãy hỏi tôi về các đề xuất phim dựa trên sở thích của bạn như thể loại, tâm trạng hoặc diễn viên, và tôi sẽ tìm những bộ phim hoàn hảo cho bạn!",
+  'recommendation.successMessage': 'Dựa trên sở thích của bạn, tôi đề xuất những phim sau:',
+  'recommendation.enjoyMessage': 'Chúc bạn có trải nghiệm xem phim tuyệt vời! 🎬',
+  'recommendation.noResultsMessage': "Tôi không thể tìm thấy phim nào phù hợp với tiêu chí của bạn. Hãy thử đề cập đến thể loại như 'hành động', 'hài', 'tình cảm' hoặc diễn viên/đạo diễn cụ thể mà bạn thích!",
+  'recommendation.errorMessage': "Xin lỗi, tôi đã gặp lỗi khi xử lý yêu cầu của bạn. Bạn vui lòng thử lại?",
+  'recommendation.title': 'Trợ lý đề xuất phim AI',
+  'recommendation.subtitle': 'Yêu cầu các đề xuất phim cá nhân hóa dựa trên thể loại, tâm trạng hoặc sở thích của bạn!',
+  'recommendation.loadingMessage': 'Đang tạo các đề xuất cá nhân hóa cho bạn...',
+  'recommendation.placeholder': "Yêu cầu đề xuất phim (ví dụ: 'Đề xuất phim hành động' hoặc 'Phim nào đang chiếu hiện tại?')...",
+  'recommendation.example1': 'Đề xuất phim hành động',
+  'recommendation.example2': "Phim nào đang chiếu hiện tại?",
+  'recommendation.example3': 'Phim PG',
+  'recommendation.example4': 'Đề xuất phim hài',
   'admin.seatmapEditor.theaterSeatmap': 'Sơ đồ ghế phòng chiếu',
   'admin.seatmapEditor.theater': 'Phòng chiếu',
   'admin.seatmapEditor.defaultBlockName': 'Khối A',

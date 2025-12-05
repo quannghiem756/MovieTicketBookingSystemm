@@ -254,14 +254,14 @@ const Home = () => {
               textAlign: { xs: 'center', md: 'left' }
             }}
           >
-            AI Movie Recommendations
+            {t('recommendation.title')}
           </Typography>
           <Typography
             variant="h6"
             color="textSecondary"
             sx={{ opacity: 0.7, textAlign: { xs: 'center', md: 'left' } }}
           >
-            Get personalized movie suggestions with our AI assistant
+            {t('recommendation.subtitle')}
           </Typography>
         </Box>
         <MovieRecommendationChat />

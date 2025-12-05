@@ -16,12 +16,14 @@ import {
 } from '@mui/material';
 import { Send, AutoAwesome } from '@mui/icons-material';
 import { getMovieRecommendations } from '../services/api';
+import { useTranslation } from '../context/I18nContext';
 
 const MovieRecommendationChat = () => {
+  const { t } = useTranslation();
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: "Hello! I'm your AI-powered movie recommendation assistant. Ask me for movie suggestions based on your preferences like genre, mood, or actors, and I'll find the perfect movies for you!",
+      text: t('recommendation.welcomeMessage'),
       isBot: true
     }
   ]);
@@ -48,15 +50,15 @@ const MovieRecommendationChat = () => {
           `• ${movie.title} (${movie.genre?.join(', ') || 'N/A'} | ${movie.rating || 'N/A'})`
         ).join('\n');
 
-        return `Based on your preferences, I recommend these movies:\n\n${movieList}\n\nEnjoy your movie experience! 🎬`;
+        return `${t('recommendation.successMessage')}\n\n${movieList}\n\n${t('recommendation.enjoyMessage')}`;
       } else if (responseMessage) {
         return responseMessage;
       } else {
-        return "I couldn't find any movies matching your criteria. Try mentioning genres like 'action', 'comedy', 'drama' or specific actors/directors you like!";
+        return t('recommendation.noResultsMessage');
       }
     } catch (error) {
       console.error('Error getting recommendation:', error);
-      return "Sorry, I encountered an error while processing your request. Could you please try again?";
+      return t('recommendation.errorMessage');
     }
   };
 
@@ -84,7 +86,7 @@ const MovieRecommendationChat = () => {
     } catch (error) {
       const errorMessage = {
         id: Date.now() + 1,
-        text: "Sorry, I encountered an error while processing your request. Could you please try again?",
+        text: t('recommendation.errorMessage'),
         isBot: true
       };
       setMessages(prev => [...prev, errorMessage]);
@@ -115,10 +117,10 @@ const MovieRecommendationChat = () => {
       <Box sx={{ p: 3, borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
         <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <AutoAwesome color="primary" />
-          AI Movie Recommendation Assistant
+          {t('recommendation.title')}
         </Typography>
         <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
-          Ask for personalized movie suggestions based on genre, mood, or your preferences!
+          {t('recommendation.subtitle')}
         </Typography>
       </Box>
 
@@ -174,7 +176,7 @@ const MovieRecommendationChat = () => {
               >
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <CircularProgress size={20} />
-                  <Typography>Generating your personalized recommendations...</Typography>
+                  <Typography>{t('recommendation.loadingMessage')}</Typography>
                 </Box>
               </Paper>
             </ListItem>
@@ -188,7 +190,7 @@ const MovieRecommendationChat = () => {
           <TextField
             fullWidth
             variant="outlined"
-            placeholder="Ask for movie recommendations (e.g., 'Recommend action movies' or 'What's playing now?')..."
+            placeholder={t('recommendation.placeholder')}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={handleKeyPress}
@@ -227,30 +229,30 @@ const MovieRecommendationChat = () => {
         <Box sx={{ mt: 1, display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
           <Chip
             size="small"
-            label="Recommend action movies"
+            label={t('recommendation.example1')}
             clickable
-            onClick={() => setInputValue("Recommend action movies")}
+            onClick={() => setInputValue(t('recommendation.example1'))}
             sx={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
           />
           <Chip
             size="small"
-            label="What's playing now?"
+            label={t('recommendation.example2')}
             clickable
-            onClick={() => setInputValue("What's playing now?")}
+            onClick={() => setInputValue(t('recommendation.example2'))}
             sx={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
           />
           <Chip
             size="small"
-            label="PG movies"
+            label={t('recommendation.example3')}
             clickable
-            onClick={() => setInputValue("PG movies")}
+            onClick={() => setInputValue(t('recommendation.example3'))}
             sx={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
           />
           <Chip
             size="small"
-            label="Comedy suggestions"
+            label={t('recommendation.example4')}
             clickable
-            onClick={() => setInputValue("Comedy suggestions")}
+            onClick={() => setInputValue(t('recommendation.example4'))}
             sx={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
           />
         </Box>

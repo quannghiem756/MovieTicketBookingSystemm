@@ -376,6 +376,21 @@ const en = {
 
   // Seatmap Editor
   'admin.seatmapEditor.title': 'Seatmap Editor',
+
+  // Movie Recommendation Chat
+  'recommendation.welcomeMessage': "Hello! I'm your AI-powered movie recommendation assistant. Ask me for movie suggestions based on your preferences like genre, mood, or actors, and I'll find the perfect movies for you!",
+  'recommendation.successMessage': 'Based on your preferences, I recommend these movies:',
+  'recommendation.enjoyMessage': 'Enjoy your movie experience! 🎬',
+  'recommendation.noResultsMessage': "I couldn't find any movies matching your criteria. Try mentioning genres like 'action', 'comedy', 'drama' or specific actors/directors you like!",
+  'recommendation.errorMessage': "Sorry, I encountered an error while processing your request. Could you please try again?",
+  'recommendation.title': 'AI Movie Recommendation Assistant',
+  'recommendation.subtitle': 'Ask for personalized movie suggestions based on genre, mood, or your preferences!',
+  'recommendation.loadingMessage': 'Generating your personalized recommendations...',
+  'recommendation.placeholder': "Ask for movie recommendations (e.g., 'Recommend action movies' or 'What's playing now?')...",
+  'recommendation.example1': 'Recommend action movies',
+  'recommendation.example2': "What's playing now?",
+  'recommendation.example3': 'PG movies',
+  'recommendation.example4': 'Comedy suggestions',
   'admin.seatmapEditor.theaterSeatmap': 'Theater Seatmap',
   'admin.seatmapEditor.theater': 'Theater',
   'admin.seatmapEditor.defaultBlockName': 'Block A',

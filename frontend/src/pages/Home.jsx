@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import { PlayArrow, ArrowForward } from '@mui/icons-material';
 import MovieCard from '../components/MovieCard';
+import MovieRecommendationChat from '../components/MovieRecommendationChat';
 import { getNowShowing, getComingSoon } from '../services/api';
 import { useTranslation } from '../context/I18nContext';
 
@@ -236,6 +237,35 @@ const Home = () => {
     <Container maxWidth="lg" sx={{ py: 4 }}>
       {/* Hero Section */}
       <HeroSection movie={nowShowing[0]} />
+
+      {/* Movie Recommendation Chat */}
+      <Container maxWidth="lg" sx={{ mb: 8 }}>
+        <Box sx={{ mb: 6 }}>
+          <Typography
+            variant="h3"
+            component="h2"
+            sx={{
+              fontWeight: 700,
+              mb: 1,
+              background: 'linear-gradient(90deg, #ffffff 0%, #b3b3b3 100%)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              textAlign: { xs: 'center', md: 'left' }
+            }}
+          >
+            AI Movie Recommendations
+          </Typography>
+          <Typography
+            variant="h6"
+            color="textSecondary"
+            sx={{ opacity: 0.7, textAlign: { xs: 'center', md: 'left' } }}
+          >
+            Get personalized movie suggestions with our AI assistant
+          </Typography>
+        </Box>
+        <MovieRecommendationChat />
+      </Container>
 
       {/* Now Showing Section */}
       <Container maxWidth="lg" sx={{ mb: 8 }}>

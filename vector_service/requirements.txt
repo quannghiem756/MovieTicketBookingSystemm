@@ -1,0 +1,14 @@
+flask
+flask-cors
+pandas
+numpy
+scikit-learn
+requests
+python-dotenv
+chromadb
+openai
+google-generativeai
+langchain
+langchain_community
+langchain_openai
+langchain_google_genai

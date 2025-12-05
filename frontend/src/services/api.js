@@ -107,4 +107,7 @@ export const getUserByEmail = (email) => api.get(`/users/email/${email}`);
 export const updateUser = (id, user) => api.put(`/users/${id}`, user);
 export const deleteUser = (id) => api.delete(`/users/${id}`);
 
+// Recommendations API
+export const getMovieRecommendations = (query) => api.post('/recommendations', { query });
+
 export default api;

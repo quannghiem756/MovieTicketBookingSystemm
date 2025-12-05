@@ -1,0 +1,13 @@
+{
+  "name": "movie-vector-service-runner",
+  "version": "1.0.0",
+  "description": "Runner for the Python-based movie vector service",
+  "scripts": {
+    "start": "cd ../vector_service && python movie_vector_service.py",
+    "install-deps": "cd ../vector_service && pip install -r requirements.txt",
+    "dev": "cd ../vector_service && python movie_vector_service.py"
+  },
+  "keywords": ["vector", "database", "rag", "movies", "recommendations"],
+  "author": "",
+  "license": "ISC"
+}

@@ -273,9 +273,11 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 
+# Intent classification is now handled internally within the recommend endpoint
+
 @app.route('/recommend', methods=['POST'])
 def get_recommendations():
-    """Get recommendations using LangChain LLM with retrieved context"""
+    """Get recommendations or available movies based on intent using LangChain LLM with retrieved context"""
     try:
         data = request.get_json()
         query = data.get('query', '')
@@ -283,7 +285,82 @@ def get_recommendations():
         if not query:
             return jsonify({'error': 'Query is required'}), 400
 
-        # Get relevant movies using vector search
+        # Determine intent first
+        intent = classify_query_intent(query)
+
+        # If the intent is to get available movies, get currently showing movies from the main API
+        if intent == 'available_movies':
+            try:
+                # Fetch currently showing movies from the main API endpoint
+                now_showing_response = requests.get(f"{MOVIE_API_URL}/now-showing")
+                if now_showing_response.status_code == 200:
+                    currently_showing_movies = now_showing_response.json().get('movies', [])
+                    return jsonify({
+                        'query': query,
+                        'recommendations': currently_showing_movies,
+                        'total': len(currently_showing_movies),
+                        'source': 'currently_showing_api',
+                        'intent': intent,
+                        'message': f'Found {len(currently_showing_movies)} movies currently showing'
+                    })
+                else:
+                    # If the now-showing endpoint doesn't exist or fails, fall back to original method
+                    logger.warning(f"Failed to fetch now-showing movies: {now_showing_response.status_code}")
+                    all_movies = fetch_movies_from_api()
+
+                    # Return only movies that are currently showing
+                    now = datetime.now()
+                    currently_showing_movies = []
+
+                    for movie in all_movies:
+                        try:
+                            release_date = datetime.strptime(movie.get('releaseDate', ''), '%Y-%m-%d') if movie.get('releaseDate') else None
+                            if release_date:
+                                if (now - datetime.timedelta(days=60) <= release_date <= now + datetime.timedelta(days=7)):
+                                    currently_showing_movies.append(movie)
+                            else:
+                                currently_showing_movies.append(movie)
+                        except ValueError:
+                            currently_showing_movies.append(movie)
+
+                    return jsonify({
+                        'query': query,
+                        'recommendations': currently_showing_movies,
+                        'total': len(currently_showing_movies),
+                        'source': 'currently_showing_fallback',
+                        'intent': intent,
+                        'message': f'Found {len(currently_showing_movies)} movies currently showing'
+                    })
+            except Exception as e:
+                logger.error(f"Error fetching now-showing movies: {e}")
+                # Fallback to original method if API call fails
+                all_movies = fetch_movies_from_api()
+
+                # Return only movies that are currently showing
+                now = datetime.now()
+                currently_showing_movies = []
+
+                for movie in all_movies:
+                    try:
+                        release_date = datetime.strptime(movie.get('releaseDate', ''), '%Y-%m-%d') if movie.get('releaseDate') else None
+                        if release_date:
+                            if (now - datetime.timedelta(days=60) <= release_date <= now + datetime.timedelta(days=7)):
+                                currently_showing_movies.append(movie)
+                        else:
+                            currently_showing_movies.append(movie)
+                    except ValueError:
+                        currently_showing_movies.append(movie)
+
+                return jsonify({
+                    'query': query,
+                    'recommendations': currently_showing_movies,
+                    'total': len(currently_showing_movies),
+                    'source': 'currently_showing_fallback',
+                    'intent': intent,
+                    'message': f'Found {len(currently_showing_movies)} movies currently showing'
+                })
+
+        # For other intents, proceed with normal recommendation logic
         results = search_similar_movies(query, top_k=10)
         relevant_movies = [result['movie'] for result in results]
 
@@ -292,6 +369,8 @@ def get_recommendations():
                 'query': query,
                 'recommendations': [],
                 'total': 0,
+                'source': 'no_matches',
+                'intent': intent,
                 'message': 'No movies match your criteria. Try mentioning genres like action, comedy, drama or specific actors/directors you like!'
             })
 
@@ -326,7 +405,8 @@ def get_recommendations():
                 'query': query,
                 'recommendations': recommendations,
                 'total': len(recommendations),
-                'source': 'retrieval_only'
+                'source': 'retrieval_only',
+                'intent': intent
             })
 
         # Create a chain with the prompt and LLM
@@ -398,7 +478,8 @@ def get_recommendations():
             'query': query,
             'recommendations': recommended_movies,
             'total': len(recommended_movies),
-            'source': 'llm_with_retrieval'
+            'source': 'llm_with_retrieval',
+            'intent': intent
         })
 
     except Exception as e:
@@ -406,13 +487,135 @@ def get_recommendations():
         # Fallback to just the retrieved results
         results = search_similar_movies(query, top_k=5)
         recommendations = [result['movie'] for result in results]
+        intent = classify_query_intent(query)  # Attempt to classify intent even in error cases
         return jsonify({
             'query': query,
             'recommendations': recommendations,
             'total': len(recommendations),
             'source': 'retrieval_fallback',
+            'intent': intent,
             'error': str(e)
         })
+
+def classify_query_intent(query):
+    """Classify the intent of a user query using LLM"""
+    try:
+        # First, check if this looks like a specific movie title request
+        # Words that indicate general availability requests vs specific movies
+        lower_query = query.lower()
+
+        # Keywords that suggest a general request for available movies
+        general_request_keywords = [
+            'available', 'showing', 'what movies', 'what films', 'currently showing',
+            'now showing', 'in theaters', 'what\'s playing', 'what is playing',
+            'currently playing', 'on screen', 'now on', 'what movies are',
+            'show me movies', 'what films are', 'any movies', 'any films',
+            'what\'s available', 'currently available', 'what can i watch',
+            'what\'s out', 'what movies are out', 'showing now', 'playing now',
+            'in cinema', 'at the cinema', 'what is available'
+        ]
+
+        # Check if query contains a specific movie title (heuristic: single quotes, capitalized words, etc.)
+        # But also check if it has general request keywords
+        has_general_keyword = any(keyword in lower_query for keyword in general_request_keywords)
+        is_specific_movie_request = not has_general_keyword and (
+            len(query.split()) <= 4 and  # Probably a movie title
+            any(word.isupper() or word.istitle() for word in query.split() if len(word) > 2)  # Has capitalized words
+        )
+
+        # Create prompt for intent classification
+        prompt_template = """Classify the intent of this user query: "{query}"
+
+        Context:
+        - Has general availability keywords: {has_general_keyword}
+        - Looks like specific movie request: {is_specific_movie_request}
+
+        Available intent types:
+        - available_movies: if asking for all currently available/showing movies, what's playing in general
+        - movie_recommendation: if asking for specific movies or recommendations based on preferences
+        - general_query: for other types of queries
+
+        For example:
+        - "What's playing now?" -> available_movies
+        - "Is Spider-Man showing?" -> movie_recommendation (looking for specific movie)
+        - "Show me movies" -> available_movies
+        - "Recommend action movies" -> movie_recommendation
+
+        Respond with only the intent type: available_movies, movie_recommendation, or general_query
+        Intent:"""
+
+        # Choose LLM based on available API keys
+        if GEMINI_API_KEY:
+            # Use Google's Gemini
+            llm = ChatGoogleGenerativeAI(model="gemini-flash-latest", google_api_key=GEMINI_API_KEY)
+        elif OPENAI_API_KEY:
+            # Use OpenAI's GPT
+            llm = ChatOpenAI(model="gpt-3.5-turbo", api_key=OPENAI_API_KEY)
+        else:
+            # If no LLM is available, use our heuristic
+            if has_general_keyword:
+                return 'available_movies'
+            elif is_specific_movie_request:
+                return 'movie_recommendation'
+            else:
+                # Use fallback keyword matching
+                if any(keyword in lower_query for keyword in general_request_keywords):
+                    return 'available_movies'
+                else:
+                    return 'movie_recommendation'
+
+        # Create a chain with the prompt and LLM
+        prompt = PromptTemplate(
+            input_variables=["query", "has_general_keyword", "is_specific_movie_request"],
+            template=prompt_template
+        )
+
+        chain = prompt | llm
+
+        # Run the chain
+        response = chain.invoke({
+            "query": query,
+            "has_general_keyword": has_general_keyword,
+            "is_specific_movie_request": is_specific_movie_request
+        })
+
+        # Extract the response text
+        if hasattr(response, 'content'):
+            response_text = response.content
+        elif isinstance(response, str):
+            response_text = response
+        elif hasattr(response, 'text'):
+            response_text = response.text
+        elif isinstance(response, dict):
+            response_text = str(response)
+        else:
+            response_text = str(response)
+
+        # Clean the response to extract the intent
+        cleaned_response = response_text.strip().lower()
+
+        # Determine intent from response
+        if 'available_movies' in cleaned_response or ('available' in cleaned_response and 'movies' in cleaned_response):
+            return 'available_movies'
+        elif 'movie_recommendation' in cleaned_response or 'recommendation' in cleaned_response or 'movie' in cleaned_response:
+            return 'movie_recommendation'
+        elif 'general_query' in cleaned_response:
+            return 'general_query'
+        else:
+            # Default behavior based on our heuristics
+            if has_general_keyword:
+                return 'available_movies'
+            else:
+                return 'movie_recommendation'
+
+    except Exception as e:
+        logger.error(f"Error in classify_query_intent: {e}")
+        # Fallback to keyword matching if LLM processing fails
+        lower_query = query.lower()
+        if any(keyword in lower_query for keyword in ['available', 'showing', 'what movies', 'what films', 'currently showing', 'now showing', 'in theaters', 'what\'s playing', 'what is playing', 'currently playing', 'on screen', 'now on', 'what movies are', 'show me movies', 'what films are', 'any movies', 'any films', 'what\'s available', 'currently available']):
+            return 'available_movies'
+        else:
+            return 'movie_recommendation'
 
 @app.route('/movies', methods=['GET'])
 def get_movies():
@@ -530,8 +733,8 @@ if __name__ == '__main__':
     initialize_chroma()
 
     # Initialize the vector index when starting the service
-    logger.info("Initializing vector index...")
-    build_vector_index()
+    # logger.info("Initializing vector index...")
+    # build_vector_index()
 
     # Run the Flask app
     app.run(debug=False, host='0.0.0.0', port=5001)

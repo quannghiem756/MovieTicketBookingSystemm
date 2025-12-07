@@ -360,6 +360,82 @@ def get_recommendations():
                     'message': f'Found {len(currently_showing_movies)} movies currently showing'
                 })
 
+        # If the intent is to get upcoming movies, get upcoming movies from the main API
+        elif intent == 'upcoming_movies':
+            try:
+                # Fetch upcoming movies from the main API endpoint
+                upcoming_response = requests.get(f"{MOVIE_API_URL}/coming-soon")
+                if upcoming_response.status_code == 200:
+                    upcoming_movies = upcoming_response.json().get('movies', [])
+                    return jsonify({
+                        'query': query,
+                        'recommendations': upcoming_movies,
+                        'total': len(upcoming_movies),
+                        'source': 'upcoming_api',
+                        'intent': intent,
+                        'message': f'Found {len(upcoming_movies)} upcoming movies'
+                    })
+                else:
+                    # If the upcoming endpoint doesn't exist or fails, fall back to original method
+                    logger.warning(f"Failed to fetch upcoming movies: {upcoming_response.status_code}")
+                    all_movies = fetch_movies_from_api()
+
+                    # Return only movies that are upcoming (released in the future)
+                    now = datetime.now()
+                    upcoming_movies = []
+
+                    for movie in all_movies:
+                        try:
+                            release_date = datetime.strptime(movie.get('releaseDate', ''), '%Y-%m-%d') if movie.get('releaseDate') else None
+                            if release_date:
+                                if release_date > now:
+                                    upcoming_movies.append(movie)
+                            else:
+                                # If no release date is available, exclude the movie from upcoming
+                                continue
+                        except ValueError:
+                            # Skip movies with invalid date format
+                            continue
+
+                    return jsonify({
+                        'query': query,
+                        'recommendations': upcoming_movies,
+                        'total': len(upcoming_movies),
+                        'source': 'upcoming_fallback',
+                        'intent': intent,
+                        'message': f'Found {len(upcoming_movies)} upcoming movies'
+                    })
+            except Exception as e:
+                logger.error(f"Error fetching upcoming movies: {e}")
+                # Fallback to original method if API call fails
+                all_movies = fetch_movies_from_api()
+
+                # Return only movies that are upcoming (released in the future)
+                now = datetime.now()
+                upcoming_movies = []
+
+                for movie in all_movies:
+                    try:
+                        release_date = datetime.strptime(movie.get('releaseDate', ''), '%Y-%m-%d') if movie.get('releaseDate') else None
+                        if release_date:
+                            if release_date > now:
+                                upcoming_movies.append(movie)
+                        else:
+                            # If no release date is available, exclude the movie from upcoming
+                            continue
+                    except ValueError:
+                        # Skip movies with invalid date format
+                        continue
+
+                return jsonify({
+                    'query': query,
+                    'recommendations': upcoming_movies,
+                    'total': len(upcoming_movies),
+                    'source': 'upcoming_fallback',
+                    'intent': intent,
+                    'message': f'Found {len(upcoming_movies)} upcoming movies'
+                })
+
         # For other intents, proceed with normal recommendation logic
         results = search_similar_movies(query, top_k=10)
         relevant_movies = [result['movie'] for result in results]
@@ -485,17 +561,96 @@ def get_recommendations():
     except Exception as e:
         logger.error(f"Error in get_recommendations: {e}")
         # Fallback to just the retrieved results
-        results = search_similar_movies(query, top_k=5)
-        recommendations = [result['movie'] for result in results]
         intent = classify_query_intent(query)  # Attempt to classify intent even in error cases
-        return jsonify({
-            'query': query,
-            'recommendations': recommendations,
-            'total': len(recommendations),
-            'source': 'retrieval_fallback',
-            'intent': intent,
-            'error': str(e)
-        })
+
+        # Handle upcoming_movies intent in the fallback as well
+        if intent == 'upcoming_movies':
+            try:
+                # Fetch upcoming movies from the main API endpoint
+                upcoming_response = requests.get(f"{MOVIE_API_URL}/upcoming")
+                if upcoming_response.status_code == 200:
+                    upcoming_movies = upcoming_response.json().get('movies', [])
+                    return jsonify({
+                        'query': query,
+                        'recommendations': upcoming_movies,
+                        'total': len(upcoming_movies),
+                        'source': 'upcoming_api_fallback',
+                        'intent': intent,
+                        'message': f'Found {len(upcoming_movies)} upcoming movies'
+                    })
+                else:
+                    # If the upcoming endpoint doesn't exist or fails, fall back to original method
+                    logger.warning(f"Failed to fetch upcoming movies in fallback: {upcoming_response.status_code}")
+                    all_movies = fetch_movies_from_api()
+
+                    # Return only movies that are upcoming (released in the future)
+                    now = datetime.now()
+                    upcoming_movies = []
+
+                    for movie in all_movies:
+                        try:
+                            release_date = datetime.strptime(movie.get('releaseDate', ''), '%Y-%m-%d') if movie.get('releaseDate') else None
+                            if release_date:
+                                if release_date > now:
+                                    upcoming_movies.append(movie)
+                            else:
+                                # If no release date is available, exclude the movie from upcoming
+                                continue
+                        except ValueError:
+                            # Skip movies with invalid date format
+                            continue
+
+                    return jsonify({
+                        'query': query,
+                        'recommendations': upcoming_movies,
+                        'total': len(upcoming_movies),
+                        'source': 'upcoming_fallback_fallback',
+                        'intent': intent,
+                        'message': f'Found {len(upcoming_movies)} upcoming movies'
+                    })
+            except Exception as fallback_error:
+                logger.error(f"Error in upcoming movies fallback: {fallback_error}")
+                # Fallback to original method if API call fails
+                all_movies = fetch_movies_from_api()
+
+                # Return only movies that are upcoming (released in the future)
+                now = datetime.now()
+                upcoming_movies = []
+
+                for movie in all_movies:
+                    try:
+                        release_date = datetime.strptime(movie.get('releaseDate', ''), '%Y-%m-%d') if movie.get('releaseDate') else None
+                        if release_date:
+                            if release_date > now:
+                                upcoming_movies.append(movie)
+                        else:
+                            # If no release date is available, exclude the movie from upcoming
+                            continue
+                    except ValueError:
+                        # Skip movies with invalid date format
+                        continue
+
+                return jsonify({
+                    'query': query,
+                    'recommendations': upcoming_movies,
+                    'total': len(upcoming_movies),
+                    'source': 'upcoming_fallback_fallback',
+                    'intent': intent,
+                    'message': f'Found {len(upcoming_movies)} upcoming movies',
+                    'error': str(fallback_error)
+                })
+        else:
+            # For other intents, use the original fallback behavior
+            results = search_similar_movies(query, top_k=5)
+            recommendations = [result['movie'] for result in results]
+            return jsonify({
+                'query': query,
+                'recommendations': recommendations,
+                'total': len(recommendations),
+                'source': 'retrieval_fallback',
+                'intent': intent,
+                'error': str(e)
+            })
 
 def classify_query_intent(query):
     """Classify the intent of a user query using LLM"""
@@ -515,10 +670,20 @@ def classify_query_intent(query):
             'in cinema', 'at the cinema', 'what is available'
         ]
 
+        # Keywords that suggest a request for upcoming movies
+        upcoming_request_keywords = [
+            'upcoming', 'coming soon', 'will be released', 'releasing', 'releases',
+            'future movies', 'next movies', 'soon', 'up next', 'new movies',
+            'coming up', 'premieres', 'premiere', 'next to come', 'anticipated',
+            'what\'s coming', 'what movies are coming', 'released soon',
+            'will show', 'will play', 'up and coming', 'future releases'
+        ]
+
         # Check if query contains a specific movie title (heuristic: single quotes, capitalized words, etc.)
         # But also check if it has general request keywords
         has_general_keyword = any(keyword in lower_query for keyword in general_request_keywords)
-        is_specific_movie_request = not has_general_keyword and (
+        has_upcoming_keyword = any(keyword in lower_query for keyword in upcoming_request_keywords)
+        is_specific_movie_request = not has_general_keyword and not has_upcoming_keyword and (
             len(query.split()) <= 4 and  # Probably a movie title
             any(word.isupper() or word.istitle() for word in query.split() if len(word) > 2)  # Has capitalized words
         )
@@ -528,20 +693,24 @@ def classify_query_intent(query):
 
         Context:
         - Has general availability keywords: {has_general_keyword}
+        - Has upcoming movies keywords: {has_upcoming_keyword}
         - Looks like specific movie request: {is_specific_movie_request}
 
         Available intent types:
         - available_movies: if asking for all currently available/showing movies, what's playing in general
+        - upcoming_movies: if asking for movies that will be released/available in the future
         - movie_recommendation: if asking for specific movies or recommendations based on preferences
         - general_query: for other types of queries
 
         For example:
         - "What's playing now?" -> available_movies
+        - "What movies are coming soon?" -> upcoming_movies
+        - "Show me upcoming releases" -> upcoming_movies
         - "Is Spider-Man showing?" -> movie_recommendation (looking for specific movie)
         - "Show me movies" -> available_movies
         - "Recommend action movies" -> movie_recommendation
 
-        Respond with only the intent type: available_movies, movie_recommendation, or general_query
+        Respond with only the intent type: available_movies, upcoming_movies, movie_recommendation, or general_query
         Intent:"""
 
         # Choose LLM based on available API keys
@@ -576,6 +745,7 @@ def classify_query_intent(query):
         response = chain.invoke({
             "query": query,
             "has_general_keyword": has_general_keyword,
+            "has_upcoming_keyword": has_upcoming_keyword,
             "is_specific_movie_request": is_specific_movie_request
         })
 
@@ -597,13 +767,17 @@ def classify_query_intent(query):
         # Determine intent from response
         if 'available_movies' in cleaned_response or ('available' in cleaned_response and 'movies' in cleaned_response):
             return 'available_movies'
+        elif 'upcoming_movies' in cleaned_response or ('upcoming' in cleaned_response and 'movies' in cleaned_response) or 'upcoming' in cleaned_response:
+            return 'upcoming_movies'
         elif 'movie_recommendation' in cleaned_response or 'recommendation' in cleaned_response or 'movie' in cleaned_response:
             return 'movie_recommendation'
         elif 'general_query' in cleaned_response:
             return 'general_query'
         else:
             # Default behavior based on our heuristics
-            if has_general_keyword:
+            if has_upcoming_keyword:
+                return 'upcoming_movies'
+            elif has_general_keyword:
                 return 'available_movies'
             else:
                 return 'movie_recommendation'
@@ -614,6 +788,8 @@ def classify_query_intent(query):
         lower_query = query.lower()
         if any(keyword in lower_query for keyword in ['available', 'showing', 'what movies', 'what films', 'currently showing', 'now showing', 'in theaters', 'what\'s playing', 'what is playing', 'currently playing', 'on screen', 'now on', 'what movies are', 'show me movies', 'what films are', 'any movies', 'any films', 'what\'s available', 'currently available']):
             return 'available_movies'
+        elif any(keyword in lower_query for keyword in ['upcoming', 'coming soon', 'will be released', 'releasing', 'releases', 'future movies', 'next movies', 'soon', 'up next', 'new movies', 'coming up', 'premieres', 'premiere', 'next to come', 'anticipated', 'what\'s coming', 'what movies are coming', 'released soon', 'will show', 'will play', 'up and coming', 'future releases']):
+            return 'upcoming_movies'
         else:
             return 'movie_recommendation'
 

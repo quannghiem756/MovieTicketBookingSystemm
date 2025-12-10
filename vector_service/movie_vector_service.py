@@ -18,8 +18,6 @@ import google.generativeai as genai
 from openai import OpenAI
 import time
 from functools import wraps
-import threading
-import hashlib
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -31,7 +29,6 @@ CORS(app)
 # Configuration
 MOVIE_API_URL = os.getenv('MOVIE_API_URL', 'http://localhost:5000/api/movies')
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
-GEMINI_API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key={GEMINI_API_KEY}"
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 openai_client = OpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
 
@@ -40,22 +37,54 @@ vector_store = None
 movies_data = []
 movie_ids = []
 
-# Cache for embeddings to avoid repeated API calls
-embedding_cache = {}
-cache_lock = threading.Lock()
-
-# Cache size limit
-MAX_CACHE_SIZE = 10000
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def fetch_movies_from_api():
-    """Fetch all movies from the main API"""
+    """Fetch only showing and upcoming movies from the main API"""
     try:
-        response = requests.get(MOVIE_API_URL)
-        response.raise_for_status()
-        return response.json().get('movies', [])
+        # First try to get currently showing movies
+        now_showing_response = requests.get(f"{MOVIE_API_URL}/now-showing")
+        now_showing_movies = []
+        if now_showing_response.status_code == 200:
+            now_showing_movies = now_showing_response.json().get('movies', [])
+
+        # Then try to get upcoming movies
+        upcoming_response = requests.get(f"{MOVIE_API_URL}/coming-soon")
+        upcoming_movies = []
+        if upcoming_response.status_code == 200:
+            upcoming_movies = upcoming_response.json().get('movies', [])
+
+        # Combine and return showing and upcoming movies
+        all_showing_upcoming = now_showing_movies + upcoming_movies
+
+        # If the specific endpoints don't work, get all movies and filter them
+        if not all_showing_upcoming:
+            response = requests.get(MOVIE_API_URL)
+            response.raise_for_status()
+            all_movies = response.json().get('movies', [])
+
+            # Filter to only show currently showing and upcoming movies
+            from datetime import datetime
+            now = datetime.now()
+            all_showing_upcoming = []
+            for movie in all_movies:
+                try:
+                    release_date_str = movie.get('releaseDate', '')
+                    if release_date_str:
+                        release_date = datetime.strptime(release_date_str, '%Y-%m-%d')
+                        # Include movies that are currently showing (released within last 60 days and up to 7 days in the future)
+                        # Or upcoming movies (released in the future)
+                        if (now - datetime.timedelta(days=60) <= release_date <= now + datetime.timedelta(days=7)) or release_date > now:
+                            all_showing_upcoming.append(movie)
+                    else:
+                        # If no release date, include the movie
+                        all_showing_upcoming.append(movie)
+                except ValueError:
+                    # If invalid date format, include the movie
+                    all_showing_upcoming.append(movie)
+
+        return all_showing_upcoming
     except Exception as e:
         logger.error(f"Error fetching movies from API: {e}")
         return []
@@ -87,20 +116,6 @@ def retry_with_backoff(func, max_retries=3, base_delay=1):
                 time.sleep(delay)
         return None
     return wrapper
-
-def manage_cache_size():
-    """Manage cache size to prevent memory issues"""
-    with cache_lock:
-        if len(embedding_cache) > MAX_CACHE_SIZE:
-            # Remove oldest entries (using insertion order in Python 3.7+ dict)
-            keys_to_remove = list(embedding_cache.keys())[:len(embedding_cache) - MAX_CACHE_SIZE + 1000]  # Keep 1000 extra
-            for key in keys_to_remove:
-                del embedding_cache[key]
-            logger.info(f"Cache size managed: removed {len(keys_to_remove)} entries")
-
-def get_embedding_cache_key(text):
-    """Generate a cache key for the given text"""
-    return hashlib.md5(text.encode('utf-8')).hexdigest()
 
 # Remove manual embedding functions since LangChain handles this
 
@@ -834,29 +849,6 @@ def get_movies():
             'count': 0
         })
 
-@app.route('/cache/clear', methods=['POST'])
-def clear_cache():
-    """Clear the embedding cache"""
-    global embedding_cache
-    with cache_lock:
-        cache_size_before = len(embedding_cache)
-        embedding_cache.clear()
-    logger.info(f"Cache cleared: {cache_size_before} entries removed")
-    return jsonify({
-        'status': 'success',
-        'message': f'Cache cleared: {cache_size_before} entries removed'
-    })
-
-@app.route('/cache/stats', methods=['GET'])
-def cache_stats():
-    """Get cache statistics"""
-    with cache_lock:
-        cache_size = len(embedding_cache)
-    return jsonify({
-        'cache_size': cache_size,
-        'max_cache_size': MAX_CACHE_SIZE,
-        'status': 'active'
-    })
 
 def initialize_chroma():
     """Initialize LangChain vector store with fallback options"""

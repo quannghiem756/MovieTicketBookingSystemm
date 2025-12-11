@@ -33,6 +33,8 @@ const en = {
 
   // Movie Card
   'movieCard.bookTicket': 'Book Ticket',
+  'movieCard.director': 'Director:',
+  'movieCard.cast': 'Cast:',
   'movieCard.mins': 'mins',
 
   // Now Showing Page
@@ -50,6 +52,7 @@ const en = {
   'movieDetails.noShowtimes': 'No showtimes available for this movie.',
   'movieDetails.select': 'Select',
   'movieDetails.watchTrailer': 'Watch Trailer',
+  'movieDetails.trailer': 'Trailer',
   'movieDetails.bookTicket': 'Book Ticket',
   'movieDetails.releaseDate': 'Release Date:',
   'movieDetails.overview': 'Overview',
@@ -168,6 +171,7 @@ const en = {
   'common.loading': 'Loading...',
   'common.error': 'An error occurred',
   'common.movieNotFound': 'Movie not found',
+  'common.close': 'Close',
   'common.back': 'Back',
 
   // Pagination

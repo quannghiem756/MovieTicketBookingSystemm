@@ -12,9 +12,10 @@ import {
   Divider,
   Chip,
   CircularProgress,
-  Alert
+  Alert,
+  Fab
 } from '@mui/material';
-import { Send, AutoAwesome } from '@mui/icons-material';
+import { Send, AutoAwesome, Minimize, ExpandMore } from '@mui/icons-material';
 import { getMovieRecommendations } from '../services/api';
 import { useTranslation } from '../context/I18nContext';
 
@@ -29,6 +30,7 @@ const MovieRecommendationChat = () => {
   ]);
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
+  const [minimized, setMinimized] = useState(false);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -102,26 +104,72 @@ const MovieRecommendationChat = () => {
     }
   };
 
+  const toggleMinimize = () => {
+    setMinimized(!minimized);
+  };
+
+  // If minimized, show only a small button with title and toggle icon
+  if (minimized) {
+    return (
+      <Fab
+        variant="extended"
+        onClick={toggleMinimize}
+        sx={{
+          position: 'fixed',
+          bottom: 20,
+          right: 20,
+          zIndex: 1000,
+          background: 'linear-gradient(45deg, #2196F3, #21CBF3)',
+          color: 'white',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
+          '&:hover': {
+            background: 'linear-gradient(45deg, #1976D2, #03A9F4)',
+          }
+        }}
+      >
+        <AutoAwesome sx={{ mr: 1 }} />
+        {t('recommendation.title')}
+        <ExpandMore
+          sx={{
+            ml: 1,
+            transform: 'rotate(180deg)',
+            transition: 'transform 0.3s ease'
+          }}
+        />
+      </Fab>
+    );
+  }
+
   return (
     <Paper
       sx={{
+        position: 'fixed',
+        bottom: 20,
+        right: 20,
+        width: '400px',
         height: '600px',
         display: 'flex',
         flexDirection: 'column',
         borderRadius: 4,
         border: '1px solid rgba(255,255,255,0.1)',
         background: 'rgba(30,30,30,0.7)',
-        backdropFilter: 'blur(10px)'
+        backdropFilter: 'blur(10px)',
+        zIndex: 1000,
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)'
       }}
     >
-      <Box sx={{ p: 3, borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+      <Box sx={{ p: 2, borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <AutoAwesome color="primary" />
           {t('recommendation.title')}
         </Typography>
-        <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
-          {t('recommendation.subtitle')}
-        </Typography>
+        <IconButton
+          onClick={toggleMinimize}
+          size="small"
+          sx={{ color: 'text.secondary' }}
+        >
+          <Minimize />
+        </IconButton>
       </Box>
 
       <Box sx={{ flex: 1, overflow: 'auto', p: 2 }}>

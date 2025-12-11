@@ -482,13 +482,13 @@ def get_recommendations():
 
         Just return the movie IDs as a JSON array of strings with no additional text or explanation:"""
 
-        # Choose LLM based on available API keys
-        if GEMINI_API_KEY:
-            # Use Google's Gemini
-            llm = ChatGoogleGenerativeAI(model="gemini-flash-latest", google_api_key=GEMINI_API_KEY)
-        elif OPENAI_API_KEY:
+        # # Choose LLM based on available API keys
+        # if GEMINI_API_KEY:
+        #     # Use Google's Gemini
+        #     llm = ChatGoogleGenerativeAI(model="gemini-flash-latest", google_api_key=GEMINI_API_KEY)
+        if OPENAI_API_KEY:
             # Use OpenAI's GPT
-            llm = ChatOpenAI(model="gpt-3.5-turbo", api_key=OPENAI_API_KEY)
+            llm = ChatOpenAI(model="gpt-5-mini", api_key=OPENAI_API_KEY)
         else:
             # Fallback to just the retrieved results
             recommendations = relevant_movies[:5]  # Take top 5 from retrieval
@@ -776,6 +776,13 @@ def classify_query_intent(query):
         else:
             response_text = str(response)
 
+        # Ensure response_text is a string and handle if it's a list
+        if isinstance(response_text, list):
+            # Convert any items in the list to strings before joining
+            response_text = ' '.join(str(item) for item in response_text)
+        elif not isinstance(response_text, str):
+            response_text = str(response_text)
+
         # Clean the response to extract the intent
         cleaned_response = response_text.strip().lower()
 
@@ -866,12 +873,6 @@ def initialize_chroma():
             logger.info("Using OpenAI embeddings")
         except Exception as e:
             logger.error(f"Error initializing OpenAI embeddings: {e}")
-    elif gemini_api_key:
-        try:
-            embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=gemini_api_key)
-            logger.info("Using Google Generative AI embeddings as fallback")
-        except Exception as e:
-            logger.error(f"Error initializing Google embeddings: {e}")
     else:
         logger.error("No API keys found - neither OPENAI_API_KEY nor GEMINI_API_KEY are set")
         return
@@ -901,8 +902,8 @@ if __name__ == '__main__':
     initialize_chroma()
 
     # Initialize the vector index when starting the service
-    # logger.info("Initializing vector index...")
-    # build_vector_index()
+    logger.info("Initializing vector index...")
+    build_vector_index()
 
     # Run the Flask app
     app.run(debug=False, host='0.0.0.0', port=5001)

@@ -66,6 +66,16 @@ function a11yProps(index) {
   };
 }
 
+// Helper function to extract YouTube video ID from URL
+const extractYouTubeVideoId = (url) => {
+  if (!url) return '';
+
+  // Regular expressions for different YouTube URL formats
+  const regExp = /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^#&?]{11})/;
+  const match = url.match(regExp);
+  return match ? match[1] : '';
+};
+
 const MovieDetails = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
@@ -539,19 +549,41 @@ const MovieDetails = () => {
           </IconButton>
         </DialogTitle>
         <DialogContent>
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 300 }}>
-            <Box sx={{ 
-              width: '100%', 
-              height: '100%', 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center',
-              bgcolor: 'rgba(0,0,0,0.5)',
-              borderRadius: 2
-            }}>
-              <PlayArrow sx={{ fontSize: 60, color: 'white' }} />
+          {movie && movie.trailerUrl ? (
+            <Box sx={{ width: '100%', position: 'relative', paddingBottom: '56.25%' /* 16:9 Aspect Ratio */ }}>
+              <iframe
+                src={`https://www.youtube.com/embed/${extractYouTubeVideoId(movie.trailerUrl)}`}
+                title="Movie Trailer"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: '8px'
+                }}
+              />
             </Box>
-          </Box>
+          ) : (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 300 }}>
+              <Box sx={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                bgcolor: 'rgba(0,0,0,0.5)',
+                borderRadius: 2
+              }}>
+                <Typography variant="h6" color="text.secondary">
+                  {t('common.movieNotFound')} - {t('movieDetails.trailer')}
+                </Typography>
+              </Box>
+            </Box>
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setTrailerOpen(false)} sx={{ borderRadius: 3, textTransform: 'none' }}>

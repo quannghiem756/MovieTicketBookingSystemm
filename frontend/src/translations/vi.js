@@ -24,6 +24,8 @@ const vi = {
 
   // Movie Card
   'movieCard.bookTicket': 'Đặt vé',
+  'movieCard.director': 'Đạo diễn:',
+  'movieCard.cast': 'Dàn diễn viên:',
   'movieCard.mins': 'phút',
 
   // Now Showing Page
@@ -41,6 +43,7 @@ const vi = {
   'movieDetails.noShowtimes': 'Không có lịch chiếu cho phim này.',
   'movieDetails.select': 'Chọn',
   'movieDetails.watchTrailer': 'Xem trailer',
+  'movieDetails.trailer': 'Trailer',
   'movieDetails.bookTicket': 'Đặt vé',
   'movieDetails.releaseDate': 'Ngày phát hành:',
   'movieDetails.overview': 'Tổng quan',
@@ -195,6 +198,7 @@ const vi = {
   'common.loading': 'Đang tải...',
   'common.error': 'Đã xảy ra lỗi',
   'common.movieNotFound': 'Không tìm thấy phim',
+  'common.close': 'Đóng',
   'common.back': 'Quay lại',
   'common.save': 'Lưu',
 

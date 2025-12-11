@@ -57,6 +57,8 @@ const en = {
   'movieDetails.releaseDate': 'Release Date:',
   'movieDetails.overview': 'Overview',
   'movieDetails.actor': 'Actor',
+  'movieDetails.selectDate': 'Select Date',
+  'movieDetails.selectShowtimeDate': 'Select Showtime Date',
 
   // Bookings Page
   'bookings.title': 'My Bookings',
@@ -172,6 +174,7 @@ const en = {
   'common.error': 'An error occurred',
   'common.movieNotFound': 'Movie not found',
   'common.close': 'Close',
+  'common.all': 'All',
   'common.back': 'Back',
 
   // Pagination

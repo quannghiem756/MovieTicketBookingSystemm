@@ -91,9 +91,9 @@ db.once('open', async () => {
           const randomLanguage = languages[Math.floor(Math.random() * languages.length)];
           
           // Set price based on format (IMAX is more expensive)
-          let basePrice = 12.99; // Standard price
-          if (randomFormat === 'IMAX') basePrice = 18.99;
-          else if (randomFormat === '3D') basePrice = 15.99;
+          let basePrice = 70000; // Standard price
+          if (randomFormat === 'IMAX') basePrice = 100000;
+          else if (randomFormat === '3D') basePrice = 120000;
           
           // Create showtime data
           const showtimeData = {

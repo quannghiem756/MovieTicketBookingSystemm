@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { 
-  Typography, 
-  Button, 
-  Grid, 
+import {
+  Typography,
+  Button,
+  Grid,
   Container,
   Box,
   Chip,
@@ -25,7 +25,11 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Divider
+  Divider,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from '@mui/material';
 import { 
   PlayArrow, 
@@ -83,6 +87,7 @@ const MovieDetails = () => {
   const [loading, setLoading] = useState(true);
   const [tabValue, setTabValue] = useState(0);
   const [trailerOpen, setTrailerOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
   const { t } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -96,7 +101,16 @@ const MovieDetails = () => {
           getShowtimesByMovieId(id)
         ]);
         setMovie(movieResponse.data);
-        setShowtimes(showtimesResponse.data || []);
+
+        // Filter showtimes by selected date if available
+        let filteredShowtimes = showtimesResponse.data || [];
+        if (selectedDate) {
+          const dateStr = selectedDate.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+          filteredShowtimes = filteredShowtimes.filter(st =>
+            new Date(st.showDate).toISOString().split('T')[0] === dateStr
+          );
+        }
+        setShowtimes(filteredShowtimes);
       } catch (error) {
         console.error('Error fetching movie details:', error);
       } finally {
@@ -105,7 +119,7 @@ const MovieDetails = () => {
     };
 
     fetchMovieDetails();
-  }, [id]);
+  }, [id, selectedDate]);
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
@@ -407,7 +421,51 @@ const MovieDetails = () => {
           <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, mb: 3 }}>
             {t('movieDetails.availableShowtimes')}
           </Typography>
-          
+
+          {/* Date Filter Section */}
+          <Box sx={{
+            mb: 3,
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
+            alignItems: { xs: 'flex-start', sm: 'center' },
+            gap: 2,
+            px: { xs: 0, md: 2 }
+          }}>
+            <FormControl
+              variant="outlined"
+              sx={{
+                minWidth: 200,
+                maxWidth: 300
+              }}
+            >
+              <InputLabel id="select-date-label">
+                {t('movieDetails.selectDate')}
+              </InputLabel>
+              <Select
+                labelId="select-date-label"
+                value={selectedDate ? selectedDate.toISOString().split('T')[0] : 'all'}
+                label={t('movieDetails.selectDate')}
+                onChange={(e) => {
+                  if (e.target.value === 'all') {
+                    setSelectedDate(null);
+                  } else {
+                    const date = new Date(e.target.value);
+                    setSelectedDate(date);
+                  }
+                }}
+              >
+                <MenuItem value="all">{t('common.all')}</MenuItem>
+                {Array.from(new Set(showtimes.map(st => new Date(st.showDate).toISOString().split('T')[0])))
+                  .sort()
+                  .map(date => (
+                    <MenuItem key={date} value={date}>
+                      {new Date(date).toLocaleDateString()}
+                    </MenuItem>
+                  ))}
+              </Select>
+            </FormControl>
+          </Box>
+
           {showtimes && showtimes.length > 0 ? (
             <Grid container spacing={3}>
               {showtimes.map((showtime) => (

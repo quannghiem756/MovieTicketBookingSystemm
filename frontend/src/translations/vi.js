@@ -52,6 +52,8 @@ const vi = {
   'movieDetails.format': 'Định dạng: ',
   'movieDetails.language': 'Ngôn ngữ: ',
   'movieDetails.price': 'Giá vé: ',
+  'movieDetails.selectDate': 'Chọn ngày',
+  'movieDetails.selectShowtimeDate': 'Chọn ngày chiếu',
 
 
   // Bookings Page
@@ -199,6 +201,7 @@ const vi = {
   'common.error': 'Đã xảy ra lỗi',
   'common.movieNotFound': 'Không tìm thấy phim',
   'common.close': 'Đóng',
+  'common.all': 'Tất cả',
   'common.back': 'Quay lại',
   'common.save': 'Lưu',
 

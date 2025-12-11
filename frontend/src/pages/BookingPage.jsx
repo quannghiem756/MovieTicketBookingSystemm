@@ -282,16 +282,23 @@ const BookingPage = () => {
           backdropFilter: 'blur(10px)'
         }}
       >
-        <Grid container spacing={3} alignItems="center">
-          <Grid item xs={12} md={2}>
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3, alignItems: 'center', width: '100%' }}>
+          <Box
+            sx={{
+              width: { xs: '100%', md: '16.666%' },
+              display: 'flex',
+              justifyContent: { xs: 'center', md: 'flex-start' },
+              mb: { xs: 2, md: 0 }
+            }}
+          >
             <Box
               component="img"
               src={movie.posterUrl || 'https://placehold.co/300x450/1a1a1a/cccccc?text=No+Image'}
               alt={movie.title}
               sx={{ width: '100%', borderRadius: 2, boxShadow: 2 }}
             />
-          </Grid>
-          <Grid item xs={12} md={10}>
+          </Box>
+          <Box sx={{ flex: 1 }}>
             <Typography variant="h4" component="h3" gutterBottom sx={{ fontWeight: 800 }}>
               {movie.title}
             </Typography>
@@ -340,8 +347,8 @@ const BookingPage = () => {
             <Typography variant="body1" color="textSecondary">
               {t('booking.selectedSeats')}: {selectedSeats.length} ({t('booking.total')}: {formatCurrency(totalPrice)})
             </Typography>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </Paper>
 
       {/* Seat selection */}

@@ -58,6 +58,7 @@ const en = {
   'movieDetails.overview': 'Overview',
   'movieDetails.actor': 'Actor',
   'movieDetails.selectDate': 'Select Date',
+  'movieDetails.availableShowtimes': 'Available Showtimes',
   'movieDetails.selectShowtimeDate': 'Select Showtime Date',
 
   // Bookings Page

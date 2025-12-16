@@ -155,7 +155,7 @@ const BookingDetailsPage = () => {
         >
           {t('common.back')}
         </Button>
-        
+
         <Typography
           variant="h3"
           component="h1"
@@ -170,7 +170,7 @@ const BookingDetailsPage = () => {
         >
           {t('bookings.details.title')}
         </Typography>
-        
+
         <Typography variant="h6" color="textSecondary">
           {t('bookings.details.subtitle')}
         </Typography>
@@ -198,7 +198,9 @@ const BookingDetailsPage = () => {
               }}>
                 <Box
                   component="img"
-                  src={booking.movie?.posterUrl || 'https://placehold.co/120x160/1a1a1a/cccccc?text=Movie'}
+                  src={booking.movie?.posterUrl && booking.movie.posterUrl.startsWith('/uploads/')
+                ? `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${booking.movie.posterUrl}`
+                : booking.movie?.posterUrl || 'https://placehold.co/120x160/1a1a1a/cccccc?text=Movie'}
                   alt={booking.movie?.title || 'Booking'}
                   sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />

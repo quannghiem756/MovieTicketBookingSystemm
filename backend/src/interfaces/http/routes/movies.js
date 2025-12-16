@@ -1,4 +1,5 @@
 const express = require('express');
+const upload = require('../middleware/upload');
 const MovieController = require('../controllers/MovieController');
 const MongoMovieRepository = require('../../../infrastructure/repositories/MongoMovieRepository');
 const MovieService = require('../../../application/MovieService');
@@ -18,8 +19,8 @@ router.get('/coming-soon', (req, res) => movieController.getComingSoon(req, res)
 router.get('/:id', (req, res) => movieController.getMovieById(req, res));
 
 // Protected routes (admin only)
-router.post('/', authenticate, authorizeAdmin, (req, res) => movieController.createMovie(req, res));
-router.put('/:id', authenticate, authorizeAdmin, (req, res) => movieController.updateMovie(req, res));
+router.post('/', authenticate, authorizeAdmin, upload.single('poster'), (req, res) => movieController.createMovie(req, res));
+router.put('/:id', authenticate, authorizeAdmin, upload.single('poster'), (req, res) => movieController.updateMovie(req, res));
 router.delete('/:id', authenticate, authorizeAdmin, (req, res) => movieController.deleteMovie(req, res));
 
 module.exports = router;

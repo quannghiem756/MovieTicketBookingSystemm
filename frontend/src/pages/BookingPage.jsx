@@ -293,7 +293,9 @@ const BookingPage = () => {
           >
             <Box
               component="img"
-              src={movie.posterUrl || 'https://placehold.co/300x450/1a1a1a/cccccc?text=No+Image'}
+              src={movie.posterUrl && movie.posterUrl.startsWith('/uploads/')
+                ? `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${movie.posterUrl}`
+                : movie.posterUrl || 'https://placehold.co/300x450/1a1a1a/cccccc?text=No+Image'}
               alt={movie.title}
               sx={{ width: '100%', borderRadius: 2, boxShadow: 2 }}
             />

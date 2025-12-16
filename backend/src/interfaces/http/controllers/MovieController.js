@@ -7,10 +7,44 @@ class MovieController {
 
   async createMovie(req, res) {
     try {
-      const movie = await this.movieService.createMovie(req.body);
+      // Process the request body to parse arrays that were sent as JSON strings
+      const processedBody = { ...req.body };
+
+      if (req.body.cast && typeof req.body.cast === 'string') {
+        try {
+          processedBody.cast = JSON.parse(req.body.cast);
+        } catch (e) {
+          // If JSON parsing fails, treat as comma-separated string
+          processedBody.cast = req.body.cast.split(',').map(item => item.trim()).filter(item => item);
+        }
+      }
+
+      if (req.body.genre && typeof req.body.genre === 'string') {
+        try {
+          processedBody.genre = JSON.parse(req.body.genre);
+        } catch (e) {
+          // If JSON parsing fails, treat as comma-separated string
+          processedBody.genre = req.body.genre.split(',').map(item => item.trim()).filter(item => item);
+        }
+      }
+
+      // If a file was uploaded, add the file path to the processed body
+      if (req.file) {
+        processedBody.posterUrl = `/uploads/${req.file.filename}`;
+      } else if (req.body.posterUrl) {
+        // If no file uploaded but URL provided (for cases where user doesn't want to upload an image)
+        processedBody.posterUrl = req.body.posterUrl;
+      }
+
+      const movie = await this.movieService.createMovie(processedBody);
       res.status(201).json(movie);
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      console.error('Create movie error:', error);
+      if (req.fileValidationError) {
+        res.status(400).json({ error: req.fileValidationError });
+      } else {
+        res.status(400).json({ error: error.message });
+      }
     }
   }
 
@@ -67,13 +101,47 @@ class MovieController {
 
   async updateMovie(req, res) {
     try {
-      const movie = await this.movieService.updateMovie(req.params.id, req.body);
+      // Process the request body to parse arrays that were sent as JSON strings
+      const processedBody = { ...req.body };
+
+      if (req.body.cast && typeof req.body.cast === 'string') {
+        try {
+          processedBody.cast = JSON.parse(req.body.cast);
+        } catch (e) {
+          // If JSON parsing fails, treat as comma-separated string
+          processedBody.cast = req.body.cast.split(',').map(item => item.trim()).filter(item => item);
+        }
+      }
+
+      if (req.body.genre && typeof req.body.genre === 'string') {
+        try {
+          processedBody.genre = JSON.parse(req.body.genre);
+        } catch (e) {
+          // If JSON parsing fails, treat as comma-separated string
+          processedBody.genre = req.body.genre.split(',').map(item => item.trim()).filter(item => item);
+        }
+      }
+
+      // If a file was uploaded, add the file path to the processed body
+      if (req.file) {
+        processedBody.posterUrl = `/uploads/${req.file.filename}`;
+      } else if (req.body.posterUrl) {
+        // If no new file was uploaded but there's a posterUrl in the request, keep it
+        processedBody.posterUrl = req.body.posterUrl;
+      }
+
+      const movie = await this.movieService.updateMovie(req.params.id, processedBody);
       if (!movie) {
         return res.status(404).json({ error: 'Movie not found' });
       }
       res.json(movie);
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      console.error('Update movie error:', error);
+      if (req.fileValidationError) {
+        res.status(400).json({ error: req.fileValidationError });
+      } else {
+        res.status(400).json({ error: error.message });
+      }
     }
   }
 

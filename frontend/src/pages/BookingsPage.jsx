@@ -22,13 +22,13 @@ import {
   Avatar
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
-import { 
-  Movie, 
-  AccessTime, 
-  CalendarToday, 
-  ConfirmationNumber, 
-  LocalCafe, 
-  LocalPlay, 
+import {
+  Movie,
+  AccessTime,
+  CalendarToday,
+  ConfirmationNumber,
+  LocalCafe,
+  LocalPlay,
   ArrowForward,
   Event,
   Schedule
@@ -61,7 +61,7 @@ const BookingsPage = () => {
     }
   }, [user]);
 
-  if (loading) 
+  if (loading)
     return (
       <Container maxWidth="lg" sx={{ py: 8 }}>
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '70vh' }}>
@@ -69,13 +69,13 @@ const BookingsPage = () => {
         </Box>
       </Container>
     );
-    
-  if (error) 
+
+  if (error)
     return (
       <Container maxWidth="lg" sx={{ py: 8 }}>
-        <Paper 
-          sx={{ 
-            p: { xs: 3, md: 6 }, 
+        <Paper
+          sx={{
+            p: { xs: 3, md: 6 },
             borderRadius: 4,
             textAlign: 'center',
             border: '1px solid rgba(255,255,255,0.1)',
@@ -103,11 +103,11 @@ const BookingsPage = () => {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Box sx={{ mb: 6 }}>
-        <Typography 
-          variant="h3" 
+        <Typography
+          variant="h3"
           component="h1"
-          sx={{ 
-            fontWeight: 800, 
+          sx={{
+            fontWeight: 800,
             mb: 2,
             background: 'linear-gradient(90deg, #ffffff 0%, #b3b3b3 100%)',
             backgroundClip: 'text',
@@ -121,13 +121,13 @@ const BookingsPage = () => {
           {t('bookings.subtitle')}
         </Typography>
       </Box>
-      
+
       {bookings.length > 0 ? (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
           {bookings.map(booking => (
             <Box key={booking.id} sx={{ flex: '1 1 auto' }}>
-              <Card 
-                sx={{ 
+              <Card
+                sx={{
                   borderRadius: 4,
                   border: '1px solid rgba(255,255,255,0.1)',
                   background: 'rgba(30,30,30,0.7)',
@@ -159,7 +159,9 @@ const BookingsPage = () => {
                       }}>
                         <Box
                           component="img"
-                          src={booking.movie?.posterUrl || 'https://placehold.co/80x80/1a1a1a/cccccc?text=Movie'}
+                          src={booking.movie?.posterUrl && booking.movie.posterUrl.startsWith('/uploads/')
+                            ? `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${booking.movie.posterUrl}`
+                            : booking.movie?.posterUrl || 'https://placehold.co/80x80/1a1a1a/cccccc?text=Movie'}
                           alt={booking.movie?.title || 'Booking'}
                           sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
@@ -313,9 +315,9 @@ const BookingsPage = () => {
                       </Button>
                     </Box>
                   </Box>
-                  
+
                   <Divider sx={{ my: 3, borderColor: 'rgba(255,255,255,0.1)' }} />
-                  
+
                   <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 2 }}>
                     <Box sx={{ textAlign: 'right' }}>
                       <Typography variant="body2" color="textSecondary">
@@ -325,8 +327,8 @@ const BookingsPage = () => {
                         {t('bookings.bookingDate')} {new Date(booking.bookingDate).toLocaleString()}
                       </Typography>
                     </Box>
-                    <Avatar 
-                      sx={{ 
+                    <Avatar
+                      sx={{
                         bgcolor: 'primary.main',
                         width: 40,
                         height: 40
@@ -341,9 +343,9 @@ const BookingsPage = () => {
           ))}
         </Box>
       ) : (
-        <Paper 
-          sx={{ 
-            p: { xs: 4, md: 8 }, 
+        <Paper
+          sx={{
+            p: { xs: 4, md: 8 },
             textAlign: 'center',
             border: '1px solid rgba(255,255,255,0.1)',
             background: 'rgba(30,30,30,0.7)',
@@ -361,9 +363,9 @@ const BookingsPage = () => {
           <Button
             variant="contained"
             href="/"
-            sx={{ 
-              borderRadius: 3, 
-              px: 4, 
+            sx={{
+              borderRadius: 3,
+              px: 4,
               py: 1.5,
               fontWeight: 600,
               textTransform: 'none'

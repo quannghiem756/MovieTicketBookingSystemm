@@ -11,12 +11,12 @@ class MongoMovieRepository extends MovieRepository {
       duration: movie.duration,
       genre: movie.genre,
       rating: movie.rating,
-      posterUrl: movie.posterUrl,
+      posterUrl: movie.posterUrl || '',
       trailerUrl: movie.trailerUrl,
       releaseDate: movie.releaseDate,
       endDate: movie.endDate
     });
-    
+
     const savedMovie = await movieDoc.save();
     movie.id = savedMovie._id;
     return movie;
@@ -25,7 +25,7 @@ class MongoMovieRepository extends MovieRepository {
   async findById(id) {
     const movieDoc = await MovieModel.findById(id);
     if (!movieDoc) return null;
-    
+
     return {
       id: movieDoc._id,
       title: movieDoc.title,
@@ -35,7 +35,7 @@ class MongoMovieRepository extends MovieRepository {
       duration: movieDoc.duration,
       genre: movieDoc.genre,
       rating: movieDoc.rating,
-      posterUrl: movieDoc.posterUrl,
+      posterUrl: movieDoc.posterUrl || '',
       trailerUrl: movieDoc.trailerUrl,
       releaseDate: movieDoc.releaseDate,
       endDate: movieDoc.endDate
@@ -56,7 +56,7 @@ class MongoMovieRepository extends MovieRepository {
       duration: doc.duration,
       genre: doc.genre,
       rating: doc.rating,
-      posterUrl: doc.posterUrl,
+      posterUrl: doc.posterUrl || '',
       trailerUrl: doc.trailerUrl,
       releaseDate: doc.releaseDate,
       endDate: doc.endDate
@@ -79,14 +79,14 @@ class MongoMovieRepository extends MovieRepository {
       duration: movie.duration,
       genre: movie.genre,
       rating: movie.rating,
-      posterUrl: movie.posterUrl,
+      posterUrl: movie.posterUrl || '',
       trailerUrl: movie.trailerUrl,
       releaseDate: movie.releaseDate,
       endDate: movie.endDate
     }, { new: true });
-    
+
     if (!updatedMovie) return null;
-    
+
     return {
       id: updatedMovie._id,
       title: updatedMovie.title,
@@ -111,7 +111,7 @@ class MongoMovieRepository extends MovieRepository {
   async findByTitle(title) {
     const movieDoc = await MovieModel.findOne({ title: new RegExp(title, 'i') });
     if (!movieDoc) return null;
-    
+
     return {
       id: movieDoc._id,
       title: movieDoc.title,
@@ -121,7 +121,7 @@ class MongoMovieRepository extends MovieRepository {
       duration: movieDoc.duration,
       genre: movieDoc.genre,
       rating: movieDoc.rating,
-      posterUrl: movieDoc.posterUrl,
+      posterUrl: movieDoc.posterUrl || '',
       trailerUrl: movieDoc.trailerUrl,
       releaseDate: movieDoc.releaseDate,
       endDate: movieDoc.endDate
@@ -131,12 +131,12 @@ class MongoMovieRepository extends MovieRepository {
   async findNowShowing(page = 1, limit = 10) {
     const today = new Date();
     const skip = (page - 1) * limit;
-    
+
     const movieDocs = await MovieModel.find({
       releaseDate: { $lte: today },
       endDate: { $gte: today }
     }).skip(skip).limit(limit);
-    
+
     const totalMovies = await MovieModel.countDocuments({
       releaseDate: { $lte: today },
       endDate: { $gte: today }
@@ -151,7 +151,7 @@ class MongoMovieRepository extends MovieRepository {
       duration: doc.duration,
       genre: doc.genre,
       rating: doc.rating,
-      posterUrl: doc.posterUrl,
+      posterUrl: doc.posterUrl || '',
       trailerUrl: doc.trailerUrl,
       releaseDate: doc.releaseDate,
       endDate: doc.endDate
@@ -186,7 +186,7 @@ class MongoMovieRepository extends MovieRepository {
       duration: doc.duration,
       genre: doc.genre,
       rating: doc.rating,
-      posterUrl: doc.posterUrl,
+      posterUrl: doc.posterUrl || '',
       trailerUrl: doc.trailerUrl,
       releaseDate: doc.releaseDate,
       endDate: doc.endDate

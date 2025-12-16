@@ -16,12 +16,12 @@ class MovieService {
       movieData.duration,
       movieData.genre,
       movieData.rating,
-      movieData.posterUrl,
+      movieData.posterUrl || '', // Use the uploaded file path or empty string
       movieData.trailerUrl,
       movieData.releaseDate,
       movieData.endDate
     );
-    
+
     return await this.movieRepository.create(movie);
   }
 
@@ -51,12 +51,12 @@ class MovieService {
       movieData.duration,
       movieData.genre,
       movieData.rating,
-      movieData.posterUrl,
+      movieData.posterUrl || '', // Use the uploaded file path or empty string
       movieData.trailerUrl,
       movieData.releaseDate,
       movieData.endDate
     );
-    
+
     return await this.movieRepository.update(id, movie);
   }
 

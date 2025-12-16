@@ -50,7 +50,9 @@ const HeroSection = ({ movie }) => {
       {movie?.posterUrl && (
         <Box
           component="img"
-          src={movie.posterUrl}
+          src={movie.posterUrl.startsWith('/uploads/')
+            ? `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${movie.posterUrl}`
+            : movie.posterUrl}
           alt={movie.title}
           sx={{
             position: 'absolute',

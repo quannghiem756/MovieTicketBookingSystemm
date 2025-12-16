@@ -52,7 +52,8 @@ const MovieForm = () => {
     duration: '',
     genre: '',
     rating: '',
-    posterUrl: '',
+    posterFile: null,  // Changed from posterUrl to posterFile
+    posterUrl: '',     // For displaying current image when editing
     trailerUrl: '',
     releaseDate: '',
     endDate: ''
@@ -165,14 +166,14 @@ const MovieForm = () => {
 
   const handleShowtimeSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       const showtimeData = {
         ...showtimeForm,
         movieId: id,
         price: parseFloat(showtimeForm.price) || 0
       };
-      
+
       if (editingShowtimeId) {
         // Update existing showtime
         await updateShowtime(editingShowtimeId, showtimeData);
@@ -180,7 +181,7 @@ const MovieForm = () => {
         // Create new showtime
         await createShowtime(showtimeData);
       }
-      
+
       // Refresh showtimes
       await fetchShowtimes();
       closeShowtimeForm();
@@ -196,7 +197,7 @@ const MovieForm = () => {
 
   const handleDeleteShowtimeConfirm = async () => {
     if (!showtimeToDelete) return;
-    
+
     try {
       await deleteShowtime(showtimeToDelete.id);
       await fetchShowtimes();
@@ -227,18 +228,46 @@ const MovieForm = () => {
     setError('');
 
     try {
-      // Prepare data for submission
-      const movieData = {
-        ...formData,
-        cast: formData.cast.split(',').map(item => item.trim()).filter(item => item),
-        genre: formData.genre.split(',').map(item => item.trim()).filter(item => item),
-        duration: parseInt(formData.duration) || 0
-      };
+      // Prepare data for submission - use FormData for file upload
+      const formDataToSend = new FormData();
+
+      // Add all other fields
+      formDataToSend.append('title', formData.title);
+      formDataToSend.append('director', formData.director);
+      formDataToSend.append('synopsis', formData.synopsis);
+      formDataToSend.append('duration', parseInt(formData.duration) || 0);
+      formDataToSend.append('rating', formData.rating);
+      formDataToSend.append('trailerUrl', formData.trailerUrl);
+      formDataToSend.append('releaseDate', formData.releaseDate);
+      formDataToSend.append('endDate', formData.endDate);
+
+      // Add cast and genre as arrays
+      const castArray = formData.cast.split(',').map(item => item.trim()).filter(item => item);
+      const genreArray = formData.genre.split(',').map(item => item.trim()).filter(item => item);
+
+      formDataToSend.append('cast', JSON.stringify(castArray));
+      formDataToSend.append('genre', JSON.stringify(genreArray));
+
+      // Add image file if selected
+      if (formData.posterFile) {
+        formDataToSend.append('poster', formData.posterFile);
+      } else if (isEdit && formData.posterUrl) {
+        // If editing and no new file selected, keep the existing URL
+        formDataToSend.append('posterUrl', formData.posterUrl);
+      }
 
       if (isEdit) {
-        await api.put(`/movies/${id}`, movieData);
+        await api.put(`/movies/${id}`, formDataToSend, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
       } else {
-        await api.post('/movies', movieData);
+        await api.post('/movies', formDataToSend, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
       }
 
       navigate('/admin/movies');
@@ -385,13 +414,58 @@ const MovieForm = () => {
 
             <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' }, gap: 3 }}>
               <FormControl fullWidth sx={{ width: "100%" }}>
-                <TextField
-                  fullWidth
-                  label={t('admin.movieForm.posterUrl')}
-                  name="posterUrl"
-                  value={formData.posterUrl}
-                  onChange={handleChange}
-                />
+                {/* Image Upload Section */}
+                <Box>
+                  <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                    {t('admin.movieForm.posterImage')}
+                  </Typography>
+                  <input
+                    accept="image/*"
+                    id="poster-upload"
+                    type="file"
+                    style={{ display: 'none' }}
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        setFormData({
+                          ...formData,
+                          posterFile: file,
+                          posterUrl: URL.createObjectURL(file) // Preview the selected image
+                        });
+                      }
+                    }}
+                  />
+                  <label htmlFor="poster-upload">
+                    <Button
+                      variant="outlined"
+                      component="span"
+                      sx={{ mb: 1 }}
+                    >
+                      {t('admin.movieForm.selectImage')}
+                    </Button>
+                  </label>
+                  {formData.posterUrl && !formData.posterFile && !formData.posterUrl.startsWith('/uploads/') && (
+                    <Typography variant="body2" sx={{ mb: 1 }}>
+                      {t('admin.movieForm.currentImage')}: {formData.posterUrl.split('/').pop()}
+                    </Typography>
+                  )}
+                  {formData.posterFile && (
+                    <Typography variant="body2" sx={{ mb: 1 }}>
+                      {t('admin.movieForm.selectedFile')}: {formData.posterFile.name}
+                    </Typography>
+                  )}
+                  {formData.posterUrl && (
+                    <Box sx={{ mt: 1 }}>
+                      <img
+                        src={formData.posterUrl && formData.posterUrl.startsWith('/uploads/')
+                          ? `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${formData.posterUrl}`
+                          : formData.posterUrl}
+                        alt={t('admin.movieForm.posterPreview')}
+                        style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'cover', border: '1px solid #ddd', borderRadius: '4px' }}
+                      />
+                    </Box>
+                  )}
+                </Box>
               </FormControl>
 
               <FormControl fullWidth sx={{ width: "100%" }}>
@@ -471,14 +545,14 @@ const MovieForm = () => {
                       <TableCell>{showtime.language}</TableCell>
                       <TableCell>{formatCurrency(showtime.price)}</TableCell>
                       <TableCell>
-                        <IconButton 
+                        <IconButton
                           onClick={() => openShowtimeForm(showtime)}
                           size="small"
                           sx={{ mr: 1 }}
                         >
                           <Edit />
                         </IconButton>
-                        <IconButton 
+                        <IconButton
                           onClick={() => handleDeleteShowtimeClick(showtime)}
                           size="small"
                           color="error"
@@ -586,8 +660,8 @@ const MovieForm = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={closeShowtimeForm}>{t('admin.movieForm.cancel')}</Button>
-          <Button 
-            variant="contained" 
+          <Button
+            variant="contained"
             onClick={handleShowtimeSubmit}
             startIcon={loading ? <CircularProgress size={20} /> : <Save />}
             disabled={loading}

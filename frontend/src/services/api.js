@@ -3,6 +3,50 @@ import axios from 'axios';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
+// Function to process movie data to handle uploaded image URLs
+const processMovieData = (data) => {
+  if (!data) return data;
+
+  // If we have a movie object with posterUrl
+  if (data.posterUrl && data.posterUrl.startsWith('/uploads/')) {
+    return {
+      ...data,
+      // Prepend the full backend URL to the relative upload path
+      posterUrl: `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${data.posterUrl}`
+    };
+  }
+
+  return data;
+};
+
+// Function to process an array of movies (for pagination responses or lists)
+const processMovieArray = (data) => {
+  if (!data) return data;
+
+  // If it's an array of movies
+  if (Array.isArray(data)) {
+    return data.map(movie => processMovieData(movie));
+  }
+
+  // If it's a pagination response (with movies array inside)
+  if (data.movies && Array.isArray(data.movies)) {
+    return {
+      ...data,
+      movies: data.movies.map(movie => processMovieData(movie))
+    };
+  }
+
+  // If it's a single movie response (has data property)
+  if (data.data) {
+    return {
+      ...data,
+      data: processMovieData(data.data)
+    };
+  }
+
+  return data;
+};
+
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -24,9 +68,31 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor to handle token refresh
+// Response interceptor to handle token refresh and image URL fixes
 api.interceptors.response.use(
   (response) => {
+    // Process the response data to handle uploaded image URLs
+    if (response.config.url.includes('/movies')) {
+      response.data = processMovieArray(response.data);
+    } else if (response.config.url.match(/\/movies\/\w+$/) && !response.config.url.includes('/showtimes')) {
+      // Handle single movie retrieval
+      if (response.data && response.data.posterUrl) {
+        response.data = processMovieData(response.data);
+      }
+    } else if (response.config.url.includes('/bookings')) {
+      // Handle booking responses that might include movie data with posters
+      if (response.data && response.data.movie && response.data.movie.posterUrl) {
+        response.data.movie = processMovieData(response.data.movie);
+      } else if (response.data && Array.isArray(response.data)) {
+        response.data = response.data.map(booking => {
+          if (booking.movie && booking.movie.posterUrl) {
+            return { ...booking, movie: processMovieData(booking.movie) };
+          }
+          return booking;
+        });
+      }
+    }
+
     return response;
   },
   async (error) => {

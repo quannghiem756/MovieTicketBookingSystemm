@@ -31,13 +31,13 @@ import {
   Select,
   MenuItem
 } from '@mui/material';
-import { 
-  PlayArrow, 
-  CalendarToday, 
-  AccessTime, 
-  Star, 
+import {
+  PlayArrow,
+  CalendarToday,
+  AccessTime,
+  Star,
   ArrowBack,
-  Movie, 
+  Movie,
   Close
 } from '@mui/icons-material';
 import { getMovieById, getShowtimesByMovieId } from '../services/api';
@@ -129,9 +129,9 @@ const MovieDetails = () => {
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 3 }}>
-          <Button 
-            component={Link} 
-            to="/" 
+          <Button
+            component={Link}
+            to="/"
             startIcon={<ArrowBack />}
             variant="outlined"
             sx={{ borderRadius: 3, textTransform: 'none' }}
@@ -161,9 +161,9 @@ const MovieDetails = () => {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 3 }}>
-        <Button 
-          component={Link} 
-          to="/" 
+        <Button
+          component={Link}
+          to="/"
           startIcon={<ArrowBack />}
           variant="outlined"
           sx={{ borderRadius: 3, textTransform: 'none' }}
@@ -173,9 +173,9 @@ const MovieDetails = () => {
       </Box>
 
       {/* Movie Header */}
-      <Box sx={{ 
-        position: 'relative', 
-        borderRadius: 4, 
+      <Box sx={{
+        position: 'relative',
+        borderRadius: 4,
         overflow: 'hidden',
         mb: 4,
         height: { xs: 400, md: 500 },
@@ -193,7 +193,9 @@ const MovieDetails = () => {
         {movie.posterUrl && (
           <Box
             component="img"
-            src={movie.posterUrl}
+            src={movie.posterUrl.startsWith('/uploads/')
+              ? `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${movie.posterUrl}`
+              : movie.posterUrl}
             alt={movie.title}
             sx={{
               position: 'absolute',
@@ -206,7 +208,7 @@ const MovieDetails = () => {
             }}
           />
         )}
-        
+
         <Box
           sx={{
             position: 'absolute',
@@ -222,7 +224,7 @@ const MovieDetails = () => {
         >
           <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, alignItems: { xs: 'flex-start', md: 'flex-end' }, gap: 4, width: '100%' }}>
             {/* Movie Poster */}
-            <Box sx={{ 
+            <Box sx={{
               flexShrink: 0,
               width: { xs: 120, md: 180 },
               height: { xs: 160, md: 240 },
@@ -234,7 +236,9 @@ const MovieDetails = () => {
               {movie.posterUrl && (
                 <Box
                   component="img"
-                  src={movie.posterUrl}
+                  src={movie.posterUrl.startsWith('/uploads/')
+                    ? `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${movie.posterUrl}`
+                    : movie.posterUrl}
                   alt={movie.title}
                   sx={{
                     width: '100%',
@@ -244,14 +248,14 @@ const MovieDetails = () => {
                 />
               )}
             </Box>
-            
+
             {/* Movie Info */}
             <Box sx={{ flex: 1, mb: { xs: 2, md: 0 } }}>
-              <Typography 
-                variant={isMobile ? "h4" : "h2"} 
-                component="h1" 
+              <Typography
+                variant={isMobile ? "h4" : "h2"}
+                component="h1"
                 gutterBottom
-                sx={{ 
+                sx={{
                   color: 'white',
                   fontWeight: 800,
                   textShadow: '0 2px 10px rgba(0,0,0,0.8)',
@@ -260,10 +264,10 @@ const MovieDetails = () => {
               >
                 {movie.title}
               </Typography>
-              
-              <Stack 
-                direction="row" 
-                spacing={2} 
+
+              <Stack
+                direction="row"
+                spacing={2}
                 flexWrap="wrap"
                 sx={{ mb: 2 }}
               >
@@ -273,14 +277,14 @@ const MovieDetails = () => {
                     {movie.duration} {t('movieCard.mins')}
                   </Typography>
                 </Stack>
-                
+
                 <Stack direction="row" alignItems="center" spacing={1}>
                   <Star sx={{ color: '#FFD700', fontSize: '1.2rem' }} />
                   <Typography variant="h6" color="textSecondary" sx={{ color: 'rgba(255,255,255,0.9)' }}>
                     {movie.rating}
                   </Typography>
                 </Stack>
-                
+
                 <Stack direction="row" alignItems="center" spacing={1}>
                   <CalendarToday sx={{ color: 'primary.main', fontSize: '1.2rem' }} />
                   <Typography variant="h6" color="textSecondary" sx={{ color: 'rgba(255,255,255,0.9)' }}>
@@ -288,7 +292,7 @@ const MovieDetails = () => {
                   </Typography>
                 </Stack>
               </Stack>
-              
+
               <Stack direction="row" flexWrap="wrap" spacing={1} sx={{ mb: 3 }}>
                 {movie.genre?.map((g, index) => (
                   <Chip
@@ -304,7 +308,7 @@ const MovieDetails = () => {
                   />
                 ))}
               </Stack>
-              
+
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems={{ xs: 'flex-start', sm: 'center' }}>
                 <Button
                   variant="contained"
@@ -312,9 +316,9 @@ const MovieDetails = () => {
                   size="large"
                   startIcon={<PlayArrow />}
                   onClick={() => setTrailerOpen(true)}
-                  sx={{ 
-                    borderRadius: 3, 
-                    px: 3, 
+                  sx={{
+                    borderRadius: 3,
+                    px: 3,
                     py: 1.5,
                     fontWeight: 700,
                     textTransform: 'none',
@@ -324,16 +328,16 @@ const MovieDetails = () => {
                 >
                   {t('movieDetails.watchTrailer')}
                 </Button>
-                
+
                 <Button
                   variant="outlined"
                   color="secondary"
                   size="large"
                   component={Link}
                   to={`/book/${movie.id}/${showtimes[0]?.id || ''}`}
-                  sx={{ 
-                    borderRadius: 3, 
-                    px: 3, 
+                  sx={{
+                    borderRadius: 3,
+                    px: 3,
                     py: 1.5,
                     fontWeight: 700,
                     textTransform: 'none',
@@ -355,8 +359,8 @@ const MovieDetails = () => {
       </Box>
 
       {/* Tabs */}
-      <Paper 
-        sx={{ 
+      <Paper
+        sx={{
           borderRadius: 4,
           overflow: 'hidden',
           border: '1px solid rgba(255,255,255,0.1)',
@@ -395,7 +399,7 @@ const MovieDetails = () => {
           <Typography variant="body1" paragraph sx={{ lineHeight: 1.8, color: 'text.secondary' }}>
             {movie.synopsis}
           </Typography>
-          
+
           <Grid container spacing={4} sx={{ mt: 4 }}>
             <Grid item xs={12} md={6}>
               <Typography variant="h6" gutterBottom sx={{ fontWeight: 700, color: 'primary.main', mb: 2 }}>
@@ -470,9 +474,9 @@ const MovieDetails = () => {
             <Grid container spacing={3}>
               {showtimes.map((showtime) => (
                 <Grid item key={showtime.id} xs={12} sm={6} md={4}>
-                  <Card sx={{ 
-                    height: '100%', 
-                    display: 'flex', 
+                  <Card sx={{
+                    height: '100%',
+                    display: 'flex',
                     flexDirection: 'column',
                     border: '1px solid rgba(255,255,255,0.1)',
                     borderRadius: 3,
@@ -490,7 +494,7 @@ const MovieDetails = () => {
                           {new Date(showtime.showDate).toLocaleDateString()}
                         </Typography>
                       </Stack>
-                      
+
                       <Typography variant="body1" gutterBottom>
                         <strong>{t('movieDetails.time')}:</strong> {showtime.showTime}
                       </Typography>
@@ -505,12 +509,12 @@ const MovieDetails = () => {
                       </Typography>
                     </CardContent>
                     <Box sx={{ p: 2, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-                      <Button 
-                        variant="contained" 
+                      <Button
+                        variant="contained"
                         fullWidth
-                        component={Link} 
+                        component={Link}
                         to={`/book/${movie.id}/${showtime.id}`}
-                        sx={{ 
+                        sx={{
                           borderRadius: 3,
                           py: 1.5,
                           fontWeight: 700,
@@ -536,12 +540,12 @@ const MovieDetails = () => {
           <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, mb: 3 }}>
             {t('movieDetails.cast')}
           </Typography>
-          
+
           <Grid container spacing={3}>
             {movie.cast && Array.isArray(movie.cast) && movie.cast.map((actor, index) => (
               <Grid item key={index} xs={6} sm={4} md={3}>
-                <Card sx={{ 
-                  textAlign: 'center', 
+                <Card sx={{
+                  textAlign: 'center',
                   border: '1px solid rgba(255,255,255,0.1)',
                   borderRadius: 3,
                   overflow: 'hidden',
@@ -551,16 +555,16 @@ const MovieDetails = () => {
                     boxShadow: 3
                   }
                 }}>
-                  <Box sx={{ 
-                    height: 150, 
-                    display: 'flex', 
-                    alignItems: 'center', 
+                  <Box sx={{
+                    height: 150,
+                    display: 'flex',
+                    alignItems: 'center',
                     justifyContent: 'center',
                     bgcolor: 'rgba(255,255,255,0.1)'
                   }}>
-                    <Avatar 
-                      sx={{ 
-                        width: 80, 
+                    <Avatar
+                      sx={{
+                        width: 80,
                         height: 80,
                         fontSize: '2rem',
                         bgcolor: 'primary.main'
@@ -583,7 +587,7 @@ const MovieDetails = () => {
           </Grid>
         </TabPanel>
       </Paper>
-      
+
       {/* Trailer Dialog */}
       <Dialog
         open={trailerOpen}

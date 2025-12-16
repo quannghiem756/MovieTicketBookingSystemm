@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { 
-  Card, 
-  CardContent, 
-  CardMedia, 
-  Typography, 
-  Button, 
-  Box, 
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Button,
+  Box,
   Chip,
   Rating,
   Stack,
@@ -35,10 +35,10 @@ const MovieCard = ({ movie }) => {
 
   if (!movie) {
     return (
-      <Card 
-        sx={{ 
-          height: '100%', 
-          display: 'flex', 
+      <Card
+        sx={{
+          height: '100%',
+          display: 'flex',
           flexDirection: 'column',
           borderRadius: 4,
           overflow: 'hidden'
@@ -55,10 +55,10 @@ const MovieCard = ({ movie }) => {
   }
 
   return (
-    <Card 
-      sx={{ 
-        height: '100%', 
-        display: 'flex', 
+    <Card
+      sx={{
+        height: '100%',
+        display: 'flex',
         flexDirection: 'column',
         borderRadius: 4,
         overflow: 'hidden',
@@ -75,18 +75,20 @@ const MovieCard = ({ movie }) => {
     >
       <Box sx={{ position: 'relative', overflow: 'hidden' }}>
         {!imageLoaded && !imageError && (
-          <Skeleton 
-            variant="rectangular" 
-            height={isMobile ? 220 : 300} 
+          <Skeleton
+            variant="rectangular"
+            height={isMobile ? 220 : 300}
             sx={{ borderRadius: 0 }}
           />
         )}
-        
+
         {!imageError ? (
           <CardMedia
             component="img"
             height={isMobile ? 220 : 300}
-            image={movie.posterUrl || 'https://placehold.co/400x600/1a1a1a/cccccc?text=No+Image'}
+            image={movie.posterUrl && movie.posterUrl.startsWith('/uploads/')
+              ? `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${movie.posterUrl}`
+              : movie.posterUrl || 'https://placehold.co/400x600/1a1a1a/cccccc?text=No+Image'}
             alt={movie.title}
             sx={{
               transition: 'transform 0.4s ease',
@@ -111,9 +113,9 @@ const MovieCard = ({ movie }) => {
             }}
           />
         )}
-        
+
         {/* Overlay on hover */}
-        <Box 
+        <Box
           className="movie-overlay"
           sx={{
             position: 'absolute',
@@ -146,7 +148,7 @@ const MovieCard = ({ movie }) => {
             {t('movieCard.bookTicket')}
           </Button>
         </Box>
-        
+
         {/* Rating badge */}
         <Chip
           label={`${movie.rating || 'PG-13'}`}
@@ -161,7 +163,7 @@ const MovieCard = ({ movie }) => {
             fontWeight: 600,
           }}
         />
-        
+
         {/* Duration badge */}
         {movie.duration && (
           <Chip
@@ -180,13 +182,13 @@ const MovieCard = ({ movie }) => {
           />
         )}
       </Box>
-      
+
       <CardContent sx={{ flexGrow: 1, p: 3 }}>
-        <Typography 
-          variant="h6" 
+        <Typography
+          variant="h6"
           component="div"
           gutterBottom
-          sx={{ 
+          sx={{
             fontWeight: 700,
             minHeight: '60px',
             overflow: 'hidden',
@@ -198,7 +200,7 @@ const MovieCard = ({ movie }) => {
         >
           {movie.title}
         </Typography>
-        
+
         <Stack direction="row" spacing={1} sx={{ mb: 2, alignItems: 'center' }}>
           {movie.genre && Array.isArray(movie.genre) && movie.genre.slice(0, 2).map((g, index) => (
             <Chip
@@ -214,12 +216,12 @@ const MovieCard = ({ movie }) => {
             />
           ))}
         </Stack>
-        
+
         {movie.director && (
-          <Typography 
-            variant="body2" 
-            color="textSecondary" 
-            sx={{ 
+          <Typography
+            variant="body2"
+            color="textSecondary"
+            sx={{
               mb: 1,
               display: '-webkit-box',
               WebkitLineClamp: 1,
@@ -230,12 +232,12 @@ const MovieCard = ({ movie }) => {
             <strong>{t('movieCard.director')}:</strong> {movie.director}
           </Typography>
         )}
-        
+
         {movie.cast && Array.isArray(movie.cast) && movie.cast.length > 0 && (
-          <Typography 
-            variant="body2" 
+          <Typography
+            variant="body2"
             color="textSecondary"
-            sx={{ 
+            sx={{
               mb: 2,
               display: '-webkit-box',
               WebkitLineClamp: 2,
@@ -247,7 +249,7 @@ const MovieCard = ({ movie }) => {
             <strong>{t('movieCard.cast')}:</strong> {movie.cast.slice(0, 3).join(', ')}
           </Typography>
         )}
-        
+
         {/* Rating display */}
         <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
           <Star sx={{ color: '#FFD700', fontSize: '1rem' }} />
@@ -255,13 +257,13 @@ const MovieCard = ({ movie }) => {
             {movie.rating || 'PG-13'}
           </Typography>
         </Stack>
-        
+
         {/* Synopsis for larger screens */}
-        <Typography 
-          variant="body2" 
-          color="textSecondary" 
+        <Typography
+          variant="body2"
+          color="textSecondary"
           paragraph
-          sx={{ 
+          sx={{
             display: { xs: 'none', md: 'block' },
             minHeight: '60px',
             overflow: 'hidden',
@@ -272,16 +274,16 @@ const MovieCard = ({ movie }) => {
         >
           {movie.synopsis}
         </Typography>
-        
+
         {/* Book button for mobile */}
         <Box sx={{ display: { xs: 'block', md: 'none' }, mt: 'auto', pt: 2 }}>
-          <Button 
-            variant="contained" 
+          <Button
+            variant="contained"
             color="primary"
-            component={Link} 
+            component={Link}
             to={`/movie/${movie.id}`}
             fullWidth
-            sx={{ 
+            sx={{
               borderRadius: 3,
               py: 1.5,
               fontWeight: 700,

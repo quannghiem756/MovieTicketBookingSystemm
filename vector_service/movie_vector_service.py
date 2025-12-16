@@ -901,9 +901,9 @@ if __name__ == '__main__':
     logger.info("Initializing LangChain vector store...")
     initialize_chroma()
 
-    # Initialize the vector index when starting the service
-    logger.info("Initializing vector index...")
-    build_vector_index()
+    # # Initialize the vector index when starting the service
+    # logger.info("Initializing vector index...")
+    # build_vector_index()
 
     # Run the Flask app
     app.run(debug=False, host='0.0.0.0', port=5001)

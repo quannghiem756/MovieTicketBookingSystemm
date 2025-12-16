@@ -88,6 +88,8 @@ router.post('/momo/callback', async (req, res) => {
           booking.status = 'confirmed';
           booking.paymentId = transId; // Store MoMo transaction ID
           await bookingRepository.update(orderId, booking);
+          console.log(`Booking ${orderId} marked as confirmed.`);
+
         }
 
         console.log(`MoMo Payment successful for booking ${orderId}, transaction ID: ${transId}`);
@@ -132,6 +134,25 @@ router.post('/momo/callback', async (req, res) => {
 router.get('/momo/return', async (req, res) => {
   try {
     const { orderId, resultCode, message } = req.query;
+
+    // Process booking status update on return as well since callback might not always trigger
+    if (orderId && resultCode) {
+      const booking = await bookingRepository.findById(orderId);
+      if (booking) {
+        // Update booking status based on result code
+        if (parseInt(resultCode) === 0) {
+          // Payment successful
+          booking.status = 'confirmed';
+          await bookingRepository.update(orderId, booking);
+          console.log(`Booking ${orderId} marked as confirmed from return handler.`);
+        } else {
+          // Payment failed
+          booking.status = 'cancelled'; // or 'failed' depending on your business logic
+          await bookingRepository.update(orderId, booking);
+          console.log(`Booking ${orderId} marked as cancelled from return handler due to payment failure.`);
+        }
+      }
+    }
 
     // Redirect user to frontend payment result page
     let redirectUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/payment/result?bookingId=${orderId}&paymentMethod=momo`;

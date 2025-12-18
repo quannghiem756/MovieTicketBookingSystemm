@@ -40,7 +40,7 @@ import {
   Movie,
   Close
 } from '@mui/icons-material';
-import { getMovieById, getShowtimesByMovieId } from '../services/api';
+import { getMovieById, getShowtimesByMovieId, getFutureShowtimesByMovieId } from '../services/api';
 import { useTranslation } from '../context/I18nContext';
 import { formatCurrency } from '../utils/currency';
 
@@ -96,28 +96,51 @@ const MovieDetails = () => {
     const fetchMovieDetails = async () => {
       try {
         setLoading(true);
-        const [movieResponse, showtimesResponse] = await Promise.all([
+        const [movieResponse, futureShowtimesResponse] = await Promise.all([
           getMovieById(id),
-          getShowtimesByMovieId(id)
+          getFutureShowtimesByMovieId(id)  // Use the new API to only get future showtimes
         ]);
         setMovie(movieResponse.data);
 
         // Filter showtimes by selected date if available
-        let filteredShowtimes = showtimesResponse.data || [];
-        if (selectedDate) {
-          const dateStr = selectedDate.toISOString().split('T')[0]; // Format: YYYY-MM-DD
-          filteredShowtimes = filteredShowtimes.filter(st =>
-            new Date(st.showDate).toISOString().split('T')[0] === dateStr
-          );
+        let filteredShowtimes = futureShowtimesResponse.data || [];
+        // if (selectedDate) {
+        //   const dateStr = selectedDate.toLocaleDateString('en-CA'); // Format: YYYY-MM-DD
+        //   console.log('Filtering showtimes for date:', dateStr);
+        //   filteredShowtimes = filteredShowtimes.filter(st =>
+        //     new Date(st.showDate).toLocaleDateString('en-CA') === dateStr
+        //   );
+        // } 
+        // else {
+        //   // If no selected date, default to today's showtimes
+        //   const today = new Date();
+        //   today.setHours(0, 0, 0, 0); // Set to start of today
+        //   console.log('Defaulting to today:', today);
+        //   setSelectedDate(today);
+        //   // const dateStr = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+        //   const dateStr = today.toLocaleDateString('en-CA');
+
+        //   filteredShowtimes = filteredShowtimes.filter(st =>
+        //     new Date(st.showDate).toLocaleDateString('en-CA') === dateStr
+        //   );
+        //   console.log('Filtered showtimes for today:', filteredShowtimes);
+        // }
+        if (filteredShowtimes.length > 0 && !selectedDate){
+          const dates = filteredShowtimes.map(st => new Date(st.showDate).toLocaleDateString('en-CA'));
+          const earliest = dates.sort()[0];
+    
+          // Set state to a Date object created from that string
+          setSelectedDate(new Date(earliest));
+          setShowtimes(filteredShowtimes);
         }
-        setShowtimes(filteredShowtimes);
+       
       } catch (error) {
         console.error('Error fetching movie details:', error);
       } finally {
         setLoading(false);
       }
     };
-
+    
     fetchMovieDetails();
   }, [id, selectedDate]);
 
@@ -447,7 +470,7 @@ const MovieDetails = () => {
               </InputLabel>
               <Select
                 labelId="select-date-label"
-                value={selectedDate ? selectedDate.toISOString().split('T')[0] : 'all'}
+                value={selectedDate ? selectedDate.toLocaleDateString('en-CA') : 'all'}
                 label={t('movieDetails.selectDate')}
                 onChange={(e) => {
                   if (e.target.value === 'all') {
@@ -459,11 +482,11 @@ const MovieDetails = () => {
                 }}
               >
                 <MenuItem value="all">{t('common.all')}</MenuItem>
-                {Array.from(new Set(showtimes.map(st => new Date(st.showDate).toISOString().split('T')[0])))
+                {Array.from(new Set(showtimes.map(st => new Date(st.showDate).toLocaleDateString('en-CA'))))
                   .sort()
                   .map(date => (
                     <MenuItem key={date} value={date}>
-                      {new Date(date).toLocaleDateString()}
+                      {new Date(date).toLocaleDateString('vi-VN')}
                     </MenuItem>
                   ))}
               </Select>

@@ -44,6 +44,15 @@ class ShowtimeController {
     }
   }
 
+  async getFutureShowtimesByMovieId(req, res) {
+    try {
+      const showtimes = await this.showtimeService.getFutureShowtimesByMovieId(req.params.movieId);
+      res.json(showtimes);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
   async updateShowtime(req, res) {
     try {
       const showtime = await this.showtimeService.updateShowtime(req.params.id, req.body);

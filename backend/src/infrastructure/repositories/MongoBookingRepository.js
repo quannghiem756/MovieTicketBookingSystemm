@@ -351,14 +351,70 @@ class MongoBookingRepository extends BookingRepository {
         $gte: new Date(Date.now() - 10 * 60 * 1000) // Last 10 minutes
       }
     });
-    
+
     // Extract all seat IDs from pending bookings
     const lockedSeats = [];
     pendingBookings.forEach(booking => {
       lockedSeats.push(...booking.seatIds);
     });
-    
+
     return lockedSeats;
+  }
+
+  async countAll() {
+    return await BookingModel.countDocuments();
+  }
+
+  async countByStatus(statuses) {
+    return await BookingModel.countDocuments({
+      status: { $in: statuses }
+    });
+  }
+
+  async getTotalRevenue() {
+    const result = await BookingModel.aggregate([
+      {
+        $match: { status: { $in: ['confirmed', 'paid'] } }
+      },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: '$totalPrice' }
+        }
+      }
+    ]);
+
+    return result.length > 0 ? result[0].total : 0;
+  }
+
+  async findAllRecent(limit = 4) {
+    const bookingDocs = await BookingModel.find({})
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .populate({
+        path: 'showtimeId',
+        populate: [
+          {
+            path: 'movieId',
+            model: 'Movie'
+          }
+        ]
+      });
+
+    return bookingDocs.map(doc => ({
+      id: doc._id,
+      userId: doc.userId,
+      showtimeId: doc.showtimeId._id,
+      seatIds: doc.seatIds,
+      totalPrice: doc.totalPrice,
+      bookingDate: doc.bookingDate,
+      status: doc.status,
+      createdAt: doc.createdAt,
+      movie: {
+        id: doc.showtimeId.movieId._id,
+        title: doc.showtimeId.movieId.title
+      }
+    }));
   }
 }
 

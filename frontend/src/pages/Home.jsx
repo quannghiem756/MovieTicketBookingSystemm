@@ -242,30 +242,6 @@ const Home = () => {
 
       {/* Movie Recommendation Chat */}
       <Container maxWidth="lg" sx={{ mb: 8 }}>
-        <Box sx={{ mb: 6 }}>
-          <Typography
-            variant="h3"
-            component="h2"
-            sx={{
-              fontWeight: 700,
-              mb: 1,
-              background: 'linear-gradient(90deg, #ffffff 0%, #b3b3b3 100%)',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              textAlign: { xs: 'center', md: 'left' }
-            }}
-          >
-            {t('recommendation.title')}
-          </Typography>
-          <Typography
-            variant="h6"
-            color="textSecondary"
-            sx={{ opacity: 0.7, textAlign: { xs: 'center', md: 'left' } }}
-          >
-            {t('recommendation.subtitle')}
-          </Typography>
-        </Box>
         <MovieRecommendationChat />
       </Container>
 

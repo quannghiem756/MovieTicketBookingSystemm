@@ -37,6 +37,7 @@ const showtimeRoutes = require('./src/interfaces/http/routes/showtimes');
 const bookingRoutes = require('./src/interfaces/http/routes/bookings');
 const userRoutes = require('./src/interfaces/http/routes/users');
 const theaterRoutes = require('./src/interfaces/http/routes/theaters');
+const dashboardRoutes = require('./src/interfaces/http/routes/dashboard');
 const paymentRoutes = require('./src/interfaces/paymentRoutes');
 const recommendationRoutes = require('./src/interfaces/http/routes/recommendations');
 
@@ -46,6 +47,7 @@ app.use('/api/showtimes', showtimeRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/theaters', theaterRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/recommendations', recommendationRoutes);
 

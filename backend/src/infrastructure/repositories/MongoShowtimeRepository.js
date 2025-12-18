@@ -12,7 +12,7 @@ class MongoShowtimeRepository extends ShowtimeRepository {
       language: showtime.language,
       price: showtime.price
     });
-    
+
     const savedShowtime = await showtimeDoc.save();
     showtime.id = savedShowtime._id;
     return showtime;
@@ -35,7 +35,7 @@ class MongoShowtimeRepository extends ShowtimeRepository {
   async findById(id) {
     const showtimeDoc = await ShowtimeModel.findById(id);
     if (!showtimeDoc) return null;
-    
+
     return {
       id: showtimeDoc._id,
       movieId: showtimeDoc.movieId,
@@ -76,19 +76,44 @@ class MongoShowtimeRepository extends ShowtimeRepository {
     }));
   }
 
+  async findFutureByMovieId(movieId) {
+    // Find showtimes from today up to one week ahead for a specific movie
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set to start of today to include today's showtimes
+
+    const nextWeek = new Date(today);
+    nextWeek.setDate(today.getDate() + 7); // Add 7 days to get one week ahead
+
+    const showtimeDocs = await ShowtimeModel.find({
+      movieId,
+      showDate: { $gte: today, $lte: nextWeek }
+    }).sort({ showDate: 1, showTime: 1 });  // Sort by date and time ascending
+
+    return showtimeDocs.map(doc => ({
+      id: doc._id,
+      movieId: doc.movieId,
+      theaterId: doc.theaterId,
+      showDate: doc.showDate,
+      showTime: doc.showTime,
+      format: doc.format,
+      language: doc.language,
+      price: doc.price
+    }));
+  }
+
   async findByDateAndTheater(date, theaterId) {
     // Find showtimes for a specific date (ignoring time) and theater
     const startOfDay = new Date(date);
     startOfDay.setHours(0, 0, 0, 0);
-    
+
     const endOfDay = new Date(date);
     endOfDay.setHours(23, 59, 59, 999);
-    
+
     const showtimeDocs = await ShowtimeModel.find({
       theaterId,
       showDate: { $gte: startOfDay, $lte: endOfDay }
     });
-    
+
     return showtimeDocs.map(doc => ({
       id: doc._id,
       movieId: doc.movieId,
@@ -111,9 +136,9 @@ class MongoShowtimeRepository extends ShowtimeRepository {
       language: showtime.language,
       price: showtime.price
     }, { new: true });
-    
+
     if (!updatedShowtime) return null;
-    
+
     return {
       id: updatedShowtime._id,
       movieId: updatedShowtime.movieId,
@@ -129,6 +154,39 @@ class MongoShowtimeRepository extends ShowtimeRepository {
   async delete(id) {
     const result = await ShowtimeModel.findByIdAndDelete(id);
     return result !== null;
+  }
+
+  async countAll() {
+    return await ShowtimeModel.countDocuments();
+  }
+
+  async countUpcoming() {
+    return await ShowtimeModel.countDocuments({
+      showDate: { $gte: new Date() }
+    });
+  }
+
+  async findAllRecent(limit = 4) {
+    const showtimeDocs = await ShowtimeModel.find({})
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .populate('movieId');
+
+    return showtimeDocs.map(doc => ({
+      id: doc._id,
+      movieId: doc.movieId._id,
+      theaterId: doc.theaterId,
+      showDate: doc.showDate,
+      showTime: doc.showTime,
+      format: doc.format,
+      language: doc.language,
+      price: doc.price,
+      createdAt: doc.createdAt,
+      movie: {
+        id: doc.movieId._id,
+        title: doc.movieId.title
+      }
+    }));
   }
 }
 

@@ -93,6 +93,10 @@ class MongoUserRepository extends UserRepository {
     const result = await UserModel.findByIdAndDelete(id);
     return result !== null;
   }
+
+  async countAll() {
+    return await UserModel.countDocuments();
+  }
 }
 
 module.exports = MongoUserRepository;

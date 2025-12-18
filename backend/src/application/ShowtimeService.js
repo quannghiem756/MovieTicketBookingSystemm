@@ -17,7 +17,7 @@ class ShowtimeService {
       showtimeData.language,
       showtimeData.price
     );
-    
+
     return await this.showtimeRepository.create(showtime);
   }
 
@@ -31,6 +31,10 @@ class ShowtimeService {
 
   async getShowtimesByMovieId(movieId) {
     return await this.showtimeRepository.findByMovieId(movieId);
+  }
+
+  async getFutureShowtimesByMovieId(movieId) {
+    return await this.showtimeRepository.findFutureByMovieId(movieId);
   }
 
   async getShowtimesByDateAndTheater(date, theaterId) {
@@ -48,7 +52,7 @@ class ShowtimeService {
       showtimeData.language,
       showtimeData.price
     );
-    
+
     return await this.showtimeRepository.update(id, showtime);
   }
 

@@ -52,6 +52,12 @@ const AdminDashboard = () => {
     activeBookings: 0,
     upcomingShows: 0
   });
+  const [recentActivity, setRecentActivity] = useState([]);
+  const [performanceStats, setPerformanceStats] = useState({
+    bookingRate: 0,
+    cinemaCapacity: 0,
+    customerSatisfaction: 92
+  });
   const { t } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -60,59 +66,166 @@ const AdminDashboard = () => {
     // Fetch dashboard statistics
     const fetchStats = async () => {
       try {
-        // In a real implementation, you would fetch from the backend
-        // For now, we'll just show placeholders
-        setStats({
-          movies: 15,
-          showtimes: 42,
-          bookings: 128,
-          users: 256,
-          revenue: 15420.50,
-          activeBookings: 24,
-          upcomingShows: 18
+        const response = await fetch('/api/dashboard/stats', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+          }
         });
+
+        if (response.ok) {
+          const data = await response.json();
+          setStats({
+            movies: data.movies,
+            showtimes: data.showtimes,
+            bookings: data.bookings,
+            users: data.users,
+            revenue: data.revenue,
+            activeBookings: data.activeBookings,
+            upcomingShows: data.upcomingShows
+          });
+        } else {
+          console.error('Error fetching dashboard stats:', response.status);
+          // Fallback to default values if API call fails
+          setStats({
+            movies: 0,
+            showtimes: 0,
+            bookings: 0,
+            users: 0,
+            revenue: 0,
+            activeBookings: 0,
+            upcomingShows: 0
+          });
+        }
       } catch (error) {
         console.error('Error fetching dashboard stats:', error);
+        // Fallback to default values if API call fails
+        setStats({
+          movies: 0,
+          showtimes: 0,
+          bookings: 0,
+          users: 0,
+          revenue: 0,
+          activeBookings: 0,
+          upcomingShows: 0
+        });
       }
     };
 
     fetchStats();
-  }, []);
 
-  const recentActivity = [
-    {
-      id: 1,
-      icon: <Add sx={{ color: 'primary.main' }} />,
-      title: t('admin.dashboard.newMovieAdded'),
-      description: '"Inception" was added to the movie list',
-      time: '2 hours ago',
-      color: 'primary'
-    },
-    {
-      id: 2,
-      icon: <AccessTime sx={{ color: 'success.main' }} />,
-      title: t('admin.dashboard.showtimeCreated'),
-      description: 'New showtime for "The Matrix" at 7:30 PM',
-      time: '4 hours ago',
-      color: 'success'
-    },
-    {
-      id: 3,
-      icon: <CheckCircle sx={{ color: 'info.main' }} />,
-      title: t('admin.dashboard.bookingConfirmed'),
-      description: 'Booking #12345 for "Interstellar" was confirmed',
-      time: '1 day ago',
-      color: 'info'
-    },
-    {
-      id: 4,
-      icon: <ConfirmationNumber sx={{ color: 'warning.main' }} />,
-      title: t('admin.dashboard.bookingCancelled'),
-      description: 'Booking #12346 for "Dune" was cancelled',
-      time: '2 days ago',
-      color: 'warning'
+    // Fetch recent activities
+    const fetchRecentActivity = async () => {
+      try {
+        const response = await fetch('/api/dashboard/recent-activity', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setRecentActivity(data.map(activity => ({
+            ...activity,
+            // Map backend activity types to MUI icons and colors
+            icon: getIconForActivityType(activity.icon, activity.status),
+            color: getColorForActivityType(activity.color),
+            title: t(`admin.dashboard.${activity.title}`) // This will use the translated version
+          })));
+        } else {
+          console.error('Error fetching recent activity:', response.status);
+          // Fallback to empty array
+          setRecentActivity([]);
+        }
+      } catch (error) {
+        console.error('Error fetching recent activity:', error);
+        // Fallback to empty array
+        setRecentActivity([]);
+      }
+    };
+
+    fetchRecentActivity();
+
+    // Fetch performance stats
+    const fetchPerformanceStats = async () => {
+      try {
+        const response = await fetch('/api/dashboard/performance-stats', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setPerformanceStats({
+            bookingRate: data.bookingRate,
+            cinemaCapacity: data.cinemaCapacity,
+            customerSatisfaction: data.customerSatisfaction
+          });
+        } else {
+          console.error('Error fetching performance stats:', response.status);
+          // Use default values
+          setPerformanceStats({
+            bookingRate: 0,
+            cinemaCapacity: 0,
+            customerSatisfaction: 92
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching performance stats:', error);
+        // Use default values
+        setPerformanceStats({
+          bookingRate: 0,
+          cinemaCapacity: 0,
+          customerSatisfaction: 92
+        });
+      }
+    };
+
+    fetchPerformanceStats();
+  }, [t]);
+
+  // Helper functions to map activity types to icons and colors
+  const getIconForActivityType = (type, status = null) => {
+    if (type === 'booking') {
+      // Different icons based on booking status
+      switch (status) {
+        case 'cancelled':
+          return <ConfirmationNumber sx={{ color: 'warning.main' }} />;
+        case 'pending':
+          return <Schedule sx={{ color: 'primary.main' }} />;
+        default:
+          return <CheckCircle sx={{ color: 'info.main' }} />;
+      }
     }
-  ];
+
+    switch (type) {
+      case 'movie':
+        return <Add sx={{ color: 'primary.main' }} />;
+      case 'showtime':
+        return <AccessTime sx={{ color: 'success.main' }} />;
+      default:
+        return <ConfirmationNumber sx={{ color: 'warning.main' }} />;
+    }
+  };
+
+  const getColorForActivityType = (color) => {
+    switch (color) {
+      case 'primary':
+        return 'primary';
+      case 'success':
+        return 'success';
+      case 'info':
+        return 'info';
+      case 'warning':
+        return 'warning';
+      default:
+        return 'default';
+    }
+  };
+
 
   const quickActions = [
     { 
@@ -410,7 +523,7 @@ const AdminDashboard = () => {
                         {activity.icon}
                       </Box>
                       <Box sx={{ flex: 1 }}>
-                        <ListItemText 
+                        <ListItemText
                           primary={activity.title}
                           secondary={activity.description}
                           primaryTypographyProps={{ fontWeight: 600, mb: 0.5 }}
@@ -456,66 +569,66 @@ const AdminDashboard = () => {
                       {t('admin.dashboard.bookingRate')}
                     </Typography>
                     <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                      78%
+                      {performanceStats.bookingRate}%
                     </Typography>
                   </Box>
-                  <LinearProgress 
-                    variant="determinate" 
-                    value={78} 
-                    sx={{ 
-                      height: 8, 
+                  <LinearProgress
+                    variant="determinate"
+                    value={performanceStats.bookingRate}
+                    sx={{
+                      height: 8,
                       borderRadius: 4,
                       bgcolor: 'rgba(255,255,255,0.1)',
                       '& .MuiLinearProgress-bar': {
                         bgcolor: 'success.main',
                       }
-                    }} 
+                    }}
                   />
                 </Box>
-                
+
                 <Box>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                     <Typography variant="body2" sx={{ fontWeight: 600 }}>
                       {t('admin.dashboard.cinemaCapacity')}
                     </Typography>
                     <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                      65%
+                      {performanceStats.cinemaCapacity}%
                     </Typography>
                   </Box>
-                  <LinearProgress 
-                    variant="determinate" 
-                    value={65} 
-                    sx={{ 
-                      height: 8, 
+                  <LinearProgress
+                    variant="determinate"
+                    value={performanceStats.cinemaCapacity}
+                    sx={{
+                      height: 8,
                       borderRadius: 4,
                       bgcolor: 'rgba(255,255,255,0.1)',
                       '& .MuiLinearProgress-bar': {
                         bgcolor: 'warning.main',
                       }
-                    }} 
+                    }}
                   />
                 </Box>
-                
+
                 <Box>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                     <Typography variant="body2" sx={{ fontWeight: 600 }}>
                       {t('admin.dashboard.customerSatisfaction')}
                     </Typography>
                     <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                      92%
+                      {performanceStats.customerSatisfaction}%
                     </Typography>
                   </Box>
-                  <LinearProgress 
-                    variant="determinate" 
-                    value={92} 
-                    sx={{ 
-                      height: 8, 
+                  <LinearProgress
+                    variant="determinate"
+                    value={performanceStats.customerSatisfaction}
+                    sx={{
+                      height: 8,
                       borderRadius: 4,
                       bgcolor: 'rgba(255,255,255,0.1)',
                       '& .MuiLinearProgress-bar': {
                         bgcolor: 'primary.main',
                       }
-                    }} 
+                    }}
                   />
                 </Box>
               </Stack>

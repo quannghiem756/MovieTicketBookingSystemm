@@ -143,6 +143,7 @@ export const deleteMovie = (id) => api.delete(`/movies/${id}`);
 
 // Showtimes API
 export const getShowtimesByMovieId = (movieId) => api.get(`/showtimes/movie/${movieId}`);
+export const getFutureShowtimesByMovieId = (movieId) => api.get(`/showtimes/movie/${movieId}/future`);
 export const getShowtimeById = (id) => api.get(`/showtimes/${id}`);
 export const createShowtime = (showtime) => api.post('/showtimes', showtime);
 export const updateShowtime = (id, showtime) => api.put(`/showtimes/${id}`, showtime);

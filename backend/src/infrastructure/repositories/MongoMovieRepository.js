@@ -199,6 +199,32 @@ class MongoMovieRepository extends MovieRepository {
       totalPages: Math.ceil(totalMovies / limit)
     };
   }
+
+  async countAll() {
+    return await MovieModel.countDocuments();
+  }
+
+  async findAllRecent(limit = 4) {
+    const movieDocs = await MovieModel.find({})
+      .sort({ createdAt: -1 })
+      .limit(limit);
+
+    return movieDocs.map(doc => ({
+      id: doc._id,
+      title: doc.title,
+      director: doc.director,
+      cast: doc.cast,
+      synopsis: doc.synopsis,
+      duration: doc.duration,
+      genre: doc.genre,
+      rating: doc.rating,
+      posterUrl: doc.posterUrl || '',
+      trailerUrl: doc.trailerUrl,
+      releaseDate: doc.releaseDate,
+      endDate: doc.endDate,
+      createdAt: doc.createdAt
+    }));
+  }
 }
 
 module.exports = MongoMovieRepository;

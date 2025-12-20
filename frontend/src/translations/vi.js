@@ -4,6 +4,7 @@ const vi = {
   'header.home': 'Trang chủ',
   'header.nowShowing': 'Đang chiếu',
   'header.comingSoon': 'Sắp chiếu',
+  'header.news': 'Tin tức',
   'header.myBookings': 'Vé của tôi',
   'header.admin': 'Quản trị',
   'header.logout': 'Đăng xuất',
@@ -227,6 +228,7 @@ const vi = {
   'admin.sidebar.theaters': 'Phòng chiếu',
   'admin.sidebar.bookings': 'Vé đặt',
   'admin.sidebar.users': 'Người dùng',
+  'admin.sidebar.news': 'Tin tức',
 
   // Admin Dashboard
   'admin.dashboard.title': 'Bảng điều khiển',
@@ -474,6 +476,41 @@ const vi = {
   'admin.seatmapEditor.addSeatLeft': 'Thêm ghế bên trái',
   'admin.seatmapEditor.addSeatRight': 'Thêm ghế bên phải',
   'admin.seatmapEditor.deleteSeat': 'Xóa ghế',
+
+  // News Management
+  'admin.news.newsManagement': 'Quản lý tin tức',
+  'admin.news.addNews': 'Thêm tin tức',
+  'admin.news.editNews': 'Sửa tin tức',
+  'admin.news.title': 'Tiêu đề',
+  'admin.news.content': 'Nội dung',
+  'admin.news.published': 'Xuất bản',
+  'admin.news.category': 'Danh mục',
+  'admin.news.publishDate': 'Ngày xuất bản',
+  'admin.news.expiryDate': 'Ngày hết hạn',
+  'admin.news.featuredImage': 'Hình ảnh nổi bật',
+  'admin.news.actions': 'Hành động',
+  'admin.news.edit': 'Sửa',
+  'admin.news.delete': 'Xóa',
+  'admin.news.cancel': 'Hủy',
+  'admin.news.createNews': 'Tạo tin tức',
+  'admin.news.updateNews': 'Cập nhật tin tức',
+  'admin.news.back': 'Quay lại',
+  'admin.news.searchNews': 'Tìm kiếm tin tức',
+  'admin.news.totalNews': 'Tổng số tin tức: {{count}}',
+  'admin.news.noNewsFound': 'Không tìm thấy tin tức nào',
+  'admin.news.noNewsDescription': 'Không có tin tức nào được tạo. Hãy bắt đầu bằng cách thêm tin tức mới.',
+  'admin.news.draft': 'Bản nháp',
+  'admin.news.publishedStatus': 'Đã xuất bản',
+  'admin.news.scheduled': 'Đã lên lịch',
+  'admin.news.expired': 'Đã hết hạn',
+
+  // Client-side News Page
+  'news.title': 'Tin tức & Cập nhật',
+  'news.description': 'Cập nhật tin tức, thông báo và các cập nhật mới nhất từ CineBook',
+  'news.searchNews': 'Tìm kiếm tin tức',
+  'news.noNewsFound': 'Không tìm thấy tin tức nào',
+  'news.noNewsDescription': 'Hiện không có bài viết tin tức nào. Vui lòng quay lại sau để xem các cập nhật mới.',
+  'news.readMore': 'Đọc thêm'
 };
 
 export default vi;

@@ -18,18 +18,33 @@ class MongoShowtimeRepository extends ShowtimeRepository {
     return showtime;
   }
 
-  async findAll() {
-    const showtimeDocs = await ShowtimeModel.find({});
-    return showtimeDocs.map(doc => ({
-      id: doc._id,
-      movieId: doc.movieId,
-      theaterId: doc.theaterId,
-      showDate: doc.showDate,
-      showTime: doc.showTime,
-      format: doc.format,
-      language: doc.language,
-      price: doc.price
-    }));
+  async findAll(page = 1, limit = 10) {
+    const skip = (page - 1) * limit;
+    const showtimeDocs = await ShowtimeModel.find({})
+      .skip(skip)
+      .limit(limit)
+      .sort({ showDate: 1, showTime: 1 }); // Sort by date and time
+
+    const total = await ShowtimeModel.countDocuments();
+
+    return {
+      data: showtimeDocs.map(doc => ({
+        id: doc._id,
+        movieId: doc.movieId,
+        theaterId: doc.theaterId,
+        showDate: doc.showDate,
+        showTime: doc.showTime,
+        format: doc.format,
+        language: doc.language,
+        price: doc.price
+      })),
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total,
+        totalPages: Math.ceil(total / limit)
+      }
+    };
   }
 
   async findById(id) {

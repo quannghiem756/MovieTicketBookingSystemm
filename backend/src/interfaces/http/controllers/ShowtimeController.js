@@ -16,8 +16,11 @@ class ShowtimeController {
 
   async getAllShowtimes(req, res) {
     try {
-      const showtimes = await this.showtimeService.getAllShowtimes();
-      res.json(showtimes);
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+
+      const result = await this.showtimeService.getAllShowtimes(page, limit);
+      res.json(result);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

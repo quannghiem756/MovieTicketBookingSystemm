@@ -48,6 +48,7 @@ const BookingsPage = () => {
       try {
         setLoading(true);
         const response = await getBookingsByUserId(user.id);
+        console.log('Fetched bookings:', response.data);
         setBookings(response.data);
         setLoading(false);
       } catch (err) {

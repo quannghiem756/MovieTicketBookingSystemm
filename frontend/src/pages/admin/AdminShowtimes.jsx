@@ -20,7 +20,8 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  DialogContentText
+  DialogContentText,
+  Pagination
 } from '@mui/material';
 import {
   Add,
@@ -28,6 +29,7 @@ import {
   Delete
 } from '@mui/icons-material';
 import { formatCurrency } from '../../utils/currency';
+import { getShowtimes, getMovies, getTheaters } from '../../services/api';
 
 const AdminShowtimes = () => {
   const [showtimes, setShowtimes] = useState([]);
@@ -37,18 +39,22 @@ const AdminShowtimes = () => {
   const [error, setError] = useState(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [showtimeToDelete, setShowtimeToDelete] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const { t } = useTranslation();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const showtimesResponse = await api.get('/showtimes');
-        const moviesResponse = await api.get('/movies');
-        const theatersResponse = await api.get('/theaters');
-        
-        setShowtimes(showtimesResponse.data);
+        setLoading(true);
+        const showtimesResponse = await getShowtimes(currentPage, 10);
+        const moviesResponse = await getMovies();
+        const theatersResponse = await getTheaters();
+
+        setShowtimes(showtimesResponse.data.data);
         setMovies(moviesResponse.data.movies || moviesResponse.data);
         setTheaters(theatersResponse.data);
+        setTotalPages(showtimesResponse.data.pagination.totalPages);
         setLoading(false);
       } catch (err) {
         setError(t('admin.showtimes.fetchError'));
@@ -57,7 +63,11 @@ const AdminShowtimes = () => {
     };
 
     fetchData();
-  }, []);
+  }, [currentPage]);
+
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
 
   const handleDeleteClick = (showtime) => {
     setShowtimeToDelete(showtime);
@@ -66,7 +76,7 @@ const AdminShowtimes = () => {
 
   const handleDeleteConfirm = async () => {
     if (!showtimeToDelete) return;
-    
+
     try {
       await api.delete(`/showtimes/${showtimeToDelete.id}`);
       setShowtimes(showtimes.filter(showtime => showtime.id !== showtimeToDelete.id));
@@ -99,7 +109,7 @@ const AdminShowtimes = () => {
       <CircularProgress />
     </Box>
   );
-  
+
   if (error) return (
     <Box sx={{ p: 3 }}>
       <Alert severity="error">{t('common.error')}: {error}</Alert>
@@ -191,6 +201,17 @@ const AdminShowtimes = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {totalPages > 1 && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={handlePageChange}
+            color="primary"
+          />
+        </Box>
+      )}
 
       {/* Delete Confirmation Dialog */}
       <Dialog

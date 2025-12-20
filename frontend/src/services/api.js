@@ -142,6 +142,7 @@ export const updateMovie = (id, movie) => api.put(`/movies/${id}`, movie);
 export const deleteMovie = (id) => api.delete(`/movies/${id}`);
 
 // Showtimes API
+export const getShowtimes = (page = 1, limit = 10) => api.get(`/showtimes?page=${page}&limit=${limit}`);
 export const getShowtimesByMovieId = (movieId) => api.get(`/showtimes/movie/${movieId}`);
 export const getFutureShowtimesByMovieId = (movieId) => api.get(`/showtimes/movie/${movieId}/future`);
 export const getShowtimeById = (id) => api.get(`/showtimes/${id}`);
@@ -176,5 +177,23 @@ export const deleteUser = (id) => api.delete(`/users/${id}`);
 
 // Recommendations API
 export const getMovieRecommendations = (query) => api.post('/recommendations', { query });
+
+// News API
+export const getNews = (page = 1, limit = 10, search = '') => {
+  let url = `/news?page=${page}&limit=${limit}`;
+  if (search) {
+    url += `&search=${encodeURIComponent(search)}`;
+  }
+  return api.get(url);
+};
+export const getNewsById = (id) => api.get(`/news/${id}`);
+export const createNews = (news) => api.post('/news', news);
+export const updateNews = (id, news) => api.put(`/news/${id}`, news);
+export const deleteNews = (id) => api.delete(`/news/${id}`);
+
+// Admin Dashboard API
+export const getDashboardStats = () => api.get('/dashboard/stats');
+export const getRecentActivity = () => api.get('/dashboard/recent-activity');
+export const getPerformanceStats = () => api.get('/dashboard/performance-stats');
 
 export default api;

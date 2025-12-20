@@ -16,6 +16,8 @@ import BookingDetailsPage from './pages/BookingDetailsPage';
 import PaymentResult from './pages/PaymentResult';
 import ProfilePage from './pages/ProfilePage';
 import ShowtimesPage from './pages/ShowtimesPage';
+import NewsPage from './pages/NewsPage';
+import NewsDetailPage from './pages/NewsDetailPage';
 // Admin components
 import AdminLayout from './pages/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -27,6 +29,8 @@ import TheaterForm from './pages/admin/TheaterForm';
 import AdminShowtimes from './pages/admin/AdminShowtimes';
 import AdminTheaters from './pages/admin/AdminTheaters';
 import AdminUsers from './pages/admin/AdminUsers';
+import AdminNews from './pages/admin/AdminNews';
+import NewsForm from './pages/admin/NewsForm';
 
 const AppRouter = () => {
   return (
@@ -36,6 +40,8 @@ const AppRouter = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/now-showing" element={<NowShowingPage />} />
+          <Route path="/news" element={<NewsPage />} />
+          <Route path="/news/:id" element={<NewsDetailPage />} />
           <Route path="/coming-soon" element={<ComingSoonPage />} />
           <Route path="/movie/:id" element={<MovieDetails />} />
           <Route path="/showtimes/:movieId" element={<ShowtimesPage />} />
@@ -71,7 +77,7 @@ const AppRouter = () => {
           } />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          
+
           {/* Admin routes */}
           <Route path="/admin" element={
             <ProtectedRoute adminOnly={true}>
@@ -91,6 +97,9 @@ const AppRouter = () => {
             <Route path="theaters/:id" element={<TheaterForm />} />
             <Route path="bookings" element={<AdminBookings />} />
             <Route path="users" element={<AdminUsers />} />
+            <Route path="news" element={<AdminNews />} />
+            <Route path="news/new" element={<NewsForm />} />
+            <Route path="news/:id" element={<NewsForm />} />
           </Route>
         </Routes>
       </Container>

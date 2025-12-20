@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { 
-  AppBar, 
-  Toolbar, 
-  Typography, 
-  Button, 
-  Box, 
-  Menu, 
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Box,
+  Menu,
   MenuItem,
   IconButton,
   Avatar,
@@ -16,16 +16,17 @@ import {
   Fab,
   Zoom
 } from '@mui/material';
-import { 
-  AccountCircle, 
-  Home, 
-  Movie, 
-  CalendarToday, 
+import {
+  AccountCircle,
+  Home,
+  Movie,
+  CalendarToday,
   ConfirmationNumber,
   Dashboard,
   Logout,
   Menu as MenuIcon,
-  ArrowUpward
+  ArrowUpward,
+  Article
 } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -53,7 +54,7 @@ const Header = () => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
+
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -76,10 +77,10 @@ const Header = () => {
   return (
     <>
       <HideOnScroll>
-        <AppBar 
-          position="sticky" 
+        <AppBar
+          position="sticky"
           elevation={0}
-          sx={{ 
+          sx={{
             background: 'rgba(15, 15, 15, 0.95)',
             backdropFilter: 'blur(10px)',
             borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
@@ -89,12 +90,12 @@ const Header = () => {
           <Container maxWidth="lg">
             <Toolbar disableGutters>
               <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-                <Typography 
-                  variant="h6" 
-                  component={Link} 
-                  to="/" 
-                  sx={{ 
-                    textDecoration: 'none', 
+                <Typography
+                  variant="h6"
+                  component={Link}
+                  to="/"
+                  sx={{
+                    textDecoration: 'none',
                     color: 'inherit',
                     fontWeight: 700,
                     fontSize: '1.5rem',
@@ -104,20 +105,20 @@ const Header = () => {
                   Cine<span style={{ color: '#d32f2f' }}>Book</span>
                 </Typography>
               </Box>
-              
-              <Box 
-                sx={{ 
+
+              <Box
+                sx={{
                   display: { xs: 'none', md: 'flex' },
                   alignItems: 'center',
                   gap: 2
                 }}
               >
-                <Button 
-                  color="inherit" 
-                  component={Link} 
-                  to="/" 
+                <Button
+                  color="inherit"
+                  component={Link}
+                  to="/"
                   startIcon={<Home />}
-                  sx={{ 
+                  sx={{
                     textTransform: 'none',
                     fontWeight: 500,
                     fontSize: '0.9rem',
@@ -131,13 +132,13 @@ const Header = () => {
                 >
                   {t('header.home')}
                 </Button>
-                
-                <Button 
-                  color="inherit" 
-                  component={Link} 
-                  to="/now-showing" 
+
+                <Button
+                  color="inherit"
+                  component={Link}
+                  to="/now-showing"
                   startIcon={<Movie />}
-                  sx={{ 
+                  sx={{
                     textTransform: 'none',
                     fontWeight: 500,
                     fontSize: '0.9rem',
@@ -151,13 +152,33 @@ const Header = () => {
                 >
                   {t('header.nowShowing')}
                 </Button>
-                
-                <Button 
-                  color="inherit" 
-                  component={Link} 
-                  to="/coming-soon" 
+
+                <Button
+                  color="inherit"
+                  component={Link}
+                  to="/news"
+                  startIcon={<Article />}
+                  sx={{
+                    textTransform: 'none',
+                    fontWeight: 500,
+                    fontSize: '0.9rem',
+                    borderRadius: 3,
+                    px: 2,
+                    py: 1,
+                    '&:hover': {
+                      backgroundColor: 'rgba(211, 47, 47, 0.1)',
+                    }
+                  }}
+                >
+                  {t('header.news', 'News')}
+                </Button>
+
+                <Button
+                  color="inherit"
+                  component={Link}
+                  to="/coming-soon"
                   startIcon={<CalendarToday />}
-                  sx={{ 
+                  sx={{
                     textTransform: 'none',
                     fontWeight: 500,
                     fontSize: '0.9rem',
@@ -171,14 +192,14 @@ const Header = () => {
                 >
                   {t('header.comingSoon')}
                 </Button>
-                
+
                 {isAuthenticated && user?.role === 'admin' && (
-                  <Button 
-                    color="inherit" 
-                    component={Link} 
-                    to="/admin" 
+                  <Button
+                    color="inherit"
+                    component={Link}
+                    to="/admin"
                     startIcon={<Dashboard />}
-                    sx={{ 
+                    sx={{
                       textTransform: 'none',
                       fontWeight: 500,
                       fontSize: '0.9rem',
@@ -193,19 +214,19 @@ const Header = () => {
                     {t('header.admin')}
                   </Button>
                 )}
-                
+
                 {isAuthenticated ? (
                   <>
-                    <Button 
-                      color="inherit" 
-                      component={Link} 
-                      to="/bookings" 
+                    <Button
+                      color="inherit"
+                      component={Link}
+                      to="/bookings"
                       startIcon={
                         <Badge badgeContent={user?.unreadBookings || 0} color="error">
                           <ConfirmationNumber />
                         </Badge>
                       }
-                      sx={{ 
+                      sx={{
                         textTransform: 'none',
                         fontWeight: 500,
                         fontSize: '0.9rem',
@@ -219,13 +240,13 @@ const Header = () => {
                     >
                       {t('header.myBookings')}
                     </Button>
-                    
-                    <IconButton 
-                      size="large" 
-                      edge="end" 
-                      color="inherit" 
+
+                    <IconButton
+                      size="large"
+                      edge="end"
+                      color="inherit"
                       onClick={handleMenuOpen}
-                      sx={{ 
+                      sx={{
                         ml: 1,
                         borderRadius: 2,
                         '&:hover': {
@@ -233,9 +254,9 @@ const Header = () => {
                         }
                       }}
                     >
-                      <Avatar 
-                        sx={{ 
-                          width: 36, 
+                      <Avatar
+                        sx={{
+                          width: 36,
                           height: 36,
                           fontSize: '1rem',
                           bgcolor: 'primary.main',
@@ -245,7 +266,7 @@ const Header = () => {
                         {user?.name?.charAt(0)?.toUpperCase() || 'U'}
                       </Avatar>
                     </IconButton>
-                    
+
                     <Menu
                       anchorEl={anchorEl}
                       open={Boolean(anchorEl)}
@@ -263,9 +284,9 @@ const Header = () => {
                         }
                       }}
                     >
-                      <MenuItem 
-                        component={Link} 
-                        to="/profile" 
+                      <MenuItem
+                        component={Link}
+                        to="/profile"
                         onClick={handleMenuClose}
                         sx={{
                           color: 'text.primary',
@@ -277,7 +298,7 @@ const Header = () => {
                         <AccountCircle sx={{ mr: 1 }} />
                         {t('header.profile')}
                       </MenuItem>
-                      <MenuItem 
+                      <MenuItem
                         onClick={handleLogout}
                         sx={{
                           color: 'text.primary',
@@ -292,13 +313,13 @@ const Header = () => {
                     </Menu>
                   </>
                 ) : (
-                  <Button 
+                  <Button
                     variant="contained"
                     color="primary"
-                    component={Link} 
-                    to="/login" 
+                    component={Link}
+                    to="/login"
                     startIcon={<AccountCircle />}
-                    sx={{ 
+                    sx={{
                       textTransform: 'none',
                       fontWeight: 600,
                       fontSize: '0.9rem',
@@ -312,7 +333,7 @@ const Header = () => {
                   </Button>
                 )}
               </Box>
-              
+
               <IconButton
                 size="large"
                 edge="end"
@@ -327,7 +348,7 @@ const Header = () => {
           </Container>
         </AppBar>
       </HideOnScroll>
-      
+
       {/* Floating scroll to top button */}
       <Zoom in={useScrollTrigger({
         target: window,

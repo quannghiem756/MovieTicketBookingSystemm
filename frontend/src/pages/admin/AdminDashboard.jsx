@@ -41,6 +41,11 @@ import {
   PieChart
 } from '@mui/icons-material';
 import { formatCurrency } from '../../utils/currency';
+import {
+  getDashboardStats,
+  getRecentActivity,
+  getPerformanceStats
+} from '../../services/api';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -66,37 +71,16 @@ const AdminDashboard = () => {
     // Fetch dashboard statistics
     const fetchStats = async () => {
       try {
-        const response = await fetch('/api/dashboard/stats', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json'
-          }
+        const response = await getDashboardStats();
+        setStats({
+          movies: response.data.movies,
+          showtimes: response.data.showtimes,
+          bookings: response.data.bookings,
+          users: response.data.users,
+          revenue: response.data.revenue,
+          activeBookings: response.data.activeBookings,
+          upcomingShows: response.data.upcomingShows
         });
-
-        if (response.ok) {
-          const data = await response.json();
-          setStats({
-            movies: data.movies,
-            showtimes: data.showtimes,
-            bookings: data.bookings,
-            users: data.users,
-            revenue: data.revenue,
-            activeBookings: data.activeBookings,
-            upcomingShows: data.upcomingShows
-          });
-        } else {
-          console.error('Error fetching dashboard stats:', response.status);
-          // Fallback to default values if API call fails
-          setStats({
-            movies: 0,
-            showtimes: 0,
-            bookings: 0,
-            users: 0,
-            revenue: 0,
-            activeBookings: 0,
-            upcomingShows: 0
-          });
-        }
       } catch (error) {
         console.error('Error fetching dashboard stats:', error);
         // Fallback to default values if API call fails
@@ -117,27 +101,14 @@ const AdminDashboard = () => {
     // Fetch recent activities
     const fetchRecentActivity = async () => {
       try {
-        const response = await fetch('/api/dashboard/recent-activity', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json'
-          }
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setRecentActivity(data.map(activity => ({
-            ...activity,
-            // Map backend activity types to MUI icons and colors
-            icon: getIconForActivityType(activity.icon, activity.status),
-            color: getColorForActivityType(activity.color),
-            title: t(`admin.dashboard.${activity.title}`) // This will use the translated version
-          })));
-        } else {
-          console.error('Error fetching recent activity:', response.status);
-          // Fallback to empty array
-          setRecentActivity([]);
-        }
+        const response = await getRecentActivity();
+        setRecentActivity(response.data.map(activity => ({
+          ...activity,
+          // Map backend activity types to MUI icons and colors
+          icon: getIconForActivityType(activity.icon, activity.status),
+          color: getColorForActivityType(activity.color),
+          title: t(`admin.dashboard.${activity.title}`) // This will use the translated version
+        })));
       } catch (error) {
         console.error('Error fetching recent activity:', error);
         // Fallback to empty array
@@ -150,29 +121,12 @@ const AdminDashboard = () => {
     // Fetch performance stats
     const fetchPerformanceStats = async () => {
       try {
-        const response = await fetch('/api/dashboard/performance-stats', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json'
-          }
+        const response = await getPerformanceStats();
+        setPerformanceStats({
+          bookingRate: response.data.bookingRate,
+          cinemaCapacity: response.data.cinemaCapacity,
+          customerSatisfaction: response.data.customerSatisfaction
         });
-
-        if (response.ok) {
-          const data = await response.json();
-          setPerformanceStats({
-            bookingRate: data.bookingRate,
-            cinemaCapacity: data.cinemaCapacity,
-            customerSatisfaction: data.customerSatisfaction
-          });
-        } else {
-          console.error('Error fetching performance stats:', response.status);
-          // Use default values
-          setPerformanceStats({
-            bookingRate: 0,
-            cinemaCapacity: 0,
-            customerSatisfaction: 92
-          });
-        }
       } catch (error) {
         console.error('Error fetching performance stats:', error);
         // Use default values
@@ -228,39 +182,39 @@ const AdminDashboard = () => {
 
 
   const quickActions = [
-    { 
-      title: t('admin.dashboard.addMovie'), 
-      icon: <TheaterComedy />, 
-      color: 'primary', 
-      link: '/admin/movies/new' 
+    {
+      title: t('admin.dashboard.addMovie'),
+      icon: <TheaterComedy />,
+      color: 'primary',
+      link: '/admin/movies/new'
     },
-    { 
-      title: t('admin.dashboard.addShowtime'), 
-      icon: <Schedule />, 
-      color: 'success', 
-      link: '/admin/showtimes/new' 
+    {
+      title: t('admin.dashboard.addShowtime'),
+      icon: <Schedule />,
+      color: 'success',
+      link: '/admin/showtimes/new'
     },
-    { 
-      title: t('admin.dashboard.addTheater'), 
-      icon: <LocalMovies />, 
-      color: 'warning', 
-      link: '/admin/theaters/new' 
+    {
+      title: t('admin.dashboard.addTheater'),
+      icon: <LocalMovies />,
+      color: 'warning',
+      link: '/admin/theaters/new'
     },
-    { 
-      title: t('admin.dashboard.manageUsers'), 
-      icon: <People />, 
-      link: '/admin/users' 
+    {
+      title: t('admin.dashboard.manageUsers'),
+      icon: <People />,
+      link: '/admin/users'
     }
   ];
 
   return (
     <Box sx={{ p: { xs: 2, md: 4 } }}>
       <Box sx={{ mb: 4 }}>
-        <Typography 
-          variant="h3" 
-          component="h1" 
-          sx={{ 
-            fontWeight: 800, 
+        <Typography
+          variant="h3"
+          component="h1"
+          sx={{
+            fontWeight: 800,
             mb: 2,
             background: 'linear-gradient(90deg, #ffffff 0%, #b3b3b3 100%)',
             backgroundClip: 'text',
@@ -274,14 +228,14 @@ const AdminDashboard = () => {
           {t('admin.dashboard.subtitle')}
         </Typography>
       </Box>
-      
+
       {/* Stats Cards */}
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 4 }}>
         <Box sx={{ flex: '1 1 calc(50% - 12px)', minWidth: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(33.333% - 12px)', lg: 'calc(16.666% - 12px)' } }}>
-          <Card 
-            sx={{ 
-              height: '100%', 
-              display: 'flex', 
+          <Card
+            sx={{
+              height: '100%',
+              display: 'flex',
               flexDirection: 'column',
               borderRadius: 4,
               border: '1px solid rgba(255,255,255,0.1)',
@@ -305,12 +259,12 @@ const AdminDashboard = () => {
             </CardContent>
           </Card>
         </Box>
-        
+
         <Box sx={{ flex: '1 1 calc(50% - 12px)', minWidth: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(33.333% - 12px)', lg: 'calc(16.666% - 12px)' } }}>
-          <Card 
-            sx={{ 
-              height: '100%', 
-              display: 'flex', 
+          <Card
+            sx={{
+              height: '100%',
+              display: 'flex',
               flexDirection: 'column',
               borderRadius: 4,
               border: '1px solid rgba(255,255,255,0.1)',
@@ -334,12 +288,12 @@ const AdminDashboard = () => {
             </CardContent>
           </Card>
         </Box>
-        
+
         <Box sx={{ flex: '1 1 calc(50% - 12px)', minWidth: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(33.333% - 12px)', lg: 'calc(16.666% - 12px)' } }}>
-          <Card 
-            sx={{ 
-              height: '100%', 
-              display: 'flex', 
+          <Card
+            sx={{
+              height: '100%',
+              display: 'flex',
               flexDirection: 'column',
               borderRadius: 4,
               border: '1px solid rgba(255,255,255,0.1)',
@@ -363,12 +317,12 @@ const AdminDashboard = () => {
             </CardContent>
           </Card>
         </Box>
-        
+
         <Box sx={{ flex: '1 1 calc(50% - 12px)', minWidth: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(33.333% - 12px)', lg: 'calc(16.666% - 12px)' } }}>
-          <Card 
-            sx={{ 
-              height: '100%', 
-              display: 'flex', 
+          <Card
+            sx={{
+              height: '100%',
+              display: 'flex',
               flexDirection: 'column',
               borderRadius: 4,
               border: '1px solid rgba(255,255,255,0.1)',
@@ -392,12 +346,12 @@ const AdminDashboard = () => {
             </CardContent>
           </Card>
         </Box>
-        
+
         <Box sx={{ flex: '1 1 calc(50% - 12px)', minWidth: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(33.333% - 12px)', lg: 'calc(16.666% - 12px)' } }}>
-          <Card 
-            sx={{ 
-              height: '100%', 
-              display: 'flex', 
+          <Card
+            sx={{
+              height: '100%',
+              display: 'flex',
               flexDirection: 'column',
               borderRadius: 4,
               border: '1px solid rgba(255,255,255,0.1)',
@@ -421,12 +375,12 @@ const AdminDashboard = () => {
             </CardContent>
           </Card>
         </Box>
-        
+
         <Box sx={{ flex: '1 1 calc(50% - 12px)', minWidth: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(33.333% - 12px)', lg: 'calc(16.666% - 12px)' } }}>
-          <Card 
-            sx={{ 
-              height: '100%', 
-              display: 'flex', 
+          <Card
+            sx={{
+              height: '100%',
+              display: 'flex',
               flexDirection: 'column',
               borderRadius: 4,
               border: '1px solid rgba(255,255,255,0.1)',
@@ -451,15 +405,15 @@ const AdminDashboard = () => {
           </Card>
         </Box>
       </Box>
-      
+
       {/* Quick Actions */}
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 4 }}>
         {quickActions.map((action, index) => (
           <Box key={index} sx={{ flex: '1 1 calc(50% - 12px)', minWidth: { xs: 'calc(50% - 12px)', sm: 'calc(25% - 12px)' } }}>
-            <Card 
+            <Card
               component={Link}
               to={action.link}
-              sx={{ 
+              sx={{
                 height: 120,
                 borderRadius: 4,
                 border: '1px solid rgba(255,255,255,0.1)',
@@ -473,10 +427,10 @@ const AdminDashboard = () => {
                 }
               }}
             >
-              <CardContent sx={{ 
-                display: 'flex', 
-                flexDirection: 'column', 
-                alignItems: 'center', 
+              <CardContent sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
                 justifyContent: 'center',
                 height: '100%',
                 p: 2
@@ -492,13 +446,13 @@ const AdminDashboard = () => {
           </Box>
         ))}
       </Box>
-      
+
       {/* Main Content */}
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
         {/* Recent Activity */}
         <Box sx={{ flex: '1 1 100%', minWidth: { xs: '100%', md: 'calc(50% - 24px)' }, width: { xs: '100%', md: 'calc(50% - 24px)' } }}>
-          <Card 
-            sx={{ 
+          <Card
+            sx={{
               height: '100%',
               borderRadius: 4,
               border: '1px solid rgba(255,255,255,0.1)',
@@ -514,7 +468,7 @@ const AdminDashboard = () => {
                   {t('admin.dashboard.recentActivity')}
                 </Typography>
               </Box>
-              
+
               <List>
                 {recentActivity.map((activity) => (
                   <ListItem key={activity.id} alignItems="flex-start" sx={{ flexDirection: 'column', alignItems: 'stretch', py: 2 }}>
@@ -541,11 +495,11 @@ const AdminDashboard = () => {
             </CardContent>
           </Card>
         </Box>
-        
+
         {/* Performance Stats */}
         <Box sx={{ flex: '1 1 100%', minWidth: { xs: '100%', md: 'calc(50% - 24px)' }, width: { xs: '100%', md: 'calc(50% - 24px)' } }}>
-          <Card 
-            sx={{ 
+          <Card
+            sx={{
               height: '100%',
               borderRadius: 4,
               border: '1px solid rgba(255,255,255,0.1)',
@@ -561,7 +515,7 @@ const AdminDashboard = () => {
                   {t('admin.dashboard.performance')}
                 </Typography>
               </Box>
-              
+
               <Stack spacing={2}>
                 <Box>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
@@ -632,15 +586,15 @@ const AdminDashboard = () => {
                   />
                 </Box>
               </Stack>
-              
+
               <Box sx={{ mt: 4, textAlign: 'center' }}>
                 <Button
                   variant="outlined"
                   component={Link}
                   to="/admin/reports"
-                  sx={{ 
-                    borderRadius: 3, 
-                    px: 3, 
+                  sx={{
+                    borderRadius: 3,
+                    px: 3,
                     py: 1,
                     textTransform: 'none',
                     borderColor: 'rgba(255,255,255,0.3)',

@@ -18,7 +18,8 @@ import {
   LocalMovies,
   Schedule,
   ConfirmationNumber,
-  People
+  People,
+  Article
 } from '@mui/icons-material';
 
 const drawerWidth = 240;
@@ -61,6 +62,11 @@ const AdminSidebar = () => {
       text: t('admin.sidebar.users'),
       icon: <People />,
       path: '/admin/users'
+    },
+    {
+      text: t('admin.sidebar.news'),
+      icon: <Article />,
+      path: '/admin/news'
     }
   ];
 
@@ -71,8 +77,8 @@ const AdminSidebar = () => {
       sx={{
         width: drawerWidth,
         flexShrink: 0,
-        [`& .MuiDrawer-paper`]: { 
-          width: drawerWidth, 
+        [`& .MuiDrawer-paper`]: {
+          width: drawerWidth,
           boxSizing: 'border-box',
           backgroundColor: '#1f2937',
           color: 'white',
@@ -85,9 +91,9 @@ const AdminSidebar = () => {
           {t('admin.sidebar.adminPanel')}
         </Typography>
       </Box>
-      
+
       <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.12)' }} />
-      
+
       <List sx={{ mt: 2 }}>
         {menuItems.map((item) => (
           <ListItem
@@ -117,7 +123,7 @@ const AdminSidebar = () => {
           </ListItem>
         ))}
       </List>
-      
+
       <Box sx={{ mt: 'auto', p: 2 }}>
         <AdminLogout />
       </Box>

@@ -4,6 +4,7 @@ const en = {
   'header.home': 'Home',
   'header.nowShowing': 'Now Showing',
   'header.comingSoon': 'Coming Soon',
+  'header.news': 'News',
   'header.myBookings': 'My Bookings',
   'header.admin': 'Admin',
   'header.logout': 'Logout',
@@ -190,6 +191,7 @@ const en = {
   'admin.sidebar.theaters': 'Theaters',
   'admin.sidebar.bookings': 'Bookings',
   'admin.sidebar.users': 'Users',
+  'admin.sidebar.news': 'News',
 
   // Admin Dashboard
   'admin.dashboard.title': 'Admin Dashboard',
@@ -437,6 +439,41 @@ const en = {
   'admin.seatmapEditor.addSeatLeft': 'Add Seat Left',
   'admin.seatmapEditor.addSeatRight': 'Add Seat Right',
   'admin.seatmapEditor.deleteSeat': 'Delete Seat',
+
+  // News Management
+  'admin.news.newsManagement': 'News Management',
+  'admin.news.addNews': 'Add News',
+  'admin.news.editNews': 'Edit News',
+  'admin.news.title': 'Title',
+  'admin.news.content': 'Content',
+  'admin.news.published': 'Published',
+  'admin.news.category': 'Category',
+  'admin.news.publishDate': 'Publish Date',
+  'admin.news.expiryDate': 'Expiry Date',
+  'admin.news.featuredImage': 'Featured Image',
+  'admin.news.actions': 'Actions',
+  'admin.news.edit': 'Edit',
+  'admin.news.delete': 'Delete',
+  'admin.news.cancel': 'Cancel',
+  'admin.news.createNews': 'Create News',
+  'admin.news.updateNews': 'Update News',
+  'admin.news.back': 'Back',
+  'admin.news.searchNews': 'Search News',
+  'admin.news.totalNews': 'Total News: {{count}}',
+  'admin.news.noNewsFound': 'No news found',
+  'admin.news.noNewsDescription': 'No news have been created. Start by adding a new news article.',
+  'admin.news.draft': 'Draft',
+  'admin.news.publishedStatus': 'Published',
+  'admin.news.scheduled': 'Scheduled',
+  'admin.news.expired': 'Expired',
+
+  // Client-side News Page
+  'news.title': 'News & Updates',
+  'news.description': 'Stay updated with the latest news, updates, and announcements from CineBook',
+  'news.searchNews': 'Search News',
+  'news.noNewsFound': 'No news found',
+  'news.noNewsDescription': 'There are currently no news articles available. Please check back later for updates.',
+  'news.readMore': 'Read More'
 };
 
 export default en;

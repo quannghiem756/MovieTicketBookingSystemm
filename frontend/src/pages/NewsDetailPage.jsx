@@ -48,6 +48,25 @@ const NewsDetailPage = () => {
     return new Date(dateString).toLocaleDateString();
   };
 
+  // Function to process image URLs in content to ensure they have the API base URL
+  const processImageUrls = (content) => {
+    if (!content) return content;
+
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = content;
+
+    const images = tempDiv.querySelectorAll('img');
+    images.forEach(img => {
+      const src = img.getAttribute('src');
+      if (src && src.startsWith('/uploads/')) {
+        const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+        img.setAttribute('src', `${apiUrl}${src}`);
+      }
+    });
+
+    return tempDiv.innerHTML;
+  };
+
   const getStatusChip = (published, publishDate, expiryDate) => {
     if (!published) {
       return <Chip label={t('admin.news.draft')} color="default" size="small" />;
@@ -173,7 +192,7 @@ const NewsDetailPage = () => {
                 marginBottom: 1
               }
             }}
-            dangerouslySetInnerHTML={{ __html: news.content }}
+            dangerouslySetInnerHTML={{ __html: processImageUrls(news.content) }}
           />
         </CardContent>
       </Card>

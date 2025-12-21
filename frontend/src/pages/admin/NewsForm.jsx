@@ -161,6 +161,26 @@ const NewsForm = () => {
     return tempDiv.innerHTML;
   };
 
+  // Function to strip the API base URL from image sources before submitting
+  const stripApiBaseUrlFromImages = (content) => {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = content;
+
+    const images = tempDiv.querySelectorAll('img');
+    images.forEach(img => {
+      const src = img.getAttribute('src');
+      if (src) {
+        const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+        if (src.startsWith(apiUrl)) {
+          const strippedSrc = src.replace(apiUrl, '');
+          img.setAttribute('src', strippedSrc);
+        }
+      }
+    });
+
+    return tempDiv.innerHTML;
+  };
+
   const handleContentChange = (content) => {
     const processedContent = processImageUrls(content);
     setFormData(prev => ({
@@ -176,11 +196,17 @@ const NewsForm = () => {
     setLoading(true);
 
     try {
+      // Prepare the form data for submission, stripping API base URL from image sources
+      const submissionData = {
+        ...formData,
+        content: stripApiBaseUrlFromImages(formData.content)
+      };
+
       if (isEditing) {
-        await updateNews(id, formData);
+        await updateNews(id, submissionData);
         setSuccess('News updated successfully!');
       } else {
-        await createNews(formData);
+        await createNews(submissionData);
         setSuccess('News created successfully!');
       }
 

@@ -189,7 +189,9 @@ const NewsPage = () => {
                         <CardMedia
                           component="img"
                           height="200"
-                          image={newsItem.featuredImage}
+                          image={newsItem.featuredImage && newsItem.featuredImage.startsWith('/uploads/')
+                            ? `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${newsItem.featuredImage}`
+                            : newsItem.featuredImage}
                           alt={newsItem.title}
                           sx={{ objectFit: 'cover' }}
                         />

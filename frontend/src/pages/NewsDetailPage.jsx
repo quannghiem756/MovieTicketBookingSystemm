@@ -119,12 +119,14 @@ const NewsDetailPage = () => {
           <CardMedia
             component="img"
             height="400"
-            image={news.featuredImage}
+            image={news.featuredImage && news.featuredImage.startsWith('/uploads/')
+              ? `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${news.featuredImage}`
+              : news.featuredImage}
             alt={news.title}
             sx={{ objectFit: 'cover' }}
           />
         )}
-        
+
         <CardContent sx={{ p: 4 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
             <Chip
@@ -138,11 +140,11 @@ const NewsDetailPage = () => {
             />
             {getStatusChip(news.published, news.publishDate, news.expiryDate)}
           </Box>
-          
+
           <Typography variant="h3" component="h1" sx={{ fontWeight: 700, mb: 2, color: 'text.primary' }}>
             {news.title}
           </Typography>
-          
+
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
               <CalendarToday sx={{ fontSize: '1rem', color: 'text.secondary' }} />
@@ -151,9 +153,9 @@ const NewsDetailPage = () => {
               </Typography>
             </Box>
           </Box>
-          
-          <Box 
-            sx={{ 
+
+          <Box
+            sx={{
               color: 'text.primary',
               fontSize: '1.1rem',
               lineHeight: 1.8,
@@ -171,7 +173,7 @@ const NewsDetailPage = () => {
                 marginBottom: 1
               }
             }}
-            dangerouslySetInnerHTML={{ __html: news.content }} 
+            dangerouslySetInnerHTML={{ __html: news.content }}
           />
         </CardContent>
       </Card>

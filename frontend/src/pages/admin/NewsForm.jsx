@@ -115,9 +115,12 @@ const NewsForm = () => {
       const response = await getNewsById(id);
       const news = response.data;
 
+      // Process the content to ensure image URLs have the API base URL
+      const processedContent = processImageUrls(news.content || '');
+
       setFormData({
         title: news.title || '',
-        content: news.content || '',
+        content: processedContent,
         published: news.published || false,
         publishDate: news.publishDate ? news.publishDate.substring(0, 10) : '',
         expiryDate: news.expiryDate ? news.expiryDate.substring(0, 10) : '',
@@ -141,10 +144,28 @@ const NewsForm = () => {
     }));
   };
 
+  // Function to process image URLs in content to ensure they have the API base URL
+  const processImageUrls = (content) => {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = content;
+
+    const images = tempDiv.querySelectorAll('img');
+    images.forEach(img => {
+      const src = img.getAttribute('src');
+      if (src && src.startsWith('/uploads/')) {
+        const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+        img.setAttribute('src', `${apiUrl}${src}`);
+      }
+    });
+
+    return tempDiv.innerHTML;
+  };
+
   const handleContentChange = (content) => {
+    const processedContent = processImageUrls(content);
     setFormData(prev => ({
       ...prev,
-      content
+      content: processedContent
     }));
   };
 
@@ -296,23 +317,24 @@ const NewsForm = () => {
                   {t('admin.news.content')}
                 </Typography>
                 <ReactQuill
-                  ref={quillRef} // Add ref
+                  ref={quillRef}
                   theme="snow"
                   value={formData.content}
                   onChange={handleContentChange}
                   modules={{
-                    toolbar: [
-                      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                      ['bold', 'italic', 'underline', 'strike'],
-                      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                      ['link', 'image'],
-                      ['clean']
-                    ],
-                    handlers: {
-                      'image': imageHandler // Attaches our custom logic to the image button
+                    toolbar: {
+                      container: [
+                        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                        ['link', 'image'],
+                        ['clean']
+                      ],
+                      handlers: {
+                        image: imageHandler // This must be inside toolbar: { ... }
+                      }
                     }
                   }}
-                  // Note: Removed the inline style={{...}} because we handled it in the Box sx above
                 />
               </Box>
 
@@ -372,7 +394,7 @@ const NewsForm = () => {
                     value={formData.publishDate}
                     onChange={handleInputChange}
                     variant="outlined"
-                    InputLabelProps={{ shrink: true, sx: { color: 'text.primary' }}}
+                    InputLabelProps={{ shrink: true, sx: { color: 'text.primary' } }}
                     InputProps={{ sx: { color: 'text.primary' } }}
                     sx={{
                       '& .MuiOutlinedInput-root': {

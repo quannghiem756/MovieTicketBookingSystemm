@@ -59,13 +59,24 @@ const ShowtimeMovieCard = ({ movie }) => {
   // Format time from HH:MM string format to display format
   const formatTime = (timeString) => {
     if (!timeString) return '';
-    // If timeString is already in HH:MM format, return as is
+
+    // Handle if timeString is already in HH:MM format
     if (typeof timeString === 'string' && timeString.includes(':')) {
-      return timeString;
+      // Extract just the HH:MM part if there are seconds or other info
+      const timeMatch = timeString.match(/\d{1,2}:\d{2}/);
+      return timeMatch ? timeMatch[0] : timeString;
     }
-    // If timeString is an ISO date string, extract time portion
-    const date = new Date(timeString);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    // If timeString is an ISO date string or timestamp, extract time portion
+    try {
+      const date = new Date(timeString);
+      if (isNaN(date.getTime())) {
+        return timeString; // Return original if invalid date
+      }
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    } catch (error) {
+      return timeString; // Return original on error
+    }
   };
 
   return (
@@ -288,7 +299,11 @@ const ShowtimeMovieCard = ({ movie }) => {
                   label={formatTime(showtime.showTime)}
                   size="small"
                   component={Link}
-                  to={`/booking/${showtime.id}`}
+                  to={`/book/${movie.id}/${showtime.id}`}
+                  onClick={(e) => {
+                    // Prevent default behavior if needed and ensure proper navigation
+                    e.stopPropagation();
+                  }}
                   sx={{
                     backgroundColor: 'rgba(33, 150, 243, 0.2)',
                     color: '#2196F3',

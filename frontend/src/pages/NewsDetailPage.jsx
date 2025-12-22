@@ -190,10 +190,17 @@ const NewsDetailPage = () => {
               '& h1, & h2, & h3, & h4, & h5, & h6': {
                 marginTop: 2,
                 marginBottom: 1
-              }
+              },
+              minHeight: 200, // Ensure minimum height
+              overflowX: 'hidden', // Hide horizontal overflow
+              overflowWrap: 'break-word', // Break long words only when necessary
+              wordWrap: 'break-word' // Fallback for older browsers
             }}
-            dangerouslySetInnerHTML={{ __html: processImageUrls(news.content) }}
-          />
+          >
+            <div
+              dangerouslySetInnerHTML={{ __html: processImageUrls(news.content) }}
+            />
+          </Box>
         </CardContent>
       </Card>
     </Container>

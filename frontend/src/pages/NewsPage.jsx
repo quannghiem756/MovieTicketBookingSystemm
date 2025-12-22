@@ -6,7 +6,6 @@ import {
   Card,
   CardContent,
   Typography,
-  Grid,
   Chip,
   Alert,
   LinearProgress,
@@ -165,9 +164,16 @@ const NewsPage = () => {
                 </Typography>
               </Box>
             ) : (
-              <Grid container spacing={4}>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
                 {news.map((newsItem) => (
-                  <Grid item xs={12} sm={6} md={4} key={newsItem.id}>
+                  <Box
+                    key={newsItem.id}
+                    sx={{
+                      flex: '1 1 calc(100% - 32px)', // Full width on mobile
+                      minWidth: { xs: '100%', sm: 'calc(50% - 32px)', md: 'calc(33.333% - 32px)' }, // Responsive width
+                      maxWidth: { md: 'calc(33.333% - 32px)' } // Max width on medium screens and above
+                    }}
+                  >
                     <Card
                       sx={{
                         height: '100%',
@@ -255,9 +261,9 @@ const NewsPage = () => {
                         </Button>
                       </CardContent>
                     </Card>
-                  </Grid>
+                  </Box>
                 ))}
-              </Grid>
+              </Box>
             )}
 
             {totalPages > 1 && (

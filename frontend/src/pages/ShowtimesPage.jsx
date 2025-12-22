@@ -127,8 +127,8 @@ const ShowtimesPage = () => {
       </Typography>
 
       {/* Date Filter Buttons */}
-      <Paper elevation={3} sx={{ p: 2, mb: 4, borderRadius: 2 }}>
-        <Box sx={{ display: 'flex', overflowX: 'auto', gap: 1, pb: 1, alignItems: 'center' }}>
+      <Paper elevation={3} sx={{ p: 2, mb: 4, borderRadius: 3, backgroundColor: 'background.paper' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', overflowX: 'auto', gap: 1, pb: 1, alignItems: 'center', width: '100%' }}>
           {availableDates.map((date, index) => (
             <Button
               key={index}
@@ -136,19 +136,44 @@ const ShowtimesPage = () => {
               onClick={() => handleDateSelect(date)}
               sx={{
                 whiteSpace: 'nowrap',
-                minWidth: 'auto',
+                minWidth: 80,
                 px: 2,
-                py: 1,
+                py: 1.5,
+                borderRadius: 3,
+                borderWidth: 2,
+                borderStyle: 'solid',
+                borderColor: selectedDate && date.toDateString() === selectedDate.toDateString()
+                  ? 'primary.main'
+                  : 'divider',
+                boxShadow: selectedDate && date.toDateString() === selectedDate.toDateString()
+                  ? 3
+                  : 0,
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  transform: selectedDate && date.toDateString() === selectedDate.toDateString()
+                    ? 'scale(1.05)'
+                    : 'scale(1.02)',
+                  boxShadow: 4,
+                },
                 ...(selectedDate && date.toDateString() === selectedDate.toDateString()
-                  ? { bgcolor: 'primary.main', color: 'white' }
-                  : {})
+                  ? {
+                      bgcolor: 'primary.main',
+                      color: 'white',
+                      '&:hover': {
+                        bgcolor: 'primary.dark',
+                      }
+                    }
+                  : {
+                      bgcolor: 'background.default',
+                      color: 'text.primary'
+                    })
               }}
             >
               <Box sx={{ textAlign: 'center' }}>
-                <Typography variant="caption" sx={{ display: 'block' }}>
+                <Typography variant="caption" sx={{ display: 'block', fontSize: '0.75rem' }}>
                   {date.toLocaleDateString('en-US', { weekday: 'short' })}
                 </Typography>
-                <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
+                <Typography variant="subtitle2" sx={{ fontWeight: 'bold', fontSize: '1rem' }}>
                   {date.getDate()}
                 </Typography>
               </Box>

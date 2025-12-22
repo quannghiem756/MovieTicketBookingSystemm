@@ -156,6 +156,26 @@ const Header = () => {
                 <Button
                   color="inherit"
                   component={Link}
+                  to="/showtimes"
+                  startIcon={<Movie />}
+                  sx={{
+                    textTransform: 'none',
+                    fontWeight: 500,
+                    fontSize: '0.9rem',
+                    borderRadius: 3,
+                    px: 2,
+                    py: 1,
+                    '&:hover': {
+                      backgroundColor: 'rgba(211, 47, 47, 0.1)',
+                    }
+                  }}
+                >
+                  {t('header.showtimes', 'Showtimes')}
+                </Button>
+
+                <Button
+                  color="inherit"
+                  component={Link}
                   to="/news"
                   startIcon={<Article />}
                   sx={{

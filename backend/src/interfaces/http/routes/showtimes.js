@@ -15,6 +15,7 @@ const router = express.Router();
 router.get('/', (req, res) => showtimeController.getAllShowtimes(req, res));
 router.get('/movie/:movieId', (req, res) => showtimeController.getShowtimesByMovieId(req, res));
 router.get('/movie/:movieId/future', (req, res) => showtimeController.getFutureShowtimesByMovieId(req, res));
+router.get('/date', (req, res) => showtimeController.getShowtimesByDate(req, res));
 router.get('/:id', (req, res) => showtimeController.getShowtimeById(req, res));
 
 // Protected routes (admin only)

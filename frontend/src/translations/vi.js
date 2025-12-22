@@ -3,6 +3,7 @@ const vi = {
   // Header
   'header.home': 'Trang chủ',
   'header.nowShowing': 'Đang chiếu',
+  'header.showtimes': 'Lịch chiếu',
   'header.comingSoon': 'Sắp chiếu',
   'header.news': 'Tin tức',
   'header.myBookings': 'Vé của tôi',
@@ -34,6 +35,11 @@ const vi = {
 
   // Coming Soon Page
   'comingSoon.title': 'Phim sắp chiếu',
+
+  // Showtimes Page
+  'showtimes.title': 'Lịch chiếu',
+  'showtimes.availableShowtimes': 'Lịch chiếu có sẵn',
+  'showtimes.noMoviesOnDate': 'Không có phim nào vào ngày được chọn',
 
   // Movie Details Page
   'movieDetails.director': 'Đạo diễn:',
@@ -297,6 +303,7 @@ const vi = {
   'admin.movieForm.save': 'Lưu phim',
   'admin.movieForm.saving': 'Đang lưu...',
   'admin.movieForm.error': 'Lưu phim không thành công:',
+  'admin.movieForm.delete': 'Xóa',
   // Quản lý lịch chiếu trong form phim
   'admin.movieForm.showtimesTitle': 'Lịch chiếu',
   'admin.movieForm.addShowtime': 'Thêm lịch chiếu',

@@ -3,6 +3,7 @@ const en = {
   // Header
   'header.home': 'Home',
   'header.nowShowing': 'Now Showing',
+  'header.showtimes': 'Showtimes',
   'header.comingSoon': 'Coming Soon',
   'header.news': 'News',
   'header.myBookings': 'My Bookings',
@@ -61,6 +62,11 @@ const en = {
   'movieDetails.selectDate': 'Select Date',
   'movieDetails.availableShowtimes': 'Available Showtimes',
   'movieDetails.selectShowtimeDate': 'Select Showtime Date',
+
+  // Showtimes Page
+  'showtimes.title': 'Showtimes',
+  'showtimes.availableShowtimes': 'Available Showtimes',
+  'showtimes.noMoviesOnDate': 'No movies available for the selected date',
 
   // Bookings Page
   'bookings.title': 'My Bookings',
@@ -260,6 +266,7 @@ const en = {
   'admin.movieForm.save': 'Save Movie',
   'admin.movieForm.saving': 'Saving...',
   'admin.movieForm.error': 'Failed to save movie:',
+  'admin.movieForm.delete': 'Delete',
   // Showtime Management in Movie Form
   'admin.movieForm.showtimesTitle': 'Showtimes',
   'admin.movieForm.addShowtime': 'Add Showtime',

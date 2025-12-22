@@ -141,6 +141,43 @@ class MongoShowtimeRepository extends ShowtimeRepository {
     }));
   }
 
+  async findByDate(date) {
+    // Find showtimes for a specific date (ignoring time), regardless of theater
+    const startOfDay = new Date(date);
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date(date);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const showtimeDocs = await ShowtimeModel.find({
+      showDate: { $gte: startOfDay, $lte: endOfDay }
+    }).populate('movieId');
+
+    return showtimeDocs.map(doc => ({
+      id: doc._id,
+      movieId: doc.movieId._id,
+      theaterId: doc.theaterId,
+      showDate: doc.showDate,
+      showTime: doc.showTime,
+      format: doc.format,
+      language: doc.language,
+      price: doc.price,
+      movie: {
+        id: doc.movieId._id,
+        title: doc.movieId.title,
+        posterUrl: doc.movieId.posterUrl,
+        rating: doc.movieId.rating,
+        duration: doc.movieId.duration,
+        genre: doc.movieId.genre,
+        director: doc.movieId.director,
+        cast: doc.movieId.cast,
+        synopsis: doc.movieId.synopsis,
+        releaseDate: doc.movieId.releaseDate,
+        status: doc.movieId.status
+      }
+    }));
+  }
+
   async update(id, showtime) {
     const updatedShowtime = await ShowtimeModel.findByIdAndUpdate(id, {
       movieId: showtime.movieId,

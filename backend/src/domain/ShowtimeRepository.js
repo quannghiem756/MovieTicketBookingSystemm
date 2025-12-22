@@ -24,6 +24,10 @@ class ShowtimeRepository {
     throw new Error('Method not implemented');
   }
 
+  async findByDate(date) {
+    throw new Error('Method not implemented');
+  }
+
   async update(id, showtime) {
     throw new Error('Method not implemented');
   }

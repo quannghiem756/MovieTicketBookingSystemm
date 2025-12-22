@@ -41,6 +41,10 @@ class ShowtimeService {
     return await this.showtimeRepository.findByDateAndTheater(date, theaterId);
   }
 
+  async getShowtimesByDate(date) {
+    return await this.showtimeRepository.findByDate(date);
+  }
+
   async updateShowtime(id, showtimeData) {
     const showtime = new Showtime(
       id,

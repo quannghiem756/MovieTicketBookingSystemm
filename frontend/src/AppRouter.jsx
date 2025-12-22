@@ -44,7 +44,7 @@ const AppRouter = () => {
           <Route path="/news/:id" element={<NewsDetailPage />} />
           <Route path="/coming-soon" element={<ComingSoonPage />} />
           <Route path="/movie/:id" element={<MovieDetails />} />
-          <Route path="/showtimes/:movieId" element={<ShowtimesPage />} />
+          <Route path="/showtimes" element={<ShowtimesPage />} />
           <Route path="/book/:movieId/:showtimeId" element={
             <ProtectedRoute>
               <BookingPage />

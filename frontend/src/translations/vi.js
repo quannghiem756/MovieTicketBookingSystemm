@@ -320,6 +320,7 @@ const vi = {
   'admin.movieForm.noShowtimes': 'Không có lịch chiếu cho phim này.',
   'admin.movieForm.deleteShowtimeConfirm': 'Xác nhận xóa',
   'admin.movieForm.deleteShowtimeMessage': 'Bạn có chắc chắn muốn xóa lịch chiếu lúc',
+  'admin.movieForm.rowsPerPage': 'Số hàng mỗi trang',
 
   // Admin Showtimes
   'admin.showtimes.title': 'Quản lý lịch chiếu',

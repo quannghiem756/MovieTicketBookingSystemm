@@ -283,6 +283,7 @@ const en = {
   'admin.movieForm.noShowtimes': 'No showtimes available for this movie.',
   'admin.movieForm.deleteShowtimeConfirm': 'Confirm Delete',
   'admin.movieForm.deleteShowtimeMessage': 'Are you sure you want to delete the showtime for',
+  'admin.movieForm.rowsPerPage': 'Rows per page',
 
   // Admin Theaters
   'admin.theaters.title': 'Manage Theaters',

@@ -7,7 +7,6 @@ import {
   Typography,
   TextField,
   Button,
-  Grid,
   CircularProgress,
   Alert,
   Paper,
@@ -134,114 +133,100 @@ const ShowtimeForm = () => {
 
       <Paper sx={{ p: 3, mx: 'auto' }}>
         <form onSubmit={handleSubmit}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
-              <FormControl fullWidth required sx={{minWidth: 120}}>
-                <InputLabel>{t('admin.showtimeForm.movie')}</InputLabel>
-                <Select
-                  name="movieId"
-                  value={formData.movieId}
-                  onChange={handleChange}
-                  label={t('admin.showtimeForm.movie')}
-                >
-                  <MenuItem value="">
-                    <em>{t('admin.showtimeForm.selectMovie')}</em>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 3 }}>
+            <FormControl fullWidth required sx={{minWidth: 120}}>
+              <InputLabel>{t('admin.showtimeForm.movie')}</InputLabel>
+              <Select
+                name="movieId"
+                value={formData.movieId}
+                onChange={handleChange}
+                label={t('admin.showtimeForm.movie')}
+              >
+                <MenuItem value="">
+                  <em>{t('admin.showtimeForm.selectMovie')}</em>
+                </MenuItem>
+                {movies.map((movie) => (
+                  <MenuItem key={movie.id} value={movie.id}>
+                    {movie.title}
                   </MenuItem>
-                  {movies.map((movie) => (
-                    <MenuItem key={movie.id} value={movie.id}>
-                      {movie.title}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
+                ))}
+              </Select>
+            </FormControl>
 
-            <Grid item xs={12} md={6}>
-              <FormControl fullWidth required sx={{minWidth: 150}}>
-                <InputLabel>{t('admin.showtimeForm.theater')}</InputLabel>
-                <Select
-                  name="theaterId"
-                  value={formData.theaterId}
-                  onChange={handleChange}
-                  label={t('admin.showtimeForm.theater')}
-                >
-                  <MenuItem value="">
-                    <em>{t('admin.showtimeForm.selectTheater')}</em>
+            <FormControl fullWidth required sx={{minWidth: 150}}>
+              <InputLabel>{t('admin.showtimeForm.theater')}</InputLabel>
+              <Select
+                name="theaterId"
+                value={formData.theaterId}
+                onChange={handleChange}
+                label={t('admin.showtimeForm.theater')}
+              >
+                <MenuItem value="">
+                  <em>{t('admin.showtimeForm.selectTheater')}</em>
+                </MenuItem>
+                {theaters.map((theater) => (
+                  <MenuItem key={theater.id} value={theater.id}>
+                    {theater.name} ({theater.location})
                   </MenuItem>
-                  {theaters.map((theater) => (
-                    <MenuItem key={theater.id} value={theater.id}>
-                      {theater.name} ({theater.location})
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
+                ))}
+              </Select>
+            </FormControl>
 
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                type="date"
-                label={t('admin.showtimeForm.showDate')}
-                name="showDate"
-                value={formData.showDate}
-                onChange={handleChange}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                required
-              />
-            </Grid>
+            <TextField
+              fullWidth
+              type="date"
+              label={t('admin.showtimeForm.showDate')}
+              name="showDate"
+              value={formData.showDate}
+              onChange={handleChange}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              required
+            />
 
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label={t('admin.showtimeForm.showTime')}
-                name="showTime"
-                value={formData.showTime}
-                onChange={handleChange}
-                placeholder={t('admin.showtimeForm.timePlaceholder')}
-                required
-              />
-            </Grid>
+            <TextField
+              fullWidth
+              label={t('admin.showtimeForm.showTime')}
+              name="showTime"
+              value={formData.showTime}
+              onChange={handleChange}
+              placeholder={t('admin.showtimeForm.timePlaceholder')}
+              required
+            />
 
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label={t('admin.showtimeForm.format')}
-                name="format"
-                value={formData.format}
-                onChange={handleChange}
-                placeholder={t('admin.showtimeForm.formatPlaceholder')}
-              />
-            </Grid>
+            <TextField
+              fullWidth
+              label={t('admin.showtimeForm.format')}
+              name="format"
+              value={formData.format}
+              onChange={handleChange}
+              placeholder={t('admin.showtimeForm.formatPlaceholder')}
+            />
 
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label={t('admin.showtimeForm.language')}
-                name="language"
-                value={formData.language}
-                onChange={handleChange}
-                placeholder={t('admin.showtimeForm.languagePlaceholder')}
-              />
-            </Grid>
+            <TextField
+              fullWidth
+              label={t('admin.showtimeForm.language')}
+              name="language"
+              value={formData.language}
+              onChange={handleChange}
+              placeholder={t('admin.showtimeForm.languagePlaceholder')}
+            />
 
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                type="number"
-                label={t('admin.showtimeForm.price')}
-                name="price"
-                value={formData.price}
-                onChange={handleChange}
-                step="0.01"
-                InputProps={{
-                  inputProps: { min: 0 }
-                }}
-                required
-              />
-            </Grid>
-          </Grid>
+            <TextField
+              fullWidth
+              type="number"
+              label={t('admin.showtimeForm.price')}
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
+              step="0.01"
+              InputProps={{
+                inputProps: { min: 0 }
+              }}
+              required
+            />
+          </Box>
 
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 3 }}>
             <Button

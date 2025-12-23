@@ -26,7 +26,9 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  IconButton
+  IconButton,
+  Pagination,
+  Stack
 } from '@mui/material';
 import {
   ArrowBack,
@@ -74,6 +76,10 @@ const MovieForm = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [showtimeToDelete, setShowtimeToDelete] = useState(null);
 
+  // Pagination state for showtimes
+  const [page, setPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(5); // Number of showtimes per page
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -111,6 +117,8 @@ const MovieForm = () => {
     try {
       const response = await getShowtimesByMovieId(id);
       setShowtimes(response.data);
+      // Reset to first page when showtimes are updated
+      setPage(1);
     } catch (err) {
       console.error('Failed to fetch showtimes:', err);
     }
@@ -184,6 +192,7 @@ const MovieForm = () => {
 
       // Refresh showtimes
       await fetchShowtimes();
+      // Page is reset to 1 in fetchShowtimes
       closeShowtimeForm();
     } catch (err) {
       setError('Failed to save showtime: ' + err.message);
@@ -201,6 +210,7 @@ const MovieForm = () => {
     try {
       await deleteShowtime(showtimeToDelete.id);
       await fetchShowtimes();
+      // Page is reset to 1 in fetchShowtimes
       setDeleteDialogOpen(false);
       setShowtimeToDelete(null);
     } catch (err) {
@@ -517,54 +527,85 @@ const MovieForm = () => {
           </Box>
 
           {showtimes.length > 0 ? (
-            <TableContainer>
-              <Table sx={{ minWidth: 650 }} aria-label="showtimes table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>{t('admin.movieForm.showtimeDate')}</TableCell>
-                    <TableCell>{t('admin.movieForm.showtimeTime')}</TableCell>
-                    <TableCell>{t('admin.movieForm.showtimeTheater')}</TableCell>
-                    <TableCell>{t('admin.movieForm.showtimeFormat')}</TableCell>
-                    <TableCell>{t('admin.movieForm.showtimeLanguage')}</TableCell>
-                    <TableCell>{t('admin.movieForm.showtimePrice')}</TableCell>
-                    <TableCell>{t('admin.movieForm.showtimeActions')}</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {showtimes.map((showtime) => (
-                    <TableRow
-                      key={showtime.id}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      <TableCell>
-                        {showtime.showDate ? new Date(showtime.showDate).toLocaleDateString() : ''}
-                      </TableCell>
-                      <TableCell>{showtime.showTime}</TableCell>
-                      <TableCell>{t('admin.movieForm.theater')} {showtime.theaterId}</TableCell>
-                      <TableCell>{showtime.format}</TableCell>
-                      <TableCell>{showtime.language}</TableCell>
-                      <TableCell>{formatCurrency(showtime.price)}</TableCell>
-                      <TableCell>
-                        <IconButton
-                          onClick={() => openShowtimeForm(showtime)}
-                          size="small"
-                          sx={{ mr: 1 }}
-                        >
-                          <Edit />
-                        </IconButton>
-                        <IconButton
-                          onClick={() => handleDeleteShowtimeClick(showtime)}
-                          size="small"
-                          color="error"
-                        >
-                          <Delete />
-                        </IconButton>
-                      </TableCell>
+            <Box>
+              <TableContainer>
+                <Table sx={{ minWidth: 650 }} aria-label="showtimes table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>{t('admin.movieForm.showtimeDate')}</TableCell>
+                      <TableCell>{t('admin.movieForm.showtimeTime')}</TableCell>
+                      <TableCell>{t('admin.movieForm.showtimeTheater')}</TableCell>
+                      <TableCell>{t('admin.movieForm.showtimeFormat')}</TableCell>
+                      <TableCell>{t('admin.movieForm.showtimeLanguage')}</TableCell>
+                      <TableCell>{t('admin.movieForm.showtimePrice')}</TableCell>
+                      <TableCell>{t('admin.movieForm.showtimeActions')}</TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                  </TableHead>
+                  <TableBody>
+                    {showtimes
+                      .slice((page - 1) * rowsPerPage, page * rowsPerPage)
+                      .map((showtime) => (
+                        <TableRow
+                          key={showtime.id}
+                          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                        >
+                          <TableCell>
+                            {showtime.showDate ? new Date(showtime.showDate).toLocaleDateString() : ''}
+                          </TableCell>
+                          <TableCell>{showtime.showTime}</TableCell>
+                          <TableCell>{t('admin.movieForm.theater')} {showtime.theaterId}</TableCell>
+                          <TableCell>{showtime.format}</TableCell>
+                          <TableCell>{showtime.language}</TableCell>
+                          <TableCell>{formatCurrency(showtime.price)}</TableCell>
+                          <TableCell>
+                            <IconButton
+                              onClick={() => openShowtimeForm(showtime)}
+                              size="small"
+                              sx={{ mr: 1 }}
+                            >
+                              <Edit />
+                            </IconButton>
+                            <IconButton
+                              onClick={() => handleDeleteShowtimeClick(showtime)}
+                              size="small"
+                              color="error"
+                            >
+                              <Delete />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                {/* Pagination Controls */}
+                <Pagination
+                  count={Math.ceil(showtimes.length / rowsPerPage)}
+                  page={page}
+                  onChange={(event, value) => setPage(value)}
+                  color="primary"
+                />
+                <Box sx={{ mt: 1, display: 'flex', alignItems: 'center' }}>
+                  <Typography variant="body2" sx={{ mr: 1 }}>
+                    {t('admin.movieForm.rowsPerPage')}:
+                  </Typography>
+                  <Select
+                    value={rowsPerPage}
+                    onChange={(e) => {
+                      setRowsPerPage(Number(e.target.value));
+                      setPage(1); // Reset to first page when changing rows per page
+                    }}
+                    size="small"
+                    sx={{ width: 80 }}
+                  >
+                    <MenuItem value={5}>5</MenuItem>
+                    <MenuItem value={10}>10</MenuItem>
+                    <MenuItem value={25}>25</MenuItem>
+                  </Select>
+                </Box>
+              </Box>
+            </Box>
           ) : (
             <Typography variant="body1" sx={{ textAlign: 'center', py: 2 }}>
               {t('admin.movieForm.noShowtimes')}

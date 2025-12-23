@@ -1,6 +1,6 @@
 // Booking domain model
 class Booking {
-  constructor(id, userId, showtimeId, seatIds, totalPrice, bookingDate, status, paymentMethod) {
+  constructor(id, userId, showtimeId, seatIds, totalPrice, bookingDate, status, paymentMethod, expiresAt) {
     this.id = id;
     this.userId = userId;
     this.showtimeId = showtimeId;
@@ -9,6 +9,7 @@ class Booking {
     this.bookingDate = bookingDate;
     this.status = status; // pending, confirmed, cancelled, paid
     this.paymentMethod = paymentMethod || 'momo'; // Default to momo, can be 'momo' or 'cash'
+    this.expiresAt = expiresAt;
   }
 }
 

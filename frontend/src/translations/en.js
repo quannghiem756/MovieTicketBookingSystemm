@@ -101,6 +101,9 @@ const en = {
   'booking.processing': 'Processing...',
   'booking.error': 'Booking failed. Please try again.',
   'booking.selectSeats': 'Please select at least one seat.',
+  'booking.maxSeatsSelected': 'You can only select up to 8 seats.',
+  'booking.sessionExpired': 'Your session has expired. Please select seats again.',
+  'booking.timeLeft': 'Time Left',
   'booking.standard': 'Standard Seat',
   'booking.double': 'Double Seat',
   'booking.vip': 'VIP Seat',
@@ -140,6 +143,7 @@ const en = {
 
   // Login Page
   'login.title': 'Sign in to your account',
+  'login.subtitle': 'Welcome back! Please enter your details to sign in.',
   'login.email': 'Email address',
   'login.password': 'Password',
   'login.submit': 'Sign in',

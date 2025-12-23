@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
+const http = require('http'); // Import http
+const { Server } = require('socket.io'); // Import socket.io
 require('dotenv').config();
 
 const app = express();
@@ -24,6 +26,40 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', () => {
   console.log('Connected to MongoDB');
+});
+
+// Create HTTP server
+const server = http.createServer(app);
+
+// Initialize Socket.io
+const io = new Server(server, {
+  cors: {
+    origin: '*', // Allow all origins for now (adjust for production)
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
+  }
+});
+
+// Store io instance in app locals so it can be accessed in controllers
+app.set('io', io);
+
+// Socket.io connection handler
+io.on('connection', (socket) => {
+  console.log('A user connected:', socket.id);
+
+  // Join a room based on showtimeId
+  socket.on('join_showtime', (showtimeId) => {
+    socket.join(showtimeId);
+    console.log(`User ${socket.id} joined showtime room: ${showtimeId}`);
+  });
+
+  socket.on('leave_showtime', (showtimeId) => {
+    socket.leave(showtimeId);
+    console.log(`User ${socket.id} left showtime room: ${showtimeId}`);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected:', socket.id);
+  });
 });
 
 // Routes
@@ -53,6 +89,7 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/recommendations', recommendationRoutes);
 
-app.listen(PORT, () => {
+// Replace app.listen with server.listen
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

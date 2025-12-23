@@ -164,6 +164,9 @@ export const getBookingById = (id) => api.get(`/bookings/${id}`);
 export const createBooking = (booking) => api.post('/bookings', booking);
 export const confirmBooking = (id) => api.put(`/bookings/${id}/confirm`);
 export const cancelBooking = (id) => api.put(`/bookings/${id}/cancel`);
+export const holdSeat = (showtimeId, seatId) => api.post('/bookings/hold', { showtimeId, seatId });
+export const releaseSeat = (showtimeId, seatId) => api.post('/bookings/release', { showtimeId, seatId });
+export const getLockedSeats = (showtimeId) => api.get(`/bookings/locked-seats/${showtimeId}`);
 
 // Payment API
 export const createMomoPayment = (bookingId) => api.post(`/payments/create-momo/${bookingId}`);

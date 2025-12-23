@@ -6,9 +6,10 @@ const bookingSchema = new mongoose.Schema({
   seatIds: [{ type: String }], // Array of selected seat IDs
   totalPrice: { type: Number, required: true },
   bookingDate: { type: Date, default: Date.now },
-  status: { type: String, enum: ['pending', 'confirmed', 'cancelled', 'paid'], default: 'pending' },
+  status: { type: String, enum: ['pending', 'confirmed', 'cancelled', 'paid', 'held'], default: 'pending' },
   paymentId: { type: String }, // Reference to payment transaction
-  paymentMethod: { type: String, enum: ['momo', 'cash'], default: 'momo' } // Payment method used
+  paymentMethod: { type: String, enum: ['momo', 'cash'], default: 'momo' }, // Payment method used
+  expiresAt: { type: Date } // When the pending/held booking expires
 }, {
   timestamps: true
 });

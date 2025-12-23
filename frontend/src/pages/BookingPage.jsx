@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Container,
@@ -26,12 +26,27 @@ import {
   AccessibleForward,
   Warning,
   ShoppingCart,
-  Done
+  Done,
+  Timer
 } from '@mui/icons-material';
-import { getMovieById, getShowtimeById, getTheaterById, createBooking, createMomoPayment } from '../services/api';
+import { io } from 'socket.io-client';
+import { 
+  getMovieById, 
+  getShowtimeById, 
+  getTheaterById, 
+  createBooking, 
+  createMomoPayment,
+  holdSeat,
+  releaseSeat,
+  getLockedSeats,
+  getBookingsByUserId
+} from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from '../context/I18nContext';
 import { formatCurrency } from '../utils/currency';
+
+// Initialize socket outside component to avoid multiple connections
+const socket = io(process.env.REACT_APP_API_URL || 'http://localhost:5000');
 
 const BookingPage = () => {
   const { movieId, showtimeId } = useParams();
@@ -45,15 +60,50 @@ const BookingPage = () => {
   const [showtime, setShowtime] = useState(null);
   const [theater, setTheater] = useState(null);
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const [lockedSeats, setLockedSeats] = useState([]); // Seats locked by others
   const [totalPrice, setTotalPrice] = useState(0);
   const [loading, setLoading] = useState(true);
   const [bookingLoading, setBookingLoading] = useState(false);
   const [error, setError] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState('momo'); // Default to MoMo
+  const [timeLeft, setTimeLeft] = useState(null); // Timer in seconds
+  const timerRef = useRef(null);
 
   // For this example, we'll create a more detailed seat map
   // In a real application, this would come from the theater data
   const [seatMap, setSeatMap] = useState([]);
+
+  useEffect(() => {
+    // Join showtime room
+    socket.emit('join_showtime', showtimeId);
+
+    // Listen for seat updates
+    const handleSeatHeld = ({ seatId, userId }) => {
+      // If it's not me holding the seat, add to lockedSeats
+      if (!user || userId !== user.id) {
+        setLockedSeats(prev => [...prev, seatId]);
+      }
+    };
+
+    const handleSeatReleased = ({ seatId }) => {
+      setLockedSeats(prev => prev.filter(id => id !== seatId));
+    };
+
+    const handleSeatConfirmed = ({ seatId }) => {
+       setLockedSeats(prev => [...prev, seatId]);
+    };
+
+    socket.on('seat_held', handleSeatHeld);
+    socket.on('seat_released', handleSeatReleased);
+    socket.on('seat_confirmed', handleSeatConfirmed);
+
+    return () => {
+      socket.emit('leave_showtime', showtimeId);
+      socket.off('seat_held', handleSeatHeld);
+      socket.off('seat_released', handleSeatReleased);
+      socket.off('seat_confirmed', handleSeatConfirmed);
+    };
+  }, [showtimeId, user]);
 
   useEffect(() => {
     const fetchBookingData = async () => {
@@ -72,6 +122,37 @@ const BookingPage = () => {
         // Fetch theater data
         const theaterResponse = await getTheaterById(showtimeResponse.data.theaterId);
         setTheater(theaterResponse.data);
+        
+        // Fetch locked seats
+        try {
+          const lockedResponse = await getLockedSeats(showtimeId);
+          setLockedSeats(lockedResponse.data || []);
+        } catch (e) {
+          console.error("Failed to fetch locked seats", e);
+        }
+
+        // Check if user already has held seats for this showtime to restore session
+        if (user) {
+          try {
+            const userBookingsRes = await getBookingsByUserId(user.id);
+            const userBookings = userBookingsRes.data;
+            const activeHold = userBookings.find(b => 
+              b.showtimeId === showtimeId && 
+              (b.status === 'held' || b.status === 'pending') &&
+              (!b.expiresAt || new Date(b.expiresAt) > new Date())
+            );
+
+            if (activeHold) {
+              setSelectedSeats(activeHold.seatIds);
+              if (activeHold.expiresAt) {
+                const diff = Math.floor((new Date(activeHold.expiresAt) - new Date()) / 1000);
+                if (diff > 0) setTimeLeft(diff);
+              }
+            }
+          } catch (e) {
+            console.error("Failed to restore user session", e);
+          }
+        }
 
         // Create seat map from theater data
         if (theaterResponse.data.seatMap) {
@@ -89,7 +170,7 @@ const BookingPage = () => {
                 row: String.fromCharCode(65 + r),
                 number: s + 1,
                 type: 'standard', // Default to standard type
-                isAvailable: Math.random() > 0.3, // Randomly mark some seats as unavailable
+                isAvailable: true, 
                 isSelected: false
               });
             }
@@ -106,7 +187,40 @@ const BookingPage = () => {
     };
 
     fetchBookingData();
-  }, [movieId, showtimeId]);
+  }, [movieId, showtimeId, user]);
+
+  // Timer effect
+  useEffect(() => {
+    if (timeLeft === null || timeLeft <= 0) {
+      if (timeLeft === 0) {
+         // Timer expired
+         setError(t('booking.sessionExpired'));
+         setSelectedSeats([]);
+         setTimeLeft(null);
+         // Refresh locked seats to ensure consistent state
+         getLockedSeats(showtimeId).then(res => setLockedSeats(res.data || [])).catch(console.error);
+      }
+      return;
+    }
+
+    timerRef.current = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(timerRef.current);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timerRef.current);
+  }, [timeLeft, showtimeId]);
+
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  };
 
   const getSeatPrice = (seatId) => {
     const seat = seatMap.flat().find(s => s.id === seatId);
@@ -134,27 +248,78 @@ const BookingPage = () => {
     setTotalPrice(total);
   }, [selectedSeats, showtime, seatMap]);
 
-  const handleSeatClick = (seatId) => {
+  const handleSeatClick = async (seatId) => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
     const isSelected = selectedSeats.includes(seatId);
 
-    if (isSelected) {
-      // Deselect seat
-      setSelectedSeats(selectedSeats.filter(id => id !== seatId));
-    } else {
-      // Check if we've reached the maximum number of seats
-      if (selectedSeats.length >= 8) {
-        setError(t('booking.maxSeatsSelected'));
-        return;
-      }
+    try {
+      if (isSelected) {
+        // Release seat
+        // Optimistic update for UI speed
+        const newSelected = selectedSeats.filter(id => id !== seatId);
+        setSelectedSeats(newSelected);
+        if (newSelected.length === 0) setTimeLeft(null);
 
-      // Select seat
-      setSelectedSeats([...selectedSeats, seatId]);
+        await releaseSeat(showtimeId, seatId);
+      } else {
+        // Check limits
+        if (selectedSeats.length >= 8) {
+          setError(t('booking.maxSeatsSelected'));
+          return;
+        }
+
+        // Hold seat
+        // Optimistic update
+        const originalSeats = [...selectedSeats];
+        setSelectedSeats([...selectedSeats, seatId]);
+
+        try {
+          const res = await holdSeat(showtimeId, seatId);
+          if (res.data && res.data.expiresAt) {
+             // Sync timer
+             const diff = Math.floor((new Date(res.data.expiresAt) - new Date()) / 1000);
+             setTimeLeft(diff);
+          } else {
+             // Fallback timer if not provided
+             if (!timeLeft) setTimeLeft(600);
+          }
+        } catch (err) {
+          // Revert if failed
+          setSelectedSeats(originalSeats);
+          setError(err.response?.data?.error || t('booking.seatUnavailable'));
+          // Refresh locked seats to show the one that caused error
+          const lockedResponse = await getLockedSeats(showtimeId);
+          setLockedSeats(lockedResponse.data || []);
+        }
+      }
+    } catch (err) {
+      console.error("Seat action failed", err);
     }
   };
 
   const getSeatStatus = (seat) => {
-    if (!seat.isAvailable) return 'unavailable';
+    // Check if locked by others (lockedSeats includes my own seats if I have a booking)
+    // But selectedSeats tracks my local selection.
+    
+    // If it's in selectedSeats, it's 'selected'.
     if (selectedSeats.includes(seat.id)) return 'selected';
+    
+    // If it's in lockedSeats BUT NOT in selectedSeats, it's 'unavailable'.
+    // (We filter out my own seats from lockedSeats via socket logic, but initial load includes them)
+    // However, since we fetch lockedSeats from server which includes ALL pending/confirmed,
+    // we need to know WHICH of those are mine if we want to be perfect.
+    // BUT: selectedSeats is the source of truth for "My Selection". 
+    // If I hold a seat, it is in selectedSeats AND lockedSeats.
+    // So the logic `if (lockedSeats.includes(seat.id)) return 'unavailable'` works fine 
+    // because `selectedSeats` check comes FIRST.
+    if (lockedSeats.includes(seat.id)) return 'unavailable';
+    
+    if (!seat.isAvailable) return 'unavailable'; // Theater map hard availability
+    
     return 'available';
   };
 
@@ -240,7 +405,7 @@ const BookingPage = () => {
       </Container>
     );
 
-  if (error && !movie && !showtime)
+  if (error && !movie && !showtime && !timeLeft) // Only show full page error if critical data missing
     return (
       <Container maxWidth="lg">
         <Box sx={{ textAlign: 'center', py: 10 }}>
@@ -260,7 +425,7 @@ const BookingPage = () => {
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 3 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3, alignItems: 'center' }}>
         <Button
           onClick={() => navigate(-1)}
           startIcon={<ArrowBack />}
@@ -269,6 +434,15 @@ const BookingPage = () => {
         >
           {t('common.back')}
         </Button>
+        
+        {timeLeft > 0 && (
+           <Chip 
+             icon={<Timer />} 
+             label={`${t('booking.timeLeft') || 'Time Left'}: ${formatTime(timeLeft)}`} 
+             color={timeLeft < 60 ? 'error' : 'primary'}
+             sx={{ fontWeight: 'bold', fontSize: '1rem', px: 2, py: 2.5, borderRadius: 2 }}
+           />
+        )}
       </Box>
 
       {/* Movie and showtime info */}
@@ -472,7 +646,7 @@ const BookingPage = () => {
                         key={seat.id}
                       >
                         <Box
-                          onClick={() => seat.isAvailable && handleSeatClick(seat.id)}
+                          onClick={() => status !== 'unavailable' && handleSeatClick(seat.id)}
                           sx={{
                             width: 36,
                             height: 36,
@@ -484,10 +658,10 @@ const BookingPage = () => {
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            cursor: seat.isAvailable ? 'pointer' : 'not-allowed',
+                            cursor: status !== 'unavailable' ? 'pointer' : 'not-allowed',
                             transition: 'all 0.2s',
                             '&:hover': {
-                              transform: seat.isAvailable ? 'scale(1.1)' : 'none',
+                              transform: status !== 'unavailable' ? 'scale(1.1)' : 'none',
                               bgcolor: status === 'selected'
                                 ? 'success.dark'
                                 : status === 'unavailable'

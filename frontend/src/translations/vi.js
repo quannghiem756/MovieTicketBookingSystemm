@@ -121,6 +121,9 @@ const vi = {
   'booking.processing': 'Đang xử lý...',
   'booking.error': 'Đặt vé không thành công. Vui lòng thử lại.',
   'booking.selectSeats': 'Vui lòng chọn ít nhất một ghế.',
+  'booking.maxSeatsSelected': 'Bạn chỉ có thể chọn tối đa 8 ghế.',
+  'booking.sessionExpired': 'Phiên làm việc của bạn đã hết hạn. Vui lòng chọn lại ghế.',
+  'booking.timeLeft': 'Thời gian còn lại',
   'booking.standard': 'Ghế thường',
   'booking.double': 'Ghế Đôi',
   'booking.vip': 'Ghế VIP',
@@ -167,6 +170,7 @@ const vi = {
 
   // Login Page
   'login.title': 'Đăng nhập vào tài khoản của bạn',
+  'login.subtitle': 'Chào mừng quay trở lại! Vui lòng nhập thông tin để đăng nhập.',
   'login.email': 'Địa chỉ email',
   'login.password': 'Mật khẩu',
   'login.submit': 'Đăng nhập',

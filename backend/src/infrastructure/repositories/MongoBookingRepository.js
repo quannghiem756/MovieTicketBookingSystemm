@@ -10,7 +10,8 @@ class MongoBookingRepository extends BookingRepository {
       totalPrice: booking.totalPrice,
       bookingDate: booking.bookingDate,
       status: booking.status,
-      paymentMethod: booking.paymentMethod
+      paymentMethod: booking.paymentMethod,
+      expiresAt: booking.expiresAt
     });
 
     const savedBooking = await bookingDoc.save();
@@ -272,7 +273,8 @@ class MongoBookingRepository extends BookingRepository {
       totalPrice: booking.totalPrice,
       bookingDate: booking.bookingDate,
       status: booking.status,
-      paymentMethod: booking.paymentMethod
+      paymentMethod: booking.paymentMethod,
+      expiresAt: booking.expiresAt
     }, { new: true })
     .populate({
       path: 'showtimeId',
@@ -342,24 +344,78 @@ class MongoBookingRepository extends BookingRepository {
   }
 
   async findLockedSeats(showtimeId) {
-    // Find all bookings with "pending" status for a showtime
-    // These represent temporarily locked seats
-    const pendingBookings = await BookingModel.find({
+    // Find all bookings that lock seats:
+    // 1. Confirmed/Paid bookings
+    // 2. Pending/Held bookings that haven't expired
+    const lockedBookings = await BookingModel.find({
       showtimeId,
-      status: 'pending',
-      bookingDate: {
-        $gte: new Date(Date.now() - 10 * 60 * 1000) // Last 10 minutes
-      }
+      $or: [
+        { status: { $in: ['confirmed', 'paid'] } },
+        { 
+          status: { $in: ['pending', 'held'] },
+          $or: [
+            { expiresAt: { $gt: new Date() } },
+            // Fallback for legacy bookings without expiresAt (default 10 mins from creation)
+            { expiresAt: { $exists: false }, bookingDate: { $gte: new Date(Date.now() - 10 * 60 * 1000) } }
+          ]
+        }
+      ]
     });
 
-    // Extract all seat IDs from pending bookings
+    // Extract all seat IDs from locked bookings
     const lockedSeats = [];
-    pendingBookings.forEach(booking => {
+    lockedBookings.forEach(booking => {
       lockedSeats.push(...booking.seatIds);
     });
 
     return lockedSeats;
   }
+
+  async findCollidingBooking(showtimeId, seatId, excludeUserId = null) {
+    const query = {
+      showtimeId,
+      seatIds: seatId,
+      $or: [
+        { status: { $in: ['confirmed', 'paid'] } },
+        { 
+          status: { $in: ['pending', 'held'] },
+          $or: [
+            { expiresAt: { $gt: new Date() } },
+            { expiresAt: { $exists: false }, bookingDate: { $gte: new Date(Date.now() - 10 * 60 * 1000) } }
+          ]
+        }
+      ]
+    };
+
+    if (excludeUserId) {
+      query.userId = { $ne: excludeUserId };
+    }
+
+    return await BookingModel.findOne(query);
+  }
+
+  async findPendingBookingByUser(userId, showtimeId) {
+    return await BookingModel.findOne({
+      userId,
+      showtimeId,
+      status: { $in: ['pending', 'held'] },
+      expiresAt: { $gt: new Date() }
+    });
+  }
+
+  async addSeatToBooking(bookingId, seatId, expiresAt) {
+    return await BookingModel.findByIdAndUpdate(bookingId, {
+      $addToSet: { seatIds: seatId },
+      $set: { expiresAt: expiresAt, status: 'held' }
+    }, { new: true });
+  }
+
+  async removeSeatFromBooking(bookingId, seatId) {
+    return await BookingModel.findByIdAndUpdate(bookingId, {
+      $pull: { seatIds: seatId }
+    }, { new: true });
+  }
+
 
   async countAll() {
     return await BookingModel.countDocuments();

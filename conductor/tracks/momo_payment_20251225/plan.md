@@ -22,7 +22,7 @@
 - [x] Task: Update the frontend booking flow to redirect to the MoMo payment URL upon booking confirmation. [2ca352e]
 - [x] Task: Conductor - User Manual Verification 'Frontend Integration & User Experience' (Protocol in workflow.md) [483b863]
 
-## Phase 5: Integration Testing
+## Phase 5: Integration Testing [checkpoint: d2e3caa]
 - [x] Task: Perform an end-to-end test of the payment flow (Booking -> Payment -> Callback -> Success Page). [483b863]
 - [x] Task: Test edge cases: User cancels payment, network failure during callback, invalid signature. [483b863]
-- [~] Task: Conductor - User Manual Verification 'Integration Testing' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Integration Testing' (Protocol in workflow.md) [d2e3caa]

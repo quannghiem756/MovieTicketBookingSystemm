@@ -11,11 +11,11 @@
 - [x] Task: Conductor - User Manual Verification 'Payment Initiation (Backend)' (Protocol in workflow.md) [effdf6e]
 
 ## Phase 3: Callback & IPN Handling (Backend)
-- [ ] Task: Write Unit Tests for `PaymentService.verifySignature` to ensure incoming IPN requests are authentic.
-- [ ] Task: Write Unit Tests for `PaymentService.processPaymentResult` to verify booking status updates based on IPN codes.
-- [ ] Task: Implement/Refactor `paymentRoutes.js` to handle the callback endpoint (IPN) and update booking status securely.
-- [ ] Task: Ensure idempotency in the callback handler (prevent double-processing of the same order).
-- [ ] Task: Conductor - User Manual Verification 'Callback & IPN Handling (Backend)' (Protocol in workflow.md)
+- [x] Task: Write Unit Tests for `PaymentService.verifySignature` to ensure incoming IPN requests are authentic. [effdf6e]
+- [x] Task: Write Unit Tests for `PaymentService.processPaymentResult` to verify booking status updates based on IPN codes. [effdf6e]
+- [x] Task: Implement/Refactor `paymentRoutes.js` to handle the callback endpoint (IPN) and update booking status securely. [effdf6e]
+- [x] Task: Ensure idempotency in the callback handler (prevent double-processing of the same order). [effdf6e]
+- [~] Task: Conductor - User Manual Verification 'Callback & IPN Handling (Backend)' (Protocol in workflow.md)
 
 ## Phase 4: Frontend Integration & User Experience
 - [ ] Task: Review `PaymentResult.jsx` and ensure it correctly interprets the query parameters returned by MoMo.

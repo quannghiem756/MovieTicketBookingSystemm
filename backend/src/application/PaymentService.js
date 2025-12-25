@@ -96,7 +96,39 @@ const verifyMomoResponse = (momoResponse) => {
   return computedSignature === signature;
 };
 
+// Process the payment result and update booking status
+const processPaymentResult = async (momoResponse) => {
+  const { orderId, resultCode, transId, message } = momoResponse;
+
+  const booking = await bookingRepository.findById(orderId);
+  if (!booking) {
+    throw new Error('Booking not found');
+  }
+
+  // Idempotency check: if booking is already confirmed, return success
+  if (booking.status === 'confirmed') {
+    console.log(`Booking ${orderId} is already confirmed. Skipping update.`);
+    return { success: true, booking, alreadyProcessed: true };
+  }
+
+  // Map MoMo result code to booking status
+  // 0: success, others: failed
+  if (parseInt(resultCode) === 0) {
+    booking.status = 'confirmed';
+    booking.paymentId = transId;
+    await bookingRepository.update(orderId, booking);
+    console.log(`Booking ${orderId} marked as confirmed.`);
+    return { success: true, booking };
+  } else {
+    booking.status = 'cancelled';
+    await bookingRepository.update(orderId, booking);
+    console.log(`Booking ${orderId} marked as cancelled due to payment failure: ${message}`);
+    return { success: false, booking, message };
+  }
+};
+
 module.exports = {
   createMomoPaymentUrl,
-  verifyMomoResponse
+  verifyMomoResponse,
+  processPaymentResult
 };

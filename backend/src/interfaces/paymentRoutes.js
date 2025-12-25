@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createMomoPaymentUrl, verifyMomoResponse } = require('../application/PaymentService');
+const { createMomoPaymentUrl, verifyMomoResponse, processPaymentResult } = require('../application/PaymentService');
 const BookingRepository = require('../infrastructure/repositories/MongoBookingRepository');
 const bookingRepository = new BookingRepository();
 
@@ -75,35 +75,16 @@ router.post('/momo/callback', async (req, res) => {
     const isValid = verifyMomoResponse(momoResponse);
 
     if (isValid) {
-      const orderId = momoResponse.orderId;
-      const resultCode = momoResponse.resultCode;
-      const transId = momoResponse.transId;
-      const amount = momoResponse.amount;
+      const result = await processPaymentResult(momoResponse);
 
-      if (resultCode === 0) {
-        // Payment successful
-        // Update booking status to paid
-        const booking = await bookingRepository.findById(orderId);
-        if (booking) {
-          booking.status = 'confirmed';
-          booking.paymentId = transId; // Store MoMo transaction ID
-          await bookingRepository.update(orderId, booking);
-          console.log(`Booking ${orderId} marked as confirmed.`);
-
-        }
-
-        console.log(`MoMo Payment successful for booking ${orderId}, transaction ID: ${transId}`);
-
-        // Respond to MoMo that IPN was received successfully
+      if (result.success) {
+        console.log(`MoMo Payment successful for booking ${momoResponse.orderId}`);
         res.json({
           resultCode: 0,
           message: 'IPN processed successfully'
         });
       } else {
-        // Payment failed
-        console.log(`MoMo Payment failed for booking ${orderId}: ${momoResponse.message}`);
-
-        // Respond to MoMo that IPN was processed
+        console.log(`MoMo Payment failed for booking ${momoResponse.orderId}: ${result.message}`);
         res.json({
           resultCode: 1,
           message: 'IPN processed but payment failed'
@@ -133,24 +114,17 @@ router.post('/momo/callback', async (req, res) => {
 // MoMo return URL (user gets redirected here after payment)
 router.get('/momo/return', async (req, res) => {
   try {
-    const { orderId, resultCode, message } = req.query;
+    const momoResponse = req.query;
+    const { orderId, resultCode, message } = momoResponse;
+
+    console.log('MoMo return received:', momoResponse);
 
     // Process booking status update on return as well since callback might not always trigger
     if (orderId && resultCode) {
-      const booking = await bookingRepository.findById(orderId);
-      if (booking) {
-        // Update booking status based on result code
-        if (parseInt(resultCode) === 0) {
-          // Payment successful
-          booking.status = 'confirmed';
-          await bookingRepository.update(orderId, booking);
-          console.log(`Booking ${orderId} marked as confirmed from return handler.`);
-        } else {
-          // Payment failed
-          booking.status = 'cancelled'; // or 'failed' depending on your business logic
-          await bookingRepository.update(orderId, booking);
-          console.log(`Booking ${orderId} marked as cancelled from return handler due to payment failure.`);
-        }
+      try {
+        await processPaymentResult(momoResponse);
+      } catch (err) {
+        console.error('Error updating booking status from return handler:', err);
       }
     }
 

@@ -5,10 +5,10 @@
 - [x] Task: Verify `.env` configuration for MoMo credentials (ensure keys are present and correct). [fe71b9e]
 - [x] Task: Conductor - User Manual Verification 'Analysis & Configuration Verification' (Protocol in workflow.md) [aef6cf8]
 
-## Phase 2: Payment Initiation (Backend)
+## Phase 2: Payment Initiation (Backend) [checkpoint: effdf6e]
 - [x] Task: Write Unit Tests for `PaymentService.createPaymentRequest` to verify payload construction and signature generation. [aef6cf8]
 - [x] Task: Refactor/Implement `createPaymentRequest` in `PaymentService.js` to ensure compliance with MoMo API. [aef6cf8]
-- [~] Task: Conductor - User Manual Verification 'Payment Initiation (Backend)' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Payment Initiation (Backend)' (Protocol in workflow.md) [effdf6e]
 
 ## Phase 3: Callback & IPN Handling (Backend)
 - [ ] Task: Write Unit Tests for `PaymentService.verifySignature` to ensure incoming IPN requests are authentic.

@@ -19,6 +19,66 @@ class MongoBookingRepository extends BookingRepository {
     return booking;
   }
 
+  mapBookingDoc(doc) {
+    if (!doc) return null;
+
+    const booking = {
+      id: doc._id,
+      userId: doc.userId,
+      seatIds: doc.seatIds,
+      totalPrice: doc.totalPrice,
+      bookingDate: doc.bookingDate,
+      status: doc.status,
+      paymentMethod: doc.paymentMethod,
+      expiresAt: doc.expiresAt,
+      showtimeId: doc.showtimeId ? (doc.showtimeId._id || doc.showtimeId) : null,
+      showtime: null,
+      movie: null,
+      theater: null
+    };
+
+    if (doc.showtimeId && typeof doc.showtimeId === 'object') {
+      booking.showtime = {
+        showDate: doc.showtimeId.showDate,
+        showTime: doc.showtimeId.showTime,
+        format: doc.showtimeId.format,
+        language: doc.showtimeId.language,
+        price: doc.showtimeId.price,
+        theaterId: doc.showtimeId.theaterId ? (doc.showtimeId.theaterId._id || doc.showtimeId.theaterId) : null
+      };
+
+      if (doc.showtimeId.movieId && typeof doc.showtimeId.movieId === 'object') {
+        booking.movie = {
+          id: doc.showtimeId.movieId._id,
+          title: doc.showtimeId.movieId.title,
+          director: doc.showtimeId.movieId.director,
+          cast: doc.showtimeId.movieId.cast,
+          synopsis: doc.showtimeId.movieId.synopsis,
+          duration: doc.showtimeId.movieId.duration,
+          genre: doc.showtimeId.movieId.genre,
+          rating: doc.showtimeId.movieId.rating,
+          posterUrl: doc.showtimeId.movieId.posterUrl,
+          trailerUrl: doc.showtimeId.movieId.trailerUrl,
+          releaseDate: doc.showtimeId.movieId.releaseDate,
+          endDate: doc.showtimeId.movieId.endDate
+        };
+      }
+
+      if (doc.showtimeId.theaterId && typeof doc.showtimeId.theaterId === 'object') {
+        const theaterData = {
+          id: doc.showtimeId.theaterId._id,
+          name: doc.showtimeId.theaterId.name,
+          location: doc.showtimeId.theaterId.location,
+          totalSeats: doc.showtimeId.theaterId.totalSeats
+        };
+        booking.theater = theaterData;
+        booking.showtime.theater = theaterData;
+      }
+    }
+
+    return booking;
+  }
+
   async findAll() {
     const bookingDocs = await BookingModel.find({})
       .populate({
@@ -35,49 +95,7 @@ class MongoBookingRepository extends BookingRepository {
         ]
       });
 
-    return bookingDocs.map(doc => ({
-      id: doc._id,
-      userId: doc.userId,
-      showtimeId: doc.showtimeId._id,
-      seatIds: doc.seatIds,
-      totalPrice: doc.totalPrice,
-      bookingDate: doc.bookingDate,
-      status: doc.status,
-      showtime: {
-        showDate: doc.showtimeId.showDate,
-        showTime: doc.showtimeId.showTime,
-        format: doc.showtimeId.format,
-        language: doc.showtimeId.language,
-        price: doc.showtimeId.price,
-        theaterId: doc.showtimeId.theaterId._id,
-        theater: {
-          id: doc.showtimeId.theaterId._id,
-          name: doc.showtimeId.theaterId.name,
-          location: doc.showtimeId.theaterId.location,
-          totalSeats: doc.showtimeId.theaterId.totalSeats
-        }
-      },
-      movie: {
-        id: doc.showtimeId.movieId._id,
-        title: doc.showtimeId.movieId.title,
-        director: doc.showtimeId.movieId.director,
-        cast: doc.showtimeId.movieId.cast,
-        synopsis: doc.showtimeId.movieId.synopsis,
-        duration: doc.showtimeId.movieId.duration,
-        genre: doc.showtimeId.movieId.genre,
-        rating: doc.showtimeId.movieId.rating,
-        posterUrl: doc.showtimeId.movieId.posterUrl,
-        trailerUrl: doc.showtimeId.movieId.trailerUrl,
-        releaseDate: doc.showtimeId.movieId.releaseDate,
-        endDate: doc.showtimeId.movieId.endDate
-      },
-      theater: {
-        id: doc.showtimeId.theaterId._id,
-        name: doc.showtimeId.theaterId.name,
-        location: doc.showtimeId.theaterId.location,
-        totalSeats: doc.showtimeId.theaterId.totalSeats
-      }
-    }));
+    return bookingDocs.map(doc => this.mapBookingDoc(doc));
   }
 
   async findById(id) {
@@ -96,51 +114,7 @@ class MongoBookingRepository extends BookingRepository {
         ]
       });
 
-    if (!bookingDoc) return null;
-
-    return {
-      id: bookingDoc._id,
-      userId: bookingDoc.userId,
-      showtimeId: bookingDoc.showtimeId._id,
-      seatIds: bookingDoc.seatIds,
-      totalPrice: bookingDoc.totalPrice,
-      bookingDate: bookingDoc.bookingDate,
-      status: bookingDoc.status,
-      showtime: {
-        showDate: bookingDoc.showtimeId.showDate,
-        showTime: bookingDoc.showtimeId.showTime,
-        format: bookingDoc.showtimeId.format,
-        language: bookingDoc.showtimeId.language,
-        price: bookingDoc.showtimeId.price,
-        theaterId: bookingDoc.showtimeId.theaterId._id,
-        theater: {
-          id: bookingDoc.showtimeId.theaterId._id,
-          name: bookingDoc.showtimeId.theaterId.name,
-          location: bookingDoc.showtimeId.theaterId.location,
-          totalSeats: bookingDoc.showtimeId.theaterId.totalSeats
-        }
-      },
-      movie: {
-        id: bookingDoc.showtimeId.movieId._id,
-        title: bookingDoc.showtimeId.movieId.title,
-        director: bookingDoc.showtimeId.movieId.director,
-        cast: bookingDoc.showtimeId.movieId.cast,
-        synopsis: bookingDoc.showtimeId.movieId.synopsis,
-        duration: bookingDoc.showtimeId.movieId.duration,
-        genre: bookingDoc.showtimeId.movieId.genre,
-        rating: bookingDoc.showtimeId.movieId.rating,
-        posterUrl: bookingDoc.showtimeId.movieId.posterUrl,
-        trailerUrl: bookingDoc.showtimeId.movieId.trailerUrl,
-        releaseDate: bookingDoc.showtimeId.movieId.releaseDate,
-        endDate: bookingDoc.showtimeId.movieId.endDate
-      },
-      theater: {
-        id: bookingDoc.showtimeId.theaterId._id,
-        name: bookingDoc.showtimeId.theaterId.name,
-        location: bookingDoc.showtimeId.theaterId.location,
-        totalSeats: bookingDoc.showtimeId.theaterId.totalSeats
-      }
-    };
+    return this.mapBookingDoc(bookingDoc);
   }
 
   async findByUserId(userId) {
@@ -159,49 +133,7 @@ class MongoBookingRepository extends BookingRepository {
         ]
       });
 
-    return bookingDocs.map(doc => ({
-      id: doc._id,
-      userId: doc.userId,
-      showtimeId: doc.showtimeId._id,
-      seatIds: doc.seatIds,
-      totalPrice: doc.totalPrice,
-      bookingDate: doc.bookingDate,
-      status: doc.status,
-      showtime: {
-        showDate: doc.showtimeId.showDate,
-        showTime: doc.showtimeId.showTime,
-        format: doc.showtimeId.format,
-        language: doc.showtimeId.language,
-        price: doc.showtimeId.price,
-        theaterId: doc.showtimeId.theaterId._id,
-        theater: {
-          id: doc.showtimeId.theaterId._id,
-          name: doc.showtimeId.theaterId.name,
-          location: doc.showtimeId.theaterId.location,
-          totalSeats: doc.showtimeId.theaterId.totalSeats
-        }
-      },
-      movie: {
-        id: doc.showtimeId.movieId._id,
-        title: doc.showtimeId.movieId.title,
-        director: doc.showtimeId.movieId.director,
-        cast: doc.showtimeId.movieId.cast,
-        synopsis: doc.showtimeId.movieId.synopsis,
-        duration: doc.showtimeId.movieId.duration,
-        genre: doc.showtimeId.movieId.genre,
-        rating: doc.showtimeId.movieId.rating,
-        posterUrl: doc.showtimeId.movieId.posterUrl,
-        trailerUrl: doc.showtimeId.movieId.trailerUrl,
-        releaseDate: doc.showtimeId.movieId.releaseDate,
-        endDate: doc.showtimeId.movieId.endDate
-      },
-      theater: {
-        id: doc.showtimeId.theaterId._id,
-        name: doc.showtimeId.theaterId.name,
-        location: doc.showtimeId.theaterId.location,
-        totalSeats: doc.showtimeId.theaterId.totalSeats
-      }
-    }));
+    return bookingDocs.map(doc => this.mapBookingDoc(doc));
   }
 
   async findByShowtimeId(showtimeId) {
@@ -220,49 +152,7 @@ class MongoBookingRepository extends BookingRepository {
         ]
       });
 
-    return bookingDocs.map(doc => ({
-      id: doc._id,
-      userId: doc.userId,
-      showtimeId: doc.showtimeId._id,
-      seatIds: doc.seatIds,
-      totalPrice: doc.totalPrice,
-      bookingDate: doc.bookingDate,
-      status: doc.status,
-      showtime: {
-        showDate: doc.showtimeId.showDate,
-        showTime: doc.showtimeId.showTime,
-        format: doc.showtimeId.format,
-        language: doc.showtimeId.language,
-        price: doc.showtimeId.price,
-        theaterId: doc.showtimeId.theaterId._id,
-        theater: {
-          id: doc.showtimeId.theaterId._id,
-          name: doc.showtimeId.theaterId.name,
-          location: doc.showtimeId.theaterId.location,
-          totalSeats: doc.showtimeId.theaterId.totalSeats
-        }
-      },
-      movie: {
-        id: doc.showtimeId.movieId._id,
-        title: doc.showtimeId.movieId.title,
-        director: doc.showtimeId.movieId.director,
-        cast: doc.showtimeId.movieId.cast,
-        synopsis: doc.showtimeId.movieId.synopsis,
-        duration: doc.showtimeId.movieId.duration,
-        genre: doc.showtimeId.movieId.genre,
-        rating: doc.showtimeId.movieId.rating,
-        posterUrl: doc.showtimeId.movieId.posterUrl,
-        trailerUrl: doc.showtimeId.movieId.trailerUrl,
-        releaseDate: doc.showtimeId.movieId.releaseDate,
-        endDate: doc.showtimeId.movieId.endDate
-      },
-      theater: {
-        id: doc.showtimeId.theaterId._id,
-        name: doc.showtimeId.theaterId.name,
-        location: doc.showtimeId.theaterId.location,
-        totalSeats: doc.showtimeId.theaterId.totalSeats
-      }
-    }));
+    return bookingDocs.map(doc => this.mapBookingDoc(doc));
   }
 
   async update(id, booking) {
@@ -290,52 +180,7 @@ class MongoBookingRepository extends BookingRepository {
       ]
     });
 
-    if (!updatedBooking) return null;
-
-    return {
-      id: updatedBooking._id,
-      userId: updatedBooking.userId,
-      showtimeId: updatedBooking.showtimeId._id,
-      seatIds: updatedBooking.seatIds,
-      totalPrice: updatedBooking.totalPrice,
-      bookingDate: updatedBooking.bookingDate,
-      status: updatedBooking.status,
-      paymentMethod: updatedBooking.paymentMethod,
-      showtime: {
-        showDate: updatedBooking.showtimeId.showDate,
-        showTime: updatedBooking.showtimeId.showTime,
-        format: updatedBooking.showtimeId.format,
-        language: updatedBooking.showtimeId.language,
-        price: updatedBooking.showtimeId.price,
-        theaterId: updatedBooking.showtimeId.theaterId._id,
-        theater: {
-          id: updatedBooking.showtimeId.theaterId._id,
-          name: updatedBooking.showtimeId.theaterId.name,
-          location: updatedBooking.showtimeId.theaterId.location,
-          totalSeats: updatedBooking.showtimeId.theaterId.totalSeats
-        }
-      },
-      movie: {
-        id: updatedBooking.showtimeId.movieId._id,
-        title: updatedBooking.showtimeId.movieId.title,
-        director: updatedBooking.showtimeId.movieId.director,
-        cast: updatedBooking.showtimeId.movieId.cast,
-        synopsis: updatedBooking.showtimeId.movieId.synopsis,
-        duration: updatedBooking.showtimeId.movieId.duration,
-        genre: updatedBooking.showtimeId.movieId.genre,
-        rating: updatedBooking.showtimeId.movieId.rating,
-        posterUrl: updatedBooking.showtimeId.movieId.posterUrl,
-        trailerUrl: updatedBooking.showtimeId.movieId.trailerUrl,
-        releaseDate: updatedBooking.showtimeId.movieId.releaseDate,
-        endDate: updatedBooking.showtimeId.movieId.endDate
-      },
-      theater: {
-        id: updatedBooking.showtimeId.theaterId._id,
-        name: updatedBooking.showtimeId.theaterId.name,
-        location: updatedBooking.showtimeId.theaterId.location,
-        totalSeats: updatedBooking.showtimeId.theaterId.totalSeats
-      }
-    };
+    return this.mapBookingDoc(updatedBooking);
   }
 
   async delete(id) {
@@ -453,24 +298,15 @@ class MongoBookingRepository extends BookingRepository {
           {
             path: 'movieId',
             model: 'Movie'
+          },
+          {
+            path: 'theaterId',
+            model: 'Theater'
           }
         ]
       });
 
-    return bookingDocs.map(doc => ({
-      id: doc._id,
-      userId: doc.userId,
-      showtimeId: doc.showtimeId._id,
-      seatIds: doc.seatIds,
-      totalPrice: doc.totalPrice,
-      bookingDate: doc.bookingDate,
-      status: doc.status,
-      createdAt: doc.createdAt,
-      movie: {
-        id: doc.showtimeId.movieId._id,
-        title: doc.showtimeId.movieId.title
-      }
-    }));
+    return bookingDocs.map(doc => this.mapBookingDoc(doc));
   }
 }
 

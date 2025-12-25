@@ -204,5 +204,23 @@ describe('PaymentService', () => {
       await expect(processPaymentResult({ orderId: 'invalid' }))
         .rejects.toThrow('Booking not found');
     });
+
+    it('should handle various MoMo error result codes by cancelling booking', async () => {
+      const errorCodes = [1006, 9000, 49]; // Denied, System maintenance, invalid amount
+      
+      for (const code of errorCodes) {
+        mockFindById.mockResolvedValue({ _id: 'booking123', status: 'pending' });
+        const result = await processPaymentResult({ 
+          orderId: 'booking123', 
+          resultCode: code, 
+          message: 'Error' 
+        });
+        
+        expect(result.success).toBe(false);
+        expect(mockUpdate).toHaveBeenCalledWith('booking123', expect.objectContaining({
+          status: 'cancelled'
+        }));
+      }
+    });
   });
 });

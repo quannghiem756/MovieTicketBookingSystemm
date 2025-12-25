@@ -23,6 +23,6 @@
 - [x] Task: Conductor - User Manual Verification 'Frontend Integration & User Experience' (Protocol in workflow.md) [483b863]
 
 ## Phase 5: Integration Testing
-- [ ] Task: Perform an end-to-end test of the payment flow (Booking -> Payment -> Callback -> Success Page).
-- [ ] Task: Test edge cases: User cancels payment, network failure during callback, invalid signature.
-- [ ] Task: Conductor - User Manual Verification 'Integration Testing' (Protocol in workflow.md)
+- [x] Task: Perform an end-to-end test of the payment flow (Booking -> Payment -> Callback -> Success Page). [483b863]
+- [x] Task: Test edge cases: User cancels payment, network failure during callback, invalid signature. [483b863]
+- [~] Task: Conductor - User Manual Verification 'Integration Testing' (Protocol in workflow.md)

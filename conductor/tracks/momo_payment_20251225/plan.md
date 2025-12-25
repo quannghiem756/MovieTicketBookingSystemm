@@ -18,9 +18,9 @@
 - [x] Task: Conductor - User Manual Verification 'Callback & IPN Handling (Backend)' (Protocol in workflow.md) [2ca352e]
 
 ## Phase 4: Frontend Integration & User Experience
-- [ ] Task: Review `PaymentResult.jsx` and ensure it correctly interprets the query parameters returned by MoMo.
-- [ ] Task: Update the frontend booking flow to redirect to the MoMo payment URL upon booking confirmation.
-- [ ] Task: Conductor - User Manual Verification 'Frontend Integration & User Experience' (Protocol in workflow.md)
+- [x] Task: Review `PaymentResult.jsx` and ensure it correctly interprets the query parameters returned by MoMo. [2ca352e]
+- [x] Task: Update the frontend booking flow to redirect to the MoMo payment URL upon booking confirmation. [2ca352e]
+- [~] Task: Conductor - User Manual Verification 'Frontend Integration & User Experience' (Protocol in workflow.md)
 
 ## Phase 5: Integration Testing
 - [ ] Task: Perform an end-to-end test of the payment flow (Booking -> Payment -> Callback -> Success Page).

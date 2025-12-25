@@ -48,12 +48,14 @@ const createMomoPaymentUrl = async (bookingId) => {
       extraData: extraData
     };
 
+    // MoMo API Endpoint
+    const momoEndpoint = process.env.MOMO_API_URL || 'https://test-payment.momo.vn/v2/gateway/api/create';
+
     // Make request to MoMo API
-    const response = await fetch('https://test-payment.momo.vn/v2/gateway/api/create', {
+    const response = await fetch(momoEndpoint, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(requestBody)
     });

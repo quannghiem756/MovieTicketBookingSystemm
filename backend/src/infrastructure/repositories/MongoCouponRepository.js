@@ -3,7 +3,20 @@ const CouponModel = require('../CouponModel');
 
 class MongoCouponRepository extends CouponRepository {
   async create(coupon) {
-    const couponDoc = new CouponModel(coupon);
+    const couponData = {
+      code: coupon.code,
+      type: coupon.type,
+      value: coupon.value,
+      startDate: coupon.startDate,
+      endDate: coupon.endDate,
+      usageLimit: coupon.usageLimit,
+      userUsageLimit: coupon.userUsageLimit,
+      minOrderValue: coupon.minOrderValue,
+      applicableMovieIds: coupon.applicableMovieIds,
+      currentUsage: coupon.currentUsage
+    };
+
+    const couponDoc = new CouponModel(couponData);
     const savedCoupon = await couponDoc.save();
     return this._mapToDomain(savedCoupon);
   }

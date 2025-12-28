@@ -52,4 +52,13 @@ describe('AdminCouponController', () => {
 
     expect(mockRes.status).toHaveBeenCalledWith(404);
   });
+
+  it('should return 200 on successful deletion', async () => {
+    mockReq.params.id = '1';
+    mockService.deleteCoupon.mockResolvedValue(true);
+
+    await controller.deleteCoupon(mockReq, mockRes);
+
+    expect(mockRes.json).toHaveBeenCalledWith(expect.objectContaining({ message: expect.any(String) }));
+  });
 });

@@ -18,7 +18,7 @@
 - [x] Task: Implement `validateCoupon` method in `CouponService` checking for expiry, minimum order value, and global/user limits. e6b0fc0
 - [x] Task: Create a public API endpoint `POST /coupons/validate` for the frontend to check code validity and get discount details before booking. f5a2b58
 - [x] Task: Update `BookingService.createBooking` to accept an optional `couponCode`. bac070d
-- [ ] Task: Implement atomic usage increment logic in `BookingService` to handle concurrency (race conditions).
+- [x] Task: Implement atomic usage increment logic in `BookingService` to handle concurrency (race conditions). edc319a
 - [x] Task: Update `Booking` model to store `couponCode`, `discountAmount`, and `finalPrice`. 123ebdd
 - [ ] Task: Write unit tests for `BookingService` covering valid/invalid coupons, expired codes, and limit enforcement.
 - [ ] Task: Conductor - User Manual Verification 'Backend - Coupon Validation & Booking Integration' (Protocol in workflow.md)

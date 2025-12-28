@@ -7,12 +7,12 @@
 - [x] Task: Write unit tests for `CouponRepository` to verify CRUD and query methods. df2f5d4
 - [x] Task: Conductor - User Manual Verification 'Backend Core - Data Model & Repository' (Protocol in workflow.md) 1421c14
 
-## Phase 2: Backend - Admin Coupon Management API
+## Phase 2: Backend - Admin Coupon Management API [checkpoint: 3c0c6f7]
 - [x] Task: Create `CouponService` (`backend/src/application/CouponService.js`) with methods for creating, updating, and listing coupons. 204caa1
 - [x] Task: Create `AdminCouponController` to expose CRUD endpoints (GET /admin/coupons, POST /admin/coupons, etc.). a9fb8bf
 - [x] Task: Register new routes in `backend/server.js` (or appropriate route loader). 3737155
 - [x] Task: Write integration tests for Admin Coupon APIs. a9fb8bf
-- [ ] Task: Conductor - User Manual Verification 'Backend - Admin Coupon Management API' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Backend - Admin Coupon Management API' (Protocol in workflow.md) 3c0c6f7
 
 ## Phase 3: Backend - Coupon Validation & Booking Integration
 - [ ] Task: Implement `validateCoupon` method in `CouponService` checking for expiry, minimum order value, and global/user limits.

@@ -27,8 +27,8 @@
 - [x] Task: Conductor - User Manual Verification 'Frontend Visuals & Logic' (Protocol in workflow.md) [checkpoint: facb6bf]
 
 ## Phase 3: Integration & Testing
-- [ ] Task: End-to-End Testing
-    - [ ] Sub-task: Verify a C18 movie booking flow for an 18+ user (Success).
-    - [ ] Sub-task: Verify a C18 movie booking flow for a 17yo user (Blocked).
-    - [ ] Sub-task: Verify a K movie booking flow for a 10yo user (Warning + Success).
-- [ ] Task: Conductor - User Manual Verification 'Integration & Testing' (Protocol in workflow.md)
+- [x] Task: End-to-End Testing
+    - [x] Sub-task: Verify a C18 movie booking flow for an 18+ user (Success).
+    - [x] Sub-task: Verify a C18 movie booking flow for a 17yo user (Blocked).
+    - [x] Sub-task: Verify a K movie booking flow for a 10yo user (Warning + Success).
+- [x] Task: Conductor - User Manual Verification 'Integration & Testing' (Protocol in workflow.md) [checkpoint: fc0b01b]

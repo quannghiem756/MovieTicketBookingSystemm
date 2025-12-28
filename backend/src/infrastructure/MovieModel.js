@@ -7,7 +7,12 @@ const movieSchema = new mongoose.Schema({
   synopsis: { type: String, required: true },
   duration: { type: Number, required: true }, // in minutes
   genre: [{ type: String }],
-  rating: { type: String, required: true }, // e.g., PG, PG-13, R
+  rating: { 
+    type: String, 
+    required: true,
+    enum: ['P', 'K', 'C13', 'C16', 'C18'],
+    message: 'Rating must be one of: P, K, C13, C16, C18'
+  }, // Vietnamese Cinema Standard
   posterUrl: { type: String },
   trailerUrl: { type: String },
   releaseDate: { type: Date, required: true },

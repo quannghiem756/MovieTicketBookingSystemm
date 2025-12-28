@@ -20,7 +20,7 @@
 - [x] Task: Update `BookingService.createBooking` to accept an optional `couponCode`. bac070d
 - [x] Task: Implement atomic usage increment logic in `BookingService` to handle concurrency (race conditions). edc319a
 - [x] Task: Update `Booking` model to store `couponCode`, `discountAmount`, and `finalPrice`. 123ebdd
-- [ ] Task: Write unit tests for `BookingService` covering valid/invalid coupons, expired codes, and limit enforcement.
+- [x] Task: Write unit tests for `BookingService` covering valid/invalid coupons, expired codes, and limit enforcement. 9011da6
 - [ ] Task: Conductor - User Manual Verification 'Backend - Coupon Validation & Booking Integration' (Protocol in workflow.md)
 
 ## Phase 4: Frontend - Admin Panel Implementation

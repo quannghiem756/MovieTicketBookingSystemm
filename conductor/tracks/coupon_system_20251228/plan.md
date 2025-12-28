@@ -23,10 +23,10 @@
 - [x] Task: Write unit tests for `BookingService` covering valid/invalid coupons, expired codes, and limit enforcement. 9011da6
 - [ ] Task: Conductor - User Manual Verification 'Backend - Coupon Validation & Booking Integration' (Protocol in workflow.md)
 
-## Phase 4: Frontend - Admin Panel Implementation
-- [ ] Task: Create `CouponList` component in Admin Dashboard to display existing coupons.
-- [ ] Task: Create `CouponForm` modal/page for creating and editing coupons (inputs for code, discount type, value, dates, restrictions).
-- [ ] Task: Integrate `AdminCouponService` in frontend to communicate with backend APIs.
+## Phase 4: Frontend - Admin Panel Implementation [checkpoint: 5fedab1]
+- [x] Task: Create `CouponList` component in Admin Dashboard to display existing coupons.
+- [x] Task: Create `CouponForm` modal/page for creating and editing coupons (inputs for code, discount type, value, dates, restrictions).
+- [x] Task: Integrate `AdminCouponService` in frontend to communicate with backend APIs.
 - [ ] Task: Conductor - User Manual Verification 'Frontend - Admin Panel Implementation' (Protocol in workflow.md)
 
 ## Phase 5: Frontend - User Checkout Integration

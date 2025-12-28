@@ -240,6 +240,7 @@ const vi = {
   'admin.sidebar.bookings': 'Vé đặt',
   'admin.sidebar.users': 'Người dùng',
   'admin.sidebar.news': 'Tin tức',
+  'admin.sidebar.coupons': 'Mã giảm giá',
 
   // Admin Dashboard
   'admin.dashboard.title': 'Bảng điều khiển',
@@ -516,6 +517,42 @@ const vi = {
   'admin.news.publishedStatus': 'Đã xuất bản',
   'admin.news.scheduled': 'Đã lên lịch',
   'admin.news.expired': 'Đã hết hạn',
+
+  // Admin Coupons
+  'admin.coupons.title': 'Quản lý mã giảm giá',
+  'admin.coupons.addNew': 'Thêm mã mới',
+  'admin.coupons.table.code': 'Mã',
+  'admin.coupons.table.type': 'Loại',
+  'admin.coupons.table.value': 'Giá trị',
+  'admin.coupons.table.validity': 'Thời hạn',
+  'admin.coupons.table.usage': 'Lượt dùng',
+  'admin.coupons.table.actions': 'Hành động',
+  'admin.coupons.edit': 'Sửa',
+  'admin.coupons.delete': 'Xóa',
+  'admin.coupons.deleteConfirm': 'Xác nhận xóa',
+  'admin.coupons.deleteMessage': 'Bạn có chắc muốn xóa mã giảm giá',
+  'admin.coupons.cancel': 'Hủy',
+  'admin.coupons.deleteError': 'Xóa mã không thành công',
+  'admin.coupons.percentage': 'Phần trăm',
+  'admin.coupons.fixed': 'Số tiền cố định',
+
+  // Coupon Form
+  'admin.couponForm.addTitle': 'Thêm mã giảm giá mới',
+  'admin.couponForm.editTitle': 'Sửa mã giảm giá',
+  'admin.couponForm.code': 'Mã giảm giá',
+  'admin.couponForm.type': 'Loại giảm giá',
+  'admin.couponForm.value': 'Giá trị giảm',
+  'admin.couponForm.startDate': 'Ngày bắt đầu',
+  'admin.couponForm.endDate': 'Ngày kết thúc',
+  'admin.couponForm.usageLimit': 'Giới hạn tổng lượt dùng',
+  'admin.couponForm.userUsageLimit': 'Giới hạn mỗi người dùng',
+  'admin.couponForm.minOrderValue': 'Giá trị đơn tối thiểu',
+  'admin.couponForm.applicableMovies': 'Phim áp dụng',
+  'admin.couponForm.allMovies': 'Tất cả phim',
+  'admin.couponForm.cancel': 'Hủy',
+  'admin.couponForm.save': 'Lưu mã giảm giá',
+  'admin.couponForm.saving': 'Đang lưu...',
+  'admin.couponForm.error': 'Lưu mã không thành công:',
 
   // Client-side News Page
   'news.title': 'Tin tức & Cập nhật',

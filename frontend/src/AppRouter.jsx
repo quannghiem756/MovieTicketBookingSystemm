@@ -30,6 +30,7 @@ import AdminShowtimes from './pages/admin/AdminShowtimes';
 import AdminTheaters from './pages/admin/AdminTheaters';
 import AdminUsers from './pages/admin/AdminUsers';
 import AdminNews from './pages/admin/AdminNews';
+import AdminCoupons from './pages/admin/AdminCoupons';
 import NewsForm from './pages/admin/NewsForm';
 
 const AppRouter = () => {
@@ -100,6 +101,7 @@ const AppRouter = () => {
             <Route path="news" element={<AdminNews />} />
             <Route path="news/new" element={<NewsForm />} />
             <Route path="news/:id" element={<NewsForm />} />
+            <Route path="coupons" element={<AdminCoupons />} />
           </Route>
         </Routes>
       </Container>

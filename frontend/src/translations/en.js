@@ -203,6 +203,7 @@ const en = {
   'admin.sidebar.bookings': 'Bookings',
   'admin.sidebar.users': 'Users',
   'admin.sidebar.news': 'News',
+  'admin.sidebar.coupons': 'Coupons',
 
   // Admin Dashboard
   'admin.dashboard.title': 'Admin Dashboard',
@@ -479,6 +480,42 @@ const en = {
   'admin.news.publishedStatus': 'Published',
   'admin.news.scheduled': 'Scheduled',
   'admin.news.expired': 'Expired',
+
+  // Admin Coupons
+  'admin.coupons.title': 'Manage Coupons',
+  'admin.coupons.addNew': 'Add New Coupon',
+  'admin.coupons.table.code': 'Code',
+  'admin.coupons.table.type': 'Type',
+  'admin.coupons.table.value': 'Value',
+  'admin.coupons.table.validity': 'Validity',
+  'admin.coupons.table.usage': 'Usage',
+  'admin.coupons.table.actions': 'Actions',
+  'admin.coupons.edit': 'Edit',
+  'admin.coupons.delete': 'Delete',
+  'admin.coupons.deleteConfirm': 'Are you sure you want to delete this coupon?',
+  'admin.coupons.deleteMessage': 'Are you sure you want to delete coupon',
+  'admin.coupons.cancel': 'Cancel',
+  'admin.coupons.deleteError': 'Failed to delete coupon',
+  'admin.coupons.percentage': 'Percentage',
+  'admin.coupons.fixed': 'Fixed Amount',
+
+  // Coupon Form
+  'admin.couponForm.addTitle': 'Add New Coupon',
+  'admin.couponForm.editTitle': 'Edit Coupon',
+  'admin.couponForm.code': 'Coupon Code',
+  'admin.couponForm.type': 'Discount Type',
+  'admin.couponForm.value': 'Discount Value',
+  'admin.couponForm.startDate': 'Start Date',
+  'admin.couponForm.endDate': 'End Date',
+  'admin.couponForm.usageLimit': 'Global Usage Limit',
+  'admin.couponForm.userUsageLimit': 'Per-User Limit',
+  'admin.couponForm.minOrderValue': 'Min Order Value',
+  'admin.couponForm.applicableMovies': 'Applicable Movies',
+  'admin.couponForm.allMovies': 'All Movies',
+  'admin.couponForm.cancel': 'Cancel',
+  'admin.couponForm.save': 'Save Coupon',
+  'admin.couponForm.saving': 'Saving...',
+  'admin.couponForm.error': 'Failed to save coupon:',
 
   // Client-side News Page
   'news.title': 'News & Updates',

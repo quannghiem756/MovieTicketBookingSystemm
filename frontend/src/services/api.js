@@ -183,21 +183,55 @@ export const deleteUser = (id) => api.delete(`/users/${id}`);
 export const getMovieRecommendations = (query) => api.post('/recommendations', { query });
 
 // News API
+
 export const getNews = (page = 1, limit = 10, search = '') => {
+
   let url = `/news?page=${page}&limit=${limit}`;
+
   if (search) {
+
     url += `&search=${encodeURIComponent(search)}`;
+
   }
+
   return api.get(url);
+
 };
+
 export const getNewsById = (id) => api.get(`/news/${id}`);
+
 export const createNews = (news) => api.post('/news', news);
+
 export const updateNews = (id, news) => api.put(`/news/${id}`, news);
+
 export const deleteNews = (id) => api.delete(`/news/${id}`);
 
+
+
+// Coupons API
+
+export const getCoupons = () => api.get('/coupons');
+
+export const getCouponById = (id) => api.get(`/coupons/${id}`);
+
+export const createCoupon = (coupon) => api.post('/coupons', coupon);
+
+export const updateCoupon = (id, coupon) => api.put(`/coupons/${id}`, coupon);
+
+export const deleteCoupon = (id) => api.delete(`/coupons/${id}`);
+
+export const validateCoupon = (code, orderTotal, movieId) => api.post('/coupons/validate', { code, orderTotal, movieId });
+
+
+
 // Admin Dashboard API
+
 export const getDashboardStats = () => api.get('/dashboard/stats');
+
 export const getRecentActivity = () => api.get('/dashboard/recent-activity');
+
 export const getPerformanceStats = () => api.get('/dashboard/performance-stats');
+
+
 
 export default api;

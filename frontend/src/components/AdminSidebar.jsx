@@ -19,7 +19,8 @@ import {
   Schedule,
   ConfirmationNumber,
   People,
-  Article
+  Article,
+  LocalOffer
 } from '@mui/icons-material';
 
 const drawerWidth = 240;
@@ -67,6 +68,11 @@ const AdminSidebar = () => {
       text: t('admin.sidebar.news'),
       icon: <Article />,
       path: '/admin/news'
+    },
+    {
+      text: t('admin.sidebar.coupons'),
+      icon: <LocalOffer />,
+      path: '/admin/coupons'
     }
   ];
 

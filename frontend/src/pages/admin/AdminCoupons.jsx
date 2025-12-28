@@ -34,6 +34,7 @@ import {
   Refresh
 } from '@mui/icons-material';
 import CouponForm from './components/CouponForm';
+import Pagination from '../../components/Pagination';
 
 const AdminCoupons = () => {
   const { t } = useTranslation();
@@ -41,6 +42,9 @@ const AdminCoupons = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [couponsPerPage] = useState(10);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [couponToDelete, setCouponToDelete] = useState(null);
   const [formOpen, setFormOpen] = useState(false);
@@ -49,8 +53,9 @@ const AdminCoupons = () => {
   const fetchCoupons = async () => {
     setLoading(true);
     try {
-      const response = await getCoupons();
-      setCoupons(response.data);
+      const response = await getCoupons(currentPage, couponsPerPage);
+      setCoupons(response.data.coupons || []);
+      setTotalPages(response.data.totalPages || 1);
       setError(null);
     } catch (err) {
       console.error('Error fetching coupons:', err);
@@ -72,8 +77,15 @@ const AdminCoupons = () => {
 
   useEffect(() => {
     fetchCoupons();
+  }, [currentPage, t]);
+
+  useEffect(() => {
     fetchMovies();
   }, [t]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   const handleDeleteClick = (coupon) => {
     setCouponToDelete(coupon);
@@ -215,6 +227,16 @@ const AdminCoupons = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {totalPages > 1 && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </Box>
+      )}
 
       {/* Delete Confirmation Dialog */}
       <Dialog

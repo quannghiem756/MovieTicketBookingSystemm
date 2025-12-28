@@ -11,6 +11,7 @@ describe('AdminCouponController', () => {
       createCoupon: jest.fn(),
       getCouponById: jest.fn(),
       getAllCoupons: jest.fn(),
+      getCouponsWithPagination: jest.fn(),
       updateCoupon: jest.fn(),
       deleteCoupon: jest.fn()
     };
@@ -36,12 +37,17 @@ describe('AdminCouponController', () => {
     expect(mockRes.json).toHaveBeenCalledWith(expect.objectContaining({ code: 'SAVE10' }));
   });
 
-  it('should return 200 on getting all coupons', async () => {
-    mockService.getAllCoupons.mockResolvedValue([{ id: '1', code: 'A' }]);
+  it('should return 200 on getting all coupons with pagination', async () => {
+    const paginatedResult = {
+      coupons: [{ id: '1', code: 'A' }],
+      totalCoupons: 1,
+      totalPages: 1
+    };
+    mockService.getCouponsWithPagination.mockResolvedValue(paginatedResult);
 
     await controller.getAllCoupons(mockReq, mockRes);
 
-    expect(mockRes.json).toHaveBeenCalledWith(expect.any(Array));
+    expect(mockRes.json).toHaveBeenCalledWith(paginatedResult);
   });
 
   it('should return 404 when updating non-existent coupon', async () => {

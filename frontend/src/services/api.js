@@ -210,7 +210,13 @@ export const deleteNews = (id) => api.delete(`/news/${id}`);
 
 // Coupons API
 
-export const getCoupons = () => api.get('/coupons');
+
+
+export const getCoupons = (page = 1, limit = 10) => api.get(`/coupons?page=${page}&limit=${limit}`);
+
+
+
+
 
 export const getCouponById = (id) => api.get(`/coupons/${id}`);
 

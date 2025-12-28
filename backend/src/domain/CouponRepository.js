@@ -14,6 +14,10 @@ class CouponRepository {
     async findAll() {
       throw new Error('Method not implemented');
     }
+
+    async findAllWithPagination(skip, limit) {
+      throw new Error('Method not implemented');
+    }
   
     async update(id, coupon) {
       throw new Error('Method not implemented');

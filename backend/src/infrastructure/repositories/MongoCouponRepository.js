@@ -38,6 +38,20 @@ class MongoCouponRepository extends CouponRepository {
     return couponDocs.map(doc => this._mapToDomain(doc));
   }
 
+  async findAllWithPagination(skip, limit) {
+    const couponDocs = await CouponModel.find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+    const totalCoupons = await CouponModel.countDocuments();
+    
+    return {
+      coupons: couponDocs.map(doc => this._mapToDomain(doc)),
+      totalCoupons,
+      totalPages: Math.ceil(totalCoupons / limit)
+    };
+  }
+
   async update(id, couponData) {
     const updatedCoupon = await CouponModel.findByIdAndUpdate(
       id,

@@ -27,8 +27,11 @@ class AdminCouponController {
 
   async getAllCoupons(req, res) {
     try {
-      const coupons = await this.couponService.getAllCoupons();
-      res.json(coupons);
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      
+      const result = await this.couponService.getCouponsWithPagination(page, limit);
+      res.json(result);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

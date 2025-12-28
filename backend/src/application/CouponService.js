@@ -37,6 +37,11 @@ class CouponService {
     return await this.couponRepository.findAll();
   }
 
+  async getCouponsWithPagination(page = 1, limit = 10) {
+    const skip = (page - 1) * limit;
+    return await this.couponRepository.findAllWithPagination(skip, limit);
+  }
+
   async updateCoupon(id, couponData) {
     const existingCoupon = await this.couponRepository.findById(id);
     if (!existingCoupon) return null;

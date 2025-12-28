@@ -39,6 +39,7 @@ import {
 } from '@mui/icons-material';
 import { getTheaters, getShowtimesByMovieId, createShowtime, updateShowtime, deleteShowtime } from '../../services/api';
 import { formatCurrency } from '../../utils/currency';
+import { getRatingDescription } from '../../utils/dateUtils';
 
 const MovieForm = () => {
   const { id } = useParams();
@@ -370,11 +371,11 @@ const MovieForm = () => {
                   onChange={handleChange}
                   label={t('admin.movieForm.rating')}
                 >
-                  <MenuItem value="G">G</MenuItem>
-                  <MenuItem value="PG">PG</MenuItem>
-                  <MenuItem value="PG-13">PG-13</MenuItem>
-                  <MenuItem value="R">R</MenuItem>
-                  <MenuItem value="NC-17">NC-17</MenuItem>
+                  <MenuItem value="P">P - {t(getRatingDescription('P'))}</MenuItem>
+                  <MenuItem value="K">K - {t(getRatingDescription('K'))}</MenuItem>
+                  <MenuItem value="C13">C13 - {t(getRatingDescription('C13'))}</MenuItem>
+                  <MenuItem value="C16">C16 - {t(getRatingDescription('C16'))}</MenuItem>
+                  <MenuItem value="C18">C18 - {t(getRatingDescription('C18'))}</MenuItem>
                 </Select>
               </FormControl>
 

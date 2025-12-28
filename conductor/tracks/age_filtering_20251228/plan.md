@@ -24,7 +24,7 @@
 - [x] Task: Add Translations for Age Filtering f1329ac
 - [x] Task: Update Admin Movie Form 3de2434
     - [ ] Sub-task: Update rating selection in MovieForm.jsx
-- [ ] Task: Conductor - User Manual Verification 'Frontend Visuals & Logic' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Frontend Visuals & Logic' (Protocol in workflow.md) [checkpoint: facb6bf]
 
 ## Phase 3: Integration & Testing
 - [ ] Task: End-to-End Testing

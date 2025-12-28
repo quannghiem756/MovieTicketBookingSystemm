@@ -1,7 +1,7 @@
 # Plan: Coupon/Voucher System
 
 ## Phase 1: Backend Core - Data Model & Repository
-- [~] Task: Create `Coupon` Mongoose model (`backend/src/infrastructure/CouponModel.js`) with fields for code, type, value, dates, limits, and restrictions.
+- [x] Task: Create `Coupon` Mongoose model (`backend/src/infrastructure/CouponModel.js`) with fields for code, type, value, dates, limits, and restrictions. 7eda1ed
 - [ ] Task: Create `Coupon` Domain Entity (`backend/src/domain/Coupon.js`) and Repository Interface.
 - [ ] Task: Implement `CouponRepository` (`backend/src/infrastructure/repositories/CouponRepository.js`).
 - [ ] Task: Write unit tests for `CouponRepository` to verify CRUD and query methods.

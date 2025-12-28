@@ -136,6 +136,12 @@ const vi = {
   'booking.paymentMethod': 'Phương thức thanh toán',
   'booking.cash': 'Tiền mặt',
   'booking.momo': 'MoMo',
+  'booking.promoCode': 'Mã giảm giá',
+  'booking.apply': 'Áp dụng',
+  'booking.couponApplied': 'Đã áp dụng mã!',
+  'booking.remove': 'Gỡ',
+  'booking.discount': 'Giảm giá',
+  'booking.finalTotal': 'Tổng thanh toán',
 
   // Booking Confirmation Page
   'booking.confirmation.title': 'Đặt vé thành công!',

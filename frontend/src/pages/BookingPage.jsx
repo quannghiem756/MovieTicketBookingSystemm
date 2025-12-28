@@ -16,7 +16,8 @@ import {
   useMediaQuery,
   IconButton,
   Tooltip,
-  Skeleton
+  Skeleton,
+  TextField
 } from '@mui/material';
 import {
   ArrowBack,
@@ -39,7 +40,8 @@ import {
   holdSeat,
   releaseSeat,
   getLockedSeats,
-  getBookingsByUserId
+  getBookingsByUserId,
+  validateCoupon
 } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from '../context/I18nContext';
@@ -67,6 +69,9 @@ const BookingPage = () => {
   const [error, setError] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState('momo'); // Default to MoMo
   const [timeLeft, setTimeLeft] = useState(null); // Timer in seconds
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [validatingCoupon, setValidatingCoupon] = useState(false);
   const timerRef = useRef(null);
 
   // For this example, we'll create a more detailed seat map
@@ -323,6 +328,28 @@ const BookingPage = () => {
     return 'available';
   };
 
+  const handleApplyCoupon = async () => {
+    if (!couponCode) return;
+    
+    setValidatingCoupon(true);
+    setError(null);
+    try {
+      const response = await validateCoupon(couponCode, totalPrice, movieId);
+      setAppliedCoupon(response.data);
+      setCouponCode('');
+    } catch (err) {
+      setError(err.response?.data?.message || t('common.error'));
+      setAppliedCoupon(null);
+    } finally {
+      setValidatingCoupon(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponCode('');
+  };
+
   const handleBooking = async () => {
     if (selectedSeats.length === 0) {
       setError(t('booking.selectSeats'));
@@ -342,7 +369,8 @@ const BookingPage = () => {
         movieId,
         seatIds: selectedSeats,
         totalPrice,
-        paymentMethod // Add payment method to booking data
+        paymentMethod, // Add payment method to booking data
+        couponCode: appliedCoupon?.code
       };
 
       const response = await createBooking(bookingData);
@@ -943,10 +971,68 @@ const BookingPage = () => {
                 <Typography variant="h5" component="div" sx={{ fontWeight: 700, mb: 1 }}>
                   {t('booking.total')}:
                 </Typography>
-                <Typography variant="h4" component="div" sx={{ fontWeight: 800, color: 'primary.main' }}>
-                  {formatCurrency(totalPrice)}
-                </Typography>
+                
+                {appliedCoupon ? (
+                  <>
+                    <Typography 
+                      variant="body1" 
+                      sx={{ 
+                        textDecoration: 'line-through', 
+                        color: 'text.secondary',
+                        mb: 0.5 
+                      }}
+                    >
+                      {formatCurrency(totalPrice)}
+                    </Typography>
+                    <Typography variant="h4" component="div" sx={{ fontWeight: 800, color: 'primary.main', mb: 1 }}>
+                      {formatCurrency(Math.max(0, totalPrice - appliedCoupon.discountAmount))}
+                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                      <Chip 
+                        label={`${t('booking.discount')}: -${formatCurrency(appliedCoupon.discountAmount)} (${appliedCoupon.code})`}
+                        color="success"
+                        onDelete={handleRemoveCoupon}
+                        size="small"
+                      />
+                    </Box>
+                  </>
+                ) : (
+                  <Typography variant="h4" component="div" sx={{ fontWeight: 800, color: 'primary.main', mb: 2 }}>
+                    {formatCurrency(totalPrice)}
+                  </Typography>
+                )}
               </Box>
+
+              {/* Promo Code Input */}
+              {!appliedCoupon && (
+                <Box sx={{ mb: 3 }}>
+                  <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600 }}>
+                    {t('booking.promoCode')}
+                  </Typography>
+                  <Box sx={{ display: 'flex', gap: 1 }}>
+                    <TextField
+                      size="small"
+                      fullWidth
+                      placeholder="e.g. SAVE10"
+                      value={couponCode}
+                      onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: 2,
+                        }
+                      }}
+                    />
+                    <Button 
+                      variant="outlined" 
+                      onClick={handleApplyCoupon}
+                      disabled={!couponCode || validatingCoupon}
+                      sx={{ borderRadius: 2, textTransform: 'none' }}
+                    >
+                      {validatingCoupon ? <CircularProgress size={20} /> : t('booking.apply')}
+                    </Button>
+                  </Box>
+                </Box>
+              )}
 
               {/* Payment Method Selection */}
               <Box sx={{ mb: 3 }}>

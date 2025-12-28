@@ -113,6 +113,12 @@ const en = {
   'booking.paymentMethod': 'Payment Method',
   'booking.cash': 'Cash',
   'booking.momo': 'MoMo',
+  'booking.promoCode': 'Promo Code',
+  'booking.apply': 'Apply',
+  'booking.couponApplied': 'Coupon Applied!',
+  'booking.remove': 'Remove',
+  'booking.discount': 'Discount',
+  'booking.finalTotal': 'Final Total',
 
   // Booking Confirmation Page
   'booking.confirmation.title': 'Booking Successful!',

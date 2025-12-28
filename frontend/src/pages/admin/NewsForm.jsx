@@ -15,9 +15,11 @@ import {
   InputLabel,
   FormControl,
   Alert,
-  LinearProgress
+  LinearProgress,
+  IconButton,
+  InputAdornment
 } from '@mui/material';
-import { Add, Save, ArrowBack } from '@mui/icons-material';
+import { Add, Save, ArrowBack, CloudUpload, Delete } from '@mui/icons-material';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import axios from 'axios'; // Import axios for image uploads
@@ -48,6 +50,52 @@ const NewsForm = () => {
   });
 
   const quillRef = React.useRef(); // Add ref for ReactQuill component
+
+  const processSingleImageUrl = (url) => {
+    if (url && url.startsWith('/uploads/')) {
+      const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+      return `${apiUrl}${url}`;
+    }
+    return url;
+  };
+
+  const stripSingleApiBaseUrl = (url) => {
+    const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+    if (url && url.startsWith(apiUrl)) {
+      return url.replace(apiUrl, '');
+    }
+    return url;
+  };
+
+  const handleFeaturedImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      setLoading(true);
+      const token = localStorage.getItem('accessToken');
+      const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
+      const response = await axios.post(`${API_BASE_URL}/api/news/upload-image`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const imageUrl = processSingleImageUrl(response.data.url);
+      setFormData(prev => ({ ...prev, featuredImage: imageUrl }));
+      setSuccess('Featured image uploaded successfully!');
+    } catch (error) {
+      console.error('Error uploading featured image:', error);
+      setError('Upload failed: ' + (error.response?.data?.error || error.message));
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Custom image handler for Quill
   const imageHandler = async () => {
@@ -117,6 +165,7 @@ const NewsForm = () => {
 
       // Process the content to ensure image URLs have the API base URL
       const processedContent = processImageUrls(news.content || '');
+      const processedFeaturedImage = processSingleImageUrl(news.featuredImage || '');
 
       setFormData({
         title: news.title || '',
@@ -125,7 +174,7 @@ const NewsForm = () => {
         publishDate: news.publishDate ? news.publishDate.substring(0, 10) : '',
         expiryDate: news.expiryDate ? news.expiryDate.substring(0, 10) : '',
         category: news.category || 'General',
-        featuredImage: news.featuredImage || '',
+        featuredImage: processedFeaturedImage,
         tags: news.tags || []
       });
     } catch (error) {
@@ -199,7 +248,8 @@ const NewsForm = () => {
       // Prepare the form data for submission, stripping API base URL from image sources
       const submissionData = {
         ...formData,
-        content: stripApiBaseUrlFromImages(formData.content)
+        content: stripApiBaseUrlFromImages(formData.content),
+        featuredImage: stripSingleApiBaseUrl(formData.featuredImage)
       };
 
       if (isEditing) {
@@ -471,30 +521,96 @@ const NewsForm = () => {
               </Box>
 
               <Box>
-                <TextField
-                  fullWidth
-                  label={t('admin.news.featuredImage')}
-                  name="featuredImage"
-                  value={formData.featuredImage}
-                  onChange={handleInputChange}
-                  variant="outlined"
-                  placeholder="https://example.com/image.jpg"
-                  InputLabelProps={{ sx: { color: 'text.primary' } }}
-                  InputProps={{ sx: { color: 'text.primary' } }}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': {
-                        borderColor: 'rgba(255,255,255,0.3)',
-                      },
-                      '&:hover fieldset': {
-                        borderColor: 'rgba(255,255,255,0.5)',
-                      },
-                      '&.Mui-focused fieldset': {
-                        borderColor: 'primary.main',
-                      },
-                    }
-                  }}
-                />
+                <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start', mb: 2 }}>
+                  <TextField
+                    fullWidth
+                    label={t('admin.news.featuredImage')}
+                    name="featuredImage"
+                    value={formData.featuredImage}
+                    onChange={handleInputChange}
+                    variant="outlined"
+                    placeholder="https://example.com/image.jpg"
+                    InputLabelProps={{ sx: { color: 'text.primary' } }}
+                    InputProps={{
+                      sx: { color: 'text.primary' },
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <input
+                            accept="image/*"
+                            style={{ display: 'none' }}
+                            id="featured-image-upload"
+                            type="file"
+                            onChange={handleFeaturedImageUpload}
+                          />
+                          <label htmlFor="featured-image-upload">
+                            <IconButton
+                              color="primary"
+                              component="span"
+                              title="Upload Image"
+                              sx={{
+                                color: 'primary.main',
+                                '&:hover': {
+                                  backgroundColor: 'rgba(255, 107, 53, 0.1)',
+                                }
+                              }}
+                            >
+                              <CloudUpload />
+                            </IconButton>
+                          </label>
+                          {formData.featuredImage && (
+                            <IconButton
+                              color="error"
+                              onClick={() => setFormData(prev => ({ ...prev, featuredImage: '' }))}
+                              title="Clear Image"
+                            >
+                              <Delete />
+                            </IconButton>
+                          )}
+                        </InputAdornment>
+                      ),
+                    }}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        '& fieldset': {
+                          borderColor: 'rgba(255,255,255,0.3)',
+                        },
+                        '&:hover fieldset': {
+                          borderColor: 'rgba(255,255,255,0.5)',
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: 'primary.main',
+                        },
+                      }
+                    }}
+                  />
+                </Box>
+                {formData.featuredImage && (
+                  <Box
+                    sx={{
+                      mt: 1,
+                      width: '100%',
+                      maxWidth: '300px',
+                      height: '180px',
+                      borderRadius: 2,
+                      overflow: 'hidden',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      position: 'relative'
+                    }}
+                  >
+                    <img
+                      src={formData.featuredImage}
+                      alt="Featured Preview"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover'
+                      }}
+                      onError={(e) => {
+                        e.target.src = 'https://via.placeholder.com/300x180?text=Invalid+Image+URL';
+                      }}
+                    />
+                  </Box>
+                )}
               </Box>
             </Box>
 

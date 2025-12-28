@@ -125,6 +125,45 @@ class BookingService {
   async getLockedSeats(showtimeId) {
     return await this.bookingRepository.findLockedSeats(showtimeId);
   }
+
+  async getAllBookings() {
+    return await this.bookingRepository.findAll();
+  }
+
+  async getBookingById(id) {
+    return await this.bookingRepository.findById(id);
+  }
+
+  async getBookingsByUserId(userId) {
+    return await this.bookingRepository.findByUserId(userId);
+  }
+
+  async confirmBooking(id) {
+    const booking = await this.bookingRepository.findById(id);
+    if (!booking) return null;
+    
+    // Create updated booking object or partial update
+    // Since repository update expects an object with properties
+    const updateData = {
+        ...booking,
+        status: 'confirmed',
+        expiresAt: null // Clear expiration
+    };
+    
+    return await this.bookingRepository.update(id, updateData);
+  }
+
+  async cancelBooking(id) {
+    const booking = await this.bookingRepository.findById(id);
+    if (!booking) return null;
+
+    const updateData = {
+        ...booking,
+        status: 'cancelled'
+    };
+
+    return await this.bookingRepository.update(id, updateData);
+  }
 }
 
 module.exports = BookingService;

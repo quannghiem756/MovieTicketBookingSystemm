@@ -16,7 +16,7 @@ A comprehensive Movie Ticket Booking System with a Node.js backend, React fronte
 ### Customer-Facing
 - **Movie Discovery:** Advanced search and browsing of movies with rich metadata, trailers, and synopses.
 - **Interactive Seat Selection:** A visual seat map for choosing specific seats in real-time.
-- **Secure Payments & QR Tickets:** Integration with Stripe for secure transactions and generation of digital tickets with QR codes.
+- **Secure Payments & QR Tickets:** Integration with MoMo E-Wallet for secure transactions and generation of digital tickets with QR codes.
 - **AI Recommendation Chatbot:** An intelligent assistant for personalized movie suggestions and basic support.
 - **User Profiles:** Management of personal information and access to a detailed booking history.
 

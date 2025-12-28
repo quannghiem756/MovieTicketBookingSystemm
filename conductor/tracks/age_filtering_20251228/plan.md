@@ -10,7 +10,7 @@
 - [x] Task: Secure Booking API Endpoint d8b11a5
     - [ ] Sub-task: Update `BookingService.js` (or relevant controller) to fetch the user's DOB and the movie's rating.
     - [ ] Sub-task: Throw a `403 Forbidden` error if the age requirement is not met.
-- [ ] Task: Conductor - User Manual Verification 'Backend Implementation & Data Standardization' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Backend Implementation & Data Standardization' (Protocol in workflow.md) [checkpoint: 3e62f3a]
 
 ## Phase 2: Frontend Visuals & Logic
 - [ ] Task: Update Frontend Movie Types & Utils

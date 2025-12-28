@@ -31,6 +31,13 @@ class BookingRepository {
   async findLockedSeats(showtimeId) {
     throw new Error('Method not implemented');
   }
+  async findPendingBookingByUser(userId, showtimeId) {
+    throw new Error('Method not implemented');
+  }
+
+  async countByUserAndCoupon(userId, couponCode) {
+    throw new Error('Method not implemented');
+  }
 }
 
 module.exports = BookingRepository;

@@ -5,6 +5,9 @@ const bookingSchema = new mongoose.Schema({
   showtimeId: { type: mongoose.Schema.Types.ObjectId, ref: 'Showtime', required: true },
   seatIds: [{ type: String }], // Array of selected seat IDs
   totalPrice: { type: Number, required: true },
+  originalPrice: { type: Number },
+  discountAmount: { type: Number, default: 0 },
+  couponCode: { type: String },
   bookingDate: { type: Date, default: Date.now },
   status: { type: String, enum: ['pending', 'confirmed', 'cancelled', 'paid', 'held'], default: 'pending' },
   paymentId: { type: String }, // Reference to payment transaction

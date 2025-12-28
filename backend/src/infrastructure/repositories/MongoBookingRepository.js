@@ -8,6 +8,9 @@ class MongoBookingRepository extends BookingRepository {
       showtimeId: booking.showtimeId,
       seatIds: booking.seatIds,
       totalPrice: booking.totalPrice,
+      originalPrice: booking.originalPrice,
+      discountAmount: booking.discountAmount,
+      couponCode: booking.couponCode,
       bookingDate: booking.bookingDate,
       status: booking.status,
       paymentMethod: booking.paymentMethod,
@@ -27,6 +30,9 @@ class MongoBookingRepository extends BookingRepository {
       userId: doc.userId,
       seatIds: doc.seatIds,
       totalPrice: doc.totalPrice,
+      originalPrice: doc.originalPrice,
+      discountAmount: doc.discountAmount,
+      couponCode: doc.couponCode,
       bookingDate: doc.bookingDate,
       status: doc.status,
       paymentMethod: doc.paymentMethod,
@@ -161,6 +167,9 @@ class MongoBookingRepository extends BookingRepository {
       showtimeId: booking.showtimeId,
       seatIds: booking.seatIds,
       totalPrice: booking.totalPrice,
+      originalPrice: booking.originalPrice,
+      discountAmount: booking.discountAmount,
+      couponCode: booking.couponCode,
       bookingDate: booking.bookingDate,
       status: booking.status,
       paymentMethod: booking.paymentMethod,
@@ -269,6 +278,14 @@ class MongoBookingRepository extends BookingRepository {
   async countByStatus(statuses) {
     return await BookingModel.countDocuments({
       status: { $in: statuses }
+    });
+  }
+
+  async countByUserAndCoupon(userId, couponCode) {
+    return await BookingModel.countDocuments({
+      userId,
+      couponCode,
+      status: { $ne: 'cancelled' }
     });
   }
 

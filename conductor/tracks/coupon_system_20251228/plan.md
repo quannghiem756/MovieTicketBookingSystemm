@@ -8,7 +8,7 @@
 - [x] Task: Conductor - User Manual Verification 'Backend Core - Data Model & Repository' (Protocol in workflow.md) 1421c14
 
 ## Phase 2: Backend - Admin Coupon Management API
-- [ ] Task: Create `CouponService` (`backend/src/application/CouponService.js`) with methods for creating, updating, and listing coupons.
+- [x] Task: Create `CouponService` (`backend/src/application/CouponService.js`) with methods for creating, updating, and listing coupons. 204caa1
 - [ ] Task: Create `AdminCouponController` to expose CRUD endpoints (GET /admin/coupons, POST /admin/coupons, etc.).
 - [ ] Task: Register new routes in `backend/server.js` (or appropriate route loader).
 - [ ] Task: Write integration tests for Admin Coupon APIs.

@@ -16,7 +16,7 @@
 
 ## Phase 3: Backend - Coupon Validation & Booking Integration
 - [x] Task: Implement `validateCoupon` method in `CouponService` checking for expiry, minimum order value, and global/user limits. e6b0fc0
-- [ ] Task: Create a public API endpoint `POST /coupons/validate` for the frontend to check code validity and get discount details before booking.
+- [x] Task: Create a public API endpoint `POST /coupons/validate` for the frontend to check code validity and get discount details before booking. f5a2b58
 - [ ] Task: Update `BookingService.createBooking` to accept an optional `couponCode`.
 - [ ] Task: Implement atomic usage increment logic in `BookingService` to handle concurrency (race conditions).
 - [x] Task: Update `Booking` model to store `couponCode`, `discountAmount`, and `finalPrice`. 123ebdd

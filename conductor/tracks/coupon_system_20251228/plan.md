@@ -10,7 +10,7 @@
 ## Phase 2: Backend - Admin Coupon Management API
 - [x] Task: Create `CouponService` (`backend/src/application/CouponService.js`) with methods for creating, updating, and listing coupons. 204caa1
 - [x] Task: Create `AdminCouponController` to expose CRUD endpoints (GET /admin/coupons, POST /admin/coupons, etc.). a9fb8bf
-- [ ] Task: Register new routes in `backend/server.js` (or appropriate route loader).
+- [x] Task: Register new routes in `backend/server.js` (or appropriate route loader). 3737155
 - [ ] Task: Write integration tests for Admin Coupon APIs.
 - [ ] Task: Conductor - User Manual Verification 'Backend - Admin Coupon Management API' (Protocol in workflow.md)
 

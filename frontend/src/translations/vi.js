@@ -287,6 +287,8 @@ const vi = {
   'admin.movies.table.actions': 'Hành động',
   'admin.movies.edit': 'Sửa',
   'admin.movies.delete': 'Xóa',
+  'admin.movies.search': 'Tìm kiếm phim...',
+  'admin.movies.noMovies': 'Không tìm thấy phim',
   'admin.movies.deleteConfirm': 'Bạn có chắc chắn muốn xóa phim này?',
   'admin.movies.deleteError': 'Xóa phim không thành công',
   'admin.movies.pagination.previous': 'Trước',

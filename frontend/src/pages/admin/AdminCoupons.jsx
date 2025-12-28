@@ -54,7 +54,9 @@ const AdminCoupons = () => {
     setLoading(true);
     try {
       const response = await getCoupons(currentPage, couponsPerPage);
-      setCoupons(response.data.coupons || []);
+      // Handle both object with coupons array and direct array response
+      const couponsData = response.data.coupons || (Array.isArray(response.data) ? response.data : []);
+      setCoupons(couponsData);
       setTotalPages(response.data.totalPages || 1);
       setError(null);
     } catch (err) {

@@ -250,6 +250,8 @@ const en = {
   'admin.movies.table.actions': 'Actions',
   'admin.movies.edit': 'Edit',
   'admin.movies.delete': 'Delete',
+  'admin.movies.search': 'Search movies...',
+  'admin.movies.noMovies': 'No movies found',
   'admin.movies.deleteConfirm': 'Are you sure you want to delete this movie?',
   'admin.movies.deleteError': 'Failed to delete movie',
   'admin.movies.pagination.previous': 'Previous',

@@ -113,12 +113,43 @@ describe('MongoCouponRepository', () => {
 
   describe('incrementUsage', () => {
     it('should increment coupon usage', async () => {
-      const mockUpdated = { _id: 'c1', currentUsage: 5 };
-      CouponModel.findByIdAndUpdate.mockResolvedValue(mockUpdated);
+      const mockCoupon = { _id: 'c1', currentUsage: 4, usageLimit: 10 };
+      const mockUpdated = { _id: 'c1', currentUsage: 5, usageLimit: 10 };
+      
+      CouponModel.findById.mockResolvedValue(mockCoupon);
+      CouponModel.findOneAndUpdate.mockResolvedValue(mockUpdated);
 
       const result = await repository.incrementUsage('c1');
       expect(result.currentUsage).toBe(5);
-      expect(CouponModel.findByIdAndUpdate).toHaveBeenCalledWith('c1', { $inc: { currentUsage: 1 } }, { new: true });
+      expect(CouponModel.findOneAndUpdate).toHaveBeenCalledWith(
+        { _id: 'c1', currentUsage: { $lt: 10 } },
+        { $inc: { currentUsage: 1 } },
+        { new: true }
+      );
+    });
+
+    it('should throw error if usage limit reached', async () => {
+      const mockCoupon = { _id: 'c1', currentUsage: 10, usageLimit: 10 };
+      
+      CouponModel.findById.mockResolvedValue(mockCoupon);
+      CouponModel.findOneAndUpdate.mockResolvedValue(null);
+
+      await expect(repository.incrementUsage('c1')).rejects.toThrow('Coupon usage limit reached');
+    });
+  });
+
+  describe('decrementUsage', () => {
+    it('should decrement coupon usage', async () => {
+      const mockUpdated = { _id: 'c1', currentUsage: 4 };
+      CouponModel.findOneAndUpdate.mockResolvedValue(mockUpdated);
+
+      const result = await repository.decrementUsage('c1');
+      expect(result.currentUsage).toBe(4);
+      expect(CouponModel.findOneAndUpdate).toHaveBeenCalledWith(
+        { _id: 'c1', currentUsage: { $gt: 0 } },
+        { $inc: { currentUsage: -1 } },
+        { new: true }
+      );
     });
   });
 });

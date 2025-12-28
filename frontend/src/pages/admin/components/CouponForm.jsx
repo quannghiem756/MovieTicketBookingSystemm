@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from '../../../context/I18nContext';
 import {
   createCoupon,
@@ -11,7 +11,6 @@ import {
   DialogActions,
   Button,
   TextField,
-  Grid,
   MenuItem,
   FormControl,
   InputLabel,
@@ -21,13 +20,16 @@ import {
   OutlinedInput,
   Box,
   Typography,
-  Alert
+  Alert,
+  InputAdornment
 } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
 const CouponForm = ({ open, onClose, coupon, movies }) => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const [formData, setFormData] = useState({
     code: '',
@@ -54,8 +56,27 @@ const CouponForm = ({ open, onClose, coupon, movies }) => {
         minOrderValue: coupon.minOrderValue || 0,
         applicableMovieIds: coupon.applicableMovieIds || []
       });
+    } else {
+      setFormData({
+        code: '',
+        type: 'PERCENTAGE',
+        value: 0,
+        startDate: new Date().toISOString().split('T')[0],
+        endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        usageLimit: '',
+        userUsageLimit: 1,
+        minOrderValue: 0,
+        applicableMovieIds: []
+      });
     }
-  }, [coupon]);
+  }, [coupon, open]);
+
+  const filteredMovies = useMemo(() => {
+    if (!searchTerm) return movies;
+    return movies.filter(movie =>
+      movie.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [movies, searchTerm]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -112,8 +133,12 @@ const CouponForm = ({ open, onClose, coupon, movies }) => {
         <DialogContent dividers>
           {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
           
-          <Grid container spacing={3}>
-            <Grid item xs={12} sm={6}>
+          <Box
+            display="grid"
+            gridTemplateColumns={{ xs: '1fr', sm: '1fr 1fr' }}
+            gap={3}
+          >
+            <Box>
               <TextField
                 fullWidth
                 label={t('admin.couponForm.code')}
@@ -123,8 +148,8 @@ const CouponForm = ({ open, onClose, coupon, movies }) => {
                 required
                 inputProps={{ style: { textTransform: 'uppercase' } }}
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            </Box>
+            <Box>
               <FormControl fullWidth>
                 <InputLabel>{t('admin.couponForm.type')}</InputLabel>
                 <Select
@@ -134,11 +159,11 @@ const CouponForm = ({ open, onClose, coupon, movies }) => {
                   label={t('admin.couponForm.type')}
                 >
                   <MenuItem value="PERCENTAGE">{t('admin.coupons.percentage')}</MenuItem>
-                  <MenuItem value="FIXED">{t('admin.coupons.fixed')}</MenuItem>
+                  <MenuItem value="FIXED_AMOUNT">{t('admin.coupons.fixed')}</MenuItem>
                 </Select>
               </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            </Box>
+            <Box>
               <TextField
                 fullWidth
                 label={t('admin.couponForm.value')}
@@ -151,8 +176,8 @@ const CouponForm = ({ open, onClose, coupon, movies }) => {
                   inputProps: { min: 0 }
                 }}
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            </Box>
+            <Box>
               <TextField
                 fullWidth
                 label={t('admin.couponForm.minOrderValue')}
@@ -164,8 +189,8 @@ const CouponForm = ({ open, onClose, coupon, movies }) => {
                   inputProps: { min: 0 }
                 }}
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            </Box>
+            <Box>
               <TextField
                 fullWidth
                 label={t('admin.couponForm.startDate')}
@@ -176,8 +201,8 @@ const CouponForm = ({ open, onClose, coupon, movies }) => {
                 required
                 InputLabelProps={{ shrink: true }}
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            </Box>
+            <Box>
               <TextField
                 fullWidth
                 label={t('admin.couponForm.endDate')}
@@ -188,8 +213,8 @@ const CouponForm = ({ open, onClose, coupon, movies }) => {
                 required
                 InputLabelProps={{ shrink: true }}
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            </Box>
+            <Box>
               <TextField
                 fullWidth
                 label={t('admin.couponForm.usageLimit')}
@@ -202,8 +227,8 @@ const CouponForm = ({ open, onClose, coupon, movies }) => {
                   inputProps: { min: 0 }
                 }}
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            </Box>
+            <Box>
               <TextField
                 fullWidth
                 label={t('admin.couponForm.userUsageLimit')}
@@ -216,8 +241,8 @@ const CouponForm = ({ open, onClose, coupon, movies }) => {
                   inputProps: { min: 0 }
                 }}
               />
-            </Grid>
-            <Grid item xs={12}>
+            </Box>
+            <Box sx={{ gridColumn: { xs: 'span 1', sm: 'span 2' } }}>
               <FormControl fullWidth>
                 <InputLabel id="applicable-movies-label">{t('admin.couponForm.applicableMovies')}</InputLabel>
                 <Select
@@ -230,20 +255,54 @@ const CouponForm = ({ open, onClose, coupon, movies }) => {
                     if (selected.length === 0) return t('admin.couponForm.allMovies');
                     return selected.map(id => movies.find(m => m.id === id)?.title).filter(Boolean).join(', ');
                   }}
+                  MenuProps={{
+                    autoFocus: false,
+                    PaperProps: {
+                      style: {
+                        maxHeight: 400,
+                      },
+                    },
+                  }}
                 >
-                  {movies.map((movie) => (
+                  <Box sx={{ p: 1, position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1 }}>
+                    <TextField
+                      fullWidth
+                      size="small"
+                      placeholder={t('admin.movies.search')}
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key !== 'Escape') {
+                          e.stopPropagation();
+                        }
+                      }}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <SearchIcon fontSize="small" />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Box>
+                  {filteredMovies.map((movie) => (
                     <MenuItem key={movie.id} value={movie.id}>
                       <Checkbox checked={formData.applicableMovieIds.indexOf(movie.id) > -1} />
                       <ListItemText primary={movie.title} />
                     </MenuItem>
                   ))}
+                  {filteredMovies.length === 0 && (
+                    <MenuItem disabled>
+                      <ListItemText primary={t('admin.movies.noMovies')} />
+                    </MenuItem>
+                  )}
                 </Select>
                 <Typography variant="caption" sx={{ mt: 1, ml: 1 }}>
                   Leave empty to apply to all movies.
                 </Typography>
               </FormControl>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => onClose(false)}>{t('admin.couponForm.cancel')}</Button>

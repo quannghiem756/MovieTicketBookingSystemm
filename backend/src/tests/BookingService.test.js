@@ -137,6 +137,61 @@ describe('BookingService', () => {
             expect(result.discountAmount).toBe(10);
             expect(result.couponCode).toBe('SAVE10');
         });
+
+        it('should throw error if coupon is invalid', async () => {
+            const userId = 'user1';
+            const showtimeId = 'showtime1';
+            const movieId = 'movie1';
+
+            mockUserRepository.findById.mockResolvedValue({ id: userId, canBookMovie: () => true });
+            mockShowtimeRepository.findById.mockResolvedValue({ id: showtimeId, movieId: movieId });
+            mockMovieRepository.findById.mockResolvedValue({ id: movieId, rating: 'P' });
+
+            mockCouponService.validateCoupon.mockRejectedValue(new Error('Invalid coupon code'));
+
+            const bookingData = { userId, showtimeId, seatIds: ['A1'], totalPrice: 100, couponCode: 'INVALID' };
+
+            await expect(bookingService.createBooking(bookingData))
+                .rejects
+                .toThrow('Invalid coupon code');
+        });
+
+        it('should throw error if coupon usage limit is reached during increment', async () => {
+            const userId = 'user1';
+            const showtimeId = 'showtime1';
+            const movieId = 'movie1';
+
+            mockUserRepository.findById.mockResolvedValue({ id: userId, canBookMovie: () => true });
+            mockShowtimeRepository.findById.mockResolvedValue({ id: showtimeId, movieId: movieId });
+            mockMovieRepository.findById.mockResolvedValue({ id: movieId, rating: 'P' });
+
+            mockCouponService.validateCoupon.mockResolvedValue({ isValid: true, code: 'LIMIT', discountAmount: 10 });
+            mockCouponService.incrementUsage.mockRejectedValue(new Error('Coupon usage limit reached'));
+
+            const bookingData = { userId, showtimeId, seatIds: ['A1'], totalPrice: 100, couponCode: 'LIMIT' };
+
+            await expect(bookingService.createBooking(bookingData))
+                .rejects
+                .toThrow('Coupon usage limit reached');
+        });
+
+        it('should throw error if minimum order value is not met', async () => {
+            const userId = 'user1';
+            const showtimeId = 'showtime1';
+            const movieId = 'movie1';
+
+            mockUserRepository.findById.mockResolvedValue({ id: userId, canBookMovie: () => true });
+            mockShowtimeRepository.findById.mockResolvedValue({ id: showtimeId, movieId: movieId });
+            mockMovieRepository.findById.mockResolvedValue({ id: movieId, rating: 'P' });
+
+            mockCouponService.validateCoupon.mockRejectedValue(new Error('Minimum order value of 200 not met'));
+
+            const bookingData = { userId, showtimeId, seatIds: ['A1'], totalPrice: 100, couponCode: 'MIN200' };
+
+            await expect(bookingService.createBooking(bookingData))
+                .rejects
+                .toThrow('Minimum order value of 200 not met');
+        });
     });
 
     describe('cancelBooking', () => {

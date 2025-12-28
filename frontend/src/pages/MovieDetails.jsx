@@ -396,7 +396,7 @@ const MovieDetails = () => {
                   {t('movieDetails.watchTrailer')}
                 </Button>
 
-                <Tooltip title={!canBook ? `You must be at least ${movie.rating === 'C18' ? 18 : movie.rating === 'C16' ? 16 : 13} years old to book.` : ''}>
+                <Tooltip title={!canBook ? t('rating.restriction.tooltip', { age: movie.rating === 'C18' ? 18 : movie.rating === 'C16' ? 16 : 13 }) : ''}>
                   <span>
                     <Button
                       variant="outlined"
@@ -586,7 +586,7 @@ const MovieDetails = () => {
                       </Typography>
                     </CardContent>
                     <Box sx={{ p: 2, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-                      <Tooltip title={!canBook ? `You must be at least ${movie.rating === 'C18' ? 18 : movie.rating === 'C16' ? 16 : 13} years old to book.` : ''}>
+                      <Tooltip title={!canBook ? t('rating.restriction.tooltip', { age: movie.rating === 'C18' ? 18 : movie.rating === 'C16' ? 16 : 13 }) : ''}>
                         <span>
                           <Button
                             variant="contained"
@@ -680,14 +680,12 @@ const MovieDetails = () => {
         }}
       >
         <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'warning.main' }}>
-          <Warning /> Age Warning
+          <Warning /> {t('rating.warning.title')}
         </DialogTitle>
         <DialogContent>
-          <Typography variant="body1" paragraph>
-            This movie is rated <strong>K</strong> (Under 13 requires guardian).
-          </Typography>
+          <Typography variant="body1" paragraph dangerouslySetInnerHTML={{ __html: t('rating.warning.k_message') }} />
           <Alert severity="warning" sx={{ mb: 2 }}>
-            Viewers under 13 must be accompanied by a parent or guardian.
+            {t('rating.warning.k_alert')}
           </Alert>
           <FormControlLabel
             control={
@@ -696,12 +694,12 @@ const MovieDetails = () => {
                 onChange={(e) => setGuardianConfirmed(e.target.checked)}
               />
             }
-            label="I confirm that I will be accompanied by a parent or guardian."
+            label={t('rating.warning.confirm_guardian')}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleGuardianCancel} sx={{ color: 'text.secondary' }}>
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button 
             onClick={handleGuardianConfirm} 
@@ -709,7 +707,7 @@ const MovieDetails = () => {
             color="primary"
             disabled={!guardianConfirmed}
           >
-            Confirm & Proceed
+            {t('rating.warning.confirm_proceed')}
           </Button>
         </DialogActions>
       </Dialog>

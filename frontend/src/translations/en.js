@@ -485,7 +485,20 @@ const en = {
   'news.searchNews': 'Search News',
   'news.noNewsFound': 'No news found',
   'news.noNewsDescription': 'There are currently no news articles available. Please check back later for updates.',
-  'news.readMore': 'Read More'
+  'news.readMore': 'Read More',
+
+  // Age Rating
+  'rating.description.p': 'All ages',
+  'rating.description.k': 'Under 13 requires guardian',
+  'rating.description.c13': '13+ years old',
+  'rating.description.c16': '16+ years old',
+  'rating.description.c18': '18+ years old',
+  'rating.warning.title': 'Age Warning',
+  'rating.warning.k_message': 'This movie is rated <strong>K</strong> (Under 13 requires guardian).',
+  'rating.warning.k_alert': 'Viewers under 13 must be accompanied by a parent or guardian.',
+  'rating.warning.confirm_guardian': 'I confirm that I will be accompanied by a parent or guardian.',
+  'rating.warning.confirm_proceed': 'Confirm & Proceed',
+  'rating.restriction.tooltip': 'You must be at least {{age}} years old to book.'
 };
 
 export default en;

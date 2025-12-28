@@ -522,7 +522,20 @@ const vi = {
   'news.searchNews': 'Tìm kiếm tin tức',
   'news.noNewsFound': 'Không tìm thấy tin tức nào',
   'news.noNewsDescription': 'Hiện không có bài viết tin tức nào. Vui lòng quay lại sau để xem các cập nhật mới.',
-  'news.readMore': 'Đọc thêm'
+  'news.readMore': 'Đọc thêm',
+
+  // Age Rating
+  'rating.description.p': 'Mọi lứa tuổi',
+  'rating.description.k': 'Dưới 13 tuổi cần người giám hộ',
+  'rating.description.c13': '13 tuổi trở lên',
+  'rating.description.c16': '16 tuổi trở lên',
+  'rating.description.c18': '18 tuổi trở lên',
+  'rating.warning.title': 'Cảnh báo độ tuổi',
+  'rating.warning.k_message': 'Phim này được xếp loại <strong>K</strong> (Dưới 13 tuổi cần người giám hộ).',
+  'rating.warning.k_alert': 'Khán giả dưới 13 tuổi phải có cha mẹ hoặc người giám hộ đi cùng.',
+  'rating.warning.confirm_guardian': 'Tôi xác nhận rằng tôi sẽ đi cùng với cha mẹ hoặc người giám hộ.',
+  'rating.warning.confirm_proceed': 'Xác nhận & Tiếp tục',
+  'rating.restriction.tooltip': 'Bạn phải đủ {{age}} tuổi để đặt vé.'
 };
 
 export default vi;

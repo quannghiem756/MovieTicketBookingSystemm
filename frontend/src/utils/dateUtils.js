@@ -70,11 +70,11 @@ export const getRatingDescription = (rating) => {
     if (!rating) return '';
     const r = rating.toUpperCase();
     switch (r) {
-        case 'P': return 'All ages';
-        case 'K': return 'Under 13 requires guardian';
-        case 'C13': return '13+ years old';
-        case 'C16': return '16+ years old';
-        case 'C18': return '18+ years old';
+        case 'P': return 'rating.description.p';
+        case 'K': return 'rating.description.k';
+        case 'C13': return 'rating.description.c13';
+        case 'C16': return 'rating.description.c16';
+        case 'C18': return 'rating.description.c18';
         default: return '';
     }
 };

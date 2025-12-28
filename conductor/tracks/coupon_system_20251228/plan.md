@@ -39,5 +39,5 @@
 ## Phase 6: End-to-End Verification
 - [ ] Task: Perform a full E2E test: Admin creates a "Limited Time" coupon -> User applies it -> Booking created with discount -> Coupon usage count increments.
 - [ ] Task: Verify usage limits block subsequent attempts (if limit is 1).
-- [x] Task: Create a workflow document of the current system (e.g., `docs/coupon-system-workflow.md`) detailing the implemented coupon logic and flows. 1e1e1e1 (placeholder hash)
+- [x] Task: Create a workflow document of the current system (e.g., `docs/coupon-system-workflow.md`) detailing the implemented coupon logic and flows. f8bffdb
 - [ ] Task: Conductor - User Manual Verification 'End-to-End Verification' (Protocol in workflow.md)

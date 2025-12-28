@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   Typography,
   Button,
@@ -29,7 +29,11 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
+  Tooltip,
+  Checkbox,
+  FormControlLabel,
+  Alert
 } from '@mui/material';
 import {
   PlayArrow,
@@ -38,12 +42,15 @@ import {
   Star,
   ArrowBack,
   Movie,
-  Close
+  Close,
+  Warning
 } from '@mui/icons-material';
 import RatingBadge from '../components/RatingBadge';
 import { getMovieById, getShowtimesByMovieId, getFutureShowtimesByMovieId } from '../services/api';
 import { useTranslation } from '../context/I18nContext';
 import { formatCurrency } from '../utils/currency';
+import { useAuth } from '../context/AuthContext';
+import { calculateAge, canBookMovie } from '../utils/dateUtils';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -83,6 +90,8 @@ const extractYouTubeVideoId = (url) => {
 
 const MovieDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [movie, setMovie] = useState(null);
   const [showtimes, setShowtimes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -92,6 +101,43 @@ const MovieDetails = () => {
   const { t } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  // Age restriction state
+  const [guardianDialogOpen, setGuardianDialogOpen] = useState(false);
+  const [pendingBookingPath, setPendingBookingPath] = useState('');
+  const [guardianConfirmed, setGuardianConfirmed] = useState(false);
+
+  const userAge = user ? calculateAge(user.dateOfBirth) : 0;
+  const canBook = user ? canBookMovie(userAge, movie?.rating) : true;
+  const isGuardianRequired = user && movie?.rating === 'K' && userAge < 13;
+
+  const handleBookClick = (e, path) => {
+    if (!user) return; // Allow guest to proceed (to login)
+
+    if (!canBook) {
+      e.preventDefault();
+      return;
+    }
+
+    if (isGuardianRequired) {
+      e.preventDefault();
+      setPendingBookingPath(path);
+      setGuardianDialogOpen(true);
+    }
+    // Otherwise proceed normally
+  };
+
+  const handleGuardianConfirm = () => {
+    setGuardianDialogOpen(false);
+    setGuardianConfirmed(false); // Reset for next time
+    navigate(pendingBookingPath);
+  };
+
+  const handleGuardianCancel = () => {
+    setGuardianDialogOpen(false);
+    setGuardianConfirmed(false);
+    setPendingBookingPath('');
+  };
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -350,29 +396,39 @@ const MovieDetails = () => {
                   {t('movieDetails.watchTrailer')}
                 </Button>
 
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  size="large"
-                  component={Link}
-                  to={`/book/${movie.id}/${showtimes[0]?.id || ''}`}
-                  sx={{
-                    borderRadius: 3,
-                    px: 3,
-                    py: 1.5,
-                    fontWeight: 700,
-                    textTransform: 'none',
-                    minWidth: 180,
-                    borderColor: 'rgba(255,255,255,0.3)',
-                    color: 'white',
-                    '&:hover': {
-                      borderColor: 'white',
-                      backgroundColor: 'rgba(255,255,255,0.1)',
-                    }
-                  }}
-                >
-                  {t('movieDetails.bookTicket')}
-                </Button>
+                <Tooltip title={!canBook ? `You must be at least ${movie.rating === 'C18' ? 18 : movie.rating === 'C16' ? 16 : 13} years old to book.` : ''}>
+                  <span>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      size="large"
+                      component={Link}
+                      to={showtimes.length > 0 ? `/book/${movie.id}/${showtimes[0].id}` : '#'}
+                      disabled={!canBook || showtimes.length === 0}
+                      onClick={(e) => handleBookClick(e, `/book/${movie.id}/${showtimes[0]?.id}`)}
+                      sx={{
+                        borderRadius: 3,
+                        px: 3,
+                        py: 1.5,
+                        fontWeight: 700,
+                        textTransform: 'none',
+                        minWidth: 180,
+                        borderColor: 'rgba(255,255,255,0.3)',
+                        color: 'white',
+                        '&:hover': {
+                          borderColor: 'white',
+                          backgroundColor: 'rgba(255,255,255,0.1)',
+                        },
+                        '&.Mui-disabled': {
+                          borderColor: 'rgba(255,255,255,0.1)',
+                          color: 'rgba(255,255,255,0.3)'
+                        }
+                      }}
+                    >
+                      {t('movieDetails.bookTicket')}
+                    </Button>
+                  </span>
+                </Tooltip>
               </Stack>
             </Box>
           </Box>
@@ -530,20 +586,26 @@ const MovieDetails = () => {
                       </Typography>
                     </CardContent>
                     <Box sx={{ p: 2, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-                      <Button
-                        variant="contained"
-                        fullWidth
-                        component={Link}
-                        to={`/book/${movie.id}/${showtime.id}`}
-                        sx={{
-                          borderRadius: 3,
-                          py: 1.5,
-                          fontWeight: 700,
-                          textTransform: 'none'
-                        }}
-                      >
-                        {t('movieDetails.select')}
-                      </Button>
+                      <Tooltip title={!canBook ? `You must be at least ${movie.rating === 'C18' ? 18 : movie.rating === 'C16' ? 16 : 13} years old to book.` : ''}>
+                        <span>
+                          <Button
+                            variant="contained"
+                            fullWidth
+                            component={Link}
+                            to={`/book/${movie.id}/${showtime.id}`}
+                            disabled={!canBook}
+                            onClick={(e) => handleBookClick(e, `/book/${movie.id}/${showtime.id}`)}
+                            sx={{
+                              borderRadius: 3,
+                              py: 1.5,
+                              fontWeight: 700,
+                              textTransform: 'none'
+                            }}
+                          >
+                            {t('movieDetails.select')}
+                          </Button>
+                        </span>
+                      </Tooltip>
                     </Box>
                   </Card>
                 </Grid>
@@ -608,6 +670,49 @@ const MovieDetails = () => {
           </Grid>
         </TabPanel>
       </Paper>
+
+      {/* Guardian Confirmation Dialog */}
+      <Dialog
+        open={guardianDialogOpen}
+        onClose={handleGuardianCancel}
+        PaperProps={{
+          sx: { borderRadius: 4, p: 1 }
+        }}
+      >
+        <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'warning.main' }}>
+          <Warning /> Age Warning
+        </DialogTitle>
+        <DialogContent>
+          <Typography variant="body1" paragraph>
+            This movie is rated <strong>K</strong> (Under 13 requires guardian).
+          </Typography>
+          <Alert severity="warning" sx={{ mb: 2 }}>
+            Viewers under 13 must be accompanied by a parent or guardian.
+          </Alert>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={guardianConfirmed}
+                onChange={(e) => setGuardianConfirmed(e.target.checked)}
+              />
+            }
+            label="I confirm that I will be accompanied by a parent or guardian."
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleGuardianCancel} sx={{ color: 'text.secondary' }}>
+            Cancel
+          </Button>
+          <Button 
+            onClick={handleGuardianConfirm} 
+            variant="contained" 
+            color="primary"
+            disabled={!guardianConfirmed}
+          >
+            Confirm & Proceed
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       {/* Trailer Dialog */}
       <Dialog

@@ -14,6 +14,12 @@ class MongoCouponRepository extends CouponRepository {
     return this._mapToDomain(couponDoc);
   }
 
+  async findById(id) {
+    const couponDoc = await CouponModel.findById(id);
+    if (!couponDoc) return null;
+    return this._mapToDomain(couponDoc);
+  }
+
   async findAll() {
     const couponDocs = await CouponModel.find().sort({ createdAt: -1 });
     return couponDocs.map(doc => this._mapToDomain(doc));

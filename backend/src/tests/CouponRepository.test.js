@@ -66,6 +66,15 @@ describe('MongoCouponRepository', () => {
     });
   });
 
+  describe('findById', () => {
+    it('should find a coupon by id', async () => {
+      const mockCoupon = { _id: 'c1', code: 'A' };
+      CouponModel.findById.mockResolvedValue(mockCoupon);
+      const result = await repository.findById('c1');
+      expect(result.id).toBe('c1');
+    });
+  });
+
   describe('findAll', () => {
     it('should return all coupons', async () => {
       const mockCoupons = [

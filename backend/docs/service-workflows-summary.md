@@ -68,6 +68,12 @@ This document provides an overview of all service workflows in the Movie Ticket 
 - **Operation**: Get Movie Recommendations
 - **Validation Points**: Route body validation, controller data validation, service query validation
 
+### 8. [Coupon Service](./coupon-service-workflow.md)
+- **Operation**: Manage Coupons (Admin)
+- **Validation Points**: Admin authorization, unique code validation, date range validation
+- **Operation**: Validate Coupon (User)
+- **Validation Points**: Authentication, expiry checks, usage limits, minimum order value
+
 ## Common Validation Patterns
 
 ### Route Level Validation

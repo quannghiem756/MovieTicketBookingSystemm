@@ -29,12 +29,12 @@
 - [x] Task: Integrate `AdminCouponService` in frontend to communicate with backend APIs.
 - [ ] Task: Conductor - User Manual Verification 'Frontend - Admin Panel Implementation' (Protocol in workflow.md)
 
-## Phase 5: Frontend - User Checkout Integration
-- [ ] Task: Update `BookingPage` (or Checkout component) to include a "Promo Code" input field and "Apply" button.
-- [ ] Task: Integrate `validateCoupon` API to check the code when clicked and display the discount amount/new total.
-- [ ] Task: Update the final booking submission to include the applied `couponCode`.
-- [ ] Task: Ensure the UI handles error messages (e.g., "Coupon Expired", "Min Order Not Met") gracefully.
-- [ ] Task: Conductor - User Manual Verification 'Frontend - User Checkout Integration' (Protocol in workflow.md)
+## Phase 5: Frontend - User Checkout Integration [checkpoint: 137a5af]
+- [x] Task: Update `BookingPage` (or Checkout component) to include a "Promo Code" input field and "Apply" button. 2a3632e
+- [x] Task: Integrate `validateCoupon` API to check the code when clicked and display the discount amount/new total. 2a3632e
+- [x] Task: Update the final booking submission to include the applied `couponCode`. 2a3632e
+- [x] Task: Ensure the UI handles error messages (e.g., "Coupon Expired", "Min Order Not Met") gracefully. 2a3632e
+- [x] Task: Conductor - User Manual Verification 'Frontend - User Checkout Integration' (Protocol in workflow.md)
 
 ## Phase 6: End-to-End Verification
 - [ ] Task: Perform a full E2E test: Admin creates a "Limited Time" coupon -> User applies it -> Booking created with discount -> Coupon usage count increments.

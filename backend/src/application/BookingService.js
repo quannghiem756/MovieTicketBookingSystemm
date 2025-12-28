@@ -3,11 +3,12 @@ const Booking = require('../domain/Booking');
 const User = require('../domain/User');
 
 class BookingService {
-  constructor(bookingRepository, userRepository, showtimeRepository, movieRepository) {
+  constructor(bookingRepository, userRepository, showtimeRepository, movieRepository, couponService) {
     this.bookingRepository = bookingRepository;
     this.userRepository = userRepository;
     this.showtimeRepository = showtimeRepository;
     this.movieRepository = movieRepository;
+    this.couponService = couponService;
   }
 
   async _checkAgeEligibility(userId, showtimeId) {
@@ -46,6 +47,27 @@ class BookingService {
     // Check age eligibility first
     await this._checkAgeEligibility(bookingData.userId, bookingData.showtimeId);
 
+    // Coupon validation and discount application
+    let finalPrice = bookingData.totalPrice;
+    let originalPrice = bookingData.totalPrice;
+    let discountAmount = 0;
+    let appliedCouponCode = null;
+
+    if (bookingData.couponCode && this.couponService) {
+        const showtime = await this.showtimeRepository.findById(bookingData.showtimeId);
+        const validation = await this.couponService.validateCoupon(bookingData.couponCode, {
+            userId: bookingData.userId,
+            orderTotal: bookingData.totalPrice,
+            movieId: showtime.movieId
+        });
+
+        if (validation.isValid) {
+            appliedCouponCode = validation.code;
+            discountAmount = validation.discountAmount;
+            finalPrice = Math.max(0, originalPrice - discountAmount);
+        }
+    }
+
     // Check for existing held booking to upgrade
     const existingHold = await this.bookingRepository.findPendingBookingByUser(bookingData.userId, bookingData.showtimeId);
 
@@ -63,26 +85,22 @@ class BookingService {
         bookingData.userId,
         bookingData.showtimeId,
         bookingData.seatIds,
-        bookingData.totalPrice,
+        finalPrice,
         new Date(),
         bookingData.paymentMethod === 'cash' ? 'confirmed' : 'pending',
-        bookingData.paymentMethod
+        bookingData.paymentMethod,
+        null, // expiresAt
+        originalPrice,
+        discountAmount,
+        appliedCouponCode
       );
       
-      // Clear expiration if confirmed, or keep/update if pending payment?
-      // If pending payment, we probably still want an expiration (e.g. 15 mins to pay)
-      // But existing logic might not use expiresAt for 'pending' status in the same way.
-      // Let's set it to null if confirmed, or +15 mins if pending.
       if (updatedBooking.status === 'confirmed') {
         updatedBooking.expiresAt = null;
       } else {
         updatedBooking.expiresAt = new Date(Date.now() + 15 * 60 * 1000); 
       }
 
-      // We need to pass the object structure expected by repository.update
-      // The repository expects a generic object or booking instance.
-      // Looking at MongoBookingRepository.update, it extracts fields.
-      // So passing the Booking instance is fine.
       return await this.bookingRepository.update(existingHold.id, updatedBooking);
     }
 
@@ -100,10 +118,14 @@ class BookingService {
       bookingData.userId,
       bookingData.showtimeId,
       bookingData.seatIds,
-      bookingData.totalPrice,
+      finalPrice,
       new Date(),
-      bookingData.paymentMethod === 'cash' ? 'confirmed' : 'pending', // For cash payments, immediately confirm
-      bookingData.paymentMethod // payment method
+      bookingData.paymentMethod === 'cash' ? 'confirmed' : 'pending',
+      bookingData.paymentMethod,
+      null, // expiresAt
+      originalPrice,
+      discountAmount,
+      appliedCouponCode
     );
     
     if (booking.status === 'pending') {

@@ -8,6 +8,8 @@ describe('BookingService', () => {
     let mockShowtimeRepository;
     let mockMovieRepository;
 
+    let mockCouponService;
+
     beforeEach(() => {
         mockBookingRepository = {
             findPendingBookingByUser: jest.fn(),
@@ -27,12 +29,17 @@ describe('BookingService', () => {
         mockMovieRepository = {
             findById: jest.fn()
         };
+        mockCouponService = {
+            validateCoupon: jest.fn(),
+            incrementUsage: jest.fn()
+        };
 
         bookingService = new BookingService(
             mockBookingRepository,
             mockUserRepository,
             mockShowtimeRepository,
-            mockMovieRepository
+            mockMovieRepository,
+            mockCouponService
         );
     });
 
@@ -44,9 +51,6 @@ describe('BookingService', () => {
 
             // Mock User
             const user = new User(userId, 'Test', 'test@test.com', '123', 'hash', new Date('2015-01-01'), 0); // 10 years old (approx)
-            // We can override calculateAge or rely on the logic if we set correct date. 
-            // Since we mocked User class in other tests by requiring it, here we are using real User class.
-            // Let's rely on real logic or spy.
             user.calculateAge = () => 10;
             user.canBookMovie = (rating) => false; // Enforce failure
 
@@ -88,6 +92,47 @@ describe('BookingService', () => {
              mockBookingRepository.create.mockResolvedValue({ id: 'booking1', status: 'confirmed' });
 
              await expect(bookingService.createBooking(bookingData)).resolves.toBeDefined();
+        });
+
+        it('should apply coupon and update total price when couponCode is provided', async () => {
+            const userId = 'user1';
+            const showtimeId = 'showtime1';
+            const movieId = 'movie1';
+
+            const user = new User(userId, 'Test', 'test@test.com', '123', 'hash', new Date('2000-01-01'), 0);
+            user.canBookMovie = () => true;
+            mockUserRepository.findById.mockResolvedValue(user);
+            mockShowtimeRepository.findById.mockResolvedValue({ id: showtimeId, movieId: movieId });
+            mockMovieRepository.findById.mockResolvedValue({ id: movieId, rating: 'P' });
+
+            const bookingData = { 
+                userId, 
+                showtimeId, 
+                seatIds: ['A1'], 
+                totalPrice: 100, 
+                paymentMethod: 'cash',
+                couponCode: 'SAVE10'
+            };
+
+            const validationResult = {
+                isValid: true,
+                code: 'SAVE10',
+                discountAmount: 10
+            };
+            mockCouponService.validateCoupon.mockResolvedValue(validationResult);
+            mockBookingRepository.create.mockImplementation(booking => Promise.resolve({ ...booking, id: 'booking1' }));
+
+            const result = await bookingService.createBooking(bookingData);
+
+            expect(mockCouponService.validateCoupon).toHaveBeenCalledWith('SAVE10', {
+                userId,
+                orderTotal: 100,
+                movieId
+            });
+            expect(result.totalPrice).toBe(90);
+            expect(result.originalPrice).toBe(100);
+            expect(result.discountAmount).toBe(10);
+            expect(result.couponCode).toBe('SAVE10');
         });
     });
 });

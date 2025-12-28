@@ -26,6 +26,27 @@ const ShowtimeMovieCard = ({ movie }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [selectedFormat, setSelectedFormat] = useState(null);
+
+  React.useEffect(() => {
+    if (movie && movie.showtimes && movie.showtimes.length > 0) {
+      const formats = [...new Set(movie.showtimes.map(s => s.format).filter(Boolean))];
+      if (formats.length > 0) {
+        setSelectedFormat(formats[0]);
+      }
+    }
+  }, [movie]);
+
+  const availableFormats = React.useMemo(() => {
+    if (!movie || !movie.showtimes) return [];
+    return [...new Set(movie.showtimes.map(s => s.format).filter(Boolean))];
+  }, [movie]);
+
+  const filteredShowtimes = React.useMemo(() => {
+    if (!movie || !movie.showtimes) return [];
+    if (!selectedFormat) return movie.showtimes;
+    return movie.showtimes.filter(s => s.format === selectedFormat);
+  }, [movie, selectedFormat]);
 
   const handleImageLoad = () => {
     setImageLoaded(true);
@@ -292,8 +313,30 @@ const ShowtimeMovieCard = ({ movie }) => {
                 {t('showtimes.availableShowtimes', 'Showtimes:')}
               </Typography>
             </Stack>
+
+            {/* Format Selection Chips */}
+            {availableFormats.length > 0 && (
+              <Stack direction="row" spacing={1} sx={{ mb: 1, flexWrap: 'wrap' }}>
+                {availableFormats.map(format => (
+                  <Chip
+                    key={format}
+                    label={format}
+                    size="small"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setSelectedFormat(format);
+                    }}
+                    color={selectedFormat === format ? "primary" : "default"}
+                    variant={selectedFormat === format ? "filled" : "outlined"}
+                    clickable
+                  />
+                ))}
+              </Stack>
+            )}
+
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-              {movie.showtimes.slice(0, 6).map((showtime, index) => (
+              {filteredShowtimes.slice(0, 6).map((showtime, index) => (
                 <Chip
                   key={showtime.id || index}
                   label={formatTime(showtime.showTime)}
@@ -316,9 +359,9 @@ const ShowtimeMovieCard = ({ movie }) => {
                   }}
                 />
               ))}
-              {movie.showtimes.length > 6 && (
+              {filteredShowtimes.length > 6 && (
                 <Chip
-                  label={`+${movie.showtimes.length - 6}`}
+                  label={`+${filteredShowtimes.length - 6}`}
                   size="small"
                   sx={{
                     backgroundColor: 'rgba(117, 117, 117, 0.2)',

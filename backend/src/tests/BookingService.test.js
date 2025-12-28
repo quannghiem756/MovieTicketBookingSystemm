@@ -12,6 +12,7 @@ describe('BookingService', () => {
 
     beforeEach(() => {
         mockBookingRepository = {
+            findById: jest.fn(),
             findPendingBookingByUser: jest.fn(),
             findCollidingBooking: jest.fn(),
             create: jest.fn(),
@@ -31,7 +32,8 @@ describe('BookingService', () => {
         };
         mockCouponService = {
             validateCoupon: jest.fn(),
-            incrementUsage: jest.fn()
+            incrementUsage: jest.fn(),
+            decrementUsage: jest.fn()
         };
 
         bookingService = new BookingService(
@@ -129,10 +131,31 @@ describe('BookingService', () => {
                 orderTotal: 100,
                 movieId
             });
+            expect(mockCouponService.incrementUsage).toHaveBeenCalledWith('SAVE10');
             expect(result.totalPrice).toBe(90);
             expect(result.originalPrice).toBe(100);
             expect(result.discountAmount).toBe(10);
             expect(result.couponCode).toBe('SAVE10');
+        });
+    });
+
+    describe('cancelBooking', () => {
+        it('should decrement coupon usage if booking has a coupon', async () => {
+            const bookingId = 'booking123';
+            const bookingData = {
+                id: bookingId,
+                couponCode: 'SAVE10',
+                status: 'pending'
+            };
+            mockBookingRepository.findById.mockResolvedValue(bookingData);
+            mockBookingRepository.update.mockResolvedValue({ ...bookingData, status: 'cancelled' });
+
+            await bookingService.cancelBooking(bookingId);
+
+            expect(mockCouponService.decrementUsage).toHaveBeenCalledWith('SAVE10');
+            expect(mockBookingRepository.update).toHaveBeenCalledWith(bookingId, expect.objectContaining({
+                status: 'cancelled'
+            }));
         });
     });
 });

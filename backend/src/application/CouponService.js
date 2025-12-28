@@ -62,6 +62,18 @@ class CouponService {
     return await this.couponRepository.delete(id);
   }
 
+  async incrementUsage(code) {
+    const coupon = await this.couponRepository.findByCode(code);
+    if (!coupon) return null;
+    return await this.couponRepository.incrementUsage(coupon.id);
+  }
+
+  async decrementUsage(code) {
+    const coupon = await this.couponRepository.findByCode(code);
+    if (!coupon) return null;
+    return await this.couponRepository.decrementUsage(coupon.id);
+  }
+
   async validateCoupon(code, { userId, orderTotal, movieId } = {}) {
     const coupon = await this.couponRepository.findByCode(code);
     if (!coupon) {

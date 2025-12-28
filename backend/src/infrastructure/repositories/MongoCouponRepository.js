@@ -54,13 +54,37 @@ class MongoCouponRepository extends CouponRepository {
   }
 
   async incrementUsage(id) {
-    const updatedCoupon = await CouponModel.findByIdAndUpdate(
-      id,
+    const coupon = await CouponModel.findById(id);
+    if (!coupon) return null;
+
+    const query = { _id: id };
+    if (coupon.usageLimit !== null) {
+      query.currentUsage = { $lt: coupon.usageLimit };
+    }
+
+    const updatedCoupon = await CouponModel.findOneAndUpdate(
+      query,
       { $inc: { currentUsage: 1 } },
       { new: true }
     );
-    if (!updatedCoupon) return null;
-    return this._mapToDomain(updatedCoupon);
+
+    if (!updatedCoupon && coupon.usageLimit !== null) {
+      const currentCoupon = await CouponModel.findById(id);
+      if (currentCoupon.currentUsage >= currentCoupon.usageLimit) {
+        throw new Error('Coupon usage limit reached');
+      }
+    }
+
+    return updatedCoupon ? this._mapToDomain(updatedCoupon) : null;
+  }
+
+  async decrementUsage(id) {
+    const updatedCoupon = await CouponModel.findOneAndUpdate(
+      { _id: id, currentUsage: { $gt: 0 } },
+      { $inc: { currentUsage: -1 } },
+      { new: true }
+    );
+    return updatedCoupon ? this._mapToDomain(updatedCoupon) : null;
   }
 
   _mapToDomain(doc) {

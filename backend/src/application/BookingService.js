@@ -65,6 +65,9 @@ class BookingService {
             appliedCouponCode = validation.code;
             discountAmount = validation.discountAmount;
             finalPrice = Math.max(0, originalPrice - discountAmount);
+            
+            // Increment usage
+            await this.couponService.incrementUsage(appliedCouponCode);
         }
     }
 
@@ -220,6 +223,10 @@ class BookingService {
   async cancelBooking(id) {
     const booking = await this.bookingRepository.findById(id);
     if (!booking) return null;
+
+    if (booking.couponCode && this.couponService) {
+      await this.couponService.decrementUsage(booking.couponCode);
+    }
 
     const updateData = {
         ...booking,

@@ -26,6 +26,10 @@ class CouponRepository {
     async incrementUsage(id) {
         throw new Error('Method not implemented');
     }
+
+    async decrementUsage(id) {
+        throw new Error('Method not implemented');
+    }
   }
   
   module.exports = CouponRepository;

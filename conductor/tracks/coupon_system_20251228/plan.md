@@ -15,11 +15,11 @@
 - [x] Task: Conductor - User Manual Verification 'Backend - Admin Coupon Management API' (Protocol in workflow.md) 3c0c6f7
 
 ## Phase 3: Backend - Coupon Validation & Booking Integration
-- [ ] Task: Implement `validateCoupon` method in `CouponService` checking for expiry, minimum order value, and global/user limits.
+- [x] Task: Implement `validateCoupon` method in `CouponService` checking for expiry, minimum order value, and global/user limits. e6b0fc0
 - [ ] Task: Create a public API endpoint `POST /coupons/validate` for the frontend to check code validity and get discount details before booking.
 - [ ] Task: Update `BookingService.createBooking` to accept an optional `couponCode`.
 - [ ] Task: Implement atomic usage increment logic in `BookingService` to handle concurrency (race conditions).
-- [ ] Task: Update `Booking` model to store `couponCode`, `discountAmount`, and `finalPrice`.
+- [x] Task: Update `Booking` model to store `couponCode`, `discountAmount`, and `finalPrice`. 123ebdd
 - [ ] Task: Write unit tests for `BookingService` covering valid/invalid coupons, expired codes, and limit enforcement.
 - [ ] Task: Conductor - User Manual Verification 'Backend - Coupon Validation & Booking Integration' (Protocol in workflow.md)
 

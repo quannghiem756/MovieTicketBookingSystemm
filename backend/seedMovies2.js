@@ -43,7 +43,7 @@ db.once('open', async () => {
       synopsis: "Lucius is forced to enter the Colosseum and must look to his past to find strength to return the glory of Rome to its people.",
       duration: 148,
       genre: ["Action", "Adventure", "Drama"],
-      rating: "R",
+      rating: "C18",
       posterUrl: "https://m.media-amazon.com/images/M/MV5BMWYzZTM5ZGQtOGE5My00NmM2LWFlMDEtMGNjYjdmOWM1MzA1XkEyXkFqcGc@._V1_.jpg",
       trailerUrl: "https://www.youtube.com/watch?v=4rgYUipGJNo"
     },
@@ -54,7 +54,7 @@ db.once('open', async () => {
       synopsis: "Elphaba and Glinda forge an unlikely but profound friendship at Shiz University in the fantastical Land of Oz.",
       duration: 160,
       genre: ["Musical", "Fantasy", "Romance"],
-      rating: "PG",
+      rating: "P",
       posterUrl: "https://m.media-amazon.com/images/M/MV5BOWMwYjYzYmMtMWQ2Ni00NWUwLTg2MzAtYzkzMDBiZDIwOTMwXkEyXkFqcGc@._V1_.jpg",
       trailerUrl: "https://www.youtube.com/watch?v=6COmYeLsz4c"
     },
@@ -65,7 +65,7 @@ db.once('open', async () => {
       synopsis: "Moana must journey to the far seas of Oceania and into dangerous, long-lost waters for an adventure unlike anything she's ever faced.",
       duration: 100,
       genre: ["Animation", "Adventure", "Family"],
-      rating: "PG",
+      rating: "P",
       posterUrl: "https://m.media-amazon.com/images/M/MV5BZDUxNThhYTUtYjgxNy00MGQ4LTgzOTEtZjg1YTU5NTcwNThlXkEyXkFqcGc@._V1_.jpg",
       trailerUrl: "https://www.youtube.com/watch?v=hDZ7y8RP5HE"
     },
@@ -76,7 +76,7 @@ db.once('open', async () => {
       synopsis: "Sonic, Knuckles, and Tails reunite against a powerful new adversary, Shadow, a mysterious villain with powers unlike anything they have faced before.",
       duration: 109,
       genre: ["Action", "Sci-Fi", "Comedy"],
-      rating: "PG",
+      rating: "P",
       posterUrl: "https://m.media-amazon.com/images/M/MV5BMjZjNjE5NDEtOWJjYS00Mjk2LWI1ZDYtOWI1ZWI3MzRjM2UzXkEyXkFqcGc@._V1_.jpg",
       trailerUrl: "https://www.youtube.com/watch?v=qSu6i2iFMO0"
     },
@@ -87,7 +87,7 @@ db.once('open', async () => {
       synopsis: "Kraven's complex relationship with his ruthless father starts him down a path of vengeance with brutal consequences.",
       duration: 127,
       genre: ["Action", "Adventure", "Sci-Fi"],
-      rating: "R",
+      rating: "C18",
       posterUrl: "https://m.media-amazon.com/images/M/MV5BZDU0YTI5ODAtN2NmMS00YTg3LTgyNDItN2RmOWEzOTkzZjcyXkEyXkFqcGc@._V1_.jpg",
       trailerUrl: "https://www.youtube.com/watch?v=I8gFw4-2RBM"
     },
@@ -98,7 +98,7 @@ db.once('open', async () => {
       synopsis: "Rafiki relays the legend of Mufasa to young lion cub Kiara, telling the story of the unlikely rise of the beloved king of the Pride Lands.",
       duration: 118,
       genre: ["Adventure", "Drama", "Family"],
-      rating: "PG",
+      rating: "P",
       posterUrl: "https://m.media-amazon.com/images/M/MV5BYjBkOWUwODYtYWI3YS00N2I0LWEyYTktOTJjM2YzOTc3ZDNlXkEyXkFqcGc@._V1_.jpg",
       trailerUrl: "https://www.youtube.com/watch?v=o17MF9vnabg"
     },
@@ -111,7 +111,7 @@ db.once('open', async () => {
       synopsis: "Sam Wilson finds himself in the middle of an international incident involving the President and a new global threat.",
       duration: 135,
       genre: ["Action", "Sci-Fi", "Thriller"],
-      rating: "PG-13",
+      rating: "C13",
       posterUrl: "https://m.media-amazon.com/images/M/MV5BNDRjY2E0ZmEtN2QwNi00NTEwLWI3MWItODNkMGYwYWFjNGE0XkEyXkFqcGc@._V1_.jpg",
       trailerUrl: "https://www.youtube.com/watch?v=1pHDWnXmK7Y"
     },
@@ -122,7 +122,7 @@ db.once('open', async () => {
       synopsis: "Four misfits are suddenly pulled through a mysterious portal into the Overworld: a bizarre, cubic wonderland that thrives on imagination.",
       duration: 110,
       genre: ["Adventure", "Family", "Fantasy"],
-      rating: "PG",
+      rating: "P",
       posterUrl: "https://m.media-amazon.com/images/M/MV5BYzFjMzNjOTktNDBlNy00YWZhLWExYTctZDcxNDA4OWVhOTJjXkEyXkFqcGc@._V1_.jpg", 
       trailerUrl: "https://www.youtube.com/watch?v=wJO_vIDZn-I"
     },
@@ -133,7 +133,7 @@ db.once('open', async () => {
       synopsis: "Superman reconciles his heritage with his human upbringing. He is the embodiment of truth, justice and the American way.",
       duration: 130,
       genre: ["Action", "Sci-Fi", "Adventure"],
-      rating: "PG-13",
+      rating: "C13",
       posterUrl: "https://m.media-amazon.com/images/M/MV5BOGMwZGJiM2EtMzEwZC00YTYzLWIxNzYtMmJmZWNlZjgxZTMwXkEyXkFqcGc@._V1_.jpg", // Placeholder style
       trailerUrl: "https://www.youtube.com/watch?v=Ox8ZLF6cGM0"
     },
@@ -144,7 +144,7 @@ db.once('open', async () => {
       synopsis: "Marvel's First Family faces their most daunting challenge yet as they must balance their lives as heroes with their bond as a family.",
       duration: 120,
       genre: ["Action", "Sci-Fi", "Adventure"],
-      rating: "PG-13",
+      rating: "C13",
       posterUrl: "https://m.media-amazon.com/images/M/MV5BOGM5MzA3MDAtYmEwMi00ZDNiLTg4MDgtMTZjOTc0ZGMyNTIwXkEyXkFqcGc@._V1_.jpg", // Placeholder style
       trailerUrl: "https://www.youtube.com/watch?v=pAsmrKyMqaA"
     },
@@ -155,7 +155,7 @@ db.once('open', async () => {
       synopsis: "Jake Sully and Neytiri encounter the Ash People, a new clan of Na'vi who live in a volcanic region of Pandora.",
       duration: 190,
       genre: ["Sci-Fi", "Adventure", "Fantasy"],
-      rating: "PG-13",
+      rating: "C13",
       posterUrl: "https://m.media-amazon.com/images/M/MV5BZDYxY2I1OGMtN2Y4MS00ZmU1LTgyNDAtODA0MzAyYjI0N2Y2XkEyXkFqcGc@._V1_.jpg", // Placeholder style
       trailerUrl: "https://www.youtube.com/watch?v=nb_fFj_0rq8"
     },
@@ -166,7 +166,7 @@ db.once('open', async () => {
       synopsis: "A group of supervillains are recruited to go on missions for the government.",
       duration: 125,
       genre: ["Action", "Sci-Fi", "Crime"],
-      rating: "PG-13",
+      rating: "C13",
       posterUrl: "https://m.media-amazon.com/images/M/MV5BYWE2NmNmYTItZGY0ZC00MmY2LTk1NDAtMGUyMGEzMjcxNWM0XkEyXkFqcGc@._V1_.jpg", // Placeholder style
       trailerUrl: "https://www.youtube.com/watch?v=-sAOWhvheK8"
     }

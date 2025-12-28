@@ -181,6 +181,7 @@ const vi = {
 
   // Register Page
   'register.title': 'Tạo tài khoản mới',
+  'register.subtitle': 'Tham gia cộng đồng của chúng tôi để tận hưởng trải nghiệm xem phim cá nhân hóa.',
   'register.name': 'Họ và tên',
   'register.email': 'Địa chỉ email',
   'register.password': 'Mật khẩu',

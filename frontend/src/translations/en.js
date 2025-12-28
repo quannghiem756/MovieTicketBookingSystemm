@@ -154,6 +154,7 @@ const en = {
 
   // Register Page
   'register.title': 'Create a new account',
+  'register.subtitle': 'Join our community to enjoy a personalized movie experience.',
   'register.name': 'Full name',
   'register.email': 'Email address',
   'register.password': 'Password',

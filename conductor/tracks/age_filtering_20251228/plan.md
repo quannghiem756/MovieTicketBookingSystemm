@@ -13,16 +13,17 @@
 - [x] Task: Conductor - User Manual Verification 'Backend Implementation & Data Standardization' (Protocol in workflow.md) [checkpoint: 3e62f3a]
 
 ## Phase 2: Frontend Visuals & Logic
-- [ ] Task: Update Frontend Movie Types & Utils
+- [x] Task: Update Frontend Movie Types & Utils 91d5ee0
     - [ ] Sub-task: Update TypeScript interfaces (if applicable) or JSDoc for Movie objects to include the new ratings.
     - [ ] Sub-task: Create a frontend utility `getAgeFromDOB(dob)` matching the backend logic.
-- [ ] Task: Implement Rating Badges
+- [x] Task: Implement Rating Badges 60093ac
     - [ ] Sub-task: Create a `RatingBadge` component.
     - [ ] Sub-task: Integrate `RatingBadge` into `MovieCard.jsx`.
     - [ ] Sub-task: Integrate `RatingBadge` into `MovieDetails.jsx`.
-- [ ] Task: Implement Booking Restriction UI
-    - [ ] Sub-task: Modify `MovieDetails.jsx` to disable the "Book Ticket" button for underage users.
-    - [ ] Sub-task: Add the "K" rating confirmation modal/checkbox logic.
+- [x] Task: Implement Booking Restriction UI c8acd93
+- [x] Task: Add Translations for Age Filtering f1329ac
+- [x] Task: Update Admin Movie Form 3de2434
+    - [ ] Sub-task: Update rating selection in MovieForm.jsx
 - [ ] Task: Conductor - User Manual Verification 'Frontend Visuals & Logic' (Protocol in workflow.md)
 
 ## Phase 3: Integration & Testing

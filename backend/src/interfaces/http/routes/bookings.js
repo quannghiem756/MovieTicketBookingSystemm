@@ -1,13 +1,19 @@
 const express = require('express');
 const BookingController = require('../controllers/BookingController');
 const MongoBookingRepository = require('../../../infrastructure/repositories/MongoBookingRepository');
+const MongoUserRepository = require('../../../infrastructure/repositories/MongoUserRepository');
+const MongoShowtimeRepository = require('../../../infrastructure/repositories/MongoShowtimeRepository');
+const MongoMovieRepository = require('../../../infrastructure/repositories/MongoMovieRepository');
 const BookingService = require('../../../application/BookingService');
 const { authenticate, authorizeAdmin } = require('../middleware/auth');
 const { seatHoldLimiter } = require('../middleware/rateLimiter');
 
 // Initialize service and controller
 const bookingRepository = new MongoBookingRepository();
-const bookingService = new BookingService(bookingRepository);
+const userRepository = new MongoUserRepository();
+const showtimeRepository = new MongoShowtimeRepository();
+const movieRepository = new MongoMovieRepository();
+const bookingService = new BookingService(bookingRepository, userRepository, showtimeRepository, movieRepository);
 const bookingController = new BookingController(bookingService);
 
 const router = express.Router();

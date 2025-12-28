@@ -1,12 +1,51 @@
 // Booking service
 const Booking = require('../domain/Booking');
+const User = require('../domain/User');
 
 class BookingService {
-  constructor(bookingRepository) {
+  constructor(bookingRepository, userRepository, showtimeRepository, movieRepository) {
     this.bookingRepository = bookingRepository;
+    this.userRepository = userRepository;
+    this.showtimeRepository = showtimeRepository;
+    this.movieRepository = movieRepository;
+  }
+
+  async _checkAgeEligibility(userId, showtimeId) {
+    if (!this.userRepository || !this.showtimeRepository || !this.movieRepository) {
+       console.warn('Repositories missing for age verification in BookingService');
+       return; 
+    }
+
+    const user = await this.userRepository.findById(userId);
+    if (!user) throw new Error('User not found');
+
+    const showtime = await this.showtimeRepository.findById(showtimeId);
+    if (!showtime) throw new Error('Showtime not found');
+
+    const movie = await this.movieRepository.findById(showtime.movieId);
+    if (!movie) throw new Error('Movie not found');
+
+    // Rehydrate User domain entity to use domain logic
+    const userEntity = new User(
+      user.id,
+      user.name,
+      user.email,
+      user.phone,
+      user.passwordHash,
+      user.dateOfBirth,
+      user.loyaltyPoints,
+      user.role
+    );
+
+    if (!userEntity.canBookMovie(movie.rating)) {
+        throw new Error(`User is not old enough to watch this movie (Rated ${movie.rating})`);
+    }
   }
 
   async createBooking(bookingData) {
+    // Check age eligibility first
+    await this._checkAgeEligibility(bookingData.userId, bookingData.showtimeId);
+
     // Check for existing held booking to upgrade
     const existingHold = await this.bookingRepository.findPendingBookingByUser(bookingData.userId, bookingData.showtimeId);
 
@@ -75,6 +114,9 @@ class BookingService {
   }
 
   async holdSeat(userId, showtimeId, seatId) {
+    // Check age eligibility first
+    await this._checkAgeEligibility(userId, showtimeId);
+
     // 1. Check if seat is already locked by someone else
     const collision = await this.bookingRepository.findCollidingBooking(showtimeId, seatId, userId);
     if (collision) {

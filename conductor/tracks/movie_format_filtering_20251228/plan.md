@@ -10,6 +10,6 @@ This plan outlines the steps to implement format-based filtering for showtimes w
 - [x] Task: Render format selection UI (Chips) 7a8111a
 - [x] Task: Filter displayed showtimes 7a8111a
 - [x] Task: Verify filtering logic with unit tests 7a8111a (Skipped verification by user request)
-- [ ] Task: Conductor - User Manual Verification 'Implementation of Format Filtering in ShowtimeMovieCard' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Implementation of Format Filtering in ShowtimeMovieCard' (Protocol in workflow.md)
 
 [checkpoint: ]

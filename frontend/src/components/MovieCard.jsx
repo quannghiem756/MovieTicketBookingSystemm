@@ -16,7 +16,8 @@ import {
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useTranslation } from '../context/I18nContext';
-import { Star, AccessTime, CalendarToday } from '@mui/icons-material';
+import { AccessTime, CalendarToday } from '@mui/icons-material';
+import RatingBadge from './RatingBadge';
 
 const MovieCard = ({ movie }) => {
   const { t } = useTranslation();
@@ -150,19 +151,9 @@ const MovieCard = ({ movie }) => {
         </Box>
 
         {/* Rating badge */}
-        <Chip
-          label={`${movie.rating || 'PG-13'}`}
-          size="small"
-          sx={{
-            position: 'absolute',
-            top: 12,
-            left: 12,
-            backgroundColor: 'rgba(0,0,0,0.7)',
-            color: 'white',
-            backdropFilter: 'blur(10px)',
-            fontWeight: 600,
-          }}
-        />
+        <Box sx={{ position: 'absolute', top: 12, left: 12 }}>
+          <RatingBadge rating={movie.rating} />
+        </Box>
 
         {/* Duration badge */}
         {movie.duration && (
@@ -250,12 +241,12 @@ const MovieCard = ({ movie }) => {
           </Typography>
         )}
 
-        {/* Rating display */}
+        {/* Rating display (secondary) */}
         <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
-          <Star sx={{ color: '#FFD700', fontSize: '1rem' }} />
-          <Typography variant="body2" color="textSecondary">
-            {movie.rating || 'PG-13'}
-          </Typography>
+            <Typography variant="body2" color="textSecondary" sx={{ fontWeight: 'bold' }}>
+                Rating:
+            </Typography>
+            <RatingBadge rating={movie.rating} />
         </Stack>
 
         {/* Synopsis for larger screens */}

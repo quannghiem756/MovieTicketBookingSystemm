@@ -40,6 +40,7 @@ import {
   Movie,
   Close
 } from '@mui/icons-material';
+import RatingBadge from '../components/RatingBadge';
 import { getMovieById, getShowtimesByMovieId, getFutureShowtimesByMovieId } from '../services/api';
 import { useTranslation } from '../context/I18nContext';
 import { formatCurrency } from '../utils/currency';
@@ -302,10 +303,7 @@ const MovieDetails = () => {
                 </Stack>
 
                 <Stack direction="row" alignItems="center" spacing={1}>
-                  <Star sx={{ color: '#FFD700', fontSize: '1.2rem' }} />
-                  <Typography variant="h6" color="textSecondary" sx={{ color: 'rgba(255,255,255,0.9)' }}>
-                    {movie.rating}
-                  </Typography>
+                  <RatingBadge rating={movie.rating} />
                 </Stack>
 
                 <Stack direction="row" alignItems="center" spacing={1}>

@@ -4,7 +4,7 @@
 - [x] Task: Install Cypress and essential dependencies in the `frontend` directory. (6201373)
 - [x] Task: Initialize Cypress configuration and folder structure. (57f3e10)
 - [x] Task: Add NPM scripts (`cypress:open`, `cypress:run`) to `frontend/package.json`. (9fab1e9)
-- [ ] Task: Create a basic "Health Check" test to verify Cypress can visit the site.
+- [x] Task: Create a basic "Health Check" test to verify Cypress can visit the site. (1a733b6)
 - [ ] Task: Conductor - User Manual Verification 'Framework Setup' (Protocol in workflow.md)
 
 ## Phase 2: Base Authentication Tests

@@ -7,7 +7,7 @@
 
 ## Phase 2: Backend Refresh Token Logic
 - [x] Task: Update `AuthService` to manage database-backed tokens and rotation. (ffaccb6)
-- [ ] Task: Update `UserController` and middleware to handle cookies and rotation endpoints.
+- [x] Task: Update `UserController` and middleware to handle cookies and rotation endpoints. (fc7ae30)
 - [ ] Task: Conductor - User Manual Verification 'Backend Refresh Token Logic' (Protocol in workflow.md)
 
 ## Phase 3: Google OAuth Integration

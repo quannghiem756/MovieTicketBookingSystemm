@@ -266,6 +266,7 @@ const Header = () => {
                       edge="end"
                       color="inherit"
                       onClick={handleMenuOpen}
+                      data-testid="user-menu-button"
                       sx={{
                         ml: 1,
                         borderRadius: 2,
@@ -320,6 +321,7 @@ const Header = () => {
                       </MenuItem>
                       <MenuItem
                         onClick={handleLogout}
+                        data-testid="logout-button"
                         sx={{
                           color: 'text.primary',
                           '&:hover': {

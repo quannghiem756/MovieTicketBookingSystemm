@@ -2,7 +2,7 @@
 
 ## Phase 1: Test Infrastructure & Dataset Setup
 - [x] Task: Define a structured dataset of edge case prompts in `vector_service/tests/edge_cases.json` covering all categories (Empty Retrieval, Overflow, Conflict, Off-Topic, Injection, Ambiguity). a58f3bd
-- [x] Task: Create the "Judge" evaluation script `vector_service/evaluator.py` using Gemini 1.5 Pro to grade responses based on the defined criteria (Groundedness, Safety, Helpfulness, Consistency, Relevance). 254199e
+- [x] Task: Create the "Judge" evaluation script `vector_service/evaluator.py` using OpenAI (GPT-4o) to grade responses based on the defined criteria (Groundedness, Safety, Helpfulness, Consistency, Relevance). 7e9b9b4
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Test Infrastructure & Dataset Setup' (Protocol in workflow.md)
 
 ## Phase 2: Test Execution Engine

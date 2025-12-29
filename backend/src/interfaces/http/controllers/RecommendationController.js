@@ -2,9 +2,26 @@ const MovieService = require('../../../application/MovieService');
 const axios = require('axios');
 
 class RecommendationController {
-  constructor(movieService) {
+  constructor(movieService, showtimeService) {
     this.movieService = movieService;
+    this.showtimeService = showtimeService;
     this.vectorServiceUrl = process.env.VECTOR_SERVICE_URL || 'http://localhost:5001';
+  }
+
+  async _enrichWithShowtimes(movies) {
+    if (!movies || !Array.isArray(movies) || !this.showtimeService) {
+      return movies;
+    }
+
+    return await Promise.all(movies.map(async (movie) => {
+      try {
+        const showtimes = await this.showtimeService.getFutureShowtimesByMovieId(movie.id);
+        return { ...movie, showtimes };
+      } catch (error) {
+        console.error(`Error fetching showtimes for movie ${movie.id}:`, error.message);
+        return { ...movie, showtimes: [] };
+      }
+    }));
   }
 
   async getMovieRecommendations(req, res) {
@@ -27,9 +44,12 @@ class RecommendationController {
 
         const { recommendations, total, source, message, intent } = vectorServiceResponse.data;
 
+        // Enrich recommendations with showtimes
+        const enrichedRecommendations = await this._enrichWithShowtimes(recommendations);
+
         res.json({
           query: query,
-          recommendations: recommendations,
+          recommendations: enrichedRecommendations,
           total: total,
           source: source || 'vector_service',
           intent: intent || 'unknown',
@@ -53,11 +73,14 @@ class RecommendationController {
         );
 
         const fallbackRecommendations = this.analyzeQuery(query, allMoviesData);
+        
+        // Enrich fallback recommendations with showtimes
+        const enrichedFallbackRecommendations = await this._enrichWithShowtimes(fallbackRecommendations);
 
         res.json({
           query: query,
-          recommendations: fallbackRecommendations,
-          total: fallbackRecommendations.length,
+          recommendations: enrichedFallbackRecommendations,
+          total: enrichedFallbackRecommendations.length,
           source: 'fallback',
           intent: 'unknown',
           message: 'Using fallback recommendation system due to vector service unavailability'
@@ -88,9 +111,12 @@ class RecommendationController {
 
         const { recommendations, total, source, message, intent } = vectorServiceResponse.data;
 
+        // Enrich recommendations with showtimes
+        const enrichedRecommendations = await this._enrichWithShowtimes(recommendations);
+
         res.json({
           query: query || "What movies are available to watch?",
-          recommendations: recommendations,
+          recommendations: enrichedRecommendations,
           total: total,
           source: source || 'vector_service',
           intent: intent || 'available_movies',
@@ -111,13 +137,16 @@ class RecommendationController {
           index === self.findIndex(m => m.id === movie.id)
         );
 
+        // Enrich available movies with showtimes
+        const enrichedAvailableMovies = await this._enrichWithShowtimes(availableMovies);
+
         res.json({
           query: query,
-          recommendations: availableMovies,
-          total: availableMovies.length,
+          recommendations: enrichedAvailableMovies,
+          total: enrichedAvailableMovies.length,
           source: 'fallback',
           intent: 'available_movies',
-          message: `Using fallback - found ${availableMovies.length} available movies`
+          message: `Using fallback - found ${enrichedAvailableMovies.length} available movies`
         });
       }
     } catch (error) {

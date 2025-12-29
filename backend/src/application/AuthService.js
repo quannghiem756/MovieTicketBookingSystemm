@@ -11,7 +11,7 @@ class AuthService {
     this.accessTokenExpiration = process.env.ACCESS_TOKEN_EXPIRATION || '15m';
     this.refreshTokenExpiration = process.env.REFRESH_TOKEN_EXPIRATION || '7d';
     
-    this.googleClientId = process.env.GOOGLE_CLIENT_ID;
+    this.googleClientId = process.env.GOOGLE_CLIENT_ID || 'your_google_client_id';
     this.googleClient = new OAuth2Client(this.googleClientId);
   }
 

@@ -1,11 +1,11 @@
 # Plan: End-to-End Authentication Testing with Cypress
 
-## Phase 1: Framework Setup
+## Phase 1: Framework Setup [checkpoint: 6ee3211]
 - [x] Task: Install Cypress and essential dependencies in the `frontend` directory. (6201373)
 - [x] Task: Initialize Cypress configuration and folder structure. (57f3e10)
 - [x] Task: Add NPM scripts (`cypress:open`, `cypress:run`) to `frontend/package.json`. (9fab1e9)
 - [x] Task: Create a basic "Health Check" test to verify Cypress can visit the site. (1a733b6)
-- [ ] Task: Conductor - User Manual Verification 'Framework Setup' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Framework Setup' (Protocol in workflow.md) (6ee3211)
 
 ## Phase 2: Base Authentication Tests
 - [ ] Task: Implement E2E tests for the Registration flow (Success/Failure cases).

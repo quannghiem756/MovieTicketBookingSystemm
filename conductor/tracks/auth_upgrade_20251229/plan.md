@@ -12,7 +12,7 @@
 
 ## Phase 3: Google OAuth Integration
 - [x] Task: Implement Google Token verification logic in `AuthService`. (0423c32)
-- [ ] Task: Create `POST /api/users/google-login` endpoint that handles both login and auto-registration.
+- [x] Task: Create `POST /api/users/google-login` endpoint that handles both login and auto-registration. (dc57967)
 - [ ] Task: Conductor - User Manual Verification 'Google OAuth Integration' (Protocol in workflow.md)
 
 ## Phase 4: Frontend Integration

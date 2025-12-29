@@ -7,11 +7,11 @@
 - [x] Task: Create a basic "Health Check" test to verify Cypress can visit the site. (1a733b6)
 - [x] Task: Conductor - User Manual Verification 'Framework Setup' (Protocol in workflow.md) (6ee3211)
 
-## Phase 2: Base Authentication Tests
+## Phase 2: Base Authentication Tests [checkpoint: 0d5f36c]
 - [x] Task: Implement E2E tests for the Registration flow (Success/Failure cases). (03796f9)
 - [x] Task: Implement E2E tests for the Email/Password Login flow. (a714fa6)
 - [x] Task: Implement E2E tests for the Logout functionality. (932caaf)
-- [ ] Task: Conductor - User Manual Verification 'Base Authentication Tests' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Base Authentication Tests' (Protocol in workflow.md) (0d5f36c)
 
 ## Phase 3: Session & Persistence Tests
 - [ ] Task: Implement tests for Session Persistence (Page reloads with Refresh Tokens).

@@ -172,4 +172,34 @@ describe('AuthService', () => {
         expect(date.getTime()).toBeGreaterThanOrEqual(now + 7 * 24 * 60 * 60 * 1000);
     });
   });
+
+  describe('verifyGoogleToken', () => {
+    it('should verify a valid Google token', async () => {
+      // We'll need to mock OAuth2Client. Since it's from a library,
+      // we might need to mock the whole library in this test file or use a specific mock.
+      // For now, let's assume we can mock the client instance.
+      authService.googleClient = {
+        verifyIdToken: jest.fn().mockResolvedValue({
+          getPayload: () => ({
+            sub: 'google-uid-123',
+            email: 'google@test.com',
+            name: 'Google User',
+            picture: 'http://photo.com'
+          })
+        })
+      };
+
+      const payload = await authService.verifyGoogleToken('valid-google-token');
+      expect(payload.sub).toBe('google-uid-123');
+      expect(payload.email).toBe('google@test.com');
+    });
+
+    it('should throw error for invalid Google token', async () => {
+      authService.googleClient = {
+        verifyIdToken: jest.fn().mockRejectedValue(new Error('Invalid Google token'))
+      };
+
+      await expect(authService.verifyGoogleToken('invalid')).rejects.toThrow('Google authentication failed');
+    });
+  });
 });

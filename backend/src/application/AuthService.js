@@ -1,5 +1,6 @@
 // backend/src/application/AuthService.js
 const jwt = require('jsonwebtoken');
+const { OAuth2Client } = require('google-auth-library');
 
 class AuthService {
   constructor(userService, refreshTokenRepository) {
@@ -9,6 +10,22 @@ class AuthService {
     this.refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET || 'refresh_token_secret';
     this.accessTokenExpiration = process.env.ACCESS_TOKEN_EXPIRATION || '15m';
     this.refreshTokenExpiration = process.env.REFRESH_TOKEN_EXPIRATION || '7d';
+    
+    this.googleClientId = process.env.GOOGLE_CLIENT_ID;
+    this.googleClient = new OAuth2Client(this.googleClientId);
+  }
+
+  async verifyGoogleToken(token) {
+    try {
+      const ticket = await this.googleClient.verifyIdToken({
+        idToken: token,
+        audience: this.googleClientId,
+      });
+      return ticket.getPayload();
+    } catch (error) {
+      console.error('Google token verification failed:', error.message);
+      throw new Error('Google authentication failed');
+    }
   }
 
   async generateTokens(user) {

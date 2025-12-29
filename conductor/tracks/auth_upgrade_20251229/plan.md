@@ -22,6 +22,6 @@
 - [x] Task: Conductor - User Manual Verification 'Frontend Integration' (Protocol in workflow.md) (fe31558)
 
 ## Phase 5: Final Verification
-- [ ] Task: Test security (XSS protection, token reuse detection).
-- [ ] Task: Verify auto-registration flow for first-time Google users.
+- [x] Task: Test security (XSS protection, token reuse detection). (887b40d)
+- [x] Task: Verify auto-registration flow for first-time Google users. (887b40d)
 - [ ] Task: Conductor - User Manual Verification 'Final Verification' (Protocol in workflow.md)

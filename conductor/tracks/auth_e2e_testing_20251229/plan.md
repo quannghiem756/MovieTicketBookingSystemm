@@ -18,7 +18,7 @@
 - [x] Task: Implement tests for Route Protection (Redirects for unauthorized users). (c91587a)
 - [x] Task: Conductor - User Manual Verification 'Session & Persistence Tests' (Protocol in workflow.md) (e78bb80)
 
-## Phase 4: Advanced OAuth Mocking
-- [ ] Task: Implement a mocked Google OAuth login flow using Cypress intercepts.
-- [ ] Task: Verify auto-registration behavior via the mocked Google flow.
-- [ ] Task: Conductor - User Manual Verification 'Advanced OAuth Mocking' (Protocol in workflow.md)
+## Phase 4: Advanced OAuth Mocking [checkpoint: 79edfc9]
+- [x] Task: Implement a mocked Google OAuth login flow using Cypress intercepts. (4c59df6)
+- [x] Task: Verify auto-registration behavior via the mocked Google flow. (4c59df6)
+- [x] Task: Conductor - User Manual Verification 'Advanced OAuth Mocking' (Protocol in workflow.md) (79edfc9)

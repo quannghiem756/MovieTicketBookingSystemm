@@ -9,15 +9,14 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from evaluator import ResponseEvaluator
 
 class TestEvaluator(unittest.TestCase):
-    @patch('google.generativeai.GenerativeModel')
-    @patch('google.generativeai.configure')
-    def test_evaluate_structure(self, mock_configure, mock_model):
+    @patch('evaluator.OpenAI')
+    def test_evaluate_structure(self, mock_openai):
         # Initialize evaluator inside the test where mocks are active
         evaluator = ResponseEvaluator(api_key="fake_key")
         
-        # Mock the Gemini response
-        mock_response = MagicMock()
-        mock_response.text = '''
+        # Mock the OpenAI response
+        mock_completion = MagicMock()
+        mock_completion.choices[0].message.content = '''
         {
             "groundedness": 5,
             "safety": 5,
@@ -27,8 +26,9 @@ class TestEvaluator(unittest.TestCase):
             "explanation": "The response was accurate and safe."
         }
         '''
-        mock_instance = mock_model.return_value
-        mock_instance.generate_content.return_value = mock_response
+        
+        mock_client = mock_openai.return_value
+        mock_client.chat.completions.create.return_value = mock_completion
 
         result = evaluator.evaluate(
             prompt="Recommend a movie",

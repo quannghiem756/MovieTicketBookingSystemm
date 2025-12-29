@@ -1,4 +1,4 @@
-import google.generativeai as genai
+from openai import OpenAI
 import json
 import os
 import re
@@ -8,12 +8,12 @@ logger = logging.getLogger(__name__)
 
 class ResponseEvaluator:
     def __init__(self, api_key=None):
-        self.api_key = api_key or os.getenv("GEMINI_API_KEY")
+        self.api_key = api_key or os.getenv("OPENAI_API_KEY")
         if not self.api_key:
-            raise ValueError("GEMINI_API_KEY must be provided or set as an environment variable.")
+            raise ValueError("OPENAI_API_KEY must be provided or set as an environment variable.")
         
-        genai.configure(api_key=self.api_key)
-        self.model = genai.GenerativeModel('gemini-1.5-pro')
+        self.client = OpenAI(api_key=self.api_key)
+        self.model = "gpt-4o" # Or gpt-3.5-turbo if preferred for cost
 
     def evaluate(self, prompt, response, context=""):
         evaluation_prompt = f"""
@@ -43,19 +43,18 @@ class ResponseEvaluator:
         """
 
         try:
-            res = self.model.generate_content(evaluation_prompt)
-            # Extract JSON from the response text
-            text = res.text
-            match = re.search(r'\{.*\}', text, re.DOTALL)
-            if match:
-                json_str = match.group(0)
-                return json.loads(json_str)
-            else:
-                logger.error(f"Could not find JSON in evaluator response: {text}")
-                return {
-                    "error": "Failed to parse JSON from evaluator",
-                    "raw_text": text
-                }
+            completion = self.client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant that outputs JSON."},
+                    {"role": "user", "content": evaluation_prompt}
+                ],
+                response_format={ "type": "json_object" }
+            )
+            
+            content = completion.choices[0].message.content
+            return json.loads(content)
+            
         except Exception as e:
             logger.error(f"Error during evaluation: {e}")
             return {

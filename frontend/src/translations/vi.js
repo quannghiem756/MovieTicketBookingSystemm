@@ -179,10 +179,10 @@ const vi = {
   'login.subtitle': 'Chào mừng quay trở lại! Vui lòng nhập thông tin để đăng nhập.',
   'login.email': 'Địa chỉ email',
   'login.password': 'Mật khẩu',
-  'login.submit': 'Đăng nhập',
-  'login.loading': 'Đang đăng nhập...',
-  'login.noAccount': 'Chưa có tài khoản?',
-  'login.register': 'Đăng ký tại đây',
+      'login.submit': 'Đăng nhập',
+      'login.loading': 'Đang đăng nhập...',
+      'login.or': 'HOẶC',
+      'login.noAccount': 'Chưa có tài khoản?',  'login.register': 'Đăng ký tại đây',
   'login.error': 'Đăng nhập không thành công. Vui lòng thử lại.',
 
   // Register Page

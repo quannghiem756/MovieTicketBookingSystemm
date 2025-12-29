@@ -28,6 +28,8 @@ export const AuthProvider = ({ children }) => {
         const parsedUser = JSON.parse(userData);
         setUser(parsedUser);
         setIsAuthenticated(true);
+        // Set default authorization header for API calls
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       } catch (error) {
         console.error('Error parsing user data:', error);
         logout();
@@ -39,21 +41,18 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await authService.login(email, password);
-      const { user, accessToken, refreshToken } = response.data;
+      const { user, accessToken } = response.data;
       
       localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
       localStorage.setItem('user', JSON.stringify(user));
       
       setUser(user);
       setIsAuthenticated(true);
       
-      // Set default authorization header for API calls
       api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
       
       return { success: true, user };
     } catch (error) {
-      logout();
       return { 
         success: false, 
         error: error.response?.data?.error || 'Login failed' 
@@ -61,23 +60,46 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('user');
-    setUser(null);
-    setIsAuthenticated(false);
-    delete api.defaults.headers.common['Authorization'];
+  const googleLogin = async (idToken) => {
+    try {
+      const response = await authService.googleLogin(idToken);
+      const { user, accessToken } = response.data;
+      
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('user', JSON.stringify(user));
+      
+      setUser(user);
+      setIsAuthenticated(true);
+      
+      api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+      
+      return { success: true, user };
+    } catch (error) {
+      return { 
+        success: false, 
+        error: error.response?.data?.error || 'Google login failed' 
+      };
+    }
+  };
+
+  const logout = async () => {
+    try {
+      await authService.logout();
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('user');
+      setUser(null);
+      setIsAuthenticated(false);
+      delete api.defaults.headers.common['Authorization'];
+    }
   };
 
   const refreshAccessToken = async () => {
     try {
-      const refreshToken = localStorage.getItem('refreshToken');
-      if (!refreshToken) {
-        throw new Error('No refresh token available');
-      }
-
-      const response = await authService.refreshToken(refreshToken);
+      // Cookies are handled automatically by browser (withCredentials: true)
+      const response = await authService.refreshToken();
       const { accessToken } = response.data;
       
       localStorage.setItem('accessToken', accessToken);
@@ -95,6 +117,7 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated,
     loading,
     login,
+    googleLogin,
     logout,
     refreshAccessToken
   };

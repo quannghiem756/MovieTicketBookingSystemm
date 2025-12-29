@@ -49,6 +49,7 @@ const processMovieArray = (data) => {
 
 const api = axios.create({
   baseURL: API_BASE_URL,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -103,13 +104,10 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshToken = localStorage.getItem('refreshToken');
-        if (!refreshToken) {
-          throw new Error('No refresh token');
-        }
-
-        const response = await axios.post(`${API_BASE_URL}/users/refresh-token`, {
-          refreshToken
+        // Refresh token is now in a cookie, so we don't need to pass it in body
+        // but withCredentials: true ensures it is sent.
+        const response = await axios.post(`${API_BASE_URL}/users/refresh-token`, {}, {
+            withCredentials: true
         });
 
         const { accessToken } = response.data;
@@ -121,7 +119,6 @@ api.interceptors.response.use(
       } catch (refreshError) {
         // Refresh failed, logout user
         localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
         localStorage.removeItem('user');
         window.location.href = '/login';
         return Promise.reject(refreshError);
@@ -174,6 +171,8 @@ export const createMomoPayment = (bookingId) => api.post(`/payments/create-momo/
 // Users API
 export const createUser = (user) => api.post('/users', user);
 export const loginUser = (credentials) => api.post('/users/login', credentials);
+export const googleLogin = (idToken) => api.post('/users/google-login', { idToken });
+export const logoutUser = () => api.post('/users/logout');
 export const getUserById = (id) => api.get(`/users/${id}`);
 export const getUserByEmail = (email) => api.get(`/users/email/${email}`);
 export const updateUser = (id, user) => api.put(`/users/${id}`, user);

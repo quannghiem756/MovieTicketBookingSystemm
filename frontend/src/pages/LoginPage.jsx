@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from '../context/I18nContext';
@@ -9,15 +9,12 @@ import {
   TextField,
   Button,
   Alert,
-  Link as MuiLink,
   Paper,
   InputAdornment,
   IconButton,
-  Grid,
   Card,
   CardContent,
   useTheme,
-  useMediaQuery,
   Avatar,
   Divider
 } from '@mui/material';
@@ -33,10 +30,9 @@ import {
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, googleLogin } = useAuth();
   const { t } = useTranslation();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   
   const [formData, setFormData] = useState({
     email: '',
@@ -46,6 +42,61 @@ const LoginPage = () => {
   const [serverError, setServerError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  // Initialize Google Login
+  useEffect(() => {
+    /* global google */
+    const initializeGoogle = () => {
+      if (typeof google !== 'undefined') {
+        google.accounts.id.initialize({
+          client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID || 'your-google-client-id.apps.googleusercontent.com',
+          callback: handleGoogleLoginResponse,
+        });
+        google.accounts.id.renderButton(
+          document.getElementById('googleSignInBtn'),
+          { 
+            theme: 'outline', 
+            size: 'large', 
+            width: '100%',
+            text: 'continue_with',
+            shape: 'rectangular'
+          }
+        );
+      }
+    };
+
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    script.onload = initializeGoogle;
+    document.head.appendChild(script);
+
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
+
+  const handleGoogleLoginResponse = async (response) => {
+    setLoading(true);
+    setServerError('');
+    try {
+      const result = await googleLogin(response.credential);
+      if (result.success) {
+        if (result.user.role === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/');
+        }
+      } else {
+        setServerError(result.error);
+      }
+    } catch (err) {
+      setServerError(t('login.error'));
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const validateField = (name, value) => {
     let error = '';
@@ -83,7 +134,6 @@ const LoginPage = () => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     
-    // Clear error for this field when user starts typing
     if (errors[name]) {
       setErrors(prev => {
         const newErrors = { ...prev };
@@ -107,7 +157,6 @@ const LoginPage = () => {
     setLoading(true);
     setServerError('');
 
-    // Validate form
     const formErrors = validateForm();
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
@@ -118,24 +167,16 @@ const LoginPage = () => {
     try {
       const result = await login(formData.email, formData.password);
       if (result.success) {
-        // Check if user is admin
         if (result.user.role === 'admin') {
           navigate('/admin');
         } else {
-          navigate('/'); // Redirect to home page
+          navigate('/');
         }
       } else {
         setServerError(result.error);
       }
     } catch (err) {
-      if (err.response && err.response.data && err.response.data.details) {
-        // Handle validation errors from backend
-        const backendErrors = {};
-        err.response.data.details.forEach(detail => {
-          backendErrors[detail.field] = detail.message;
-        });
-        setErrors(backendErrors);
-      } else if (err.response && err.response.data && err.response.data.error) {
+      if (err.response && err.response.data && err.response.data.error) {
         setServerError(err.response.data.error);
       } else {
         setServerError(t('login.error'));
@@ -154,7 +195,6 @@ const LoginPage = () => {
       <Card 
         sx={{ 
           borderRadius: 4,
-          overflow: 'hidden',
           border: '1px solid rgba(255,255,255,0.1)',
           background: 'rgba(30,30,30,0.7)',
           backdropFilter: 'blur(10px)',
@@ -162,7 +202,6 @@ const LoginPage = () => {
           overflow: 'hidden'
         }}
       >
-        {/* Decorative background element */}
         <Box 
           sx={{ 
             position: 'absolute', 
@@ -223,30 +262,7 @@ const LoginPage = () => {
                       <Email sx={{ color: 'primary.main' }} />
                     </InputAdornment>
                   ),
-                  sx: { 
-                    borderRadius: 3,
-                    '& .MuiInputBase-input': {
-                      py: 1.2
-                    }
-                  }
-                }}
-                InputLabelProps={{
-                  sx: {
-                    fontWeight: 600
-                  }
-                }}
-                sx={{ 
-                  '& .MuiOutlinedInput-root': {
-                    '& fieldset': {
-                      borderColor: 'rgba(255,255,255,0.3)',
-                    },
-                    '&:hover fieldset': {
-                      borderColor: 'rgba(255,255,255,0.5)',
-                    },
-                    '&.Mui-focused fieldset': {
-                      borderColor: 'primary.main',
-                    },
-                  }
+                  sx: { borderRadius: 3 }
                 }}
               />
               <TextField
@@ -280,30 +296,7 @@ const LoginPage = () => {
                       </IconButton>
                     </InputAdornment>
                   ),
-                  sx: { 
-                    borderRadius: 3,
-                    '& .MuiInputBase-input': {
-                      py: 1.5
-                    }
-                  }
-                }}
-                InputLabelProps={{
-                  sx: {
-                    fontWeight: 600
-                  }
-                }}
-                sx={{ 
-                  '& .MuiOutlinedInput-root': {
-                    '& fieldset': {
-                      borderColor: 'rgba(255,255,255,0.3)',
-                    },
-                    '&:hover fieldset': {
-                      borderColor: 'rgba(255,255,255,0.5)',
-                    },
-                    '&.Mui-focused fieldset': {
-                      borderColor: 'primary.main',
-                    },
-                  }
+                  sx: { borderRadius: 3 }
                 }}
               />
             </Box>
@@ -324,15 +317,18 @@ const LoginPage = () => {
               }}
               disabled={loading}
             >
-              {loading ? (
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Box sx={{ width: 20, height: 20, border: '2px solid', borderColor: 'white', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
-                  <Box component="span" sx={{ ml: 1 }}>{t('login.loading')}</Box>
-                </Box>
-              ) : (
-                t('login.submit')
-              )}
+              {loading ? t('login.loading') : t('login.submit')}
             </Button>
+
+            <Box sx={{ my: 3, display: 'flex', alignItems: 'center' }}>
+              <Divider sx={{ flexGrow: 1 }} />
+              <Typography variant="body2" sx={{ mx: 2, color: 'text.secondary' }}>
+                {t('login.or')}
+              </Typography>
+              <Divider sx={{ flexGrow: 1 }} />
+            </Box>
+
+            <Box id="googleSignInBtn" sx={{ mb: 2, width: '100%' }} />
             
             <Divider sx={{ my: 2, borderColor: 'rgba(255,255,255,0.1)' }} />
             

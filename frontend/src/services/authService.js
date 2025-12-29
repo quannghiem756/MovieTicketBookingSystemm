@@ -1,13 +1,21 @@
 // frontend/src/services/authService.js
-import api from './api';
+import api, { googleLogin as apiGoogleLogin, logoutUser } from './api';
 
 class AuthService {
   async login(email, password) {
     return api.post('/users/login', { email, password });
   }
 
-  async refreshToken(refreshToken) {
-    return api.post('/users/refresh-token', { refreshToken });
+  async googleLogin(idToken) {
+    return apiGoogleLogin(idToken);
+  }
+
+  async logout() {
+    return logoutUser();
+  }
+
+  async refreshToken() {
+    return api.post('/users/refresh-token');
   }
 
   async register(userData) {

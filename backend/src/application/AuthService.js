@@ -1,17 +1,17 @@
 // backend/src/application/AuthService.js
 const jwt = require('jsonwebtoken');
-const UserService = require('./UserService');
 
 class AuthService {
-  constructor(userService) {
+  constructor(userService, refreshTokenRepository) {
     this.userService = userService;
+    this.refreshTokenRepository = refreshTokenRepository;
     this.accessTokenSecret = process.env.ACCESS_TOKEN_SECRET || 'access_token_secret';
     this.refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET || 'refresh_token_secret';
     this.accessTokenExpiration = process.env.ACCESS_TOKEN_EXPIRATION || '15m';
     this.refreshTokenExpiration = process.env.REFRESH_TOKEN_EXPIRATION || '7d';
   }
 
-  generateTokens(user) {
+  async generateTokens(user) {
     const payload = {
       id: user.id,
       email: user.email,
@@ -25,6 +25,16 @@ class AuthService {
     const refreshToken = jwt.sign(payload, this.refreshTokenSecret, {
       expiresIn: this.refreshTokenExpiration
     });
+
+    // Save refresh token to database
+    if (this.refreshTokenRepository) {
+      const expiresAt = this._getExpiryDate(this.refreshTokenExpiration);
+      await this.refreshTokenRepository.create({
+        userId: user.id,
+        token: refreshToken,
+        expiresAt: expiresAt
+      });
+    }
 
     return { accessToken, refreshToken };
   }
@@ -41,30 +51,58 @@ class AuthService {
     try {
       return jwt.verify(token, this.refreshTokenSecret);
     } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+          throw new Error('Refresh token expired');
+      }
       throw new Error('Invalid refresh token');
     }
   }
 
   async refreshTokens(refreshToken) {
+    let decoded;
     try {
-      const decoded = this.verifyRefreshToken(refreshToken);
-      const user = await this.userService.getUserById(decoded.id);
-      
-      if (!user) {
-        throw new Error('User not found');
-      }
-
-      const { accessToken, refreshToken: newRefreshToken } = this.generateTokens(user);
-      return { accessToken, refreshToken: newRefreshToken };
+      decoded = jwt.verify(refreshToken, this.refreshTokenSecret);
     } catch (error) {
-      throw new Error('Token refresh failed');
+        // If JWT is invalid or expired, we can't do much about reuse detection
+        // but we should still delete it if it's in DB (though TTL might handle it)
+        if (this.refreshTokenRepository) {
+            await this.refreshTokenRepository.deleteByToken(refreshToken);
+        }
+        throw new Error('Invalid refresh token');
     }
+
+    if (!this.refreshTokenRepository) {
+        throw new Error('Refresh token repository not configured');
+    }
+
+    // Reuse detection: Check if token exists in database
+    const tokenInDb = await this.refreshTokenRepository.findByToken(refreshToken);
+    if (!tokenInDb) {
+      // REUSE DETECTED!
+      // This token was already used or invalidated. 
+      // For security, invalidate ALL tokens for this user.
+      await this.refreshTokenRepository.deleteAllForUser(decoded.id);
+      throw new Error('Invalid refresh token');
+    }
+
+    // Token is valid and exists in DB -> Rotate it
+    const user = await this.userService.getUserById(decoded.id);
+    if (!user) {
+      await this.refreshTokenRepository.deleteByToken(refreshToken);
+      throw new Error('User not found');
+    }
+
+    // Delete old token
+    await this.refreshTokenRepository.deleteByToken(refreshToken);
+
+    // Generate and save new pair
+    return await this.generateTokens(user);
   }
 
   async authenticateUser(email, password) {
     const user = await this.userService.authenticateUser(email, password);
     if (user) {
-      const { accessToken, refreshToken } = this.generateTokens(user);
+      const { accessToken, refreshToken } = await this.generateTokens(user);
       return {
         user: {
           id: user.id,
@@ -80,6 +118,32 @@ class AuthService {
       };
     }
     return null;
+  }
+
+  async logout(refreshToken) {
+    if (this.refreshTokenRepository) {
+      await this.refreshTokenRepository.deleteByToken(refreshToken);
+    }
+  }
+
+  _getExpiryDate(expirationString) {
+    const match = expirationString.match(/^(\d+)([smhd])$/);
+    if (!match) {
+      // Default to 7 days if parsing fails
+      return new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    }
+
+    const value = parseInt(match[1]);
+    const unit = match[2];
+    const now = Date.now();
+
+    switch (unit) {
+      case 's': return new Date(now + value * 1000);
+      case 'm': return new Date(now + value * 60 * 1000);
+      case 'h': return new Date(now + value * 60 * 60 * 1000);
+      case 'd': return new Date(now + value * 24 * 60 * 60 * 1000);
+      default: return new Date(now + 7 * 24 * 60 * 60 * 1000);
+    }
   }
 }
 

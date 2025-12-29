@@ -1,9 +1,9 @@
 # Plan: Recommendation Chatbot Edge Case Testing
 
-## Phase 1: Test Infrastructure & Dataset Setup
+## Phase 1: Test Infrastructure & Dataset Setup [checkpoint: 31d27b9]
 - [x] Task: Define a structured dataset of edge case prompts in `vector_service/tests/edge_cases.json` covering all categories (Empty Retrieval, Overflow, Conflict, Off-Topic, Injection, Ambiguity). a58f3bd
 - [x] Task: Create the "Judge" evaluation script `vector_service/evaluator.py` using OpenAI (GPT-4o) to grade responses based on the defined criteria (Groundedness, Safety, Helpfulness, Consistency, Relevance). 7e9b9b4
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Test Infrastructure & Dataset Setup' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Test Infrastructure & Dataset Setup' (Protocol in workflow.md)
 
 ## Phase 2: Test Execution Engine
 - [ ] Task: Implement a test runner `vector_service/run_edge_tests.py` that iterates through the dataset, calls the recommendation API, and logs the raw responses.

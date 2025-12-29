@@ -1,21 +1,30 @@
 // backend/src/interfaces/http/middleware/auth.js
 const jwt = require('jsonwebtoken');
 const MongoUserRepository = require('../../../infrastructure/repositories/MongoUserRepository');
+const MongoRefreshTokenRepository = require('../../../infrastructure/repositories/MongoRefreshTokenRepository');
 const UserService = require('../../../application/UserService');
 const AuthService = require('../../../application/AuthService');
 
 const userRepository = new MongoUserRepository();
+const refreshTokenRepository = new MongoRefreshTokenRepository();
 const userService = new UserService(userRepository);
-const authService = new AuthService(userService);
+const authService = new AuthService(userService, refreshTokenRepository);
 
 const authenticate = async (req, res, next) => {
   try {
+    let token;
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      token = authHeader.split(' ')[1];
+    } else if (req.cookies && req.cookies.accessToken) {
+      token = req.cookies.accessToken;
+    }
+
+    if (!token) {
       return res.status(401).json({ error: 'Authentication required' });
     }
 
-    const token = authHeader.split(' ')[1];
     const decoded = authService.verifyAccessToken(token);
     
     // Fetch user from database to ensure they still exist

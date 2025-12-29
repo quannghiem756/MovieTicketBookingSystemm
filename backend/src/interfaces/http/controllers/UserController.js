@@ -12,7 +12,6 @@ class UserController {
       const user = await this.userService.createUser(req.body);
       res.status(201).json(user);
     } catch (error) {
-      // Check if it's a duplicate email error
       if (error.code === 11000 && error.keyPattern && error.keyPattern.email) {
         return res.status(400).json({ error: 'Email already exists' });
       }
@@ -81,11 +80,22 @@ class UserController {
     try {
       const { email, password } = req.body;
       const result = await this.authService.authenticateUser(email, password);
-      console.log('AuthService result:', result); // Debug log
+      
       if (!result) {
         return res.status(401).json({ error: 'Invalid credentials' });
       }
-      res.json(result);
+
+      const { user, accessToken, refreshToken } = result;
+
+      // Set refreshToken as HttpOnly cookie
+      res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days (match REFRESH_TOKEN_EXPIRATION)
+      });
+
+      res.json({ user, accessToken });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -93,15 +103,39 @@ class UserController {
 
   async refreshToken(req, res) {
     try {
-      const { refreshToken } = req.body;
+      const refreshToken = req.cookies.refreshToken || req.body.refreshToken;
+      
       if (!refreshToken) {
         return res.status(400).json({ error: 'Refresh token is required' });
       }
 
-      const tokens = await this.authService.refreshTokens(refreshToken);
-      res.json(tokens);
+      const { accessToken, refreshToken: newRefreshToken } = await this.authService.refreshTokens(refreshToken);
+
+      // Update the cookie with the new rotated token
+      res.cookie('refreshToken', newRefreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000
+      });
+
+      res.json({ accessToken });
     } catch (error) {
+      console.error('Refresh token error:', error.message);
       res.status(401).json({ error: 'Invalid refresh token' });
+    }
+  }
+
+  async logout(req, res) {
+    try {
+      const refreshToken = req.cookies.refreshToken;
+      if (refreshToken) {
+        await this.authService.logout(refreshToken);
+      }
+      res.clearCookie('refreshToken');
+      res.json({ message: 'Logged out successfully' });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
   }
 }

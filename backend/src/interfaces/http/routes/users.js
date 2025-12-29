@@ -1,6 +1,7 @@
 const express = require('express');
 const UserController = require('../controllers/UserController');
 const MongoUserRepository = require('../../../infrastructure/repositories/MongoUserRepository');
+const MongoRefreshTokenRepository = require('../../../infrastructure/repositories/MongoRefreshTokenRepository');
 const UserService = require('../../../application/UserService');
 const AuthService = require('../../../application/AuthService');
 const { authenticate, authorizeAdmin } = require('../middleware/auth');
@@ -8,8 +9,9 @@ const { registerValidationRules, loginValidationRules, validate } = require('../
 
 // Initialize services and controller
 const userRepository = new MongoUserRepository();
+const refreshTokenRepository = new MongoRefreshTokenRepository();
 const userService = new UserService(userRepository);
-const authService = new AuthService(userService);
+const authService = new AuthService(userService, refreshTokenRepository);
 const userController = new UserController(userService, authService);
 
 const router = express.Router();
@@ -18,6 +20,7 @@ const router = express.Router();
 router.post('/', registerValidationRules(), validate, (req, res) => userController.createUser(req, res));
 router.post('/login', loginValidationRules(), validate, (req, res) => userController.authenticateUser(req, res));
 router.post('/refresh-token', (req, res) => userController.refreshToken(req, res));
+router.post('/logout', (req, res) => userController.logout(req, res));
 
 // Protected routes
 router.get('/', authenticate, authorizeAdmin, (req, res) => userController.getAllUsers(req, res));

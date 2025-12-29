@@ -1,0 +1,8 @@
+{
+  "track_id": "chat_movie_cards_20251229",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2025-12-29T21:34:00Z",
+  "updated_at": "2025-12-29T21:34:00Z",
+  "description": "Implement movie cards on MovieRecommendationChat so that people could book the ticket straight from the chat section."
+}

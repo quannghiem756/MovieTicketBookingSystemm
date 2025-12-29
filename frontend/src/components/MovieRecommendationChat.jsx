@@ -13,8 +13,7 @@ import {
   Chip,
   CircularProgress,
   Alert,
-  Fab,
-  Grid
+  Fab
 } from '@mui/material';
 import { Send, AutoAwesome, Minimize, ExpandMore } from '@mui/icons-material';
 import { getMovieRecommendations } from '../services/api';
@@ -212,14 +211,18 @@ const MovieRecommendationChat = () => {
               </Paper>
 
               {message.movies && message.movies.length > 0 && (
-                <Box sx={{ width: '100%', mt: 1 }}>
-                  <Grid container spacing={1}>
-                    {message.movies.map((movie) => (
-                      <Grid item xs={6} key={movie.id}>
-                        <ChatMovieCard movie={movie} />
-                      </Grid>
-                    ))}
-                  </Grid>
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(2, 1fr)',
+                    gap: 1,
+                    width: '100%',
+                    mt: 1
+                  }}
+                >
+                  {message.movies.map((movie) => (
+                    <ChatMovieCard key={movie.id} movie={movie} />
+                  ))}
                 </Box>
               )}
             </ListItem>

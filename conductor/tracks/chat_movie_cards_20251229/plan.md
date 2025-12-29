@@ -1,11 +1,11 @@
 # Implementation Plan: Interactive Movie Cards in Recommendation Chat
 
-## Phase 1: Backend Enhancement - Recommendation Data
+## Phase 1: Backend Enhancement - Recommendation Data [checkpoint: fb5a4fd]
 This phase focuses on ensuring the recommendation API returns movie data with associated future showtimes to minimize frontend requests.
 
 - [x] Task: Update `RecommendationController` to fetch future showtimes for each recommended movie. [12b70b7]
 - [x] Task: Write unit tests to verify the recommendation response includes a `showtimes` array for each movie. [12b70b7]
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Backend Enhancement' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Backend Enhancement' (Protocol in workflow.md) [fb5a4fd]
 
 ## Phase 2: Frontend Component - ChatMovieCard
 This phase involves creating a specialized, compact version of the `ShowtimeMovieCard` for the chat interface.

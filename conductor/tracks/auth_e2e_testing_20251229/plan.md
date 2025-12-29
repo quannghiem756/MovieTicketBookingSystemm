@@ -15,7 +15,7 @@
 
 ## Phase 3: Session & Persistence Tests
 - [x] Task: Implement tests for Session Persistence (Page reloads with Refresh Tokens). (4a62a3a)
-- [ ] Task: Implement tests for Route Protection (Redirects for unauthorized users).
+- [x] Task: Implement tests for Route Protection (Redirects for unauthorized users). (c91587a)
 - [ ] Task: Conductor - User Manual Verification 'Session & Persistence Tests' (Protocol in workflow.md)
 
 ## Phase 4: Advanced OAuth Mocking

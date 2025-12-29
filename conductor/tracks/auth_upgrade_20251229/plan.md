@@ -21,7 +21,7 @@
 - [x] Task: Update `AuthContext` to handle the new session management logic. (71a465b)
 - [x] Task: Conductor - User Manual Verification 'Frontend Integration' (Protocol in workflow.md) (fe31558)
 
-## Phase 5: Final Verification
+## Phase 5: Final Verification [checkpoint: 1733ae2]
 - [x] Task: Test security (XSS protection, token reuse detection). (887b40d)
 - [x] Task: Verify auto-registration flow for first-time Google users. (887b40d)
-- [ ] Task: Conductor - User Manual Verification 'Final Verification' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Final Verification' (Protocol in workflow.md) (1733ae2)

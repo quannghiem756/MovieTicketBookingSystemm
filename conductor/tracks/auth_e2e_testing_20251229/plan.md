@@ -8,7 +8,7 @@
 - [x] Task: Conductor - User Manual Verification 'Framework Setup' (Protocol in workflow.md) (6ee3211)
 
 ## Phase 2: Base Authentication Tests
-- [ ] Task: Implement E2E tests for the Registration flow (Success/Failure cases).
+- [x] Task: Implement E2E tests for the Registration flow (Success/Failure cases). (03796f9)
 - [ ] Task: Implement E2E tests for the Email/Password Login flow.
 - [ ] Task: Implement E2E tests for the Logout functionality.
 - [ ] Task: Conductor - User Manual Verification 'Base Authentication Tests' (Protocol in workflow.md)

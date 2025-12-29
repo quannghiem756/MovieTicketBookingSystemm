@@ -2,7 +2,7 @@
 
 ## Phase 1: Framework Setup
 - [x] Task: Install Cypress and essential dependencies in the `frontend` directory. (6201373)
-- [ ] Task: Initialize Cypress configuration and folder structure.
+- [x] Task: Initialize Cypress configuration and folder structure. (57f3e10)
 - [ ] Task: Add NPM scripts (`cypress:open`, `cypress:run`) to `frontend/package.json`.
 - [ ] Task: Create a basic "Health Check" test to verify Cypress can visit the site.
 - [ ] Task: Conductor - User Manual Verification 'Framework Setup' (Protocol in workflow.md)

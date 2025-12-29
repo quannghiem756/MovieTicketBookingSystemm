@@ -100,7 +100,13 @@ api.interceptors.response.use(
     const originalRequest = error.config;
 
     // If error is 401 and we haven't retried yet
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // Do NOT retry for login or register endpoints
+    if (error.response?.status === 401 && 
+        !originalRequest._retry && 
+        !originalRequest.url.includes('/users/login') && 
+        !originalRequest.url.includes('/users/google-login') &&
+        originalRequest.url !== '/users' // register endpoint
+    ) {
       originalRequest._retry = true;
 
       try {

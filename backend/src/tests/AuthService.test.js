@@ -9,6 +9,8 @@ describe('AuthService', () => {
   beforeEach(() => {
     mockUserService = {
       getUserById: jest.fn(),
+      getUserByEmail: jest.fn(),
+      createUser: jest.fn(),
       authenticateUser: jest.fn()
     };
     mockRefreshTokenRepository = {
@@ -200,6 +202,40 @@ describe('AuthService', () => {
       };
 
       await expect(authService.verifyGoogleToken('invalid')).rejects.toThrow('Google authentication failed');
+    });
+  });
+
+  describe('googleLogin', () => {
+    it('should login existing user if Google email matches', async () => {
+        const googlePayload = { sub: 'g123', email: 'exist@test.com', name: 'Exist' };
+        const mockUser = { id: 'u123', email: 'exist@test.com', name: 'Exist' };
+        
+        mockUserService.getUserByEmail.mockResolvedValue(mockUser);
+        mockRefreshTokenRepository.create.mockResolvedValue({});
+
+        const result = await authService.googleLogin(googlePayload);
+
+        expect(result.user.id).toBe('u123');
+        expect(result.accessToken).toBeDefined();
+        expect(mockUserService.createUser).not.toHaveBeenCalled();
+    });
+
+    it('should auto-register and login new user if email not found', async () => {
+        const googlePayload = { sub: 'new123', email: 'new@test.com', name: 'New' };
+        const mockCreatedUser = { id: 'new-u-123', email: 'new@test.com', name: 'New' };
+
+        mockUserService.getUserByEmail.mockResolvedValue(null);
+        mockUserService.createUser.mockResolvedValue(mockCreatedUser);
+        mockRefreshTokenRepository.create.mockResolvedValue({});
+
+        const result = await authService.googleLogin(googlePayload);
+
+        expect(result.user.id).toBe('new-u-123');
+        expect(mockUserService.createUser).toHaveBeenCalledWith(expect.objectContaining({
+            email: 'new@test.com',
+            name: 'New',
+            googleId: 'new123'
+        }));
     });
   });
 });

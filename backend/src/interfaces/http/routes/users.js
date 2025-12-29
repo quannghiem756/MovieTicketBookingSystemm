@@ -19,6 +19,7 @@ const router = express.Router();
 // Public routes
 router.post('/', registerValidationRules(), validate, (req, res) => userController.createUser(req, res));
 router.post('/login', loginValidationRules(), validate, (req, res) => userController.authenticateUser(req, res));
+router.post('/google-login', (req, res) => userController.googleLogin(req, res));
 router.post('/refresh-token', (req, res) => userController.refreshToken(req, res));
 router.post('/logout', (req, res) => userController.logout(req, res));
 

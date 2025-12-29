@@ -28,6 +28,42 @@ class AuthService {
     }
   }
 
+  async googleLogin(payload) {
+    const { sub, email, name, picture } = payload;
+    
+    let user = await this.userService.getUserByEmail(email);
+    
+    if (!user) {
+      // Auto-registration
+      user = await this.userService.createUser({
+        name: name || email.split('@')[0],
+        email: email,
+        googleId: sub,
+        phone: null,
+        password: null, // Optional now in Model
+        dateOfBirth: null,
+        role: 'user'
+      });
+    }
+
+    const { accessToken, refreshToken } = await this.generateTokens(user);
+    
+    return {
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        dateOfBirth: user.dateOfBirth,
+        loyaltyPoints: user.loyaltyPoints,
+        role: user.role,
+        picture: picture // Optional extra info
+      },
+      accessToken,
+      refreshToken
+    };
+  }
+
   async generateTokens(user) {
     const payload = {
       id: user.id,

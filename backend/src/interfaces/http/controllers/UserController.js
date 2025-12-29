@@ -101,6 +101,33 @@ class UserController {
     }
   }
 
+  async googleLogin(req, res) {
+    try {
+      const { idToken } = req.body;
+      if (!idToken) {
+        return res.status(400).json({ error: 'ID Token is required' });
+      }
+
+      const payload = await this.authService.verifyGoogleToken(idToken);
+      const result = await this.authService.googleLogin(payload);
+
+      const { user, accessToken, refreshToken } = result;
+
+      // Set refreshToken as HttpOnly cookie
+      res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000
+      });
+
+      res.json({ user, accessToken });
+    } catch (error) {
+      console.error('Google login error:', error.message);
+      res.status(401).json({ error: error.message });
+    }
+  }
+
   async refreshToken(req, res) {
     try {
       const refreshToken = req.cookies.refreshToken || req.body.refreshToken;

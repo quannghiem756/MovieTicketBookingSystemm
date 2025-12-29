@@ -18,7 +18,9 @@ describe('UserController', () => {
     mockAuthService = {
       authenticateUser: jest.fn(),
       refreshTokens: jest.fn(),
-      logout: jest.fn()
+      logout: jest.fn(),
+      verifyGoogleToken: jest.fn(),
+      googleLogin: jest.fn()
     };
     userController = new UserController(mockUserService, mockAuthService);
   });
@@ -151,6 +153,36 @@ describe('UserController', () => {
         mockAuthService.authenticateUser.mockResolvedValue(null);
         await userController.authenticateUser(req, res);
         expect(res.statusCode).toBe(401);
+    });
+  });
+
+  describe('googleLogin', () => {
+    it('should login with Google and set cookie', async () => {
+      const req = httpMocks.createRequest({
+        method: 'POST',
+        body: { idToken: 'google-token' }
+      });
+      const res = httpMocks.createResponse();
+
+      mockAuthService.verifyGoogleToken.mockResolvedValue({ sub: 'g1', email: 'g@g.com' });
+      mockAuthService.googleLogin.mockResolvedValue({
+        user: { id: 'u1', name: 'G' },
+        accessToken: 'acc',
+        refreshToken: 'ref'
+      });
+
+      await userController.googleLogin(req, res);
+
+      expect(res.statusCode).toBe(200);
+      expect(res.cookies.refreshToken.value).toBe('ref');
+      expect(JSON.parse(res._getData()).user.name).toBe('G');
+    });
+
+    it('should return 400 if idToken is missing', async () => {
+        const req = httpMocks.createRequest({ method: 'POST' });
+        const res = httpMocks.createResponse();
+        await userController.googleLogin(req, res);
+        expect(res.statusCode).toBe(400);
     });
   });
 

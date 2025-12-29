@@ -6,7 +6,7 @@
 - [ ] Task: Conductor - User Manual Verification 'Infrastructure & Models' (Protocol in workflow.md)
 
 ## Phase 2: Backend Refresh Token Logic
-- [ ] Task: Update `AuthService` to manage database-backed tokens and rotation.
+- [x] Task: Update `AuthService` to manage database-backed tokens and rotation. (ffaccb6)
 - [ ] Task: Update `UserController` and middleware to handle cookies and rotation endpoints.
 - [ ] Task: Conductor - User Manual Verification 'Backend Refresh Token Logic' (Protocol in workflow.md)
 

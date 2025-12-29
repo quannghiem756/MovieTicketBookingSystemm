@@ -11,7 +11,7 @@
 - [ ] Task: Conductor - User Manual Verification 'Backend Refresh Token Logic' (Protocol in workflow.md)
 
 ## Phase 3: Google OAuth Integration
-- [ ] Task: Implement Google Token verification logic in `AuthService`.
+- [x] Task: Implement Google Token verification logic in `AuthService`. (0423c32)
 - [ ] Task: Create `POST /api/users/google-login` endpoint that handles both login and auto-registration.
 - [ ] Task: Conductor - User Manual Verification 'Google OAuth Integration' (Protocol in workflow.md)
 

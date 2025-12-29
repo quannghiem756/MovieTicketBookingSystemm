@@ -2,7 +2,7 @@
 
 ## Phase 1: Infrastructure & Models
 - [x] Task: Create `RefreshToken` model and repository. (0ec43ff)
-- [ ] Task: Install necessary dependencies (`google-auth-library`, `cookie-parser`).
+- [x] Task: Install necessary dependencies (`google-auth-library`, `cookie-parser`). (fbce347)
 - [ ] Task: Conductor - User Manual Verification 'Infrastructure & Models' (Protocol in workflow.md)
 
 ## Phase 2: Backend Refresh Token Logic

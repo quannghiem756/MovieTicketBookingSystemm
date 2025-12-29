@@ -1,6 +1,6 @@
 # Plan: Auth System Upgrade
 
-## Phase 1: Infrastructure & Models
+## Phase 1: Infrastructure & Models [checkpoint: e29f88d]
 - [x] Task: Create `RefreshToken` model and repository. (0ec43ff)
 - [x] Task: Install necessary dependencies (`google-auth-library`, `cookie-parser`). (fbce347)
 - [ ] Task: Conductor - User Manual Verification 'Infrastructure & Models' (Protocol in workflow.md)

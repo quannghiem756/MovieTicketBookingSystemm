@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from '../context/I18nContext';
@@ -9,12 +9,10 @@ import {
   TextField,
   Button,
   Alert,
-  Paper,
   InputAdornment,
   IconButton,
   Card,
   CardContent,
-  useTheme,
   Avatar,
   Divider
 } from '@mui/material';
@@ -32,7 +30,6 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { login, googleLogin } = useAuth();
   const { t } = useTranslation();
-  const theme = useTheme();
   
   const [formData, setFormData] = useState({
     email: '',
@@ -42,6 +39,27 @@ const LoginPage = () => {
   const [serverError, setServerError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  const handleGoogleLoginResponse = useCallback(async (response) => {
+    setLoading(true);
+    setServerError('');
+    try {
+      const result = await googleLogin(response.credential);
+      if (result.success) {
+        if (result.user.role === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/');
+        }
+      } else {
+        setServerError(result.error);
+      }
+    } catch (err) {
+      setServerError(t('login.error'));
+    } finally {
+      setLoading(false);
+    }
+  }, [googleLogin, navigate, t]);
 
   // Initialize Google Login
   useEffect(() => {
@@ -73,30 +91,11 @@ const LoginPage = () => {
     document.head.appendChild(script);
 
     return () => {
-      document.head.removeChild(script);
-    };
-  }, []);
-
-  const handleGoogleLoginResponse = async (response) => {
-    setLoading(true);
-    setServerError('');
-    try {
-      const result = await googleLogin(response.credential);
-      if (result.success) {
-        if (result.user.role === 'admin') {
-          navigate('/admin');
-        } else {
-          navigate('/');
-        }
-      } else {
-        setServerError(result.error);
+      if (document.head.contains(script)) {
+        document.head.removeChild(script);
       }
-    } catch (err) {
-      setServerError(t('login.error'));
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+  }, [handleGoogleLoginResponse]);
 
   const validateField = (name, value) => {
     let error = '';

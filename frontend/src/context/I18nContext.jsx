@@ -1,5 +1,5 @@
 // context/I18nContext.jsx
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useCallback } from 'react';
 import vi from '../translations/vi';
 import en from '../translations/en'; // We'll create this later if needed
 
@@ -21,9 +21,9 @@ export const useTranslation = () => {
 export const I18nProvider = ({ children }) => {
   const [language, setLanguage] = useState('vi'); // Default to Vietnamese
 
-  const t = (key) => {
+  const t = useCallback((key) => {
     return translations[language][key] || key;
-  };
+  }, [language]);
 
   const value = {
     t,

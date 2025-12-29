@@ -10,7 +10,7 @@
 - [x] Task: Update `UserController` and middleware to handle cookies and rotation endpoints. (fc7ae30)
 - [ ] Task: Conductor - User Manual Verification 'Backend Refresh Token Logic' (Protocol in workflow.md)
 
-## Phase 3: Google OAuth Integration
+## Phase 3: Google OAuth Integration [checkpoint: c0e553a]
 - [x] Task: Implement Google Token verification logic in `AuthService`. (0423c32)
 - [x] Task: Create `POST /api/users/google-login` endpoint that handles both login and auto-registration. (dc57967)
 - [ ] Task: Conductor - User Manual Verification 'Google OAuth Integration' (Protocol in workflow.md)

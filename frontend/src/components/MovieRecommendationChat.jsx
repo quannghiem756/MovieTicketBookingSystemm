@@ -15,7 +15,7 @@ import {
   Alert,
   Fab
 } from '@mui/material';
-import { Send, AutoAwesome, Minimize, ExpandMore } from '@mui/icons-material';
+import { Send, AutoAwesome, Minimize, ExpandMore, ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { getMovieRecommendations } from '../services/api';
 import { useTranslation } from '../context/I18nContext';
 import ChatMovieCard from './ChatMovieCard';
@@ -82,6 +82,8 @@ const MovieRecommendationChat = () => {
         id: Date.now() + 1,
         text: result.text,
         movies: result.movies,
+        currentPage: 0,
+        pageSize: 2,
         isBot: true
       };
 
@@ -96,6 +98,12 @@ const MovieRecommendationChat = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handlePageChange = (messageId, newPage) => {
+    setMessages(prev => prev.map(msg => 
+      msg.id === messageId ? { ...msg, currentPage: newPage } : msg
+    ));
   };
 
   const handleKeyPress = (e) => {
@@ -176,57 +184,91 @@ const MovieRecommendationChat = () => {
 
       <Box sx={{ flex: 1, overflow: 'auto', p: 1 }}>
         <List sx={{ p: 0 }}>
-          {messages.map((message) => (
-            <ListItem
-              key={message.id}
-              sx={{
-                flexDirection: 'column',
-                alignItems: message.isBot ? 'flex-start' : 'flex-end',
-                mb: 2,
-                p: 1
-              }}
-            >
-              <Paper
+          {messages.map((message) => {
+            const hasMovies = message.movies && message.movies.length > 0;
+            const startIndex = message.currentPage * (message.pageSize || 2);
+            const visibleMovies = hasMovies 
+              ? message.movies.slice(startIndex, startIndex + (message.pageSize || 2))
+              : [];
+            const totalPages = hasMovies ? Math.ceil(message.movies.length / (message.pageSize || 2)) : 0;
+
+            return (
+              <ListItem
+                key={message.id}
                 sx={{
-                  maxWidth: '90%',
-                  p: 1.5,
-                  borderRadius: message.isBot ? '20px 20px 20px 4px' : '20px 20px 4px 20px',
-                  backgroundColor: message.isBot
-                    ? 'rgba(60, 60, 60, 0.9)'
-                    : 'primary.main',
-                  color: 'white',
-                  mb: message.movies && message.movies.length > 0 ? 1 : 0
+                  flexDirection: 'column',
+                  alignItems: message.isBot ? 'flex-start' : 'flex-end',
+                  mb: 2,
+                  p: 1
                 }}
               >
-                <Typography
-                  component="div"
+                <Paper
                   sx={{
-                    whiteSpace: 'pre-line',
-                    fontSize: '0.9rem',
-                    lineHeight: 1.5
+                    maxWidth: '90%',
+                    p: 1.5,
+                    borderRadius: message.isBot ? '20px 20px 20px 4px' : '20px 20px 4px 20px',
+                    backgroundColor: message.isBot
+                      ? 'rgba(60, 60, 60, 0.9)'
+                      : 'primary.main',
+                    color: 'white',
+                    mb: hasMovies ? 1 : 0
                   }}
                 >
-                  {message.text}
-                </Typography>
-              </Paper>
+                  <Typography
+                    component="div"
+                    sx={{
+                      whiteSpace: 'pre-line',
+                      fontSize: '0.9rem',
+                      lineHeight: 1.5
+                    }}
+                  >
+                    {message.text}
+                  </Typography>
+                </Paper>
 
-              {message.movies && message.movies.length > 0 && (
-                <Box
-                  sx={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(2, 1fr)',
-                    gap: 1,
-                    width: '100%',
-                    mt: 1
-                  }}
-                >
-                  {message.movies.map((movie) => (
-                    <ChatMovieCard key={movie.id} movie={movie} />
-                  ))}
-                </Box>
-              )}
-            </ListItem>
-          ))}
+                {hasMovies && (
+                  <Box sx={{ width: '100%', mt: 1 }}>
+                    <Box
+                      sx={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(2, 1fr)',
+                        gap: 1,
+                        width: '100%'
+                      }}
+                    >
+                      {visibleMovies.map((movie) => (
+                        <ChatMovieCard key={movie.id} movie={movie} />
+                      ))}
+                    </Box>
+                    
+                    {totalPages > 1 && (
+                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mt: 1, gap: 1 }}>
+                        <IconButton 
+                          size="small" 
+                          onClick={() => handlePageChange(message.id, message.currentPage - 1)}
+                          disabled={message.currentPage === 0}
+                          sx={{ color: 'white', bgcolor: 'rgba(255,255,255,0.05)' }}
+                        >
+                          <ChevronLeft fontSize="small" />
+                        </IconButton>
+                        <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 600 }}>
+                          {message.currentPage + 1} / {totalPages}
+                        </Typography>
+                        <IconButton 
+                          size="small" 
+                          onClick={() => handlePageChange(message.id, message.currentPage + 1)}
+                          disabled={message.currentPage === totalPages - 1}
+                          sx={{ color: 'white', bgcolor: 'rgba(255,255,255,0.05)' }}
+                        >
+                          <ChevronRight fontSize="small" />
+                        </IconButton>
+                      </Box>
+                    )}
+                  </Box>
+                )}
+              </ListItem>
+            );
+          })}
           {loading && (
             <ListItem sx={{ justifyContent: 'flex-start', mb: 2, p: 1 }}>
               <Paper

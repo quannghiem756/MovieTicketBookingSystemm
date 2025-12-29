@@ -7,10 +7,12 @@ import {
   Box,
   Chip,
   Stack,
-  Skeleton
+  Skeleton,
+  Button
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useTranslation } from '../context/I18nContext';
+import { ConfirmationNumber } from '@mui/icons-material';
 
 const ChatMovieCard = ({ movie }) => {
   const { t } = useTranslation();
@@ -113,7 +115,7 @@ const ChatMovieCard = ({ movie }) => {
         </Box>
       </Box>
 
-      <CardContent sx={{ p: 1, '&:last-child': { pb: 1 } }}>
+      <CardContent sx={{ p: 1, '&:last-child': { pb: 1 }, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
         <Typography
           variant="subtitle2"
           sx={{
@@ -156,7 +158,7 @@ const ChatMovieCard = ({ movie }) => {
         )}
 
         {/* Showtimes */}
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mb: 1 }}>
           {filteredShowtimes.slice(0, 4).map((showtime, index) => (
             <Chip
               key={showtime.id || index}
@@ -182,6 +184,26 @@ const ChatMovieCard = ({ movie }) => {
               +{filteredShowtimes.length - 4}
             </Typography>
           )}
+        </Box>
+
+        <Box sx={{ mt: 'auto' }}>
+          <Button
+            variant="contained"
+            fullWidth
+            size="small"
+            component={Link}
+            to={`/movie/${movie.id}`}
+            startIcon={<ConfirmationNumber sx={{ fontSize: '0.8rem !important' }} />}
+            sx={{
+              fontSize: '0.7rem',
+              py: 0.5,
+              borderRadius: 1.5,
+              textTransform: 'none',
+              fontWeight: 700
+            }}
+          >
+            {t('movieCard.bookTicket')}
+          </Button>
         </Box>
       </CardContent>
     </Card>

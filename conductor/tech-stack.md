@@ -13,7 +13,7 @@
 - **Database:** MongoDB with Mongoose ODM.
 - **Real-time:** Socket.io for server-side WebSocket management.
 - **Payments:** MoMo E-Wallet API integration.
-- **Security:** JWT for authentication, bcryptjs for password hashing, express-rate-limit.
+- **Security:** JWT (Access/Refresh tokens) with database-backed rotation, `google-auth-library` for OAuth, `bcryptjs` for password hashing, `cookie-parser`, `express-rate-limit`.
 
 ## AI & Vector Service
 - **Runtime:** Python

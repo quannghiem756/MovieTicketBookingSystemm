@@ -5,7 +5,7 @@
 - [x] Task: Install necessary dependencies (`google-auth-library`, `cookie-parser`). (fbce347)
 - [ ] Task: Conductor - User Manual Verification 'Infrastructure & Models' (Protocol in workflow.md)
 
-## Phase 2: Backend Refresh Token Logic
+## Phase 2: Backend Refresh Token Logic [checkpoint: 215660c]
 - [x] Task: Update `AuthService` to manage database-backed tokens and rotation. (ffaccb6)
 - [x] Task: Update `UserController` and middleware to handle cookies and rotation endpoints. (fc7ae30)
 - [ ] Task: Conductor - User Manual Verification 'Backend Refresh Token Logic' (Protocol in workflow.md)

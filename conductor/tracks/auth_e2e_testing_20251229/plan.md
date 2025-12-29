@@ -13,10 +13,10 @@
 - [x] Task: Implement E2E tests for the Logout functionality. (932caaf)
 - [x] Task: Conductor - User Manual Verification 'Base Authentication Tests' (Protocol in workflow.md) (0d5f36c)
 
-## Phase 3: Session & Persistence Tests
+## Phase 3: Session & Persistence Tests [checkpoint: e78bb80]
 - [x] Task: Implement tests for Session Persistence (Page reloads with Refresh Tokens). (4a62a3a)
 - [x] Task: Implement tests for Route Protection (Redirects for unauthorized users). (c91587a)
-- [ ] Task: Conductor - User Manual Verification 'Session & Persistence Tests' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Session & Persistence Tests' (Protocol in workflow.md) (e78bb80)
 
 ## Phase 4: Advanced OAuth Mocking
 - [ ] Task: Implement a mocked Google OAuth login flow using Cypress intercepts.

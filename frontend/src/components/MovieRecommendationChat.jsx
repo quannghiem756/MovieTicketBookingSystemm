@@ -13,11 +13,13 @@ import {
   Chip,
   CircularProgress,
   Alert,
-  Fab
+  Fab,
+  Grid
 } from '@mui/material';
 import { Send, AutoAwesome, Minimize, ExpandMore } from '@mui/icons-material';
 import { getMovieRecommendations } from '../services/api';
 import { useTranslation } from '../context/I18nContext';
+import ChatMovieCard from './ChatMovieCard';
 
 const MovieRecommendationChat = () => {
   const { t } = useTranslation();
@@ -41,26 +43,25 @@ const MovieRecommendationChat = () => {
     scrollToBottom();
   }, [messages]);
 
-  const getRecommendation = async (userMessage) => {
+  const getRecommendationData = async (userMessage) => {
     try {
       // Call backend API for recommendations using Gemini
       const response = await getMovieRecommendations(userMessage);
       const { recommendations, message: responseMessage } = response.data;
 
       if (recommendations && recommendations.length > 0) {
-        const movieList = recommendations.map(movie =>
-          `• ${movie.title} (${movie.genre?.join(', ') || 'N/A'} | ${movie.rating || 'N/A'})`
-        ).join('\n');
-
-        return `${t('recommendation.successMessage')}\n\n${movieList}\n\n${t('recommendation.enjoyMessage')}`;
+        return {
+          text: responseMessage || t('recommendation.successMessage'),
+          movies: recommendations
+        };
       } else if (responseMessage) {
-        return responseMessage;
+        return { text: responseMessage };
       } else {
-        return t('recommendation.noResultsMessage');
+        return { text: t('recommendation.noResultsMessage') };
       }
     } catch (error) {
       console.error('Error getting recommendation:', error);
-      return t('recommendation.errorMessage');
+      return { text: t('recommendation.errorMessage') };
     }
   };
 
@@ -75,12 +76,13 @@ const MovieRecommendationChat = () => {
 
     try {
       // Get recommendation from backend API
-      const botResponse = await getRecommendation(inputValue);
+      const result = await getRecommendationData(inputValue);
 
       // Add bot response
       const botMessage = {
         id: Date.now() + 1,
-        text: botResponse,
+        text: result.text,
+        movies: result.movies,
         isBot: true
       };
 
@@ -152,14 +154,15 @@ const MovieRecommendationChat = () => {
         flexDirection: 'column',
         borderRadius: 4,
         border: '1px solid rgba(255,255,255,0.1)',
-        background: 'rgba(30,30,30,0.7)',
-        backdropFilter: 'blur(10px)',
+        background: 'rgba(30,30,30,0.85)',
+        backdropFilter: 'blur(20px)',
         zIndex: 1000,
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)'
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
+        overflow: 'hidden'
       }}
     >
-      <Box sx={{ p: 2, borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+      <Box sx={{ p: 2, borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(20, 20, 20, 0.4)' }}>
+        <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', gap: 1, fontWeight: 700 }}>
           <AutoAwesome color="primary" />
           {t('recommendation.title')}
         </Typography>
@@ -172,59 +175,68 @@ const MovieRecommendationChat = () => {
         </IconButton>
       </Box>
 
-      <Box sx={{ flex: 1, overflow: 'auto', p: 2 }}>
-        <List>
+      <Box sx={{ flex: 1, overflow: 'auto', p: 1 }}>
+        <List sx={{ p: 0 }}>
           {messages.map((message) => (
             <ListItem
               key={message.id}
               sx={{
-                justifyContent: message.isBot ? 'flex-start' : 'flex-end',
-                mb: 2
+                flexDirection: 'column',
+                alignItems: message.isBot ? 'flex-start' : 'flex-end',
+                mb: 2,
+                p: 1
               }}
             >
               <Paper
                 sx={{
-                  maxWidth: '80%',
-                  p: 2,
-                  borderRadius: 3,
+                  maxWidth: '90%',
+                  p: 1.5,
+                  borderRadius: message.isBot ? '20px 20px 20px 4px' : '20px 20px 4px 20px',
                   backgroundColor: message.isBot
-                    ? 'rgba(50, 50, 50, 0.8)'
+                    ? 'rgba(60, 60, 60, 0.9)'
                     : 'primary.main',
-                  color: message.isBot ? 'white' : 'white'
+                  color: 'white',
+                  mb: message.movies && message.movies.length > 0 ? 1 : 0
                 }}
               >
-                <ListItemText
-                  primary={
-                    <Typography
-                      component="div"
-                      sx={{
-                        whiteSpace: 'pre-line',
-                        fontSize: '0.9rem',
-                        lineHeight: 1.5
-                      }}
-                    >
-                      {message.text}
-                    </Typography>
-                  }
-                  sx={{ margin: 0 }}
-                />
+                <Typography
+                  component="div"
+                  sx={{
+                    whiteSpace: 'pre-line',
+                    fontSize: '0.9rem',
+                    lineHeight: 1.5
+                  }}
+                >
+                  {message.text}
+                </Typography>
               </Paper>
+
+              {message.movies && message.movies.length > 0 && (
+                <Box sx={{ width: '100%', mt: 1 }}>
+                  <Grid container spacing={1}>
+                    {message.movies.map((movie) => (
+                      <Grid item xs={6} key={movie.id}>
+                        <ChatMovieCard movie={movie} />
+                      </Grid>
+                    ))}
+                  </Grid>
+                </Box>
+              )}
             </ListItem>
           ))}
           {loading && (
-            <ListItem sx={{ justifyContent: 'flex-start', mb: 2 }}>
+            <ListItem sx={{ justifyContent: 'flex-start', mb: 2, p: 1 }}>
               <Paper
                 sx={{
-                  maxWidth: '80%',
-                  p: 2,
-                  borderRadius: 3,
-                  backgroundColor: 'rgba(50, 50, 50, 0.8)',
+                  p: 1.5,
+                  borderRadius: '20px 20px 20px 4px',
+                  backgroundColor: 'rgba(60, 60, 60, 0.9)',
                   color: 'white'
                 }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <CircularProgress size={20} />
-                  <Typography>{t('recommendation.loadingMessage')}</Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                  <CircularProgress size={16} thickness={5} />
+                  <Typography variant="body2">{t('recommendation.loadingMessage')}</Typography>
                 </Box>
               </Paper>
             </ListItem>
@@ -233,7 +245,7 @@ const MovieRecommendationChat = () => {
         </List>
       </Box>
 
-      <Box sx={{ p: 2, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+      <Box sx={{ p: 2, borderTop: '1px solid rgba(255,255,255,0.1)', background: 'rgba(20, 20, 20, 0.4)' }}>
         <Box sx={{ display: 'flex', gap: 1 }}>
           <TextField
             fullWidth
@@ -245,9 +257,10 @@ const MovieRecommendationChat = () => {
             multiline
             maxRows={4}
             disabled={loading}
+            size="small"
             sx={{
               '& .MuiOutlinedInput-root': {
-                borderRadius: 2,
+                borderRadius: 3,
                 backgroundColor: 'rgba(255, 255, 255, 0.05)',
                 '& fieldset': {
                   borderColor: 'rgba(255, 255, 255, 0.1)',
@@ -266,42 +279,29 @@ const MovieRecommendationChat = () => {
             onClick={handleSendMessage}
             disabled={!inputValue.trim() || loading}
             sx={{
-              borderRadius: 2,
-              minWidth: 50,
+              borderRadius: 3,
+              minWidth: 48,
+              height: 40,
               alignSelf: 'flex-end'
             }}
           >
-            <Send />
+            <Send fontSize="small" />
           </Button>
         </Box>
-        <Box sx={{ mt: 1, display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+        <Box sx={{ mt: 1.5, display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
           <Chip
             size="small"
             label={t('recommendation.example1')}
             clickable
             onClick={() => setInputValue(t('recommendation.example1'))}
-            sx={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
+            sx={{ backgroundColor: 'rgba(255, 255, 255, 0.08)', fontSize: '0.7rem' }}
           />
           <Chip
             size="small"
             label={t('recommendation.example2')}
             clickable
             onClick={() => setInputValue(t('recommendation.example2'))}
-            sx={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
-          />
-          <Chip
-            size="small"
-            label={t('recommendation.example3')}
-            clickable
-            onClick={() => setInputValue(t('recommendation.example3'))}
-            sx={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
-          />
-          <Chip
-            size="small"
-            label={t('recommendation.example4')}
-            clickable
-            onClick={() => setInputValue(t('recommendation.example4'))}
-            sx={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
+            sx={{ backgroundColor: 'rgba(255, 255, 255, 0.08)', fontSize: '0.7rem' }}
           />
         </Box>
       </Box>

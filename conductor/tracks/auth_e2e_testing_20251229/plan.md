@@ -10,7 +10,7 @@
 ## Phase 2: Base Authentication Tests
 - [x] Task: Implement E2E tests for the Registration flow (Success/Failure cases). (03796f9)
 - [x] Task: Implement E2E tests for the Email/Password Login flow. (a714fa6)
-- [ ] Task: Implement E2E tests for the Logout functionality.
+- [x] Task: Implement E2E tests for the Logout functionality. (932caaf)
 - [ ] Task: Conductor - User Manual Verification 'Base Authentication Tests' (Protocol in workflow.md)
 
 ## Phase 3: Session & Persistence Tests

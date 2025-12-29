@@ -26,4 +26,4 @@
 - **Architecture:** Modular Monolith (Node.js) with a sidecar Vector Service (Python).
 - **Package Management:** npm (Node.js), pip (Python).
 - **Environment Management:** dotenv for configuration.
-- **Testing:** Jest for backend and frontend unit testing.
+- **Testing:** Jest for unit testing; Cypress for End-to-End (E2E) testing.

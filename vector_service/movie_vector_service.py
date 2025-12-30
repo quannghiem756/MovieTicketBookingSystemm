@@ -174,7 +174,11 @@ def build_vector_index():
                 'cast': ', '.join(movie.get('cast', [])),
                 'synopsis': movie.get('synopsis', ''),
                 'genre': ', '.join(movie.get('genre', [])),
-                'rating': movie.get('rating', '')
+                'rating': movie.get('rating', ''),
+                'posterUrl': movie.get('posterUrl', ''),
+                'releaseDate': str(movie.get('releaseDate', '')),
+                'duration': str(movie.get('duration', '')),
+                'trailerUrl': movie.get('trailerUrl', '')
             }
         )
         documents.append(doc)
@@ -228,7 +232,11 @@ def search_similar_movies(query, top_k=10):
                     'cast': metadata.get('cast', '').split(', ') if metadata.get('cast') else [],
                     'synopsis': metadata.get('synopsis'),
                     'genre': metadata.get('genre', '').split(', ') if metadata.get('genre') else [],
-                    'rating': metadata.get('rating')
+                    'rating': metadata.get('rating'),
+                    'posterUrl': metadata.get('posterUrl'),
+                    'releaseDate': metadata.get('releaseDate'),
+                    'duration': metadata.get('duration'),
+                    'trailerUrl': metadata.get('trailerUrl')
                 }
 
             result = {
@@ -773,7 +781,11 @@ def get_movies():
                 'cast': metadata.get('cast', '').split(', ') if metadata.get('cast') else [],
                 'synopsis': metadata.get('synopsis'),
                 'genre': metadata.get('genre', '').split(', ') if metadata.get('genre') else [],
-                'rating': metadata.get('rating')
+                'rating': metadata.get('rating'),
+                'posterUrl': metadata.get('posterUrl'),
+                'releaseDate': metadata.get('releaseDate'),
+                'duration': metadata.get('duration'),
+                'trailerUrl': metadata.get('trailerUrl')
             }
             movies.append(movie)
 

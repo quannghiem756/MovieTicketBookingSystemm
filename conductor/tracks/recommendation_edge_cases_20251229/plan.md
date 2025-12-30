@@ -10,7 +10,7 @@
 - [x] Task: Integrate the `evaluator.py` into the test runner to automatically score each response after it is received. 5997163
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Test Execution Engine' (Protocol in workflow.md)
 
-## Phase 3: Evaluation & Reporting
+## Phase 3: Evaluation & Reporting [checkpoint: ddfea79]
 - [x] Task: Execute the full edge case test suite and capture the results in a raw JSON format.
 - [x] Task: Create a report generator `vector_service/generate_report.py` that parses the evaluation results and outputs a human-readable Markdown summary.
 - [x] Task: Analyze the final report and identify any critical failures or hallucinations.

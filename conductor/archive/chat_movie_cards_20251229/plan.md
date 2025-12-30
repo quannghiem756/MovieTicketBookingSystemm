@@ -33,8 +33,8 @@ Final end-to-end testing and UI refinements.
 ## Phase 5: Pagination and Book Button
 Address user feedback to add pagination for results and a dedicated Book button on cards.
 
-- [ ] Task: Update `RecommendationController` to return top 10 results instead of 5.
-- [ ] Task: Update `MovieRecommendationChat` to implement "Show More" functionality (display initial batch, click to show more).
-- [ ] Task: Update `ChatMovieCard` to add a "Book Ticket" button linking to the movie detail page.
-- [ ] Task: Conductor - User Manual Verification 'Phase 5: Pagination and Book Button' (Protocol in workflow.md)
+- [x] Task: Update `RecommendationController` to return top 10 results instead of 5. (Already returning 10 by default from vector service) [4627480]
+- [x] Task: Update `MovieRecommendationChat` to implement pagination functionality (display 2 movies at a time with Previous/Next controls). [e8809c3]
+- [x] Task: Update `ChatMovieCard` to add a "Book Ticket" button linking to the movie detail page. [ca4a35b]
+- [x] Task: Conductor - User Manual Verification 'Phase 5: Pagination and Book Button' (Protocol in workflow.md) [e8809c3]
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Final Verification' (Protocol in workflow.md)

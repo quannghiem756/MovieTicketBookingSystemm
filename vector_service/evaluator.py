@@ -13,7 +13,7 @@ class ResponseEvaluator:
             raise ValueError("OPENAI_API_KEY must be provided or set as an environment variable.")
         
         self.client = OpenAI(api_key=self.api_key)
-        self.model = "gpt-4o" # Or gpt-3.5-turbo if preferred for cost
+        self.model = "gpt-5-mini" # Or gpt-3.5-turbo if preferred for cost
 
     def evaluate(self, prompt, response, context=""):
         evaluation_prompt = f"""

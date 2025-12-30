@@ -20,9 +20,9 @@ This plan outlines the steps to include `posterUrl`, `releaseDate`, `duration`, 
 - [x] Task: Verify via `curl` or Postman that the `/search` and `/movies` endpoints now return the complete metadata. bed7c3b
 - [x] Task: Conductor - User Manual Verification 'Validation and Index Rebuild' (Protocol in workflow.md) 17ba28a
 
-## Phase 4: Reset Database API
+## Phase 4: Reset Database API [checkpoint: 385e6e7]
 - [x] Task: Create a new test file `vector_service/tests/test_reset_db.py` to verify the `/reset-db` endpoint clears the database.
 - [x] Task: **Red Phase:** Run the new tests and confirm they fail (endpoint not found or not working).
 - [x] Task: **Green Phase:** Implement the `/reset-db` endpoint in `movie_vector_service.py` to delete the collection or clear all data.
-- [~] Task: **Green Phase:** Run tests and verify they pass.
-- [x] Task: Conductor - User Manual Verification 'Reset Database API' (Protocol in workflow.md) de0ab85
+- [x] Task: **Green Phase:** Run tests and verify they pass.
+- [x] Task: Conductor - User Manual Verification 'Reset Database API' (Protocol in workflow.md) 385e6e7

@@ -800,6 +800,30 @@ def get_movies():
             'count': 0
         })
 
+@app.route('/reset-db', methods=['POST'])
+def reset_db():
+    """Reset the vector database by deleting the collection"""
+    global vector_store, movies_data, movie_ids
+    
+    if vector_store is None:
+        return jsonify({'status': 'error', 'message': 'Vector store not initialized'}), 500
+        
+    try:
+        # Delete the collection using the underlying client
+        vector_store.delete_collection()
+        
+        # Re-initialize the vector store (empty)
+        initialize_chroma()
+        
+        # Clear in-memory caches
+        movies_data = []
+        movie_ids = []
+        
+        logger.info("Vector database has been reset")
+        return jsonify({'status': 'success', 'message': 'Vector database has been reset'})
+    except Exception as e:
+        logger.error(f"Error resetting vector database: {e}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 def initialize_chroma():
     """Initialize LangChain vector store with fallback options"""

@@ -12,6 +12,7 @@ Currently, the `movie_vector_service` only stores a limited subset of movie data
 2.  **Retrieval Update:** Update `search_similar_movies`, `get_movies`, and any fallback mechanisms (like `get_recommendations` fallback) to correctly extract and return these new metadata fields.
 3.  **Data Consistency:** Ensure that when the main API is queried for movies, these new fields are correctly mapped to the vector store documents.
 4.  **Index Rebuild:** Provide a way to trigger a re-indexing of the existing movies to populate the new metadata fields.
+5.  **Reset Database:** Provide an endpoint `/reset-db` to clear all data from the vector database.
 
 ## Non-Functional Requirements
 - **Performance:** Adding these fields to metadata should have negligible impact on search latency.

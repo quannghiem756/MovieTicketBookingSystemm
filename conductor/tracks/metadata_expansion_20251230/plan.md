@@ -8,12 +8,12 @@ This plan outlines the steps to include `posterUrl`, `releaseDate`, `duration`, 
 - [x] Task: Conductor - User Manual Verification 'Preparation and Testing Setup' (Protocol in workflow.md) c7c5769
 
 ## Phase 2: Implementation (TDD)
-- [ ] Task: **Red Phase:** Run the new tests and confirm they fail because fields are missing.
-- [ ] Task: **Green Phase:** Update `build_vector_index` in `movie_vector_service.py` to include `posterUrl`, `releaseDate`, `duration`, and `trailerUrl` in document metadata.
-- [ ] Task: **Green Phase:** Update `search_similar_movies` and `get_movies` to extract these new fields from metadata.
-- [ ] Task: **Green Phase:** Run tests and verify they pass.
-- [ ] Task: **Refactor:** Clean up any redundant data mapping in `movie_vector_service.py`.
-- [ ] Task: Conductor - User Manual Verification 'Implementation' (Protocol in workflow.md)
+- [x] Task: **Red Phase:** Run the new tests and confirm they fail because fields are missing. 2262357
+- [x] Task: **Green Phase:** Update `build_vector_index` in `movie_vector_service.py` to include `posterUrl`, `releaseDate`, `duration`, and `trailerUrl` in document metadata. 1dc5856
+- [x] Task: **Green Phase:** Update `search_similar_movies` and `get_movies` to extract these new fields from metadata. 1dc5856
+- [x] Task: **Green Phase:** Run tests and verify they pass. 1dc5856
+- [x] Task: **Refactor:** Clean up any redundant data mapping in `movie_vector_service.py`. 1dc5856
+- [~] Task: Conductor - User Manual Verification 'Implementation' (Protocol in workflow.md)
 
 ## Phase 3: Validation and Index Rebuild
 - [ ] Task: Start the `movie_vector_service` and trigger the `/rebuild-index` endpoint.

@@ -8,10 +8,10 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Intent Classification & Refusal Logic' (Protocol in workflow.md) 7f817b3
 
 ## Phase 2: System Prompt Strengthening & Grounding
-- [ ] Task: Update the system prompt in `movie_vector_service.py` with strict grounding rules ("Only use provided context") and persona defense instructions.
-- [ ] Task: Write failing integration tests in `vector_service/tests/test_grounding.py` that expect refusals when context doesn't match the query.
-- [ ] Task: Refine the LLM prompt until all grounding tests pass and hallucinations are eliminated in local runs.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: System Prompt Strengthening & Grounding' (Protocol in workflow.md)
+- [x] Task: Update the system prompt in `movie_vector_service.py` with strict grounding rules ("Only use provided context") and persona defense instructions. 4a8acd2
+- [x] Task: Write failing integration tests in `vector_service/tests/test_grounding.py` that expect refusals when context doesn't match the query. 4a8acd2
+- [x] Task: Refine the LLM prompt until all grounding tests pass and hallucinations are eliminated in local runs. 4a8acd2
+- [x] Task: Conductor - User Manual Verification 'Phase 2: System Prompt Strengthening & Grounding' (Protocol in workflow.md) 4a8acd2
 
 ## Phase 3: Performance & Vague Query Fallback
 - [ ] Task: Increase the timeout configuration in `movie_vector_service.py` and any associated client-side calls (if applicable) to 60s.

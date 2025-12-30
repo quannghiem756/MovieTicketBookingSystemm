@@ -18,4 +18,6 @@ This plan outlines the steps to include `posterUrl`, `releaseDate`, `duration`, 
 ## Phase 3: Validation and Index Rebuild
 - [x] Task: Start the `movie_vector_service` and trigger the `/rebuild-index` endpoint. bed7c3b
 - [x] Task: Verify via `curl` or Postman that the `/search` and `/movies` endpoints now return the complete metadata. bed7c3b
-- [~] Task: Conductor - User Manual Verification 'Validation and Index Rebuild' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Validation and Index Rebuild' (Protocol in workflow.md) 10cf323
+
+## Phase 4: Reset Database API

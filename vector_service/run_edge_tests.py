@@ -78,6 +78,6 @@ if __name__ == "__main__":
     import dotenv
     dotenv.load_dotenv()
     runner = TestRunner()
-    # By default, don't evaluate to save credits during development
-    runner.run_all(evaluate=False)
+    # Enable evaluation for Phase 3
+    runner.run_all(evaluate=True)
     print(f"Results saved to {runner.results_path}")

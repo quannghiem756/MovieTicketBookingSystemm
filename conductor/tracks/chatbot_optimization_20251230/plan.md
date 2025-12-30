@@ -5,7 +5,7 @@
 - [x] Task: Write unit tests in `vector_service/tests/test_intent_classifier.py` to verify classification of various edge case prompts. 9903af5
 - [x] Task: Implement the classifier logic using a lightweight LLM call or robust pattern matching. 9903af5
 - [x] Task: Integrate the classifier into the main request flow in `movie_vector_service.py` to return early refusals for off-topic/malicious queries. 9903af5
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Intent Classification & Refusal Logic' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Intent Classification & Refusal Logic' (Protocol in workflow.md) 7f817b3
 
 ## Phase 2: System Prompt Strengthening & Grounding
 - [ ] Task: Update the system prompt in `movie_vector_service.py` with strict grounding rules ("Only use provided context") and persona defense instructions.

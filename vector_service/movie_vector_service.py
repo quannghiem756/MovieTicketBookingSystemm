@@ -290,6 +290,31 @@ from intent_classifier import classify_query_intent
 
 # Intent classification is now handled internally within the recommend endpoint
 
+def get_popular_movies(limit=5):
+    """Retrieve a curated list of trending or popular movies as a fallback"""
+    try:
+        all_movies = fetch_movies_from_api()
+        if not all_movies:
+            return []
+            
+        # For now, sort by rating and return top K as a simple 'popular' heuristic
+        # In a real app, this might query a specific 'trending' endpoint or use booking counts
+        def get_rating_value(movie):
+            rating = movie.get('rating', '0')
+            try:
+                # Handle ratings like '8.5/10' or '4.5'
+                if '/' in str(rating):
+                    return float(str(rating).split('/')[0])
+                return float(rating)
+            except:
+                return 0.0
+
+        sorted_movies = sorted(all_movies, key=get_rating_value, reverse=True)
+        return sorted_movies[:limit]
+    except Exception as e:
+        logger.error(f"Error in get_popular_movies: {e}")
+        return []
+
 @app.route('/recommend', methods=['POST'])
 def get_recommendations():
     """Get recommendations or available movies based on intent using LangChain LLM with retrieved context"""
@@ -493,14 +518,23 @@ def get_recommendations():
         results = search_similar_movies(query, top_k=10)
         relevant_movies = [result['movie'] for result in results]
 
-        if not relevant_movies:
+        # Vague query detection or no results
+        is_vague = len(query.split()) <= 2 and intent == 'movie_recommendation'
+        
+        if not relevant_movies or is_vague:
+            popular_movies = get_popular_movies(limit=5)
+            message = "I couldn't find specific matches for your request, but here are some popular movies you might enjoy!"
+            if language == 'vi':
+                message = "Tôi không tìm thấy kết quả chính xác cho yêu cầu của bạn, nhưng đây là một số phim phổ biến mà bạn có thể thích!"
+            
             return jsonify({
                 'query': query,
-                'recommendations': [],
-                'total': 0,
-                'source': 'no_matches',
+                'recommendations': popular_movies,
+                'total': len(popular_movies),
+                'source': 'popular_fallback',
                 'intent': intent,
-                'message': 'No movies match your criteria. Try mentioning genres like action, comedy, drama or specific actors/directors you like!'
+                'language': language,
+                'message': message
             })
 
         # Create context from relevant movies for LLM

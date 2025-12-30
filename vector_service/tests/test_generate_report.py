@@ -23,10 +23,7 @@ class TestReportGenerator(unittest.TestCase):
         generate_report(results_path='fake_results.json', output_path=output_file)
         
         # Check if open was called to write the report
-        # The first call is to read the results, subsequent calls are for the report
-        handle = mock_file()
-        calls = [c for c in mock_file.mock_calls if 'write' in str(c)]
-        self.assertTrue(len(calls) > 0)
+        mock_file.assert_any_call(output_file, 'w', encoding='utf-8')
 
 if __name__ == '__main__':
     unittest.main()

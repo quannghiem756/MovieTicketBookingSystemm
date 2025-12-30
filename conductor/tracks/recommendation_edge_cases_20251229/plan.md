@@ -11,7 +11,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Test Execution Engine' (Protocol in workflow.md)
 
 ## Phase 3: Evaluation & Reporting
-- [ ] Task: Execute the full edge case test suite and capture the results in a raw JSON format.
-- [ ] Task: Create a report generator `vector_service/generate_report.py` that parses the evaluation results and outputs a human-readable Markdown summary.
-- [ ] Task: Analyze the final report and identify any critical failures or hallucinations.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Evaluation & Reporting' (Protocol in workflow.md)
+- [x] Task: Execute the full edge case test suite and capture the results in a raw JSON format.
+- [x] Task: Create a report generator `vector_service/generate_report.py` that parses the evaluation results and outputs a human-readable Markdown summary.
+- [x] Task: Analyze the final report and identify any critical failures or hallucinations.
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Evaluation & Reporting' (Protocol in workflow.md)

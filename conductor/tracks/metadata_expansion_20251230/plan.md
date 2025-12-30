@@ -15,9 +15,9 @@ This plan outlines the steps to include `posterUrl`, `releaseDate`, `duration`, 
 - [x] Task: **Refactor:** Clean up any redundant data mapping in `movie_vector_service.py`. 1dc5856
 - [x] Task: Conductor - User Manual Verification 'Implementation' (Protocol in workflow.md) 8eb4541
 
-## Phase 3: Validation and Index Rebuild
+## Phase 3: Validation and Index Rebuild [checkpoint: 17ba28a]
 - [x] Task: Start the `movie_vector_service` and trigger the `/rebuild-index` endpoint. bed7c3b
 - [x] Task: Verify via `curl` or Postman that the `/search` and `/movies` endpoints now return the complete metadata. bed7c3b
-- [x] Task: Conductor - User Manual Verification 'Validation and Index Rebuild' (Protocol in workflow.md) 10cf323
+- [x] Task: Conductor - User Manual Verification 'Validation and Index Rebuild' (Protocol in workflow.md) 17ba28a
 
 ## Phase 4: Reset Database API

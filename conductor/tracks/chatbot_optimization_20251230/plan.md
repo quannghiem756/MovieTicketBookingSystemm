@@ -14,11 +14,11 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: System Prompt Strengthening & Grounding' (Protocol in workflow.md) 4a8acd2
 
 ## Phase 3: Performance & Vague Query Fallback
-- [ ] Task: Increase the timeout configuration in `movie_vector_service.py` and any associated client-side calls (if applicable) to 60s.
-- [ ] Task: Implement a `get_popular_movies()` fallback method that retrieves a curated list of trending films from the database.
-- [ ] Task: Update the RAG logic to detect vague queries or low-confidence vector results and trigger the popular fallback.
-- [ ] Task: Verify with a test script that "good movie" now returns results within the new timeout window.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Performance & Vague Query Fallback' (Protocol in workflow.md)
+- [x] Task: Increase the timeout configuration in `movie_vector_service.py` and any associated client-side calls (if applicable) to 60s. f7b1d88
+- [x] Task: Implement a `get_popular_movies()` fallback method that retrieves a curated list of trending films from the database. f7b1d88
+- [x] Task: Update the RAG logic to detect vague queries or low-confidence vector results and trigger the popular fallback. f7b1d88
+- [x] Task: Verify with a test script that "good movie" now returns results within the new timeout window. f7b1d88
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Performance & Vague Query Fallback' (Protocol in workflow.md) f7b1d88
 
 ## Phase 4: Final Validation & Regression Testing
 - [ ] Task: Re-run the full edge case test suite using `vector_service/run_edge_tests.py`.

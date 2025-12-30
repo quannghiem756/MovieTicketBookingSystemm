@@ -1,0 +1,21 @@
+# Plan - Movie Metadata Expansion in Vector Service
+
+This plan outlines the steps to include `posterUrl`, `releaseDate`, `duration`, and `trailerUrl` in the `movie_vector_service` metadata.
+
+## Phase 1: Preparation and Testing Setup
+- [x] Task: Analyze current metadata extraction in `movie_vector_service.py` 8598778
+- [x] Task: Create a new test file `vector_service/tests/test_metadata_expansion.py` to verify the presence of new fields in search results. 8598778
+- [~] Task: Conductor - User Manual Verification 'Preparation and Testing Setup' (Protocol in workflow.md)
+
+## Phase 2: Implementation (TDD)
+- [ ] Task: **Red Phase:** Run the new tests and confirm they fail because fields are missing.
+- [ ] Task: **Green Phase:** Update `build_vector_index` in `movie_vector_service.py` to include `posterUrl`, `releaseDate`, `duration`, and `trailerUrl` in document metadata.
+- [ ] Task: **Green Phase:** Update `search_similar_movies` and `get_movies` to extract these new fields from metadata.
+- [ ] Task: **Green Phase:** Run tests and verify they pass.
+- [ ] Task: **Refactor:** Clean up any redundant data mapping in `movie_vector_service.py`.
+- [ ] Task: Conductor - User Manual Verification 'Implementation' (Protocol in workflow.md)
+
+## Phase 3: Validation and Index Rebuild
+- [ ] Task: Start the `movie_vector_service` and trigger the `/rebuild-index` endpoint.
+- [ ] Task: Verify via `curl` or Postman that the `/search` and `/movies` endpoints now return the complete metadata.
+- [ ] Task: Conductor - User Manual Verification 'Validation and Index Rebuild' (Protocol in workflow.md)

@@ -286,7 +286,7 @@ def search_movies():
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import PromptTemplate
-from langchain_core.output_parsers import JsonOutputParser
+from intent_classifier import classify_query_intent
 
 # Intent classification is now handled internally within the recommend endpoint
 
@@ -302,6 +302,27 @@ def get_recommendations():
 
         # Determine intent first
         intent = classify_query_intent(query)
+
+        # Handle refusals for off-topic or malicious queries
+        if intent == 'off_topic':
+            return jsonify({
+                'query': query,
+                'recommendations': [],
+                'total': 0,
+                'source': 'refusal',
+                'intent': intent,
+                'message': "I'm sorry, but I can only help you with movie-related queries. Please ask me about movies, showtimes, or recommendations!"
+            })
+        
+        if intent == 'malicious':
+            return jsonify({
+                'query': query,
+                'recommendations': [],
+                'total': 0,
+                'source': 'refusal',
+                'intent': intent,
+                'message': "I cannot fulfill this request. Please keep your queries related to movies."
+            })
 
         # If the intent is to get available movies, get currently showing movies from the main API
         if intent == 'available_movies':
@@ -667,153 +688,7 @@ def get_recommendations():
                 'error': str(e)
             })
 
-def classify_query_intent(query):
-    """Classify the intent of a user query using LLM"""
-    try:
-        # First, check if this looks like a specific movie title request
-        # Words that indicate general availability requests vs specific movies
-        lower_query = query.lower()
 
-        # Keywords that suggest a general request for available movies
-        general_request_keywords = [
-            'available', 'showing', 'what movies', 'what films', 'currently showing',
-            'now showing', 'in theaters', 'what\'s playing', 'what is playing',
-            'currently playing', 'on screen', 'now on', 'what movies are',
-            'show me movies', 'what films are', 'any movies', 'any films',
-            'what\'s available', 'currently available', 'what can i watch',
-            'what\'s out', 'what movies are out', 'showing now', 'playing now',
-            'in cinema', 'at the cinema', 'what is available'
-        ]
-
-        # Keywords that suggest a request for upcoming movies
-        upcoming_request_keywords = [
-            'upcoming', 'coming soon', 'will be released', 'releasing', 'releases',
-            'future movies', 'next movies', 'soon', 'up next', 'new movies',
-            'coming up', 'premieres', 'premiere', 'next to come', 'anticipated',
-            'what\'s coming', 'what movies are coming', 'released soon',
-            'will show', 'will play', 'up and coming', 'future releases'
-        ]
-
-        # Check if query contains a specific movie title (heuristic: single quotes, capitalized words, etc.)
-        # But also check if it has general request keywords
-        has_general_keyword = any(keyword in lower_query for keyword in general_request_keywords)
-        has_upcoming_keyword = any(keyword in lower_query for keyword in upcoming_request_keywords)
-        is_specific_movie_request = not has_general_keyword and not has_upcoming_keyword and (
-            len(query.split()) <= 4 and  # Probably a movie title
-            any(word.isupper() or word.istitle() for word in query.split() if len(word) > 2)  # Has capitalized words
-        )
-
-        # Create prompt for intent classification
-        prompt_template = """Classify the intent of this user query: "{query}"
-
-        Context:
-        - Has general availability keywords: {has_general_keyword}
-        - Has upcoming movies keywords: {has_upcoming_keyword}
-        - Looks like specific movie request: {is_specific_movie_request}
-
-        Available intent types:
-        - available_movies: if asking for all currently available/showing movies, what's playing in general
-        - upcoming_movies: if asking for movies that will be released/available in the future
-        - movie_recommendation: if asking for specific movies or recommendations based on preferences
-        - general_query: for other types of queries
-
-        For example:
-        - "What's playing now?" -> available_movies
-        - "What movies are coming soon?" -> upcoming_movies
-        - "Show me upcoming releases" -> upcoming_movies
-        - "Is Spider-Man showing?" -> movie_recommendation (looking for specific movie)
-        - "Show me movies" -> available_movies
-        - "Recommend action movies" -> movie_recommendation
-
-        Respond with only the intent type: available_movies, upcoming_movies, movie_recommendation, or general_query
-        Intent:"""
-
-        # Choose LLM based on available API keys
-        if GEMINI_API_KEY:
-            # Use Google's Gemini
-            llm = ChatGoogleGenerativeAI(model="gemini-flash-latest", google_api_key=GEMINI_API_KEY)
-        elif OPENAI_API_KEY:
-            # Use OpenAI's GPT
-            llm = ChatOpenAI(model="gpt-3.5-turbo", api_key=OPENAI_API_KEY)
-        else:
-            # If no LLM is available, use our heuristic
-            if has_general_keyword:
-                return 'available_movies'
-            elif is_specific_movie_request:
-                return 'movie_recommendation'
-            else:
-                # Use fallback keyword matching
-                if any(keyword in lower_query for keyword in general_request_keywords):
-                    return 'available_movies'
-                else:
-                    return 'movie_recommendation'
-
-        # Create a chain with the prompt and LLM
-        prompt = PromptTemplate(
-            input_variables=["query", "has_general_keyword", "is_specific_movie_request"],
-            template=prompt_template
-        )
-
-        chain = prompt | llm
-
-        # Run the chain
-        response = chain.invoke({
-            "query": query,
-            "has_general_keyword": has_general_keyword,
-            "has_upcoming_keyword": has_upcoming_keyword,
-            "is_specific_movie_request": is_specific_movie_request
-        })
-
-        # Extract the response text
-        if hasattr(response, 'content'):
-            response_text = response.content
-        elif isinstance(response, str):
-            response_text = response
-        elif hasattr(response, 'text'):
-            response_text = response.text
-        elif isinstance(response, dict):
-            response_text = str(response)
-        else:
-            response_text = str(response)
-
-        # Ensure response_text is a string and handle if it's a list
-        if isinstance(response_text, list):
-            # Convert any items in the list to strings before joining
-            response_text = ' '.join(str(item) for item in response_text)
-        elif not isinstance(response_text, str):
-            response_text = str(response_text)
-
-        # Clean the response to extract the intent
-        cleaned_response = response_text.strip().lower()
-
-        # Determine intent from response
-        if 'available_movies' in cleaned_response or ('available' in cleaned_response and 'movies' in cleaned_response):
-            return 'available_movies'
-        elif 'upcoming_movies' in cleaned_response or ('upcoming' in cleaned_response and 'movies' in cleaned_response) or 'upcoming' in cleaned_response:
-            return 'upcoming_movies'
-        elif 'movie_recommendation' in cleaned_response or 'recommendation' in cleaned_response or 'movie' in cleaned_response:
-            return 'movie_recommendation'
-        elif 'general_query' in cleaned_response:
-            return 'general_query'
-        else:
-            # Default behavior based on our heuristics
-            if has_upcoming_keyword:
-                return 'upcoming_movies'
-            elif has_general_keyword:
-                return 'available_movies'
-            else:
-                return 'movie_recommendation'
-
-    except Exception as e:
-        logger.error(f"Error in classify_query_intent: {e}")
-        # Fallback to keyword matching if LLM processing fails
-        lower_query = query.lower()
-        if any(keyword in lower_query for keyword in ['available', 'showing', 'what movies', 'what films', 'currently showing', 'now showing', 'in theaters', 'what\'s playing', 'what is playing', 'currently playing', 'on screen', 'now on', 'what movies are', 'show me movies', 'what films are', 'any movies', 'any films', 'what\'s available', 'currently available']):
-            return 'available_movies'
-        elif any(keyword in lower_query for keyword in ['upcoming', 'coming soon', 'will be released', 'releasing', 'releases', 'future movies', 'next movies', 'soon', 'up next', 'new movies', 'coming up', 'premieres', 'premiere', 'next to come', 'anticipated', 'what\'s coming', 'what movies are coming', 'released soon', 'will show', 'will play', 'up and coming', 'future releases']):
-            return 'upcoming_movies'
-        else:
-            return 'movie_recommendation'
 
 @app.route('/movies', methods=['GET'])
 def get_movies():

@@ -301,27 +301,44 @@ def get_recommendations():
             return jsonify({'error': 'Query is required'}), 400
 
         # Determine intent first
-        intent = classify_query_intent(query)
+        intent_result = classify_query_intent(query)
+        
+        # Handle tuple return (intent, language) or single string (legacy support/fallback)
+        if isinstance(intent_result, tuple):
+            intent, language = intent_result
+        else:
+            intent = intent_result
+            language = 'en'
 
         # Handle refusals for off-topic or malicious queries
         if intent == 'off_topic':
+            message = "I'm sorry, but I can only help you with movie-related queries. Please ask me about movies, showtimes, or recommendations!"
+            if language == 'vi':
+                message = "Xin lỗi, tôi chỉ có thể giúp bạn với các câu hỏi liên quan đến phim ảnh. Vui lòng hỏi tôi về phim, lịch chiếu hoặc gợi ý phim!"
+            
             return jsonify({
                 'query': query,
                 'recommendations': [],
                 'total': 0,
                 'source': 'refusal',
                 'intent': intent,
-                'message': "I'm sorry, but I can only help you with movie-related queries. Please ask me about movies, showtimes, or recommendations!"
+                'language': language,
+                'message': message
             })
         
         if intent == 'malicious':
+            message = "I cannot fulfill this request. Please keep your queries related to movies."
+            if language == 'vi':
+                message = "Tôi không thể thực hiện yêu cầu này. Vui lòng giữ các câu hỏi liên quan đến phim ảnh."
+                
             return jsonify({
                 'query': query,
                 'recommendations': [],
                 'total': 0,
                 'source': 'refusal',
                 'intent': intent,
-                'message': "I cannot fulfill this request. Please keep your queries related to movies."
+                'language': language,
+                'message': message
             })
 
         # If the intent is to get available movies, get currently showing movies from the main API

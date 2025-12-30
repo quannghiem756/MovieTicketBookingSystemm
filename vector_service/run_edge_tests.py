@@ -42,20 +42,17 @@ class TestRunner:
                 }
 
                 if evaluate and self.evaluator:
-                    # Construct context string for the judge
+                    # Construct context string for the judge - provide ALL recommendations
                     context = ""
-                    if 'recommendations' in data:
-                        context = json.dumps(data['recommendations'][:3]) # Top 3 for context
+                    if 'recommendations' in data and data['recommendations']:
+                        context = "Retrieved recommendations provided to user: " + json.dumps(data['recommendations'])
                     
-                    # We need the actual text response from the chatbot, 
-                    # but the /recommend endpoint currently returns a list of movies.
-                    # Wait, looking at movie_vector_service.py, /recommend returns a JSON with 'recommendations' list.
-                    # It doesn't seem to return a natural language string.
-                    # Actually, for 'no_matches' and other fallbacks, it returns a 'message' field.
+                    if 'intent' in data:
+                        context += f"\nDetected Intent: {data['intent']}"
                     
                     chat_text = data.get('message', "")
                     if not chat_text and data.get('recommendations'):
-                        chat_text = f"I recommend: {', '.join([m.get('title', 'Unknown') for m in data['recommendations']])}"
+                        chat_text = f"I recommend these movies: {', '.join([m.get('title', 'Unknown') for m in data['recommendations']])}"
                     
                     evaluation = self.evaluator.evaluate(case['prompt'], chat_text, context)
                     result['evaluation'] = evaluation

@@ -43,8 +43,8 @@ class TestGrounding(unittest.TestCase):
             mock_chain = MagicMock()
             mock_prompt.__or__.return_value = mock_chain
             
-            # LLM returns an ID that is NOT '1'
-            mock_chain.invoke.return_value.content = '["999"]'
+            # LLM returns a JSON with an ID that is NOT '1'
+            mock_chain.invoke.return_value.content = '{"message": "Try this", "recommended_ids": ["999"]}'
             
             response = self.app.post('/recommend', 
                 data=json.dumps({'query': 'Recommend me a movie'}),
@@ -52,11 +52,21 @@ class TestGrounding(unittest.TestCase):
             )
             data = json.loads(response.data)
             
-            # The current implementation falls back to top retrieved if LLM output is empty or filtered
-            # But here, if the ID 999 is not found, it should NOT be in the recommendations
-            for rec in data['recommendations']:
-                self.assertNotEqual(str(rec['id']), '999')
-                self.assertEqual(str(rec['id']), '1')
+            # The current implementation filters out '999' as it's not in relevant_movies
+            # And if both filtered and message are present, it uses them.
+            # But wait, if recommended_movies is empty, it might fallback.
+            
+            # In my new code:
+            # if recommended_ids: 
+            #    recommended_movies = [m for m in relevant_movies if m['id'] in recommended_ids]
+            # else: recommended_movies = []
+            
+            # If '999' doesn't match, recommended_movies is empty.
+            # If message is "Try this", then message is not empty.
+            # So it returns recommended_movies=[] and message="Try this".
+            
+            self.assertEqual(len(data['recommendations']), 0)
+            self.assertEqual(data['message'], "Try this")
 
 if __name__ == '__main__':
     unittest.main()

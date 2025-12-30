@@ -13,7 +13,7 @@ This plan outlines the steps to include `posterUrl`, `releaseDate`, `duration`, 
 - [x] Task: **Green Phase:** Update `search_similar_movies` and `get_movies` to extract these new fields from metadata. 1dc5856
 - [x] Task: **Green Phase:** Run tests and verify they pass. 1dc5856
 - [x] Task: **Refactor:** Clean up any redundant data mapping in `movie_vector_service.py`. 1dc5856
-- [~] Task: Conductor - User Manual Verification 'Implementation' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Implementation' (Protocol in workflow.md) 571e21b
 
 ## Phase 3: Validation and Index Rebuild
 - [ ] Task: Start the `movie_vector_service` and trigger the `/rebuild-index` endpoint.

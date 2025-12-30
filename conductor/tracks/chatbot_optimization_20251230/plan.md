@@ -21,6 +21,6 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Performance & Vague Query Fallback' (Protocol in workflow.md) f7b1d88
 
 ## Phase 4: Final Validation & Regression Testing
-- [ ] Task: Re-run the full edge case test suite using `vector_service/run_edge_tests.py`.
-- [ ] Task: Generate a new `edge_case_report.md` using `vector_service/generate_report.py` and verify scores have improved.
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Final Validation & Regression Testing' (Protocol in workflow.md)
+- [x] Task: Re-run the full edge case test suite using `vector_service/run_edge_tests.py`. 699c43e
+- [x] Task: Generate a new `edge_case_report.md` using `vector_service/generate_report.py` and verify scores have improved. 699c43e
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Final Validation & Regression Testing' (Protocol in workflow.md) 699c43e

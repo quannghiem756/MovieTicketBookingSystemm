@@ -11,9 +11,9 @@ The goal of this phase is to update the backend services to handle the filtering
 ## Phase 2: Frontend UI Updates
 This phase focuses on updating the customer-facing components to handle the "Booking Closed" state and ensuring past showtimes are not rendered.
 
-- [ ] Task: Update showtime listing components to check for the 15-minute "Booking Closed" window.
-- [ ] Task: Replace the "Book" button with "Booking Closed" text when the threshold is met.
-- [ ] Task: Verify that search results and widgets correctly hide showtimes that have already started.
+- [x] Task: Update showtime listing components to check for the 15-minute "Booking Closed" window. efeb35d
+- [x] Task: Replace the "Book" button with "Booking Closed" text when the threshold is met. efeb35d
+- [x] Task: Verify that search results and widgets correctly hide showtimes that have already started. efeb35d
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Frontend UI Updates' (Protocol in workflow.md)
 
 ## Phase 3: Admin Dashboard Verification

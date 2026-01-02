@@ -1,0 +1,8 @@
+{
+  "track_id": "hide_past_showtimes_20260102",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-01-02T16:22:00Z",
+  "updated_at": "2026-01-02T16:22:00Z",
+  "description": "Showtime on the showtime page must be hidden when it past that showtime"
+}

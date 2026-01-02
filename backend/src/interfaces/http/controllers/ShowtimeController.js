@@ -58,12 +58,12 @@ class ShowtimeController {
 
   async getShowtimesByDate(req, res) {
     try {
-      const { date } = req.query;
+      const { date, filterPast } = req.query;
       if (!date) {
         return res.status(400).json({ error: 'Date parameter is required' });
       }
 
-      const showtimes = await this.showtimeService.getShowtimesByDate(date);
+      const showtimes = await this.showtimeService.getShowtimesByDate(date, filterPast === 'true');
       res.json(showtimes);
     } catch (error) {
       res.status(500).json({ error: error.message });

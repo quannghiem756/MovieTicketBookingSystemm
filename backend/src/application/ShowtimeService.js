@@ -34,15 +34,28 @@ class ShowtimeService {
   }
 
   async getFutureShowtimesByMovieId(movieId) {
-    return await this.showtimeRepository.findFutureByMovieId(movieId);
+    const showtimes = await this.showtimeRepository.findFutureByMovieId(movieId);
+    const now = new Date();
+    // Filter out 'Past' showtimes
+    return showtimes.filter(st => this.getShowtimeStatus(st, now) !== 'Past');
   }
 
-  async getShowtimesByDateAndTheater(date, theaterId) {
-    return await this.showtimeRepository.findByDateAndTheater(date, theaterId);
+  async getShowtimesByDateAndTheater(date, theaterId, filterPast = false) {
+    const showtimes = await this.showtimeRepository.findByDateAndTheater(date, theaterId);
+    if (filterPast) {
+      const now = new Date();
+      return showtimes.filter(st => this.getShowtimeStatus(st, now) !== 'Past');
+    }
+    return showtimes;
   }
 
-  async getShowtimesByDate(date) {
-    return await this.showtimeRepository.findByDate(date);
+  async getShowtimesByDate(date, filterPast = false) {
+    const showtimes = await this.showtimeRepository.findByDate(date);
+    if (filterPast) {
+      const now = new Date();
+      return showtimes.filter(st => this.getShowtimeStatus(st, now) !== 'Past');
+    }
+    return showtimes;
   }
 
   async updateShowtime(id, showtimeData) {

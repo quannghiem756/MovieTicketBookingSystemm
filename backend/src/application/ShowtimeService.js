@@ -63,6 +63,24 @@ class ShowtimeService {
   async deleteShowtime(id) {
     return await this.showtimeRepository.delete(id);
   }
+
+  getShowtimeStatus(showtime, currentTime = new Date()) {
+    const startDateTime = new Date(showtime.showDate);
+    // showTime format is "HH:mm"
+    const [hours, minutes] = showtime.showTime.split(':').map(Number);
+    startDateTime.setUTCHours(hours, minutes, 0, 0);
+
+    const diffInMs = startDateTime.getTime() - currentTime.getTime();
+    const diffInMinutes = diffInMs / (1000 * 60);
+
+    if (diffInMinutes <= 0) {
+      return 'Past';
+    } else if (diffInMinutes <= 15) {
+      return 'Closed';
+    } else {
+      return 'Active';
+    }
+  }
 }
 
 module.exports = ShowtimeService;

@@ -336,29 +336,33 @@ const ShowtimeMovieCard = ({ movie }) => {
             )}
 
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-              {filteredShowtimes.slice(0, 6).map((showtime, index) => (
-                <Chip
-                  key={showtime.id || index}
-                  label={formatTime(showtime.showTime)}
-                  size="small"
-                  component={Link}
-                  to={`/book/${movie.id}/${showtime.id}`}
-                  onClick={(e) => {
-                    // Prevent default behavior if needed and ensure proper navigation
-                    e.stopPropagation();
-                  }}
-                  sx={{
-                    backgroundColor: 'rgba(33, 150, 243, 0.2)',
-                    color: '#2196F3',
-                    fontWeight: 500,
-                    fontSize: '0.75rem',
-                    cursor: 'pointer',
-                    '&:hover': {
-                      backgroundColor: 'rgba(33, 150, 243, 0.3)',
-                    }
-                  }}
-                />
-              ))}
+              {filteredShowtimes.slice(0, 6).map((showtime, index) => {
+                  const isClosed = showtime.status === 'Closed';
+                  
+                  return (
+                    <Chip
+                      key={showtime.id || index}
+                      label={isClosed ? 'Closed' : formatTime(showtime.showTime)}
+                      size="small"
+                      component={isClosed ? 'div' : Link}
+                      to={isClosed ? undefined : `/book/${movie.id}/${showtime.id}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                      sx={{
+                        backgroundColor: isClosed ? 'rgba(117, 117, 117, 0.2)' : 'rgba(33, 150, 243, 0.2)',
+                        color: isClosed ? 'text.disabled' : '#2196F3',
+                        fontWeight: 500,
+                        fontSize: '0.75rem',
+                        cursor: isClosed ? 'default' : 'pointer',
+                        pointerEvents: isClosed ? 'none' : 'auto',
+                        '&:hover': {
+                          backgroundColor: isClosed ? 'rgba(117, 117, 117, 0.2)' : 'rgba(33, 150, 243, 0.3)',
+                        }
+                      }}
+                    />
+                  );
+              })}
               {filteredShowtimes.length > 6 && (
                 <Chip
                   label={`+${filteredShowtimes.length - 6}`}

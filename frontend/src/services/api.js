@@ -148,7 +148,7 @@ export const deleteMovie = (id) => api.delete(`/movies/${id}`);
 export const getShowtimes = (page = 1, limit = 10) => api.get(`/showtimes?page=${page}&limit=${limit}`);
 export const getShowtimesByMovieId = (movieId) => api.get(`/showtimes/movie/${movieId}`);
 export const getFutureShowtimesByMovieId = (movieId) => api.get(`/showtimes/movie/${movieId}/future`);
-export const getShowtimesByDate = (date) => api.get(`/showtimes/date?date=${date}`);
+export const getShowtimesByDate = (date, filterPast = false) => api.get(`/showtimes/date?date=${date}&filterPast=${filterPast}`);
 export const getShowtimeById = (id) => api.get(`/showtimes/${id}`);
 export const createShowtime = (showtime) => api.post('/showtimes', showtime);
 export const updateShowtime = (id, showtime) => api.put(`/showtimes/${id}`, showtime);

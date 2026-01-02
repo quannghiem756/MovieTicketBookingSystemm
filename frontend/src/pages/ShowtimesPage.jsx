@@ -52,7 +52,7 @@ const ShowtimesPage = () => {
       // Format date to YYYY-MM-DD
       const dateStr = selectedDate.toISOString().split('T')[0];
 
-      const response = await getShowtimesByDate(dateStr);
+      const response = await getShowtimesByDate(dateStr, true);
       const showtimes = response.data || [];
 
       // Group showtimes by movie ID and create unique movie entries

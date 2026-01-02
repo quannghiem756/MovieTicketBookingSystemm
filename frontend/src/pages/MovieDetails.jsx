@@ -549,7 +549,9 @@ const MovieDetails = () => {
 
           {showtimes && showtimes.length > 0 ? (
             <Grid container spacing={3}>
-              {showtimes.map((showtime) => (
+              {showtimes.map((showtime) => {
+                const isClosed = showtime.status === 'Closed';
+                return (
                 <Grid item key={showtime.id} xs={12} sm={6} md={4}>
                   <Card sx={{
                     height: '100%',
@@ -591,10 +593,13 @@ const MovieDetails = () => {
                           <Button
                             variant="contained"
                             fullWidth
-                            component={Link}
-                            to={`/book/${movie.id}/${showtime.id}`}
-                            disabled={!canBook}
-                            onClick={(e) => handleBookClick(e, `/book/${movie.id}/${showtime.id}`)}
+                            component={isClosed ? 'button' : Link}
+                            to={isClosed ? undefined : `/book/${movie.id}/${showtime.id}`}
+                            disabled={!canBook || isClosed}
+                            onClick={(e) => {
+                                if (isClosed) return;
+                                handleBookClick(e, `/book/${movie.id}/${showtime.id}`);
+                            }}
                             sx={{
                               borderRadius: 3,
                               py: 1.5,
@@ -602,14 +607,15 @@ const MovieDetails = () => {
                               textTransform: 'none'
                             }}
                           >
-                            {t('movieDetails.select')}
+                            {isClosed ? 'Closed' : t('movieDetails.select')}
                           </Button>
                         </span>
                       </Tooltip>
                     </Box>
                   </Card>
                 </Grid>
-              ))}
+              );
+              })}
             </Grid>
           ) : (
             <Typography variant="body1" align="center" color="text.secondary" sx={{ py: 4 }}>

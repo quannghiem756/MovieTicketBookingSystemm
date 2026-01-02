@@ -36,26 +36,30 @@ class ShowtimeService {
   async getFutureShowtimesByMovieId(movieId) {
     const showtimes = await this.showtimeRepository.findFutureByMovieId(movieId);
     const now = new Date();
-    // Filter out 'Past' showtimes
-    return showtimes.filter(st => this.getShowtimeStatus(st, now) !== 'Past');
+    // Filter out 'Past' showtimes and add status
+    return showtimes
+      .filter(st => this.getShowtimeStatus(st, now) !== 'Past')
+      .map(st => ({ ...st, status: this.getShowtimeStatus(st, now) }));
   }
 
   async getShowtimesByDateAndTheater(date, theaterId, filterPast = false) {
     const showtimes = await this.showtimeRepository.findByDateAndTheater(date, theaterId);
+    const now = new Date();
+    let result = showtimes;
     if (filterPast) {
-      const now = new Date();
-      return showtimes.filter(st => this.getShowtimeStatus(st, now) !== 'Past');
+      result = showtimes.filter(st => this.getShowtimeStatus(st, now) !== 'Past');
     }
-    return showtimes;
+    return result.map(st => ({ ...st, status: this.getShowtimeStatus(st, now) }));
   }
 
   async getShowtimesByDate(date, filterPast = false) {
     const showtimes = await this.showtimeRepository.findByDate(date);
+    const now = new Date();
+    let result = showtimes;
     if (filterPast) {
-      const now = new Date();
-      return showtimes.filter(st => this.getShowtimeStatus(st, now) !== 'Past');
+      result = showtimes.filter(st => this.getShowtimeStatus(st, now) !== 'Past');
     }
-    return showtimes;
+    return result.map(st => ({ ...st, status: this.getShowtimeStatus(st, now) }));
   }
 
   async updateShowtime(id, showtimeData) {

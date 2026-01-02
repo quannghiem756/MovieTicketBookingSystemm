@@ -128,6 +128,7 @@ describe('ShowtimeService', () => {
           
           expect(result).toHaveLength(1);
           expect(result[0].id).toBe('2');
+          expect(result[0]).toHaveProperty('status'); // Verify status field is added
       });
   });
 

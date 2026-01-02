@@ -4,8 +4,8 @@
 The goal of this phase is to update the backend services to handle the filtering of showtimes based on the time-based rules defined in the spec.
 
 - [x] Task: Update `ShowtimeService` to include logic for determining showtime status (Active, Closed, Past). 144f9ab
-- [ ] Task: Update `ShowtimeRepository` or equivalent query logic to filter out past showtimes for public (non-admin) requests.
-- [ ] Task: Ensure Admin-specific routes or query flags bypass the time-based filtering.
+- [x] Task: Update `ShowtimeRepository` or equivalent query logic to filter out past showtimes for public (non-admin) requests. f58fddf
+- [x] Task: Ensure Admin-specific routes or query flags bypass the time-based filtering. f58fddf
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Backend Logic & API Refinement' (Protocol in workflow.md)
 
 ## Phase 2: Frontend UI Updates

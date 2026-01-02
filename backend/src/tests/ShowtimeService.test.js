@@ -36,9 +36,9 @@ describe('ShowtimeService', () => {
     };
 
     it('should return "Active" if showtime is more than 15 minutes away', () => {
-        // Mock current time: 2023-10-27 10:00:00
-        const now = new Date('2023-10-27T10:00:00.000Z');
-        // Showtime: 2023-10-27 10:30:00 (30 mins away)
+        // Mock current time: 03:00 UTC (10:00 VN)
+        const now = new Date('2023-10-27T03:00:00.000Z');
+        // Showtime: 10:30 VN (03:30 UTC)
         const showtime = createShowtime('2023-10-27T00:00:00.000Z', '10:30');
         
         const status = showtimeService.getShowtimeStatus(showtime, now);
@@ -46,9 +46,9 @@ describe('ShowtimeService', () => {
     });
 
     it('should return "Closed" if showtime is within 15 minutes', () => {
-        // Mock current time: 2023-10-27 10:16:00
-        const now = new Date('2023-10-27T10:16:00.000Z');
-        // Showtime: 2023-10-27 10:30:00 (14 mins away)
+        // Mock current time: 03:16 UTC (10:16 VN)
+        const now = new Date('2023-10-27T03:16:00.000Z');
+        // Showtime: 10:30 VN (03:30 UTC)
         const showtime = createShowtime('2023-10-27T00:00:00.000Z', '10:30');
         
         const status = showtimeService.getShowtimeStatus(showtime, now);
@@ -56,9 +56,9 @@ describe('ShowtimeService', () => {
     });
 
     it('should return "Past" if showtime has started', () => {
-        // Mock current time: 2023-10-27 10:30:00
-        const now = new Date('2023-10-27T10:30:00.000Z');
-        // Showtime: 2023-10-27 10:30:00 (Starts now)
+        // Mock current time: 03:30 UTC (10:30 VN)
+        const now = new Date('2023-10-27T03:30:00.000Z');
+        // Showtime: 10:30 VN (03:30 UTC)
         const showtime = createShowtime('2023-10-27T00:00:00.000Z', '10:30');
         
         const status = showtimeService.getShowtimeStatus(showtime, now);
@@ -66,9 +66,9 @@ describe('ShowtimeService', () => {
     });
 
     it('should return "Past" if showtime was yesterday', () => {
-        // Mock current time: 2023-10-28 10:00:00
-        const now = new Date('2023-10-28T10:00:00.000Z');
-        // Showtime: 2023-10-27 10:30:00
+        // Mock current time: 2023-10-28 03:00 UTC
+        const now = new Date('2023-10-28T03:00:00.000Z');
+        // Showtime: 2023-10-27 10:30 VN
         const showtime = createShowtime('2023-10-27T00:00:00.000Z', '10:30');
         
         const status = showtimeService.getShowtimeStatus(showtime, now);
@@ -76,9 +76,9 @@ describe('ShowtimeService', () => {
     });
 
      it('should return "Active" if showtime is tomorrow', () => {
-        // Mock current time: 2023-10-26 10:00:00
-        const now = new Date('2023-10-26T10:00:00.000Z');
-        // Showtime: 2023-10-27 10:30:00
+        // Mock current time: 2023-10-26 03:00 UTC
+        const now = new Date('2023-10-26T03:00:00.000Z');
+        // Showtime: 2023-10-27 10:30 VN
         const showtime = createShowtime('2023-10-27T00:00:00.000Z', '10:30');
         
         const status = showtimeService.getShowtimeStatus(showtime, now);

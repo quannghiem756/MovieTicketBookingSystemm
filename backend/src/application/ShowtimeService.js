@@ -1,5 +1,6 @@
 // Showtime service
 const Showtime = require('../domain/Showtime');
+const moment = require('moment-timezone');
 
 class ShowtimeService {
   constructor(showtimeRepository) {
@@ -82,10 +83,12 @@ class ShowtimeService {
   }
 
   getShowtimeStatus(showtime, currentTime = new Date()) {
-    const startDateTime = new Date(showtime.showDate);
-    // showTime format is "HH:mm"
-    const [hours, minutes] = showtime.showTime.split(':').map(Number);
-    startDateTime.setUTCHours(hours, minutes, 0, 0);
+    const dateStr = new Date(showtime.showDate).toISOString().split('T')[0];
+    const timeStr = showtime.showTime;
+    
+    // Create moment object in VN time
+    const showtimeMoment = moment.tz(`${dateStr} ${timeStr}`, "YYYY-MM-DD HH:mm", "Asia/Ho_Chi_Minh");
+    const startDateTime = showtimeMoment.toDate();
 
     const diffInMs = startDateTime.getTime() - currentTime.getTime();
     const diffInMinutes = diffInMs / (1000 * 60);

@@ -1,0 +1,8 @@
+{
+  "track_id": "qr_ticket_validation_20260103",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-01-03T17:42:00Z",
+  "updated_at": "2026-01-03T17:42:00Z",
+  "description": "Add QR Code on the ticket so that people could scan it on the kiosk, or on site employee could scan it for the physical ticket print when people when to the cinema. Includes a new Staff role and secure validation endpoint."
+}

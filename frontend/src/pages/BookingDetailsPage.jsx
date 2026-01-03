@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
+import { QRCodeSVG } from 'qrcode.react';
 import { getBookingById } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from '../context/I18nContext';
@@ -410,9 +411,19 @@ const BookingDetailsPage = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 borderRadius: 2,
-                mb: 2
+                mb: 2,
+                p: 2
               }}>
-                <ConfirmationNumber sx={{ fontSize: { xs: 80, md: 120 }, color: 'primary.main' }} />
+                {booking.validationToken ? (
+                  <QRCodeSVG
+                    value={`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/bookings/validate?token=${booking.validationToken}`}
+                    size={isMobile ? 120 : 160}
+                    level="H"
+                    includeMargin={false}
+                  />
+                ) : (
+                  <ConfirmationNumber sx={{ fontSize: { xs: 80, md: 120 }, color: 'primary.main' }} />
+                )}
               </Box>
 
               <Typography variant="body1" color="textSecondary" sx={{ mb: 2 }}>

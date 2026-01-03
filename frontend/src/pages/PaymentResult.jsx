@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import { QRCodeSVG } from 'qrcode.react';
 import {
   Typography,
   Button,
@@ -287,27 +288,25 @@ const PaymentResult = () => {
                     </Box>
                   </Box>
 
-                  <Box sx={{
-                    mt: 'auto',
-                    p: 3,
-                    borderRadius: 2,
-                    bgcolor: isSuccess ? 'rgba(76, 175, 80, 0.1)' : 'rgba(244, 67, 54, 0.1)',
-                    border: isSuccess
-                      ? '1px solid rgba(76, 175, 80, 0.2)'
-                      : '1px solid rgba(244, 67, 54, 0.2)',
-                    textAlign: 'center'
-                  }}>
-                    <Typography variant="body2" color={isSuccess ? "success.main" : "error.main"} sx={{ mb: 1, fontWeight: 600 }}>
-                      {isSuccess
-                        ? t('payment.result.paymentSuccess')
-                        : t('payment.result.paymentFailed')}
-                    </Typography>
-                    <Typography variant="caption" color="textSecondary" sx={{ display: 'block' }}>
-                      {isSuccess
-                        ? t('payment.result.successMessage')
-                        : t('payment.result.failedMessage')}
-                    </Typography>
-                  </Box>
+                  {isSuccess && booking.validationToken && (
+                    <Box sx={{ mt: 2, mb: 3, textAlign: 'center' }}>
+                      <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
+                        {t('bookings.details.qrCodeTitle')}
+                      </Typography>
+                      <Box sx={{
+                        p: 1.5,
+                        bgcolor: 'white',
+                        display: 'inline-block',
+                        borderRadius: 2,
+                        lineHeight: 0
+                      }}>
+                        <QRCodeSVG
+                          value={`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/bookings/validate?token=${booking.validationToken}`}
+                          size={120}
+                        />
+                      </Box>
+                    </Box>
+                  )}
                 </Paper>
               </Box>
             </Box>

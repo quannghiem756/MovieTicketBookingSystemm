@@ -83,6 +83,11 @@ const en = {
   'bookings.status.confirmed': 'Confirmed',
   'bookings.status.pending': 'Pending',
   'bookings.status.cancelled': 'Cancelled',
+  'bookings.details.notAvailable': 'Not available',
+  'bookings.details.noSynopsis': 'No synopsis',
+  'bookings.details.qrCodeTitle': 'Digital Ticket QR Code',
+  'bookings.details.qrCodeSubtitle': 'Show this QR code at the cinema counter or kiosk to collect your physical ticket.',
+  'bookings.details.qrCodeHint': 'For security, do not share this QR code with others.',
   'bookings.view': 'View Details',
 
   // Booking Page

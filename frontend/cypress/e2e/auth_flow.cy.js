@@ -55,4 +55,22 @@ describe('Authentication Flow', () => {
       expect(win.localStorage.getItem('accessToken')).to.equal('new-valid-token');
     });
   });
+
+  describe('Protected Routes', () => {
+    it('should redirect unauthenticated users to login', () => {
+      cy.visit('/profile');
+      cy.url().should('include', '/login');
+    });
+
+    it('should allow authenticated users to access protected routes', () => {
+      LoginPage.visit();
+      LoginPage.login(testUser.email, testUser.password);
+      LoginPage.verifySuccessfulLogin();
+
+      cy.visit('/profile');
+      cy.url().should('include', '/profile');
+      // "Hồ sơ của tôi" is the translation for profile.title in vi.js
+      cy.get('h1').contains('Admin User').should('exist');
+    });
+  });
 });

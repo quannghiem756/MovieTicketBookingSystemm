@@ -21,7 +21,7 @@ This phase implements the logic for creating secure signed tokens and generating
 ## Phase 3: Validation Endpoint & Content Negotiation
 This phase builds the core validation endpoint that handles both JSON (API) and HTML (Browser) responses.
 
-- [ ] Task: Implement `GET /api/bookings/validate` endpoint.
+- [x] Task: Implement `GET /api/bookings/validate` endpoint. f5c1586
 - [ ] Task: Implement logic to decode token, verify signature, and check booking status.
 - [ ] Task: Implement Content Negotiation: return JSON for `application/json` and render HTML for `text/html`.
 - [ ] Task: Implement "Redemption" logic: Update booking status to `redeemed` on first valid scan.

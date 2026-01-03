@@ -16,7 +16,7 @@ This phase implements the logic for creating secure signed tokens and generating
 - [x] Task: Update `BookingService` (or `TicketService`) to generate and store/append the validation token/URL upon booking completion. 71edfb7
 - [x] Task: Create unit tests for token generation and verification logic. e124fc5
 - [x] Task: Update Frontend `BookingSuccess` and `TicketDetail` components to render the QR Code using a library (e.g., `qrcode.react`) pointing to the validation URL. bf00d4f
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Token Generation & QR Code Logic' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Token Generation & QR Code Logic' (Protocol in workflow.md)
 
 ## Phase 3: Validation Endpoint & Content Negotiation
 This phase builds the core validation endpoint that handles both JSON (API) and HTML (Browser) responses.

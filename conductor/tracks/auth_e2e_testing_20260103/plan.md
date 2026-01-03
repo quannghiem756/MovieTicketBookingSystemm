@@ -7,8 +7,8 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Setup & Login Verification' (Protocol in workflow.md) f9a8970
 
 ## Phase 2: Token Management & Security
-- [ ] Task: Implement TDD - Write failing test for Token Refresh Mechanism (simulate token expiration).
-- [ ] Task: Implement Token Refresh test logic (intercept network requests to verify refresh call).
-- [ ] Task: Implement TDD - Write failing test for Protected Route Access (unauthenticated vs. authenticated).
+- [x] Task: Implement TDD - Write failing test for Token Refresh Mechanism (simulate token expiration). 3f435ef
+- [x] Task: Implement Token Refresh test logic (intercept network requests to verify refresh call). 3f435ef
+- [~] Task: Implement TDD - Write failing test for Protected Route Access (unauthenticated vs. authenticated).
 - [ ] Task: Implement Protected Route Access verification (ensure redirection for unauthorized users).
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Token Management & Security' (Protocol in workflow.md)

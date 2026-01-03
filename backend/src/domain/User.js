@@ -9,7 +9,7 @@ class User {
     this.googleId = googleId;
     this.dateOfBirth = dateOfBirth ? new Date(dateOfBirth) : null;
     this.loyaltyPoints = loyaltyPoints;
-    this.role = role; // 'admin' or 'user'
+    this.role = role; // 'admin', 'user', or 'staff'
   }
 
   calculateAge() {

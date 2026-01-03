@@ -12,7 +12,7 @@ This phase focuses on updating the backend to support the new `staff` role and e
 ## Phase 2: Token Generation & QR Code Logic
 This phase implements the logic for creating secure signed tokens and generating the QR code content.
 
-- [ ] Task: Implement `generateValidationToken` utility using JWT with signing (using `jsonwebtoken`).
+- [x] Task: Implement `generateValidationToken` utility using JWT with signing (using `jsonwebtoken`). e124fc5
 - [ ] Task: Update `BookingService` (or `TicketService`) to generate and store/append the validation token/URL upon booking completion.
 - [ ] Task: Create unit tests for token generation and verification logic.
 - [ ] Task: Update Frontend `BookingSuccess` and `TicketDetail` components to render the QR Code using a library (e.g., `qrcode.react`) pointing to the validation URL.

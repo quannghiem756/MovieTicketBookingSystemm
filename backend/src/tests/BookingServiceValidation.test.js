@@ -7,7 +7,8 @@ describe('BookingService - validateBooking', () => {
 
   beforeEach(() => {
     mockBookingRepository = {
-      findById: jest.fn()
+      findById: jest.fn(),
+      update: jest.fn()
     };
     mockValidationService = {
       verifyValidationToken: jest.fn()
@@ -81,5 +82,23 @@ describe('BookingService - validateBooking', () => {
 
     expect(result.status).toBe('valid');
     expect(result.booking.id).toBe('123');
+  });
+
+  it('should mark booking as redeemed on first valid scan', async () => {
+    mockValidationService.verifyValidationToken.mockReturnValue({ bookingId: '123' });
+    const booking = { 
+      id: '123', 
+      validationToken: 'valid_token',
+      status: 'confirmed',
+      seatIds: ['A1'],
+      totalPrice: 100
+    };
+    mockBookingRepository.findById.mockResolvedValue(booking);
+    mockBookingRepository.update.mockResolvedValue({ ...booking, status: 'redeemed' });
+
+    const result = await bookingService.validateBooking('valid_token');
+
+    expect(result.status).toBe('valid');
+    expect(mockBookingRepository.update).toHaveBeenCalledWith('123', expect.objectContaining({ status: 'redeemed' }));
   });
 });

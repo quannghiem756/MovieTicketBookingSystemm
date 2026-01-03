@@ -269,6 +269,13 @@ class BookingService {
         return { status: 'invalid', message: `Booking status is ${booking.status}` };
       }
 
+      // Mark as redeemed
+      const updateData = {
+        ...booking,
+        status: 'redeemed'
+      };
+      await this.bookingRepository.update(bookingId, updateData);
+
       return {
         status: 'valid',
         booking: {

@@ -7,14 +7,25 @@ class UserService {
     this.userRepository = userRepository;
   }
 
-  async createUser(userData) {
+  async createUser(userData, isAdmin = false) {
     let hashedPassword = null;
     if (userData.password) {
       const saltRounds = 10;
       hashedPassword = await bcrypt.hash(userData.password, saltRounds);
     }
     
-    const role = userData.role && userData.role === 'admin' ? 'admin' : 'user';
+    // Default role is 'user'
+    let role = 'user';
+    
+    // Only allow setting specific roles if isAdmin is true
+    if (isAdmin && userData.role) {
+      if (['admin', 'staff', 'user'].includes(userData.role)) {
+        role = userData.role;
+      }
+    } 
+    // Fallback/Legacy: If not admin context, force 'user' (ignoring any passed role)
+    // PREVIOUSLY: const role = userData.role && userData.role === 'admin' ? 'admin' : 'user';
+    // This was a security risk if the controller/validation didn't filter it.
     
     const user = new User(
       null,

@@ -19,6 +19,18 @@ class UserController {
     }
   }
 
+  async createUserByAdmin(req, res) {
+    try {
+      const user = await this.userService.createUser(req.body, true);
+      res.status(201).json(user);
+    } catch (error) {
+      if (error.code === 11000 && error.keyPattern && error.keyPattern.email) {
+        return res.status(400).json({ error: 'Email already exists' });
+      }
+      res.status(400).json({ error: error.message });
+    }
+  }
+
   async getAllUsers(req, res) {
     try {
       const users = await this.userService.getAllUsers();
@@ -54,6 +66,16 @@ class UserController {
 
   async updateUser(req, res) {
     try {
+      // Security Check: Role Modification
+      if (req.body.role && req.user.role !== 'admin') {
+          return res.status(403).json({ error: 'Forbidden: Only admins can update roles' });
+      }
+      
+      // Security Check: Profile Ownership
+      if (req.user.role !== 'admin' && req.user.id.toString() !== req.params.id) {
+          return res.status(403).json({ error: 'Forbidden: You can only update your own profile' });
+      }
+
       const user = await this.userService.updateUser(req.params.id, req.body);
       if (!user) {
         return res.status(404).json({ error: 'User not found' });

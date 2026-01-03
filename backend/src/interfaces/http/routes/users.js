@@ -25,6 +25,7 @@ router.post('/logout', (req, res) => userController.logout(req, res));
 
 // Protected routes
 router.get('/', authenticate, authorizeAdmin, (req, res) => userController.getAllUsers(req, res));
+router.post('/admin', authenticate, authorizeAdmin, (req, res) => userController.createUserByAdmin(req, res)); // Admin creation route
 router.get('/:id', authenticate, (req, res) => userController.getUserById(req, res));
 router.get('/email/:email', authenticate, (req, res) => userController.getUserByEmail(req, res));
 router.put('/:id', authenticate, (req, res) => userController.updateUser(req, res));

@@ -6,6 +6,7 @@ const MongoShowtimeRepository = require('../../../infrastructure/repositories/Mo
 const MongoMovieRepository = require('../../../infrastructure/repositories/MongoMovieRepository');
 const BookingService = require('../../../application/BookingService');
 const CouponService = require('../../../application/CouponService');
+const ValidationService = require('../../../application/ValidationService');
 const MongoCouponRepository = require('../../../infrastructure/repositories/MongoCouponRepository');
 const { authenticate, authorizeAdmin } = require('../middleware/auth');
 const { seatHoldLimiter } = require('../middleware/rateLimiter');
@@ -17,7 +18,8 @@ const showtimeRepository = new MongoShowtimeRepository();
 const movieRepository = new MongoMovieRepository();
 const couponRepository = new MongoCouponRepository();
 const couponService = new CouponService(couponRepository, bookingRepository);
-const bookingService = new BookingService(bookingRepository, userRepository, showtimeRepository, movieRepository, couponService);
+const validationService = new ValidationService();
+const bookingService = new BookingService(bookingRepository, userRepository, showtimeRepository, movieRepository, couponService, validationService);
 const bookingController = new BookingController(bookingService);
 
 const router = express.Router();

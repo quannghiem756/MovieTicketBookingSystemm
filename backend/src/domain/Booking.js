@@ -1,6 +1,6 @@
 // Booking domain model
 class Booking {
-  constructor(id, userId, showtimeId, seatIds, totalPrice, bookingDate, status, paymentMethod, expiresAt, originalPrice, discountAmount, couponCode) {
+  constructor(id, userId, showtimeId, seatIds, totalPrice, bookingDate, status, paymentMethod, expiresAt, originalPrice, discountAmount, couponCode, validationToken) {
     this.id = id;
     this.userId = userId;
     this.showtimeId = showtimeId;
@@ -13,6 +13,7 @@ class Booking {
     this.originalPrice = originalPrice;
     this.discountAmount = discountAmount || 0;
     this.couponCode = couponCode;
+    this.validationToken = validationToken;
   }
 }
 

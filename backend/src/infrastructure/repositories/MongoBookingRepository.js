@@ -14,6 +14,7 @@ class MongoBookingRepository extends BookingRepository {
       bookingDate: booking.bookingDate,
       status: booking.status,
       paymentMethod: booking.paymentMethod,
+      validationToken: booking.validationToken,
       expiresAt: booking.expiresAt
     });
 
@@ -36,6 +37,7 @@ class MongoBookingRepository extends BookingRepository {
       bookingDate: doc.bookingDate,
       status: doc.status,
       paymentMethod: doc.paymentMethod,
+      validationToken: doc.validationToken,
       expiresAt: doc.expiresAt,
       showtimeId: doc.showtimeId ? (doc.showtimeId._id || doc.showtimeId) : null,
       showtime: null,
@@ -173,6 +175,7 @@ class MongoBookingRepository extends BookingRepository {
       bookingDate: booking.bookingDate,
       status: booking.status,
       paymentMethod: booking.paymentMethod,
+      validationToken: booking.validationToken,
       expiresAt: booking.expiresAt
     }, { new: true })
     .populate({

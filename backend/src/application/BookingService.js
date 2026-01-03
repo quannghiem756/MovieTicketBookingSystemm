@@ -3,12 +3,13 @@ const Booking = require('../domain/Booking');
 const User = require('../domain/User');
 
 class BookingService {
-  constructor(bookingRepository, userRepository, showtimeRepository, movieRepository, couponService) {
+  constructor(bookingRepository, userRepository, showtimeRepository, movieRepository, couponService, validationService) {
     this.bookingRepository = bookingRepository;
     this.userRepository = userRepository;
     this.showtimeRepository = showtimeRepository;
     this.movieRepository = movieRepository;
     this.couponService = couponService;
+    this.validationService = validationService;
   }
 
   async _checkAgeEligibility(userId, showtimeId) {
@@ -100,6 +101,9 @@ class BookingService {
       
       if (updatedBooking.status === 'confirmed') {
         updatedBooking.expiresAt = null;
+        if (this.validationService) {
+          updatedBooking.validationToken = this.validationService.generateValidationToken(existingHold.id);
+        }
       } else {
         updatedBooking.expiresAt = new Date(Date.now() + 15 * 60 * 1000); 
       }
@@ -135,7 +139,14 @@ class BookingService {
        booking.expiresAt = new Date(Date.now() + 15 * 60 * 1000);
     }
 
-    return await this.bookingRepository.create(booking);
+    const result = await this.bookingRepository.create(booking);
+    
+    if (result.status === 'confirmed' && this.validationService && !result.validationToken) {
+      result.validationToken = this.validationService.generateValidationToken(result.id);
+      return await this.bookingRepository.update(result.id, result);
+    }
+
+    return result;
   }
 
   async holdSeat(userId, showtimeId, seatId) {
@@ -216,6 +227,10 @@ class BookingService {
         status: 'confirmed',
         expiresAt: null // Clear expiration
     };
+
+    if (this.validationService && !updateData.validationToken) {
+        updateData.validationToken = this.validationService.generateValidationToken(id);
+    }
     
     return await this.bookingRepository.update(id, updateData);
   }

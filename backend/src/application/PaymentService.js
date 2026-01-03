@@ -1,5 +1,7 @@
 const BookingRepository = require('../infrastructure/repositories/MongoBookingRepository');
+const ValidationService = require('./ValidationService');
 const bookingRepository = new BookingRepository();
+const validationService = new ValidationService();
 const crypto = require('crypto');
 
 // Create MoMo payment URL for movie booking
@@ -116,6 +118,11 @@ const processPaymentResult = async (momoResponse) => {
   if (parseInt(resultCode) === 0) {
     booking.status = 'confirmed';
     booking.paymentId = transId;
+    
+    if (!booking.validationToken) {
+      booking.validationToken = validationService.generateValidationToken(orderId);
+    }
+
     await bookingRepository.update(orderId, booking);
     console.log(`Booking ${orderId} marked as confirmed.`);
     return { success: true, booking };

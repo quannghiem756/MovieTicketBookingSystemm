@@ -12,6 +12,7 @@ const bookingSchema = new mongoose.Schema({
   status: { type: String, enum: ['pending', 'confirmed', 'cancelled', 'paid', 'held'], default: 'pending' },
   paymentId: { type: String }, // Reference to payment transaction
   paymentMethod: { type: String, enum: ['momo', 'cash'], default: 'momo' }, // Payment method used
+  validationToken: { type: String }, // Token for QR code validation
   expiresAt: { type: Date } // When the pending/held booking expires
 }, {
   timestamps: true

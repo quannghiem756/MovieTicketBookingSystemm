@@ -9,6 +9,7 @@ describe('BookingService', () => {
     let mockMovieRepository;
 
     let mockCouponService;
+    let mockValidationService;
 
     beforeEach(() => {
         mockBookingRepository = {
@@ -35,13 +36,18 @@ describe('BookingService', () => {
             incrementUsage: jest.fn(),
             decrementUsage: jest.fn()
         };
+        mockValidationService = {
+            generateValidationToken: jest.fn().mockReturnValue('mock-token'),
+            verifyValidationToken: jest.fn()
+        };
 
         bookingService = new BookingService(
             mockBookingRepository,
             mockUserRepository,
             mockShowtimeRepository,
             mockMovieRepository,
-            mockCouponService
+            mockCouponService,
+            mockValidationService
         );
     });
 
@@ -92,6 +98,7 @@ describe('BookingService', () => {
              mockBookingRepository.findPendingBookingByUser.mockResolvedValue(null);
              mockBookingRepository.findCollidingBooking.mockResolvedValue(null);
              mockBookingRepository.create.mockResolvedValue({ id: 'booking1', status: 'confirmed' });
+             mockBookingRepository.update.mockImplementation((id, data) => Promise.resolve(data));
 
              await expect(bookingService.createBooking(bookingData)).resolves.toBeDefined();
         });
@@ -123,6 +130,7 @@ describe('BookingService', () => {
             };
             mockCouponService.validateCoupon.mockResolvedValue(validationResult);
             mockBookingRepository.create.mockImplementation(booking => Promise.resolve({ ...booking, id: 'booking1' }));
+            mockBookingRepository.update.mockImplementation((id, data) => Promise.resolve(data));
 
             const result = await bookingService.createBooking(bookingData);
 

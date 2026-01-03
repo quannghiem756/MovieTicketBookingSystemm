@@ -6,7 +6,7 @@ This phase focuses on updating the backend to support the new `staff` role and e
 - [x] Task: Update `User` model to include `staff` in the `role` enum. 1e176ea
 - [x] Task: Create `createStaffUser.js` seed script to generate initial staff accounts. d068884
 - [x] Task: Update `authMiddleware` to support `staff` role authorization. bd4c48d
-- [ ] Task: Create backend tests for role-based access control (RBAC) to ensure `staff` has correct permissions.
+- [x] Task: Create backend tests for role-based access control (RBAC) to ensure `staff` has correct permissions. bd4c48d
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Staff Role & Authentication Backend' (Protocol in workflow.md)
 
 ## Phase 2: Token Generation & QR Code Logic

@@ -14,6 +14,9 @@ class ValidationService {
     try {
       return jwt.verify(token, this.secret);
     } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        throw new Error('Validation token expired');
+      }
       throw new Error('Invalid validation token');
     }
   }

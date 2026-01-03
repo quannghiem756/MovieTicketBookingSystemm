@@ -6,7 +6,7 @@
 - [x] Task: Implement Login Flow test using existing test user and Page Object Model (if needed). f37f989
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Setup & Login Verification' (Protocol in workflow.md) f9a8970
 
-## Phase 2: Token Management & Security
+## Phase 2: Token Management & Security [checkpoint: d277bf6]
 - [x] Task: Implement TDD - Write failing test for Token Refresh Mechanism (simulate token expiration). 3f435ef
 - [x] Task: Implement Token Refresh test logic (intercept network requests to verify refresh call). 3f435ef
 - [x] Task: Implement TDD - Write failing test for Protected Route Access (unauthenticated vs. authenticated). a26511b

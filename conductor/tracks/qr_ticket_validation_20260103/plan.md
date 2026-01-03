@@ -9,7 +9,7 @@ This phase focuses on updating the backend to support the new `staff` role and e
 - [x] Task: Create backend tests for role-based access control (RBAC) to ensure `staff` has correct permissions. bd4c48d
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Staff Role & Authentication Backend' (Protocol in workflow.md) b014281
 
-## Phase 2: Token Generation & QR Code Logic
+## Phase 2: Token Generation & QR Code Logic [checkpoint: 57b0939]
 This phase implements the logic for creating secure signed tokens and generating the QR code content.
 
 - [x] Task: Implement `generateValidationToken` utility using JWT with signing (using `jsonwebtoken`). e124fc5

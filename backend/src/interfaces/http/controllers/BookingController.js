@@ -123,6 +123,20 @@ class BookingController {
       res.status(500).json({ error: error.message });
     }
   }
+
+  async validateBooking(req, res) {
+    try {
+      const { token } = req.query;
+      if (!token) {
+        return res.status(400).json({ error: 'Token is required' });
+      }
+
+      const result = await this.bookingService.validateBooking(token);
+      res.json(result);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
 }
 
 module.exports = BookingController;

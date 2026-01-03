@@ -25,6 +25,7 @@ const bookingController = new BookingController(bookingService);
 const router = express.Router();
 
 // Protected routes
+router.get('/validate', (req, res) => bookingController.validateBooking(req, res));
 router.get('/', authenticate, authorizeAdmin, (req, res) => bookingController.getAllBookings(req, res));
 router.post('/', authenticate, (req, res) => bookingController.createBooking(req, res));
 router.get('/:id', authenticate, (req, res) => bookingController.getBookingById(req, res));

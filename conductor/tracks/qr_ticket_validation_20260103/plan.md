@@ -1,13 +1,13 @@
 # Plan: QR Code Ticket Generation & Validation
 
-## Phase 1: Staff Role & Authentication Backend
+## Phase 1: Staff Role & Authentication Backend [checkpoint: b014281]
 This phase focuses on updating the backend to support the new `staff` role and establishing the foundation for secure validation.
 
 - [x] Task: Update `User` model to include `staff` in the `role` enum. 1e176ea
 - [x] Task: Create `createStaffUser.js` seed script to generate initial staff accounts. d068884
 - [x] Task: Update `authMiddleware` to support `staff` role authorization. bd4c48d
 - [x] Task: Create backend tests for role-based access control (RBAC) to ensure `staff` has correct permissions. bd4c48d
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Staff Role & Authentication Backend' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Staff Role & Authentication Backend' (Protocol in workflow.md) b014281
 
 ## Phase 2: Token Generation & QR Code Logic
 This phase implements the logic for creating secure signed tokens and generating the QR code content.

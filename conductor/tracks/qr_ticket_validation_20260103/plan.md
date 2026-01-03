@@ -31,8 +31,8 @@ This phase builds the core validation endpoint that handles both JSON (API) and 
 ## Phase 4: Admin User Management
 This phase implements the management interface for Admins to handle staff and other admin accounts.
 
-- [ ] Task: Implement Backend API: `GET /api/users` (list), `POST /api/users` (create), `PUT /api/users/:id` (update).
-- [ ] Task: Implement Backend Tests: Verify Admin-only access and correct CRUD operations for users.
+- [x] Task: Implement Backend API: `GET /api/users` (list), `POST /api/users` (create), `PUT /api/users/:id` (update). 733c298
+- [x] Task: Implement Backend Tests: Verify Admin-only access and correct CRUD operations for users. 733c298
 - [ ] Task: Create Frontend Admin Page: `UserManagement` table/list view.
 - [ ] Task: Create Frontend Component: `UserFormModal` for creating/editing users (assigning roles).
 - [ ] Task: Integrate Frontend with Backend User APIs.

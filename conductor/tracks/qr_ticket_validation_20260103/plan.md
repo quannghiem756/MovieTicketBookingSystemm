@@ -24,7 +24,7 @@ This phase builds the core validation endpoint that handles both JSON (API) and 
 - [x] Task: Implement `GET /api/bookings/validate` endpoint. f5c1586
 - [x] Task: Implement logic to decode token, verify signature, and check booking status. a650eac
 - [x] Task: Implement Content Negotiation: return JSON for `application/json` and render HTML for `text/html`. 216f3ae
-- [ ] Task: Implement "Redemption" logic: Update booking status to `redeemed` on first valid scan.
+- [x] Task: Implement "Redemption" logic: Update booking status to `redeemed` on first valid scan. 68848ef
 - [ ] Task: Create integration tests for the endpoint covering valid, invalid, expired tokens, and double-redemption scenarios.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Validation Endpoint & Content Negotiation' (Protocol in workflow.md)
 

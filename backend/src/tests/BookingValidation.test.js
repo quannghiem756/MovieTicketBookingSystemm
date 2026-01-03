@@ -46,4 +46,26 @@ describe('BookingController - validateBooking', () => {
     const data = JSON.parse(res._getData());
     expect(data).toEqual(validationResult);
   });
+
+  it('should return HTML when Accept header includes text/html', async () => {
+    const req = httpMocks.createRequest({
+      method: 'GET',
+      query: { token: 'valid_token' },
+      headers: { accept: 'text/html' }
+    });
+    const res = httpMocks.createResponse();
+
+    mockBookingService.validateBooking.mockResolvedValue({
+      status: 'valid',
+      booking: { id: '123', seats: ['A1'] }
+    });
+
+    await bookingController.validateBooking(req, res);
+
+    expect(res.statusCode).toBe(200);
+    const html = res._getData();
+    expect(html).toContain('<html>');
+    expect(html).toContain('valid');
+    expect(html).toContain('123');
+  });
 });

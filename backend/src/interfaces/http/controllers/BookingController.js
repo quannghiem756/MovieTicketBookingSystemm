@@ -132,6 +132,53 @@ class BookingController {
       }
 
       const result = await this.bookingService.validateBooking(token);
+      
+      // Content Negotiation
+      const acceptHeader = req.get('Accept') || '';
+      
+      if (acceptHeader.includes('text/html')) {
+        const statusColor = result.status === 'valid' ? '#4caf50' : '#f44336';
+        const html = `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Validation</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f5f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: white; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); padding: 30px; width: 90%; max-width: 400px; text-align: center; }
+        .status { font-size: 2.5rem; font-weight: bold; color: ${statusColor}; margin-bottom: 20px; text-transform: uppercase; border-bottom: 3px solid ${statusColor}; padding-bottom: 10px; }
+        .details { text-align: left; background: #fafafa; padding: 15px; border-radius: 8px; margin-top: 20px; }
+        .details-row { margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .label { font-weight: bold; color: #666; font-size: 0.9rem; }
+        .value { color: #333; font-size: 1.1rem; }
+        .message { margin-top: 20px; padding: 10px; border-radius: 4px; background: #fff3e0; color: #e65100; font-weight: 500; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="status">${result.status}</div>
+        ${result.booking ? `
+            <div class="details">
+                <div class="details-row">
+                    <div class="label">Booking ID</div>
+                    <div class="value">${result.booking.id}</div>
+                </div>
+                <div class="details-row">
+                    <div class="label">Seats</div>
+                    <div class="value">${result.booking.seats.join(', ')}</div>
+                </div>
+            </div>
+        ` : ''}
+        ${result.message ? `<div class="message">${result.message}</div>` : ''}
+    </div>
+</body>
+</html>`;
+        res.setHeader('Content-Type', 'text/html');
+        return res.send(html);
+      }
+
       res.json(result);
     } catch (error) {
       res.status(400).json({ error: error.message });

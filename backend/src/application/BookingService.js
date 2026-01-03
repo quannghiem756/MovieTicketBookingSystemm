@@ -235,6 +235,53 @@ class BookingService {
     return await this.bookingRepository.update(id, updateData);
   }
 
+  async validateBooking(token) {
+    if (!this.validationService) {
+      throw new Error('Validation service not initialized');
+    }
+
+    try {
+      const decoded = this.validationService.verifyValidationToken(token);
+      const bookingId = decoded.bookingId;
+
+      const booking = await this.bookingRepository.findById(bookingId);
+      if (!booking) {
+        return { status: 'invalid', message: 'Booking not found' };
+      }
+
+      // Check if token matches stored token (security measure)
+      if (booking.validationToken !== token) {
+        return { status: 'invalid', message: 'Token mismatch' };
+      }
+
+      if (booking.status === 'redeemed') {
+        return { 
+          status: 'redeemed', 
+          message: 'Ticket already redeemed',
+          booking: {
+            id: booking.id,
+            seats: booking.seatIds
+          }
+        };
+      }
+
+      if (booking.status !== 'confirmed') {
+        return { status: 'invalid', message: `Booking status is ${booking.status}` };
+      }
+
+      return {
+        status: 'valid',
+        booking: {
+          id: booking.id,
+          seats: booking.seatIds,
+          totalPrice: booking.totalPrice
+        }
+      };
+    } catch (error) {
+      return { status: 'invalid', message: error.message };
+    }
+  }
+
   async cancelBooking(id) {
     const booking = await this.bookingRepository.findById(id);
     if (!booking) return null;

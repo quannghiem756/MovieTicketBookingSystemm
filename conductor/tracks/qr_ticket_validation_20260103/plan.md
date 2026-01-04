@@ -28,7 +28,7 @@ This phase builds the core validation endpoint that handles both JSON (API) and 
 - [x] Task: Create integration tests for the endpoint covering valid, invalid, expired tokens, and double-redemption scenarios. ea07a17
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Validation Endpoint & Content Negotiation' (Protocol in workflow.md)
 
-## Phase 4: Admin User Management
+## Phase 4: Admin User Management [checkpoint: 47948d7]
 This phase implements the management interface for Admins to handle staff and other admin accounts.
 
 - [x] Task: Implement Backend API: `GET /api/users` (list), `POST /api/users` (create), `PUT /api/users/:id` (update). 733c298
@@ -36,7 +36,7 @@ This phase implements the management interface for Admins to handle staff and ot
 - [x] Task: Create Frontend Admin Page: `UserManagement` table/list view. cfbd35d
 - [x] Task: Create Frontend Component: `UserFormModal` for creating/editing users (assigning roles). 72e872a
 - [x] Task: Integrate Frontend with Backend User APIs. 4fd18fc
-- [~] Task: Conductor - User Manual Verification 'Phase 4: Admin User Management' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Admin User Management' (Protocol in workflow.md) 47948d7
 
 ## Phase 5: Documentation
 - [ ] Task: Create `docs/ticket-validation-workflow.md` diagramming the generation, scanning, and validation flows.

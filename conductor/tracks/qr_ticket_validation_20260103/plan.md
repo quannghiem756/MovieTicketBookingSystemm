@@ -33,10 +33,10 @@ This phase implements the management interface for Admins to handle staff and ot
 
 - [x] Task: Implement Backend API: `GET /api/users` (list), `POST /api/users` (create), `PUT /api/users/:id` (update). 733c298
 - [x] Task: Implement Backend Tests: Verify Admin-only access and correct CRUD operations for users. 733c298
-- [ ] Task: Create Frontend Admin Page: `UserManagement` table/list view.
-- [ ] Task: Create Frontend Component: `UserFormModal` for creating/editing users (assigning roles).
-- [ ] Task: Integrate Frontend with Backend User APIs.
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Admin User Management' (Protocol in workflow.md)
+- [x] Task: Create Frontend Admin Page: `UserManagement` table/list view. cfbd35d
+- [x] Task: Create Frontend Component: `UserFormModal` for creating/editing users (assigning roles). 72e872a
+- [x] Task: Integrate Frontend with Backend User APIs. 4fd18fc
+- [~] Task: Conductor - User Manual Verification 'Phase 4: Admin User Management' (Protocol in workflow.md)
 
 ## Phase 5: Documentation
 - [ ] Task: Create `docs/ticket-validation-workflow.md` diagramming the generation, scanning, and validation flows.

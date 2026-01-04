@@ -22,8 +22,11 @@ import {
   Button
 } from '@mui/material';
 import {
-  Delete
+  Delete,
+  Add,
+  Edit
 } from '@mui/icons-material';
+import UserFormModal from './components/UserFormModal';
 
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);
@@ -31,22 +34,48 @@ const AdminUsers = () => {
   const [error, setError] = useState(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
+  const [formOpen, setFormOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
   const { t } = useTranslation();
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await api.get('/users');
-        setUsers(response.data);
-        setLoading(false);
-      } catch (err) {
-        setError(t('admin.users.fetchError'));
-        setLoading(false);
-      }
-    };
+  const fetchUsers = async () => {
+    try {
+      const response = await api.get('/users');
+      setUsers(response.data);
+      setLoading(false);
+    } catch (err) {
+      setError(t('admin.users.fetchError'));
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchUsers();
   }, [t]);
+
+  const handleAddClick = () => {
+    setSelectedUser(null);
+    setFormOpen(true);
+  };
+
+  const handleEditClick = (user) => {
+    setSelectedUser(user);
+    setFormOpen(true);
+  };
+
+  const handleFormSubmit = async (formData) => {
+    try {
+      if (selectedUser) {
+        await api.put(`/users/${selectedUser.id}`, formData);
+      } else {
+        await api.post('/users', formData);
+      }
+      setFormOpen(false);
+      fetchUsers();
+    } catch (err) {
+      alert(t('admin.users.saveError'));
+    }
+  };
 
   const handleDeleteClick = (user) => {
     setUserToDelete(user);
@@ -91,6 +120,14 @@ const AdminUsers = () => {
         <Typography variant="h4" component="h1">
           {t('admin.users.title')}
         </Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<Add />}
+          onClick={handleAddClick}
+        >
+          {t('admin.users.create')}
+        </Button>
       </Box>
 
       <TableContainer component={Paper}>
@@ -99,6 +136,7 @@ const AdminUsers = () => {
             <TableRow>
               <TableCell>{t('admin.users.table.name')}</TableCell>
               <TableCell>{t('admin.users.table.email')}</TableCell>
+              <TableCell>{t('admin.users.table.role')}</TableCell>
               <TableCell>{t('admin.users.table.phone')}</TableCell>
               <TableCell>{t('admin.users.table.loyaltyPoints')}</TableCell>
               <TableCell>{t('admin.users.table.actions')}</TableCell>
@@ -122,6 +160,11 @@ const AdminUsers = () => {
                 </TableCell>
                 <TableCell>
                   <Typography variant="body2" color="text.secondary">
+                    {user.role}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="body2" color="text.secondary">
                     {user.phone}
                   </Typography>
                 </TableCell>
@@ -131,21 +174,40 @@ const AdminUsers = () => {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    size="small"
-                    startIcon={<Delete />}
-                    onClick={() => handleDeleteClick(user)}
-                  >
-                    {t('admin.users.delete')}
-                  </Button>
+                  <Box sx={{ display: 'flex', gap: 1 }}>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      size="small"
+                      startIcon={<Edit />}
+                      onClick={() => handleEditClick(user)}
+                    >
+                      {t('admin.users.edit')}
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      size="small"
+                      startIcon={<Delete />}
+                      onClick={() => handleDeleteClick(user)}
+                    >
+                      {t('admin.users.delete')}
+                    </Button>
+                  </Box>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* User Form Modal */}
+      <UserFormModal
+        open={formOpen}
+        onClose={() => setFormOpen(false)}
+        onSubmit={handleFormSubmit}
+        initialData={selectedUser}
+      />
 
       {/* Delete Confirmation Dialog */}
       <Dialog

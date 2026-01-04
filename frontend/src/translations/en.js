@@ -200,6 +200,7 @@ const en = {
   'common.close': 'Close',
   'common.all': 'All',
   'common.back': 'Back',
+  'common.required': 'Required',
 
   // Pagination
   'pagination.previous': 'Previous',
@@ -383,11 +384,13 @@ const en = {
   'admin.theaterForm.seatType.double': 'Double',
   'admin.theaterForm.seatType.vip': 'VIP',
 
-  // Admin Users
   'admin.users.title': 'Manage Users',
+  'admin.users.create': 'Add User',
+  'admin.users.edit': 'Edit',
   'admin.users.table.ariaLabel': 'Users table',
   'admin.users.table.name': 'Name',
   'admin.users.table.email': 'Email',
+  'admin.users.table.role': 'Role',
   'admin.users.table.phone': 'Phone',
   'admin.users.table.loyaltyPoints': 'Loyalty Points',
   'admin.users.table.actions': 'Actions',
@@ -397,6 +400,16 @@ const en = {
   'admin.users.cancel': 'Cancel',
   'admin.users.fetchError': 'Failed to fetch users',
   'admin.users.deleteError': 'Failed to delete user',
+  'admin.users.saveError': 'Failed to save user',
+  'admin.users.modal.createTitle': 'Create New User',
+  'admin.users.modal.editTitle': 'Edit User',
+  'admin.users.form.name': 'Full Name',
+  'admin.users.form.email': 'Email',
+  'admin.users.form.phone': 'Phone',
+  'admin.users.form.role': 'Role',
+  'admin.users.form.password': 'Password',
+  'admin.users.form.passwordHelpEdit': 'Leave blank to keep current password',
+  'admin.users.save': 'Save',
 
   // Admin Bookings
   'admin.bookings.title': 'Manage Bookings',

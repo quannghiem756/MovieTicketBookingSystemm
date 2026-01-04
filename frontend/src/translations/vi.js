@@ -223,6 +223,7 @@ const vi = {
   'common.all': 'Tất cả',
   'common.back': 'Quay lại',
   'common.save': 'Lưu',
+  'common.required': 'Bắt buộc',
 
   // Pagination
   'pagination.previous': 'Trước',
@@ -415,11 +416,13 @@ const vi = {
   'admin.theaterForm.seatType.double': 'Đôi',
   'admin.theaterForm.seatType.vip': 'VIP',
 
-  // Admin Users
   'admin.users.title': 'Quản lý người dùng',
+  'admin.users.create': 'Thêm người dùng',
+  'admin.users.edit': 'Sửa',
   'admin.users.table.ariaLabel': 'Bảng người dùng',
   'admin.users.table.name': 'Tên',
   'admin.users.table.email': 'Email',
+  'admin.users.table.role': 'Vai trò',
   'admin.users.table.phone': 'Điện thoại',
   'admin.users.table.loyaltyPoints': 'Điểm thưởng',
   'admin.users.table.actions': 'Hành động',
@@ -429,6 +432,16 @@ const vi = {
   'admin.users.cancel': 'Hủy',
   'admin.users.fetchError': 'Không thể tải danh sách người dùng',
   'admin.users.deleteError': 'Xóa người dùng không thành công',
+  'admin.users.saveError': 'Lưu người dùng không thành công',
+  'admin.users.modal.createTitle': 'Tạo người dùng mới',
+  'admin.users.modal.editTitle': 'Sửa người dùng',
+  'admin.users.form.name': 'Họ tên',
+  'admin.users.form.email': 'Email',
+  'admin.users.form.phone': 'Số điện thoại',
+  'admin.users.form.role': 'Vai trò',
+  'admin.users.form.password': 'Mật khẩu',
+  'admin.users.form.passwordHelpEdit': 'Để trống nếu không muốn đổi mật khẩu',
+  'admin.users.save': 'Lưu',
 
   // Admin Bookings
   'admin.bookings.title': 'Quản lý vé đặt',

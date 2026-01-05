@@ -191,7 +191,7 @@ export const getMovieRecommendations = (query) => api.post('/recommendations', {
 
 export const getNews = (page = 1, limit = 10, search = '') => {
 
-  let url = `/news?page=${page}&limit=${limit}`;
+  let url = `/news/published?page=${page}&limit=${limit}`;
 
   if (search) {
 

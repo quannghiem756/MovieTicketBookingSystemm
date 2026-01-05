@@ -5,6 +5,7 @@
 - **UI Library:** Material UI (MUI v7+) for Material Design principles.
 - **Routing:** React Router (v7+) for navigation.
 - **State Management & API:** Axios for HTTP requests, React Context for global state (Auth, I18n).
+- **Utilities:** `qrcode.react` for generating digital tickets.
 - **Real-time:** Socket.io-client for live seat updates.
 
 ## Backend

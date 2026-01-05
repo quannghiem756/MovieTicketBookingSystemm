@@ -9,16 +9,34 @@ describe('Validation Integration Tests', () => {
   let bookingService;
   let validationService;
   let mockBookingRepository;
+  let mockShowtimeRepository;
 
   beforeEach(() => {
     mockBookingRepository = {
       findById: jest.fn(),
       update: jest.fn()
     };
+    mockShowtimeRepository = {
+        findById: jest.fn()
+    };
     validationService = new ValidationService('test_secret');
+    
+    // Setup default valid showtime (now)
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+
+    mockShowtimeRepository.findById.mockResolvedValue({
+      id: 'showtime123',
+      showDate: now,
+      showTime: `${hours}:${minutes}`
+    });
+
     bookingService = new BookingService(
       mockBookingRepository,
-      null, null, null, null,
+      null, 
+      mockShowtimeRepository, // Inject mock showtime repo
+      null, null,
       validationService
     );
     bookingController = new BookingController(bookingService);
@@ -32,6 +50,7 @@ describe('Validation Integration Tests', () => {
       id: bookingId,
       validationToken: token,
       status: 'confirmed',
+      showtimeId: 'showtime123',
       seatIds: ['A1', 'A2'],
       totalPrice: 200
     };
@@ -52,6 +71,8 @@ describe('Validation Integration Tests', () => {
   });
 
   it('should return invalid for an expired token', async () => {
+    // This tests the JWT expiration itself, independent of the window logic (if JWT expired before window check)
+    // However, since verifyValidationToken throws specific error for expiration, this should still work.
     const token = jwt.sign({ bookingId: '123' }, 'test_secret', { expiresIn: '0s' });
     
     const req = httpMocks.createRequest({ method: 'GET', query: { token } });
@@ -73,6 +94,7 @@ describe('Validation Integration Tests', () => {
       id: bookingId,
       validationToken: token,
       status: 'confirmed',
+      showtimeId: 'showtime123',
       seatIds: ['A1']
     };
     
@@ -101,6 +123,7 @@ describe('Validation Integration Tests', () => {
       id: bookingId,
       validationToken: token,
       status: 'redeemed',
+      showtimeId: 'showtime123',
       seatIds: ['A1']
     };
     

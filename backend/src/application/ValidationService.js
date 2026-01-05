@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 class ValidationService {
   constructor(secret) {
     this.secret = secret || process.env.VALIDATION_TOKEN_SECRET || 'validation_secret';
-    this.expiration = '1h'; // Short-lived as per spec recommendation
+    this.expiration = '90d'; // Long-lived, validation logic handles the specific window
   }
 
   generateValidationToken(bookingId) {

@@ -254,6 +254,32 @@ class BookingService {
         return { status: 'invalid', message: 'Token mismatch' };
       }
 
+      // Time-based Validation (Window: -60m to +30m)
+      const showtime = await this.showtimeRepository.findById(booking.showtimeId);
+      if (!showtime) {
+        return { status: 'invalid', message: 'Showtime not found associated with booking' };
+      }
+
+      // Construct Showtime DateTime
+      // showtime.showDate is assumed to be a Date object or string.
+      // showtime.showTime is "HH:MM"
+      const showDateTime = new Date(showtime.showDate);
+      const [hours, minutes] = showtime.showTime.split(':').map(Number);
+      showDateTime.setHours(hours, minutes, 0, 0);
+
+      const now = new Date();
+      // Calculate difference in minutes
+      const diffMs = now.getTime() - showDateTime.getTime();
+      const diffMinutes = diffMs / (1000 * 60);
+
+      // Rule: Valid from 60 mins BEFORE (-60) to 30 mins AFTER (+30)
+      if (diffMinutes < -60) {
+          return { status: 'invalid', message: 'Ticket not yet valid. (Valid 60 mins before show)' };
+      }
+      if (diffMinutes > 30) {
+          return { status: 'invalid', message: 'Ticket expired. (Valid until 30 mins after show start)' };
+      }
+
       if (booking.status === 'redeemed') {
         return { 
           status: 'redeemed', 

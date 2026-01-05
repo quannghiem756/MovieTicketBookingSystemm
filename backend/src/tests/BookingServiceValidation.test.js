@@ -4,6 +4,7 @@ describe('BookingService - validateBooking', () => {
   let bookingService;
   let mockBookingRepository;
   let mockValidationService;
+  let mockShowtimeRepository;
 
   beforeEach(() => {
     mockBookingRepository = {
@@ -13,9 +14,27 @@ describe('BookingService - validateBooking', () => {
     mockValidationService = {
       verifyValidationToken: jest.fn()
     };
+    mockShowtimeRepository = {
+      findById: jest.fn()
+    };
+
+    // Setup default valid showtime (now)
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+
+    mockShowtimeRepository.findById.mockResolvedValue({
+      id: 'showtime123',
+      showDate: now,
+      showTime: `${hours}:${minutes}`
+    });
+
     bookingService = new BookingService(
       mockBookingRepository,
-      null, null, null, null,
+      null, 
+      mockShowtimeRepository, // Inject mock
+      null, 
+      null,
       mockValidationService
     );
   });
@@ -60,6 +79,7 @@ describe('BookingService - validateBooking', () => {
       id: '123', 
       validationToken: 'valid_token',
       status: 'redeemed',
+      showtimeId: 'showtime123',
       seatIds: ['A1']
     });
 
@@ -74,6 +94,7 @@ describe('BookingService - validateBooking', () => {
       id: '123', 
       validationToken: 'valid_token',
       status: 'confirmed',
+      showtimeId: 'showtime123',
       seatIds: ['A1'],
       totalPrice: 100
     });
@@ -90,6 +111,7 @@ describe('BookingService - validateBooking', () => {
       id: '123', 
       validationToken: 'valid_token',
       status: 'confirmed',
+      showtimeId: 'showtime123',
       seatIds: ['A1'],
       totalPrice: 100
     };

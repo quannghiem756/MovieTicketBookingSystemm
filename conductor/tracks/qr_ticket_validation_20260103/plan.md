@@ -27,7 +27,7 @@ This phase builds the core validation endpoint that handles both JSON (API) and 
 - [x] Task: Implement "Redemption" logic: Update booking status to `redeemed` on first valid scan. 68848ef
 - [x] Task: Create integration tests for the endpoint covering valid, invalid, expired tokens, and double-redemption scenarios. ea07a17
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Validation Endpoint & Content Negotiation' (Protocol in workflow.md)
-- [~] Task: Update validation logic: Enforce validity window (60m before to 30m after showtime) using DB checks, and extend token JWT expiration.
+- [x] Task: Update validation logic: Enforce validity window (60m before to 30m after showtime) using DB checks, and extend token JWT expiration. 144c3ac
 
 ## Phase 4: Admin User Management [checkpoint: 47948d7]
 This phase implements the management interface for Admins to handle staff and other admin accounts.

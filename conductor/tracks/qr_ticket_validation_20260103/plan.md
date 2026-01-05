@@ -18,7 +18,7 @@ This phase implements the logic for creating secure signed tokens and generating
 - [x] Task: Update Frontend `BookingSuccess` and `TicketDetail` components to render the QR Code using a library (e.g., `qrcode.react`) pointing to the validation URL. bf00d4f
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Token Generation & QR Code Logic' (Protocol in workflow.md)
 
-## Phase 3: Validation Endpoint & Content Negotiation
+## Phase 3: Validation Endpoint & Content Negotiation [checkpoint: 144c3ac]
 This phase builds the core validation endpoint that handles both JSON (API) and HTML (Browser) responses.
 
 - [x] Task: Implement `GET /api/bookings/validate` endpoint. f5c1586
@@ -39,6 +39,6 @@ This phase implements the management interface for Admins to handle staff and ot
 - [x] Task: Integrate Frontend with Backend User APIs. 4fd18fc
 - [x] Task: Conductor - User Manual Verification 'Phase 4: Admin User Management' (Protocol in workflow.md) 47948d7
 
-## Phase 5: Documentation
+## Phase 5: Documentation [checkpoint: 32e6064]
 - [x] Task: Create `docs/ticket-validation-workflow.md` diagramming the generation, scanning, and validation flows. ef150b6
-- [~] Task: Conductor - User Manual Verification 'Phase 5: Documentation' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 5: Documentation' (Protocol in workflow.md) 8a60b53

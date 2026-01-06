@@ -24,7 +24,7 @@
 - [x] Task: Update Frontend `AuthService.js` with new API endpoints. 4f476bd
 - [x] Task: Update `RegisterPage.jsx` with OTP verification step. 376494e
 - [x] Task: Update `LoginPage.jsx` with Forgot Password link. a91bc33
-- [ ] Task: Create `ResetPasswordPage.jsx` (or modal).
+- [x] Task: Create `ResetPasswordPage.jsx` (or modal). a95d717
 - [ ] Task: Conductor - User Manual Verification 'Frontend OTP Integration' (Protocol in workflow.md)
 
 ## Phase 5: Booking Notification Email

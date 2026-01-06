@@ -72,12 +72,12 @@ describe('MongoRefreshTokenRepository', () => {
   });
 
   describe('markAsConsumed', () => {
-    it('should mark a token as consumed and set replacedBy', async () => {
+    it('should mark a token as consumed, set replacedBy, and shorten expiry', async () => {
       const mockToken = {
         _id: 'rt123',
         userId: 'user123',
         token: 'token123',
-        expiresAt: new Date(),
+        expiresAt: new Date(Date.now() + 120000), // Shortened
         consumedAt: new Date(),
         replacedBy: 'newToken123'
       };
@@ -92,7 +92,8 @@ describe('MongoRefreshTokenRepository', () => {
         { token: 'token123' },
         expect.objectContaining({ 
           replacedBy: 'newToken123',
-          consumedAt: expect.any(Date)
+          consumedAt: expect.any(Date),
+          expiresAt: expect.any(Date)
         }),
         { new: true }
       );

@@ -29,7 +29,9 @@ class MongoRefreshTokenRepository extends RefreshTokenRepository {
       { token },
       { 
         consumedAt: new Date(),
-        replacedBy: replacedByToken
+        replacedBy: replacedByToken,
+        // Shorten expiry to 2 minutes to allow grace period checks but clean up soon after
+        expiresAt: new Date(Date.now() + 2 * 60 * 1000) 
       },
       { new: true }
     );

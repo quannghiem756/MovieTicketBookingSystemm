@@ -10,9 +10,8 @@
 - [x] Task: Verify fix with the reproduction test case. e58f0ac
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Implementation of Grace Period Logic' (Protocol in workflow.md)
 
-## Phase 3: Final Integration and Cleanup
-- [~] Task: Add comprehensive unit tests for the new `AuthService` logic.
-    - Test edge cases: expired grace period, truly stolen token reuse, expired tokens.
-- [ ] Task: Run full backend test suite and check coverage.
-    - Ensure `AuthService` and `RefreshTokenRepository` have >80% coverage.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Final Integration and Cleanup' (Protocol in workflow.md)
+## Phase 3: Final Integration and Cleanup [checkpoint: e745c58]
+- [x] Task: Add comprehensive unit tests for the new `AuthService` logic. aae5086
+- [x] Task: Run full backend test suite and check coverage. aae5086
+- [x] Task: Optimize `expiresAt` for consumed tokens to ensure quick cleanup. 3ed52da
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Final Integration and Cleanup' (Protocol in workflow.md)

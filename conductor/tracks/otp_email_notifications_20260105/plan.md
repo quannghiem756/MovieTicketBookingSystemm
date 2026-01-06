@@ -22,7 +22,7 @@
 
 ## Phase 4: Frontend OTP Integration
 - [x] Task: Update Frontend `AuthService.js` with new API endpoints. 4f476bd
-- [ ] Task: Update `RegisterPage.jsx` with OTP verification step.
+- [x] Task: Update `RegisterPage.jsx` with OTP verification step. 376494e
 - [ ] Task: Update `LoginPage.jsx` with Forgot Password link.
 - [ ] Task: Create `ResetPasswordPage.jsx` (or modal).
 - [ ] Task: Conductor - User Manual Verification 'Frontend OTP Integration' (Protocol in workflow.md)

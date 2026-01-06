@@ -91,6 +91,7 @@ describe('UserController', () => {
   describe('updateUser', () => {
     it('should update user', async () => {
         const req = httpMocks.createRequest({ method: 'PUT', params: { id: '1' }, body: { name: 'New' } });
+        req.user = { id: '1', role: 'user' };
         const res = httpMocks.createResponse();
         mockUserService.updateUser.mockResolvedValue({ id: '1', name: 'New' });
         await userController.updateUser(req, res);
@@ -98,6 +99,7 @@ describe('UserController', () => {
     });
     it('should return 404 if user not found', async () => {
         const req = httpMocks.createRequest({ method: 'PUT', params: { id: '1' } });
+        req.user = { id: '1', role: 'user' };
         const res = httpMocks.createResponse();
         mockUserService.updateUser.mockResolvedValue(null);
         await userController.updateUser(req, res);

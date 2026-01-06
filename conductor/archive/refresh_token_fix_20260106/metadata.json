@@ -1,0 +1,8 @@
+{
+  "track_id": "refresh_token_fix_20260106",
+  "type": "bug_fix",
+  "status": "new",
+  "created_at": "2026-01-06T17:46:00Z",
+  "updated_at": "2026-01-06T17:46:00Z",
+  "description": "Fix infinite refresh token generation loop and race conditions"
+}

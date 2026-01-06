@@ -73,6 +73,44 @@ describe('AuthService', () => {
       expect(mockRefreshTokenRepository.create).toHaveBeenCalled();
     });
 
+    it('should return replacement token if valid and within grace period', async () => {
+      const userId = 'u123';
+      const mockUser = { id: userId, email: 'test@test.com' };
+      const oldToken = jwt.sign({ id: userId }, authService.refreshTokenSecret);
+      const replacementToken = 'new-token-123';
+      
+      const consumedAt = new Date(Date.now() - 5000); // 5 seconds ago
+      mockRefreshTokenRepository.findByToken.mockResolvedValue({ 
+        userId, 
+        token: oldToken,
+        consumedAt,
+        replacedBy: replacementToken
+      });
+      mockUserService.getUserById.mockResolvedValue(mockUser);
+
+      const result = await authService.refreshTokens(oldToken);
+
+      expect(result.refreshToken).toBe(replacementToken);
+      expect(mockRefreshTokenRepository.create).not.toHaveBeenCalled();
+      expect(mockRefreshTokenRepository.markAsConsumed).not.toHaveBeenCalled();
+    });
+
+    it('should throw error and detect reuse if consumed outside grace period', async () => {
+      const userId = 'u123';
+      const oldToken = jwt.sign({ id: userId }, authService.refreshTokenSecret);
+      
+      const consumedAt = new Date(Date.now() - 60000); // 60 seconds ago (outside 30s grace)
+      mockRefreshTokenRepository.findByToken.mockResolvedValue({ 
+        userId, 
+        token: oldToken,
+        consumedAt,
+        replacedBy: 'some-new-token'
+      });
+
+      await expect(authService.refreshTokens(oldToken)).rejects.toThrow('Invalid refresh token');
+      expect(mockRefreshTokenRepository.deleteAllForUser).toHaveBeenCalledWith(userId);
+    });
+
     it('should throw error and detect reuse if token is valid but NOT in DB', async () => {
       const oldToken = jwt.sign({ id: 'u123' }, authService.refreshTokenSecret);
       mockRefreshTokenRepository.findByToken.mockResolvedValue(null);

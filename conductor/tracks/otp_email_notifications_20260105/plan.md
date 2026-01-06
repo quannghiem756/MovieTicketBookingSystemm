@@ -1,12 +1,12 @@
 # Plan: OTP Email Verification & Booking Notifications
 
-## Phase 1: Email Infrastructure Setup
+## Phase 1: Email Infrastructure Setup [checkpoint: e2a4d02]
 - [x] Task: Install `nodemailer` and `dotenv`. c02e164
 - [x] Task: Configure Environment Variables for SMTP. b5a748d
     - Add `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM` to `.env`.
 - [x] Task: Create Email Service Module. 377472c
 - [x] Task: TDD - Email Service 377472c
-- [ ] Task: Conductor - User Manual Verification 'Email Infrastructure Setup' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Email Infrastructure Setup' (Protocol in workflow.md) e2a4d02
 
 ## Phase 2: OTP System Implementation
 - [ ] Task: Create OTP Schema/Model (or extend User model).

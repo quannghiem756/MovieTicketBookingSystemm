@@ -4,13 +4,8 @@
 - [x] Task: Install `nodemailer` and `dotenv`. c02e164
 - [x] Task: Configure Environment Variables for SMTP. b5a748d
     - Add `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM` to `.env`.
-- [ ] Task: Create Email Service Module.
-    - Create `backend/src/infrastructure/EmailService.js`.
-    - Implement `sendEmail(to, subject, html)` function.
-    - Implement `verifyConnection()` to test SMTP config.
-- [ ] Task: TDD - Email Service
-    - Create `backend/src/infrastructure/tests/EmailService.test.js`.
-    - Write tests for successful sending and error handling (mocking `nodemailer`).
+- [x] Task: Create Email Service Module. 377472c
+- [x] Task: TDD - Email Service 377472c
 - [ ] Task: Conductor - User Manual Verification 'Email Infrastructure Setup' (Protocol in workflow.md)
 
 ## Phase 2: OTP System Implementation

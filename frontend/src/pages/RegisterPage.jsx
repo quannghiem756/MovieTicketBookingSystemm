@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { createUser } from '../services/api';
+import { createUser, verifyRegistration } from '../services/api';
 import { useTranslation } from '../context/I18nContext';
 import {
   Container,
@@ -36,6 +36,8 @@ import {
 
 const RegisterPage = () => {
   const navigate = useNavigate();
+  const [step, setStep] = useState('register'); // 'register' or 'otp'
+  const [otp, setOtp] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -152,41 +154,57 @@ const RegisterPage = () => {
     setLoading(true);
     setServerError('');
 
-    // Validate form
-    const formErrors = validateForm();
-    if (Object.keys(formErrors).length > 0) {
-      setErrors(formErrors);
-      setLoading(false);
-      return;
-    }
-
-    // Create a copy of formData without confirmPassword for API submission
-    const { confirmPassword, ...userData } = formData;
-
-    try {
-      const response = await createUser(userData);
-      console.log('Registration successful', response.data);
-      navigate('/login'); // Redirect to login page
-    } catch (err) {
-      if (err.response && err.response.data && err.response.data.details) {
-        // Handle validation errors from backend
-        const backendErrors = {};
-        err.response.data.details.forEach(detail => {
-          backendErrors[detail.field] = detail.message;
-        });
-        setErrors(backendErrors);
-      } else if (err.response && err.response.data && err.response.data.error) {
-        // Handle other backend errors
-        if (err.response.data.error === 'Email already exists') {
-          setServerError(t('validation.email.exists'));
-        } else {
-          setServerError(err.response.data.error);
+    if (step === 'register') {
+        // Validate form
+        const formErrors = validateForm();
+        if (Object.keys(formErrors).length > 0) {
+          setErrors(formErrors);
+          setLoading(false);
+          return;
         }
-      } else {
-        setServerError(t('register.error'));
-      }
-    } finally {
-      setLoading(false);
+
+        // Create a copy of formData without confirmPassword for API submission
+        const { confirmPassword, ...userData } = formData;
+
+        try {
+          // This now triggers OTP email
+          await createUser(userData);
+          setStep('otp');
+        } catch (err) {
+          if (err.response && err.response.data && err.response.data.details) {
+            const backendErrors = {};
+            err.response.data.details.forEach(detail => {
+              backendErrors[detail.field] = detail.message;
+            });
+            setErrors(backendErrors);
+          } else if (err.response && err.response.data && err.response.data.error) {
+            if (err.response.data.error === 'Email already exists') {
+              setServerError(t('validation.email.exists'));
+            } else {
+              setServerError(err.response.data.error);
+            }
+          } else {
+            setServerError(t('register.error'));
+          }
+        } finally {
+          setLoading(false);
+        }
+    } else {
+        // OTP Step
+        if (!otp || otp.length !== 6) {
+            setServerError('Please enter a valid 6-digit OTP.');
+            setLoading(false);
+            return;
+        }
+
+        try {
+            await verifyRegistration(formData.email, otp);
+            navigate('/login', { state: { message: 'Registration successful! Please login.' } });
+        } catch (err) {
+            setServerError(err.response?.data?.error || 'Verification failed. Please try again.');
+        } finally {
+            setLoading(false);
+        }
     }
   };
 
@@ -242,16 +260,48 @@ const RegisterPage = () => {
                 WebkitTextFillColor: 'transparent',
               }}
             >
-              {t('register.title')}
+              {step === 'otp' ? 'Verification' : t('register.title')}
             </Typography>
             <Typography variant="body1" color="textSecondary">
-              {t('register.subtitle')}
+              {step === 'otp' ? 'Enter the code sent to your email' : t('register.subtitle')}
             </Typography>
           </Box>
           
           {serverError && <Alert severity="error" sx={{ mb: 3 }}>{serverError}</Alert>}
           
           <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
+            {step === 'otp' ? (
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                <Typography variant="body1" color="textSecondary" align="center" sx={{ mb: 2 }}>
+                  We have sent a 6-digit verification code to <b>{formData.email}</b>.<br/>
+                  Please enter it below to verify your account.
+                </Typography>
+                <TextField
+                  required
+                  fullWidth
+                  id="otp"
+                  label="Verification Code"
+                  name="otp"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  autoFocus
+                  InputProps={{
+                    sx: { borderRadius: 3 }
+                  }}
+                  inputProps={{ 
+                    maxLength: 6,
+                    style: { textAlign: 'center', letterSpacing: '0.5em', fontSize: '1.5rem', fontWeight: 'bold' } 
+                  }}
+                  sx={{ 
+                    '& .MuiOutlinedInput-root': {
+                      '& fieldset': { borderColor: 'rgba(255,255,255,0.3)' },
+                      '&:hover fieldset': { borderColor: 'rgba(255,255,255,0.5)' },
+                      '&.Mui-focused fieldset': { borderColor: 'primary.main' },
+                    }
+                  }}
+                />
+              </Box>
+            ) : (
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
               <TextField
                 autoComplete="name"
@@ -548,6 +598,7 @@ const RegisterPage = () => {
                 />
               </Box>
             </Box>
+            )}
             
             <Button
               type="submit"
@@ -568,10 +619,10 @@ const RegisterPage = () => {
               {loading ? (
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <Box sx={{ width: 20, height: 20, border: '2px solid', borderColor: 'white', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
-                  <Box component="span" sx={{ ml: 1 }}>{t('register.loading')}</Box>
+                  <Box component="span" sx={{ ml: 1 }}>{step === 'otp' ? 'Verifying...' : t('register.loading')}</Box>
                 </Box>
               ) : (
-                t('register.submit')
+                step === 'otp' ? 'Verify OTP' : t('register.submit')
               )}
             </Button>
             

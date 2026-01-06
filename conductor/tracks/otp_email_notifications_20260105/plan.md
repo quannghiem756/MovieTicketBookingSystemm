@@ -14,13 +14,20 @@
 - [x] Task: TDD - OTP Service 93acae4
 - [x] Task: Conductor - User Manual Verification 'OTP System Implementation' (Protocol in workflow.md) 3c88f6b
 
-## Phase 3: Registration & Password Reset Integration
+## Phase 3: Registration & Password Reset Integration [checkpoint: 531ccd2]
 - [x] Task: Modify Registration Flow. 12b91ac
 - [x] Task: Modify Password Reset Flow. 12b91ac
 - [x] Task: TDD - Auth Integration 12b91ac
-- [ ] Task: Conductor - User Manual Verification 'Registration & Password Reset Integration' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Registration & Password Reset Integration' (Protocol in workflow.md) 531ccd2
 
-## Phase 4: Booking Notification Email
+## Phase 4: Frontend OTP Integration
+- [x] Task: Update Frontend `AuthService.js` with new API endpoints. 4f476bd
+- [ ] Task: Update `RegisterPage.jsx` with OTP verification step.
+- [ ] Task: Update `LoginPage.jsx` with Forgot Password link.
+- [ ] Task: Create `ResetPasswordPage.jsx` (or modal).
+- [ ] Task: Conductor - User Manual Verification 'Frontend OTP Integration' (Protocol in workflow.md)
+
+## Phase 5: Booking Notification Email
 - [ ] Task: Create HTML Email Template.
     - Create `backend/src/templates/bookingEmail.html` (or a helper function to generate HTML).
     - Style to match `BookingConfirmation.jsx` (embed CSS inline).

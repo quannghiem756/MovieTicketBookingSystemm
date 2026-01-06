@@ -15,17 +15,9 @@
 - [x] Task: Conductor - User Manual Verification 'OTP System Implementation' (Protocol in workflow.md) 3c88f6b
 
 ## Phase 3: Registration & Password Reset Integration
-- [ ] Task: Modify Registration Flow.
-    - Update `AuthService.js` to create inactive user or temporary registration state.
-    - Send OTP upon registration request.
-    - Create new endpoint `POST /api/auth/verify-email`.
-- [ ] Task: Modify Password Reset Flow.
-    - Create endpoint `POST /api/auth/forgot-password` (sends OTP).
-    - Create endpoint `POST /api/auth/reset-password` (verifies OTP + new password).
-- [ ] Task: TDD - Auth Integration
-    - Update `backend/src/application/tests/AuthService.test.js`.
-    - Test full flows: Register -> Verify -> Login.
-    - Test Forgot Password -> Verify -> Login.
+- [x] Task: Modify Registration Flow. 12b91ac
+- [x] Task: Modify Password Reset Flow. 12b91ac
+- [x] Task: TDD - Auth Integration 12b91ac
 - [ ] Task: Conductor - User Manual Verification 'Registration & Password Reset Integration' (Protocol in workflow.md)
 
 ## Phase 4: Booking Notification Email

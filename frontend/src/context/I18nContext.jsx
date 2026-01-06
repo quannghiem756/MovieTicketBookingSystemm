@@ -21,8 +21,17 @@ export const useTranslation = () => {
 export const I18nProvider = ({ children }) => {
   const [language, setLanguage] = useState('vi'); // Default to Vietnamese
 
-  const t = useCallback((key) => {
-    return translations[language][key] || key;
+  const t = useCallback((key, params = {}) => {
+    let text = translations[language][key] || key;
+    
+    // Basic interpolation
+    if (params) {
+      Object.keys(params).forEach(param => {
+        text = text.replace(new RegExp(`{{${param}}}`, 'g'), params[param]);
+      });
+    }
+    
+    return text;
   }, [language]);
 
   const value = {

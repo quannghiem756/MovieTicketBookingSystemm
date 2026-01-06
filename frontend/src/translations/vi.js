@@ -594,7 +594,32 @@ const vi = {
   'rating.warning.k_alert': 'Khán giả dưới 13 tuổi phải có cha mẹ hoặc người giám hộ đi cùng.',
   'rating.warning.confirm_guardian': 'Tôi xác nhận rằng tôi sẽ đi cùng với cha mẹ hoặc người giám hộ.',
   'rating.warning.confirm_proceed': 'Xác nhận & Tiếp tục',
-  'rating.restriction.tooltip': 'Bạn phải đủ {{age}} tuổi để đặt vé.'
+  'rating.restriction.tooltip': 'Bạn phải đủ {{age}} tuổi để đặt vé.',
+
+  // OTP / Verification
+  'auth.otp.verification': 'Xác thực',
+  'auth.otp.subtitle': 'Chúng tôi đã gửi mã xác thực 6 chữ số đến <b>{{email}}</b>.<br/>Vui lòng nhập mã bên dưới để xác thực tài khoản của bạn.',
+  'auth.otp.label': 'Mã xác thực',
+  'auth.otp.verify': 'Xác thực OTP',
+  'auth.otp.verifying': 'Đang xác thực...',
+  'auth.otp.error': 'Xác thực không thành công. Vui lòng thử lại.',
+  'auth.otp.invalid': 'Vui lòng nhập mã OTP 6 chữ số hợp lệ',
+
+  // Forgot Password
+  'auth.forgotPassword.title': 'Quên mật khẩu',
+  'auth.forgotPassword.subtitle': 'Nhập địa chỉ email của bạn để nhận mã xác thực.',
+  'auth.forgotPassword.send': 'Gửi mã xác thực',
+  'auth.forgotPassword.backToLogin': 'Quay lại đăng nhập',
+  'auth.forgotPassword.success': 'Mã xác thực đặt lại mật khẩu đã được gửi đến email của bạn.',
+
+  // Reset Password
+  'auth.resetPassword.title': 'Đặt lại mật khẩu',
+  'auth.resetPassword.subtitle': 'Nhập mã xác thực đã được gửi đến email của bạn.',
+  'auth.resetPassword.submit': 'Đặt lại mật khẩu',
+  'auth.resetPassword.newPassword': 'Mật khẩu mới',
+  'auth.resetPassword.confirmPassword': 'Xác nhận mật khẩu mới',
+  'auth.resetPassword.success': 'Đặt lại mật khẩu thành công! Vui lòng đăng nhập.',
+  'auth.resetPassword.failed': 'Đặt lại mật khẩu không thành công'
 };
 
 export default vi;

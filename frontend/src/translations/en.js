@@ -17,7 +17,7 @@ const en = {
   'profile.edit': 'Edit Profile',
   'profile.save': 'Save Changes',
   'profile.cancel': 'Cancel',
-  'profile.saving': 'Saving...',
+  'profile.saving': 'Saving...', 
   'profile.updateSuccess': 'Profile updated successfully',
   'profile.updateError': 'Failed to update profile',
 
@@ -103,7 +103,7 @@ const en = {
   'booking.selectedSeats': 'Selected Seats',
   'booking.total': 'Total',
   'booking.confirmBooking': 'Confirm Booking',
-  'booking.processing': 'Processing...',
+  'booking.processing': 'Processing...', 
   'booking.error': 'Booking failed. Please try again.',
   'booking.selectSeats': 'Please select at least one seat.',
   'booking.maxSeatsSelected': 'You can only select up to 8 seats.',
@@ -158,7 +158,7 @@ const en = {
   'login.email': 'Email address',
   'login.password': 'Password',
     'login.submit': 'Login',
-    'login.loading': 'Logging in...',
+    'login.loading': 'Logging in...', 
   'login.noAccount': 'Don\'t have an account?',
   'login.register': 'Register here',
   'login.error': 'Login failed. Please try again.',
@@ -173,7 +173,7 @@ const en = {
   'register.phone': 'Phone number',
   'register.dateOfBirth': 'Date of birth',
   'register.submit': 'Register',
-  'register.loading': 'Registering...',
+  'register.loading': 'Registering...', 
   'register.hasAccount': 'Already have an account?',
   'register.login': 'Sign in',
   'register.error': 'Registration failed. Please try again.',
@@ -194,7 +194,7 @@ const en = {
   'validation.dateOfBirth.age': 'You must be at least 13 years old',
 
   // Common
-  'common.loading': 'Loading...',
+  'common.loading': 'Loading...', 
   'common.error': 'An error occurred',
   'common.movieNotFound': 'Movie not found',
   'common.close': 'Close',
@@ -256,7 +256,7 @@ const en = {
   'admin.movies.table.actions': 'Actions',
   'admin.movies.edit': 'Edit',
   'admin.movies.delete': 'Delete',
-  'admin.movies.search': 'Search movies...',
+  'admin.movies.search': 'Search movies...', 
   'admin.movies.noMovies': 'No movies found',
   'admin.movies.deleteConfirm': 'Are you sure you want to delete this movie?',
   'admin.movies.deleteError': 'Failed to delete movie',
@@ -284,7 +284,7 @@ const en = {
   'admin.movieForm.trailerUrl': 'Trailer URL',
   'admin.movieForm.cancel': 'Cancel',
   'admin.movieForm.save': 'Save Movie',
-  'admin.movieForm.saving': 'Saving...',
+  'admin.movieForm.saving': 'Saving...', 
   'admin.movieForm.error': 'Failed to save movie:',
   'admin.movieForm.delete': 'Delete',
   // Showtime Management in Movie Form
@@ -358,7 +358,7 @@ const en = {
   'admin.showtimeForm.languagePlaceholder': 'e.g., English, Spanish',
   'admin.showtimeForm.cancel': 'Cancel',
   'admin.showtimeForm.save': 'Save Showtime',
-  'admin.showtimeForm.saving': 'Saving...',
+  'admin.showtimeForm.saving': 'Saving...', 
   'admin.showtimeForm.fetchMoviesError': 'Failed to fetch movies:',
   'admin.showtimeForm.fetchTheatersError': 'Failed to fetch theaters:',
   'admin.showtimeForm.fetchError': 'Failed to fetch showtime',
@@ -373,7 +373,7 @@ const en = {
   'admin.theaterForm.seatsPerRow': 'Seats Per Row',
   'admin.theaterForm.cancel': 'Cancel',
   'admin.theaterForm.save': 'Save Theater',
-  'admin.theaterForm.saving': 'Saving...',
+  'admin.theaterForm.saving': 'Saving...', 
   'admin.theaterForm.error': 'Failed to save theater:',
   'admin.theaterForm.seatMapTitle': 'Seat Map',
   'admin.theaterForm.seatMap.ariaLabel': 'Seat map',
@@ -447,7 +447,7 @@ const en = {
   'recommendation.errorMessage': "Sorry, I encountered an error while processing your request. Could you please try again?",
   'recommendation.title': 'AI Movie Recommendation Assistant',
   'recommendation.subtitle': 'Ask for personalized movie suggestions based on genre, mood, or your preferences!',
-  'recommendation.loadingMessage': 'Generating your personalized recommendations...',
+  'recommendation.loadingMessage': 'Generating your personalized recommendations...', 
   'recommendation.placeholder': "Ask for movie recommendations (e.g., 'Recommend action movies' or 'What's playing now?')...",
   'recommendation.example1': 'Recommend action movies',
   'recommendation.example2': "What's playing now?",
@@ -540,7 +540,7 @@ const en = {
   'admin.couponForm.allMovies': 'All Movies',
   'admin.couponForm.cancel': 'Cancel',
   'admin.couponForm.save': 'Save Coupon',
-  'admin.couponForm.saving': 'Saving...',
+  'admin.couponForm.saving': 'Saving...', 
   'admin.couponForm.error': 'Failed to save coupon:',
 
   // Client-side News Page
@@ -562,7 +562,32 @@ const en = {
   'rating.warning.k_alert': 'Viewers under 13 must be accompanied by a parent or guardian.',
   'rating.warning.confirm_guardian': 'I confirm that I will be accompanied by a parent or guardian.',
   'rating.warning.confirm_proceed': 'Confirm & Proceed',
-  'rating.restriction.tooltip': 'You must be at least {{age}} years old to book.'
+  'rating.restriction.tooltip': 'You must be at least {{age}} years old to book.',
+
+  // OTP / Verification
+  'auth.otp.verification': 'Verification',
+  'auth.otp.subtitle': 'We have sent a 6-digit verification code to <b>{{email}}</b>.<br/>Please enter it below to verify your account.',
+  'auth.otp.label': 'Verification Code',
+  'auth.otp.verify': 'Verify OTP',
+  'auth.otp.verifying': 'Verifying...', 
+  'auth.otp.error': 'Verification failed. Please try again.',
+  'auth.otp.invalid': 'Please enter a valid 6-digit OTP',
+
+  // Forgot Password
+  'auth.forgotPassword.title': 'Forgot Password',
+  'auth.forgotPassword.subtitle': 'Enter your email address to receive a verification code.',
+  'auth.forgotPassword.send': 'Send Verification Code',
+  'auth.forgotPassword.backToLogin': 'Back to Login',
+  'auth.forgotPassword.success': 'Password reset OTP sent to your email.',
+
+  // Reset Password
+  'auth.resetPassword.title': 'Reset Password',
+  'auth.resetPassword.subtitle': 'Enter the verification code sent to your email.',
+  'auth.resetPassword.submit': 'Reset Password',
+  'auth.resetPassword.newPassword': 'New Password',
+  'auth.resetPassword.confirmPassword': 'Confirm New Password',
+  'auth.resetPassword.success': 'Password reset successful! Please login.',
+  'auth.resetPassword.failed': 'Password reset failed'
 };
 
 export default en;

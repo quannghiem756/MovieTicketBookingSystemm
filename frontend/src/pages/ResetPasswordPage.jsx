@@ -65,7 +65,7 @@ const ResetPasswordPage = () => {
     } else {
       // Reset Step
       if (!otp || otp.length !== 6) {
-        setErrors({ otp: 'Please enter a valid 6-digit OTP' });
+        setErrors({ otp: t('auth.otp.invalid') });
         setLoading(false);
         return;
       }
@@ -82,9 +82,9 @@ const ResetPasswordPage = () => {
 
       try {
         await resetPassword(email, otp, password);
-        navigate('/login', { state: { message: 'Password reset successful! Please login.' } });
+        navigate('/login', { state: { message: t('auth.resetPassword.success') } });
       } catch (err) {
-        setServerError(err.response?.data?.error || 'Password reset failed');
+        setServerError(err.response?.data?.error || t('auth.resetPassword.failed'));
       } finally {
         setLoading(false);
       }
@@ -133,12 +133,12 @@ const ResetPasswordPage = () => {
                 WebkitTextFillColor: 'transparent',
               }}
             >
-              {step === 'email' ? 'Forgot Password' : 'Reset Password'}
+              {step === 'email' ? t('auth.forgotPassword.title') : t('auth.resetPassword.title')}
             </Typography>
             <Typography variant="body1" color="textSecondary">
               {step === 'email' 
-                ? 'Enter your email address to receive a verification code.' 
-                : 'Enter the verification code sent to your email.'}
+                ? t('auth.forgotPassword.subtitle')
+                : t('auth.resetPassword.subtitle')}
             </Typography>
           </Box>
           
@@ -172,7 +172,7 @@ const ResetPasswordPage = () => {
                   <TextField
                     fullWidth
                     id="otp"
-                    label="Verification Code"
+                    label={t('auth.otp.label')}
                     value={otp}
                     onChange={(e) => setOtp(e.target.value)}
                     error={!!errors.otp}
@@ -186,7 +186,7 @@ const ResetPasswordPage = () => {
                   <TextField
                     fullWidth
                     name="password"
-                    label="New Password"
+                    label={t('auth.resetPassword.newPassword')}
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -214,7 +214,7 @@ const ResetPasswordPage = () => {
                   <TextField
                     fullWidth
                     name="confirmPassword"
-                    label="Confirm New Password"
+                    label={t('auth.resetPassword.confirmPassword')}
                     type={showConfirmPassword ? 'text' : 'password'}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
@@ -258,7 +258,7 @@ const ResetPasswordPage = () => {
               }}
               disabled={loading}
             >
-              {loading ? t('login.loading') : (step === 'email' ? 'Send Verification Code' : 'Reset Password')}
+              {loading ? t('login.loading') : (step === 'email' ? t('auth.forgotPassword.send') : t('auth.resetPassword.submit'))}
             </Button>
             
             <Button
@@ -272,7 +272,7 @@ const ResetPasswordPage = () => {
                 color: 'text.secondary'
               }}
             >
-              Back to Login
+              {t('auth.forgotPassword.backToLogin')}
             </Button>
           </Box>
         </CardContent>

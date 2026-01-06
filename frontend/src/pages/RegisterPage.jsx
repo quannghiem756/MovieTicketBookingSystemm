@@ -260,11 +260,15 @@ const RegisterPage = () => {
                 WebkitTextFillColor: 'transparent',
               }}
             >
-              {step === 'otp' ? 'Verification' : t('register.title')}
+              {step === 'otp' ? t('auth.otp.verification') : t('register.title')}
             </Typography>
-            <Typography variant="body1" color="textSecondary">
-              {step === 'otp' ? 'Enter the code sent to your email' : t('register.subtitle')}
-            </Typography>
+            {step === 'otp' ? (
+                <Typography variant="body1" color="textSecondary" dangerouslySetInnerHTML={{ __html: t('auth.otp.subtitle', { email: formData.email }) }} />
+            ) : (
+                <Typography variant="body1" color="textSecondary">
+                  {t('register.subtitle')}
+                </Typography>
+            )}
           </Box>
           
           {serverError && <Alert severity="error" sx={{ mb: 3 }}>{serverError}</Alert>}
@@ -272,15 +276,11 @@ const RegisterPage = () => {
           <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
             {step === 'otp' ? (
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                <Typography variant="body1" color="textSecondary" align="center" sx={{ mb: 2 }}>
-                  We have sent a 6-digit verification code to <b>{formData.email}</b>.<br/>
-                  Please enter it below to verify your account.
-                </Typography>
                 <TextField
                   required
                   fullWidth
                   id="otp"
-                  label="Verification Code"
+                  label={t('auth.otp.label')}
                   name="otp"
                   value={otp}
                   onChange={(e) => setOtp(e.target.value)}
@@ -619,10 +619,10 @@ const RegisterPage = () => {
               {loading ? (
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <Box sx={{ width: 20, height: 20, border: '2px solid', borderColor: 'white', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
-                  <Box component="span" sx={{ ml: 1 }}>{step === 'otp' ? 'Verifying...' : t('register.loading')}</Box>
+                  <Box component="span" sx={{ ml: 1 }}>{step === 'otp' ? t('auth.otp.verifying') : t('register.loading')}</Box>
                 </Box>
               ) : (
-                step === 'otp' ? 'Verify OTP' : t('register.submit')
+                step === 'otp' ? t('auth.otp.verify') : t('register.submit')
               )}
             </Button>
             

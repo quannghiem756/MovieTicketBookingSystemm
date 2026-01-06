@@ -71,6 +71,34 @@ describe('MongoRefreshTokenRepository', () => {
     });
   });
 
+  describe('markAsConsumed', () => {
+    it('should mark a token as consumed and set replacedBy', async () => {
+      const mockToken = {
+        _id: 'rt123',
+        userId: 'user123',
+        token: 'token123',
+        expiresAt: new Date(),
+        consumedAt: new Date(),
+        replacedBy: 'newToken123'
+      };
+
+      RefreshTokenModel.findOneAndUpdate.mockResolvedValue(mockToken);
+
+      const result = await repository.markAsConsumed('token123', 'newToken123');
+
+      expect(result.id).toBe('rt123');
+      expect(result.replacedBy).toBe('newToken123');
+      expect(RefreshTokenModel.findOneAndUpdate).toHaveBeenCalledWith(
+        { token: 'token123' },
+        expect.objectContaining({ 
+          replacedBy: 'newToken123',
+          consumedAt: expect.any(Date)
+        }),
+        { new: true }
+      );
+    });
+  });
+
   describe('deleteAllForUser', () => {
     it('should delete all tokens for a user', async () => {
       RefreshTokenModel.deleteMany.mockResolvedValue({ deletedCount: 5 });

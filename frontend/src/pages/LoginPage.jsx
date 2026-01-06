@@ -9,6 +9,7 @@ import {
   TextField,
   Button,
   Alert,
+  Link as MuiLink,
   InputAdornment,
   IconButton,
   Card,
@@ -298,6 +299,11 @@ const LoginPage = () => {
                   sx: { borderRadius: 3 }
                 }}
               />
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: -2 }}>
+                <MuiLink component={Link} to="/forgot-password" variant="body2" sx={{ color: 'text.secondary', '&:hover': { color: 'primary.main' } }}>
+                  {t('login.forgotPassword', 'Forgot Password?')}
+                </MuiLink>
+              </Box>
             </Box>
             
             <Button

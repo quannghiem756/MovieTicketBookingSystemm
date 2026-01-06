@@ -8,6 +8,7 @@ import MovieDetails from './pages/MovieDetails';
 import BookingConfirmation from './pages/BookingConfirmation';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 import NowShowingPage from './pages/NowShowingPage';
 import ComingSoonPage from './pages/ComingSoonPage';
 import BookingPage from './pages/BookingPage';
@@ -78,6 +79,7 @@ const AppRouter = () => {
           } />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/forgot-password" element={<ResetPasswordPage />} />
 
           {/* Admin routes */}
           <Route path="/admin" element={

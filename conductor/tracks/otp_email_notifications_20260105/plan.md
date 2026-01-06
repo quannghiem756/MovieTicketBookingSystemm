@@ -2,7 +2,7 @@
 
 ## Phase 1: Email Infrastructure Setup
 - [x] Task: Install `nodemailer` and `dotenv`. c02e164
-- [ ] Task: Configure Environment Variables for SMTP.
+- [x] Task: Configure Environment Variables for SMTP. b5a748d
     - Add `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM` to `.env`.
 - [ ] Task: Create Email Service Module.
     - Create `backend/src/infrastructure/EmailService.js`.

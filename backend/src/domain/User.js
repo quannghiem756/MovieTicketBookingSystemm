@@ -1,6 +1,6 @@
 // User domain model
 class User {
-  constructor(id, name, email, phone, passwordHash, dateOfBirth, loyaltyPoints, role = 'user', googleId = null) {
+  constructor(id, name, email, phone, passwordHash, dateOfBirth, loyaltyPoints, role = 'user', googleId = null, isVerified = false) {
     this.id = id;
     this.name = name;
     this.email = email;
@@ -10,6 +10,7 @@ class User {
     this.dateOfBirth = dateOfBirth ? new Date(dateOfBirth) : null;
     this.loyaltyPoints = loyaltyPoints;
     this.role = role; // 'admin', 'user', or 'staff'
+    this.isVerified = isVerified;
   }
 
   calculateAge() {

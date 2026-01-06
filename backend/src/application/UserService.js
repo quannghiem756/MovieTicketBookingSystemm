@@ -36,7 +36,8 @@ class UserService {
       userData.dateOfBirth,
       0,
       role,
-      userData.googleId
+      userData.googleId,
+      userData.googleId ? true : (userData.isVerified || false)
     );
     
     return await this.userRepository.create(user);
@@ -64,7 +65,8 @@ class UserService {
       userData.dateOfBirth,
       userData.loyaltyPoints,
       userData.role || 'user',
-      userData.googleId
+      userData.googleId,
+      userData.isVerified
     );
     
     return await this.userRepository.update(id, user);
@@ -74,10 +76,24 @@ class UserService {
     return await this.userRepository.delete(id);
   }
 
+  async resetPassword(id, newPassword) {
+    const saltRounds = 10;
+    const passwordHash = await bcrypt.hash(newPassword, saltRounds);
+    const user = await this.userRepository.findById(id);
+    if (!user) throw new Error('User not found');
+    
+    // We update the domain object-like structure that the repository expects
+    user.passwordHash = passwordHash;
+    return await this.userRepository.update(id, user);
+  }
+
   async authenticateUser(email, password) {
     const user = await this.userRepository.findByEmail(email);
     // If user has no password (Google user), they can't login via email/password
     if (user && user.passwordHash && await bcrypt.compare(password, user.passwordHash)) {
+      if (!user.isVerified) {
+        throw new Error('Email not verified');
+      }
       return user;
     }
     return null;

@@ -4,6 +4,8 @@ const MongoUserRepository = require('../../../infrastructure/repositories/MongoU
 const MongoRefreshTokenRepository = require('../../../infrastructure/repositories/MongoRefreshTokenRepository');
 const UserService = require('../../../application/UserService');
 const AuthService = require('../../../application/AuthService');
+const OTPService = require('../../../application/OTPService');
+const EmailService = require('../../../infrastructure/EmailService');
 const { authenticate, authorizeAdmin } = require('../middleware/auth');
 const { registerValidationRules, loginValidationRules, validate } = require('../middleware/validation');
 
@@ -12,7 +14,7 @@ const userRepository = new MongoUserRepository();
 const refreshTokenRepository = new MongoRefreshTokenRepository();
 const userService = new UserService(userRepository);
 const authService = new AuthService(userService, refreshTokenRepository);
-const userController = new UserController(userService, authService);
+const userController = new UserController(userService, authService, OTPService, EmailService);
 
 const router = express.Router();
 
@@ -22,6 +24,9 @@ router.post('/login', loginValidationRules(), validate, (req, res) => userContro
 router.post('/google-login', (req, res) => userController.googleLogin(req, res));
 router.post('/refresh-token', (req, res) => userController.refreshToken(req, res));
 router.post('/logout', (req, res) => userController.logout(req, res));
+router.post('/verify-registration', (req, res) => userController.verifyRegistration(req, res));
+router.post('/forgot-password', (req, res) => userController.forgotPassword(req, res));
+router.post('/reset-password', (req, res) => userController.resetPassword(req, res));
 
 // Protected routes
 router.get('/', authenticate, authorizeAdmin, (req, res) => userController.getAllUsers(req, res));

@@ -2,15 +2,31 @@ const UserService = require('../../../application/UserService');
 const AuthService = require('../../../application/AuthService');
 
 class UserController {
-  constructor(userService, authService) {
+  constructor(userService, authService, otpService, emailService) {
     this.userService = userService;
     this.authService = authService;
+    this.otpService = otpService;
+    this.emailService = emailService;
   }
 
   async createUser(req, res) {
     try {
       const user = await this.userService.createUser(req.body);
-      res.status(201).json(user);
+      
+      // Generate and send OTP for regular registration
+      const otp = this.otpService.generateOTP();
+      await this.otpService.saveOTP(user.email, otp, 'registration');
+      
+      await this.emailService.sendEmail(
+        user.email,
+        'Verify your email',
+        `<p>Your OTP for registration is: <b>${otp}</b>. It expires in 5 minutes.</p>`
+      );
+
+      res.status(201).json({ 
+        message: 'Registration successful. Please check your email for OTP.',
+        email: user.email 
+      });
     } catch (error) {
       if (error.code === 11000 && error.keyPattern && error.keyPattern.email) {
         return res.status(400).json({ error: 'Email already exists' });
@@ -21,13 +37,81 @@ class UserController {
 
   async createUserByAdmin(req, res) {
     try {
-      const user = await this.userService.createUser(req.body, true);
+      // Admin created users are verified by default
+      const user = await this.userService.createUser({ ...req.body, isVerified: true }, true);
       res.status(201).json(user);
     } catch (error) {
       if (error.code === 11000 && error.keyPattern && error.keyPattern.email) {
         return res.status(400).json({ error: 'Email already exists' });
       }
       res.status(400).json({ error: error.message });
+    }
+  }
+
+  async verifyRegistration(req, res) {
+    try {
+      const { email, otp } = req.body;
+      const isValid = await this.otpService.verifyOTP(email, otp, 'registration');
+      
+      if (!isValid) {
+        return res.status(400).json({ error: 'Invalid or expired OTP' });
+      }
+
+      const user = await this.userService.getUserByEmail(email);
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      await this.userService.updateUser(user.id, { ...user, isVerified: true });
+
+      res.json({ message: 'Email verified successfully. You can now login.' });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async forgotPassword(req, res) {
+    try {
+      const { email } = req.body;
+      const user = await this.userService.getUserByEmail(email);
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      const otp = this.otpService.generateOTP();
+      await this.otpService.saveOTP(email, otp, 'password_reset');
+
+      await this.emailService.sendEmail(
+        email,
+        'Password Reset OTP',
+        `<p>Your OTP for password reset is: <b>${otp}</b>. It expires in 5 minutes.</p>`
+      );
+
+      res.json({ message: 'Password reset OTP sent to your email.' });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async resetPassword(req, res) {
+    try {
+      const { email, otp, newPassword } = req.body;
+      const isValid = await this.otpService.verifyOTP(email, otp, 'password_reset');
+      
+      if (!isValid) {
+        return res.status(400).json({ error: 'Invalid or expired OTP' });
+      }
+
+      const user = await this.userService.getUserByEmail(email);
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      await this.userService.resetPassword(user.id, newPassword);
+
+      res.json({ message: 'Password reset successfully. You can now login.' });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
   }
 

@@ -8,7 +8,8 @@ const userSchema = new mongoose.Schema({
   googleId: { type: String },
   dateOfBirth: { type: Date },
   loyaltyPoints: { type: Number, default: 0 },
-  role: { type: String, enum: ['admin', 'user', 'staff'], default: 'user' }
+  role: { type: String, enum: ['admin', 'user', 'staff'], default: 'user' },
+  isVerified: { type: Boolean, default: false }
 }, {
   timestamps: true
 });

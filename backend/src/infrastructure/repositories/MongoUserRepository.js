@@ -11,7 +11,8 @@ class MongoUserRepository extends UserRepository {
       googleId: user.googleId,
       dateOfBirth: user.dateOfBirth,
       loyaltyPoints: user.loyaltyPoints,
-      role: user.role || 'user'
+      role: user.role || 'user',
+      isVerified: user.isVerified || false
     });
     
     const savedUser = await userDoc.save();
@@ -45,7 +46,8 @@ class MongoUserRepository extends UserRepository {
       googleId: user.googleId,
       dateOfBirth: user.dateOfBirth,
       loyaltyPoints: user.loyaltyPoints,
-      role: user.role
+      role: user.role,
+      isVerified: user.isVerified
     }, { new: true });
     
     if (!updatedUser) return null;
@@ -71,7 +73,8 @@ class MongoUserRepository extends UserRepository {
       googleId: doc.googleId,
       dateOfBirth: doc.dateOfBirth,
       loyaltyPoints: doc.loyaltyPoints,
-      role: doc.role
+      role: doc.role,
+      isVerified: doc.isVerified
     };
   }
 }

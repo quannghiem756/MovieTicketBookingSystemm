@@ -22,6 +22,18 @@ class AuthService {
     return api.post('/users', userData);
   }
 
+  async verifyRegistration(email, otp) {
+    return api.post('/users/verify-registration', { email, otp });
+  }
+
+  async forgotPassword(email) {
+    return api.post('/users/forgot-password', { email });
+  }
+
+  async resetPassword(email, otp, newPassword) {
+    return api.post('/users/reset-password', { email, otp, newPassword });
+  }
+
   async getUserById(id) {
     return api.get(`/users/${id}`);
   }

@@ -12,6 +12,10 @@ class RefreshTokenRepository {
     throw new Error('Method not implemented');
   }
 
+  async markAsConsumed(token, replacedByToken) {
+    throw new Error('Method not implemented');
+  }
+
   async deleteAllForUser(userId) {
     throw new Error('Method not implemented');
   }

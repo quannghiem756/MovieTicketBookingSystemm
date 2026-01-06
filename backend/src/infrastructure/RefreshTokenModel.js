@@ -14,6 +14,14 @@ const refreshTokenSchema = new mongoose.Schema({
   expiresAt: {
     type: Date,
     required: true
+  },
+  consumedAt: {
+    type: Date,
+    default: null
+  },
+  replacedBy: {
+    type: String,
+    default: null
   }
 }, {
   timestamps: { createdAt: true, updatedAt: false }

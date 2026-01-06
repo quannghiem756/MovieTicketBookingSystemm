@@ -24,6 +24,18 @@ class MongoRefreshTokenRepository extends RefreshTokenRepository {
     return result !== null;
   }
 
+  async markAsConsumed(token, replacedByToken) {
+    const result = await RefreshTokenModel.findOneAndUpdate(
+      { token },
+      { 
+        consumedAt: new Date(),
+        replacedBy: replacedByToken
+      },
+      { new: true }
+    );
+    return result !== null ? this._mapToDomain(result) : null;
+  }
+
   async deleteAllForUser(userId) {
     const result = await RefreshTokenModel.deleteMany({ userId });
     return result.deletedCount;
@@ -35,6 +47,8 @@ class MongoRefreshTokenRepository extends RefreshTokenRepository {
       userId: doc.userId.toString(),
       token: doc.token,
       expiresAt: doc.expiresAt,
+      consumedAt: doc.consumedAt,
+      replacedBy: doc.replacedBy,
       createdAt: doc.createdAt
     };
   }

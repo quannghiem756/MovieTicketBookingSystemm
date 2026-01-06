@@ -20,12 +20,12 @@
 - [x] Task: TDD - Auth Integration 12b91ac
 - [x] Task: Conductor - User Manual Verification 'Registration & Password Reset Integration' (Protocol in workflow.md) 531ccd2
 
-## Phase 4: Frontend OTP Integration
+## Phase 4: Frontend OTP Integration [checkpoint: c70e076]
 - [x] Task: Update Frontend `AuthService.js` with new API endpoints. 4f476bd
 - [x] Task: Update `RegisterPage.jsx` with OTP verification step. 376494e
 - [x] Task: Update `LoginPage.jsx` with Forgot Password link. a91bc33
 - [x] Task: Create `ResetPasswordPage.jsx` (or modal). a95d717
-- [ ] Task: Conductor - User Manual Verification 'Frontend OTP Integration' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Frontend OTP Integration' (Protocol in workflow.md) c70e076
 
 ## Phase 5: Booking Notification Email
 - [ ] Task: Create HTML Email Template.

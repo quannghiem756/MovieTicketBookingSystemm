@@ -17,6 +17,7 @@ describe('AuthService', () => {
       create: jest.fn(),
       findByToken: jest.fn(),
       deleteByToken: jest.fn(),
+      markAsConsumed: jest.fn(),
       deleteAllForUser: jest.fn()
     };
     authService = new AuthService(mockUserService, mockRefreshTokenRepository);
@@ -68,7 +69,7 @@ describe('AuthService', () => {
 
       expect(result.accessToken).toBeDefined();
       expect(result.refreshToken).toBeDefined();
-      expect(mockRefreshTokenRepository.deleteByToken).toHaveBeenCalledWith(oldToken);
+      expect(mockRefreshTokenRepository.markAsConsumed).toHaveBeenCalledWith(oldToken, expect.any(String));
       expect(mockRefreshTokenRepository.create).toHaveBeenCalled();
     });
 

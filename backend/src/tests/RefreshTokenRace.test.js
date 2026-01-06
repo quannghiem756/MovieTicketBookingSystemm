@@ -16,6 +16,7 @@ describe('RefreshTokenRace', () => {
       create: jest.fn(),
       findByToken: jest.fn(),
       deleteByToken: jest.fn(),
+      markAsConsumed: jest.fn(),
       deleteAllForUser: jest.fn()
     };
     authService = new AuthService(mockUserService, mockRefreshTokenRepository);
@@ -78,34 +79,47 @@ describe('RefreshTokenRace', () => {
     // We can make findByToken for Req 2 wait until Req 1 has called deleteByToken.
   });
 
-  it('guarantees reproduction of reuse detection trigger on concurrent requests', async () => {
+  it('resolves race condition by allowing grace period for recently rotated tokens', async () => {
     const userId = 'user123';
     const mockUser = { id: userId, email: 'test@test.com', name: 'Test' };
     const oldToken = jwt.sign({ id: userId }, refreshTokenSecret);
+    const newToken = 'new-rotated-token';
 
-    let findCount = 0;
-    mockRefreshTokenRepository.findByToken.mockImplementation(async () => {
-        findCount++;
-        if (findCount === 1) {
-            // First request finds it
-            return { userId, token: oldToken, expiresAt: new Date(Date.now() + 10000) };
-        }
-        // Second request (and subsequent) don't find it if it was deleted
-        return null; 
+    let dbToken = { 
+        userId, 
+        token: oldToken, 
+        expiresAt: new Date(Date.now() + 10000),
+        consumedAt: null,
+        replacedBy: null
+    };
+
+    mockRefreshTokenRepository.findByToken.mockImplementation(async () => dbToken);
+    mockUserService.getUserById.mockResolvedValue(mockUser);
+    
+    mockRefreshTokenRepository.markAsConsumed.mockImplementation(async (token, replacement) => {
+        dbToken.consumedAt = new Date();
+        dbToken.replacedBy = replacement;
+        return { ...dbToken };
     });
 
-    mockUserService.getUserById.mockResolvedValue(mockUser);
-    mockRefreshTokenRepository.deleteByToken.mockResolvedValue(true);
     mockRefreshTokenRepository.create.mockResolvedValue({});
 
-    const results = await Promise.allSettled([
+    // Simultaneous requests
+    const [res1, res2] = await Promise.all([
         authService.refreshTokens(oldToken),
         authService.refreshTokens(oldToken)
     ]);
 
-    const rejected = results.find(r => r.status === 'rejected');
-    expect(rejected).toBeDefined();
-    expect(rejected.reason.message).toBe('Invalid refresh token');
-    expect(mockRefreshTokenRepository.deleteAllForUser).toHaveBeenCalledWith(userId);
+    // Both should succeed
+    expect(res1.refreshToken).toBeDefined();
+    expect(res2.refreshToken).toBeDefined();
+    
+    // One of them will be the original "new" token, the other will be the "replacement" 
+    // In our implementation, they should both point to the SAME new refresh token.
+    expect(res1.refreshToken).toBe(res2.refreshToken);
+    
+    // Check that we only created ONE new token record in DB (called once by the first request)
+    expect(mockRefreshTokenRepository.create).toHaveBeenCalledTimes(1);
+    expect(mockRefreshTokenRepository.deleteAllForUser).not.toHaveBeenCalled();
   });
 });

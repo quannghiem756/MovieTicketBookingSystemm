@@ -9,15 +9,9 @@
 - [x] Task: Conductor - User Manual Verification 'Email Infrastructure Setup' (Protocol in workflow.md) e2a4d02
 
 ## Phase 2: OTP System Implementation
-- [ ] Task: Create OTP Schema/Model (or extend User model).
-    - Store `email`, `otpCode`, `expiresAt`.
-- [ ] Task: Implement `OTPService.js`.
-    - `generateOTP()`: Returns 6-digit code.
-    - `saveOTP(email, otp)`: Stores in DB/Memory.
-    - `verifyOTP(email, otp)`: Checks validity and expiration.
-- [ ] Task: TDD - OTP Service
-    - Create `backend/src/application/tests/OTPService.test.js`.
-    - Test generation, storage, successful verification, expired OTP, and invalid OTP.
+- [x] Task: Create OTP Schema/Model (or extend User model). 93acae4
+- [x] Task: Implement `OTPService.js`. 93acae4
+- [x] Task: TDD - OTP Service 93acae4
 - [ ] Task: Conductor - User Manual Verification 'OTP System Implementation' (Protocol in workflow.md)
 
 ## Phase 3: Registration & Password Reset Integration

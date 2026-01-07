@@ -12,6 +12,7 @@ import {
   Stack
 } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
+import { QRCodeSVG } from 'qrcode.react';
 import { CheckCircle, Movie, CalendarToday, AccessTime, ConfirmationNumber, LocationOn } from '@mui/icons-material';
 import { useTranslation } from '../context/I18nContext';
 import { formatCurrency } from '../utils/currency';
@@ -260,7 +261,16 @@ const BookingConfirmation = () => {
                     justifyContent: 'center',
                     borderRadius: 1
                   }}>
-                    <ConfirmationNumber sx={{ fontSize: 60, color: 'primary.main' }} />
+                    {bookingData.validationToken ? (
+                      <QRCodeSVG
+                        value={`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/bookings/validate?token=${bookingData.validationToken}`}
+                        size={100}
+                        level="H"
+                        includeMargin={false}
+                      />
+                    ) : (
+                      <ConfirmationNumber sx={{ fontSize: 60, color: 'primary.main' }} />
+                    )}
                   </Box>
                   <Typography variant="caption" color="textSecondary" sx={{ mt: 1, display: 'block' }}>
                     {t('booking.confirmation.qrCodeSubtitle')}

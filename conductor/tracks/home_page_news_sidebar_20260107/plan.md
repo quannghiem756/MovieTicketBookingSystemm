@@ -24,10 +24,10 @@ Build the `NewsSidebar` component that will be integrated into the home page.
 ## Phase 3: Home Page Integration
 Update the Home page layout to accommodate the new sidebar.
 
-- [ ] Task: Modify `frontend/src/pages/Home.jsx` to use a 75/25 grid layout for the "Now Showing" section.
-- [ ] Task: Integrate `NewsSidebar` into the 25% column of the grid.
-- [ ] Task: Ensure proper spacing and alignment between the movie cards and the news sidebar.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Home Page Integration' (Protocol in workflow.md)
+- [x] Task: Modify `frontend/src/pages/Home.jsx` to use a 75/25 grid layout for the "Now Showing" section.
+- [x] Task: Integrate `NewsSidebar` into the 25% column of the grid.
+- [x] Task: Ensure proper spacing and alignment between the movie cards and the news sidebar.
+- [~] Task: Conductor - User Manual Verification 'Phase 3: Home Page Integration' (Protocol in workflow.md)
 
 ## Phase 4: Responsive Design & Polishing
 Ensure the sidebar looks great across all devices and handle edge cases.

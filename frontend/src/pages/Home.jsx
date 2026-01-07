@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import { PlayArrow, ArrowForward } from '@mui/icons-material';
 import MovieCard from '../components/MovieCard';
+import NewsSidebar from '../components/NewsSidebar';
 import MovieRecommendationChat from '../components/MovieRecommendationChat';
 import { getNowShowing, getComingSoon } from '../services/api';
 import { useTranslation } from '../context/I18nContext';
@@ -247,44 +248,51 @@ const Home = () => {
 
       {/* Now Showing Section */}
       <Container maxWidth="lg" sx={{ mb: 8 }}>
-        <SectionTitle
-          title={t('home.nowShowing')}
-          subtitle={t('home.nowShowingSubtitle')}
-        />
+        <Grid container spacing={4}>
+          <Grid item xs={12} md={9}>
+            <SectionTitle
+              title={t('home.nowShowing')}
+              subtitle={t('home.nowShowingSubtitle')}
+            />
 
-        {loading ? (
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
-            {[...Array(4)].map((_, index) => (
-              <Box key={index} sx={{ flex: '1 1 calc(25% - 12px)', minWidth: 250, maxWidth: 'calc(25% - 12px)' }}>
-                <Skeleton variant="rectangular" height={400} sx={{ borderRadius: 4 }} />
+            {loading ? (
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                {[...Array(3)].map((_, index) => (
+                  <Box key={index} sx={{ flex: '1 1 calc(33.33% - 27px)', minWidth: 200, maxWidth: 'calc(33.33% - 27px)' }}>
+                    <Skeleton variant="rectangular" height={400} sx={{ borderRadius: 4 }} />
+                  </Box>
+                ))}
               </Box>
-            ))}
-          </Box>
-        ) : (
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
-            {Array.isArray(nowShowing) && nowShowing.slice(0, 8).map((movie) => (
-              <Box
-                key={movie.id}
-                sx={{
-                  flex: '1 1 calc(25% - 24px)', // <-- Correct math for 32px gap
-                  maxWidth: 'calc(25% - 24px)', // <-- Must match
-                  minWidth: 220 // <-- Lower this so it doesn't wrap so early
-                }}
-              >
-                <MovieCard movie={movie} />
-              </Box>
-            ))}
-            {nowShowing.length === 0 && (
-              <Box sx={{ width: '100%' }}>
-                <Paper sx={{ p: 4, textAlign: 'center' }}>
-                  <Typography variant="h6" color="textSecondary">
-                    {t('home.noMovies')}
-                  </Typography>
-                </Paper>
+            ) : (
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                {Array.isArray(nowShowing) && nowShowing.slice(0, 8).map((movie) => (
+                  <Box
+                    key={movie.id}
+                    sx={{
+                      flex: { xs: '1 1 calc(50% - 24px)', sm: '1 1 calc(33.33% - 27px)' },
+                      maxWidth: { xs: 'calc(50% - 24px)', sm: 'calc(33.33% - 27px)' },
+                      minWidth: 200
+                    }}
+                  >
+                    <MovieCard movie={movie} />
+                  </Box>
+                ))}
+                {nowShowing.length === 0 && (
+                  <Box sx={{ width: '100%' }}>
+                    <Paper sx={{ p: 4, textAlign: 'center' }}>
+                      <Typography variant="h6" color="textSecondary">
+                        {t('home.noMovies')}
+                      </Typography>
+                    </Paper>
+                  </Box>
+                )}
               </Box>
             )}
-          </Box>
-        )}
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <NewsSidebar />
+          </Grid>
+        </Grid>
       </Container>
 
       {/* Divider */}

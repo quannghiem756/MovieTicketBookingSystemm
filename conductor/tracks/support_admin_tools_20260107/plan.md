@@ -1,13 +1,13 @@
 # Plan: Support Module & Admin Booking Tools
 
-## Phase 1: Database Foundation & Models
+## Phase 1: Database Foundation & Models [checkpoint: 111ecf6]
 - [x] Task: Create `SupportTicket` Mongoose Schema and Model
     - [x] Write unit tests for `SupportTicket` model validation
     - [x] Implement `SupportTicket` schema in `backend/src/infrastructure/SupportTicketModel.js`
-- [~] Task: Create `AuditLog` Mongoose Schema and Model
-    - [ ] Write unit tests for `AuditLog` model validation
-    - [ ] Implement `AuditLog` schema in `backend/src/infrastructure/AuditLogModel.js`
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Database Foundation' (Protocol in workflow.md)
+- [x] Task: Create `AuditLog` Mongoose Schema and Model
+    - [x] Write unit tests for `AuditLog` model validation
+    - [x] Implement `AuditLog` schema in `backend/src/infrastructure/AuditLogModel.js`
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Database Foundation' (Protocol in workflow.md)
 
 ## Phase 2: Support Ticket Submission System
 - [ ] Task: Implement Support Ticket Creation API

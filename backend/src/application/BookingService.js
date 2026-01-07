@@ -45,7 +45,7 @@ class BookingService {
 
       await this.emailService.sendEmail(
         user.email,
-        `Booking Confirmation - ${movie.title}`,
+        `Booking Confirmation - ${movie.title}`,  
         templateData.html,
         templateData.attachments
       );

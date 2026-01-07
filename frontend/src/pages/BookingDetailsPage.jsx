@@ -416,7 +416,7 @@ const BookingDetailsPage = () => {
               }}>
                 {booking.validationToken ? (
                   <QRCodeSVG
-                    value={`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/bookings/validate?token=${booking.validationToken}`}
+                    value={`${process.env.REACT_APP_API_URL || 'http://localhost:5000/api'}/bookings/validate?token=${booking.validationToken}`}
                     size={isMobile ? 120 : 160}
                     level="H"
                     includeMargin={false}

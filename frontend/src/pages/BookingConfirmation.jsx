@@ -263,7 +263,7 @@ const BookingConfirmation = () => {
                   }}>
                     {bookingData.validationToken ? (
                       <QRCodeSVG
-                        value={`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/bookings/validate?token=${bookingData.validationToken}`}
+                        value={`${process.env.REACT_APP_API_URL || 'http://localhost:5000/api'}/bookings/validate?token=${bookingData.validationToken}`}
                         size={100}
                         level="H"
                         includeMargin={false}

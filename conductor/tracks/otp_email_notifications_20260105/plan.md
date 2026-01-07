@@ -31,10 +31,21 @@
 - [x] Task: Create HTML Email Template. 72e2f9c
 - [x] Task: Integrate QR Code Generation. 72e2f9c
     - Ensure backend can generate QR code image (using `qrcode` lib) or embed frontend-generated data.
-- [ ] Task: Integrate into Booking Flow.
+- [x] Task: Integrate into Booking Flow. be43fd8
     - Update `BookingService.js`.
     - Call `EmailService` after successful payment/booking creation.
-- [ ] Task: TDD - Booking Notification
+- [x] Task: TDD - Booking Notification be43fd8
     - Update `backend/src/application/tests/BookingService.test.js`.
     - Verify `EmailService.sendEmail` is called with correct parameters after booking.
+- [x] Task: Display QR Code on Booking Confirmation Page 1fcda61
+    - Update `frontend/src/pages/BookingConfirmation.jsx` to use `qrcode.react`.
+    - Display the booking ID as a QR code.
+- [x] Task: Enhance Email Template 3f5ca9e
+    - Add I18n support (EN/VI) to `EmailTemplates.js`.
+    - Match email UI to Frontend Dark Theme.
+    - Pass language param from `BookingService.js`.
+- [x] Task: Fix QR Code Display in Email af8da62
+    - Use `attachments` and `cid` for QR code image in `EmailTemplates.js`.
+    - Update `EmailService.js` to support attachments.
+    - Revert layout to Red Gradient style.
 - [ ] Task: Conductor - User Manual Verification 'Booking Notification Email' (Protocol in workflow.md)

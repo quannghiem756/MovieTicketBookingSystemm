@@ -394,7 +394,8 @@ const BookingPage = () => {
               showTime: showtime.showTime,
               seatIds: selectedSeats,
               totalPrice: totalPrice,
-              bookingDate: response.data.bookingDate
+              bookingDate: response.data.bookingDate,
+              validationToken: response.data.validationToken
             }
           }
         });

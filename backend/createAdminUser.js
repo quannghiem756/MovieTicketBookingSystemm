@@ -37,7 +37,8 @@ db.once('open', async () => {
       hashedPassword,
       new Date('1990-01-01'),
       0, // initial loyalty points
-      'admin'
+      'admin',
+      true // isVerified
     );
     
     const result = await userRepository.create(adminUser);

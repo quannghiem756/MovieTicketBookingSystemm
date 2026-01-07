@@ -179,6 +179,7 @@ const vi = {
   'login.subtitle': 'Chào mừng quay trở lại! Vui lòng nhập thông tin để đăng nhập.',
   'login.email': 'Địa chỉ email',
   'login.password': 'Mật khẩu',
+  'login.forgotPassword': 'Quên mật khẩu?',
       'login.submit': 'Đăng nhập',
       'login.loading': 'Đang đăng nhập...',
       'login.or': 'HOẶC',

@@ -9,5 +9,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [~] Track: implement otp for email verification and feature for email notification for sending user's receipt/purchased ticket
-*Link: [./conductor/tracks/otp_email_notifications_20260105/](./conductor/tracks/otp_email_notifications_20260105/)*
+## [~] Track: Support Module & Admin Booking Tools
+*Link: [./conductor/tracks/support_admin_tools_20260107/](./conductor/tracks/support_admin_tools_20260107/)*

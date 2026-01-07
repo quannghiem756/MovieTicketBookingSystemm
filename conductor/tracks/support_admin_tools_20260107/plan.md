@@ -1,0 +1,38 @@
+# Plan: Support Module & Admin Booking Tools
+
+## Phase 1: Database Foundation & Models
+- [x] Task: Create `SupportTicket` Mongoose Schema and Model
+    - [x] Write unit tests for `SupportTicket` model validation
+    - [x] Implement `SupportTicket` schema in `backend/src/infrastructure/SupportTicketModel.js`
+- [~] Task: Create `AuditLog` Mongoose Schema and Model
+    - [ ] Write unit tests for `AuditLog` model validation
+    - [ ] Implement `AuditLog` schema in `backend/src/infrastructure/AuditLogModel.js`
+- [ ] Task: Conductor - User Manual Verification 'Phase 1: Database Foundation' (Protocol in workflow.md)
+
+## Phase 2: Support Ticket Submission System
+- [ ] Task: Implement Support Ticket Creation API
+    - [ ] Write tests for Ticket creation with auto-priority logic (Category -> Priority)
+    - [ ] Implement `POST /api/support/tickets` endpoint in `SupportService`
+- [ ] Task: Create "Contact Us" Frontend Component
+    - [ ] Write unit tests for the Contact Form modal
+    - [ ] Implement `ContactUsModal` using MUI in `frontend/src/components/`
+    - [ ] Add "Contact Us" button to `HomePage` to trigger modal
+- [ ] Task: Conductor - User Manual Verification 'Phase 2: Support Ticket Submission' (Protocol in workflow.md)
+
+## Phase 3: Admin Booking Management (Backend)
+- [ ] Task: Implement Booking Search API
+    - [ ] Write tests for searching bookings by email/phone (with indexing check)
+    - [ ] Implement search logic in `BookingService`
+- [ ] Task: Implement Manual Redemption API
+    - [ ] Write tests for manual redemption: check status update and AuditLog creation
+    - [ ] Implement `PATCH /api/admin/bookings/:id/manual-redeem` in `BookingService`
+- [ ] Task: Conductor - User Manual Verification 'Phase 3: Admin Booking Management (Backend)' (Protocol in workflow.md)
+
+## Phase 4: Admin Dashboard UI Integration
+- [ ] Task: Create Support Ticket Management View
+    - [ ] Write tests for ticket list display (sorting by oldest first)
+    - [ ] Implement `SupportTicketList` component in Admin Dashboard
+- [ ] Task: Create Booking Search & Redemption UI
+    - [ ] Write tests for search results list and expansion logic
+    - [ ] Implement `AdminBookingSearch` component with "Manual Redeem" functionality and Confirmation Modal
+- [ ] Task: Conductor - User Manual Verification 'Phase 4: Admin Dashboard UI' (Protocol in workflow.md)

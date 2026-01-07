@@ -1,0 +1,8 @@
+{
+  "track_id": "support_admin_tools_20260107",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-01-07T23:59:00Z",
+  "updated_at": "2026-01-07T23:59:00Z",
+  "description": "I want to add a basic support module. Create a Contact Us form that saves user inquiries into a SupportTickets table in the database. On the Admin Dashboard, add a 'Search Bookings' feature where I can find a user by their Email or Phone Number. Add a 'Manual Redeem' button for Admins. This allows us to help customers whose QR codes aren't scanning by manually updating their status to 'Redeemed' after verifying their ID."
+}

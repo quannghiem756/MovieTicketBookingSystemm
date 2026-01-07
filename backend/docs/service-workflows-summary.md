@@ -74,6 +74,12 @@ This document provides an overview of all service workflows in the Movie Ticket 
 - **Operation**: Validate Coupon (User)
 - **Validation Points**: Authentication, expiry checks, usage limits, minimum order value
 
+### 9. [OTP & Email Service](./otp-email-workflow.md)
+- **Operation**: Send/Verify OTP
+- **Validation Points**: Email format, OTP expiration (5m), single-use validation
+- **Operation**: Booking Notification
+- **Validation Points**: Successful confirmation trigger, recipient email existence, QR code attachment (CID)
+
 ## Common Validation Patterns
 
 ### Route Level Validation

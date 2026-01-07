@@ -583,6 +583,8 @@ const vi = {
   'news.noNewsFound': 'Không tìm thấy tin tức nào',
   'news.noNewsDescription': 'Hiện không có bài viết tin tức nào. Vui lòng quay lại sau để xem các cập nhật mới.',
   'news.readMore': 'Đọc thêm',
+  'news.viewAll': 'Xem tất cả',
+  'news.sidebarTitle': 'Tin tức',
 
   // Age Rating
   'rating.description.p': 'Mọi lứa tuổi',

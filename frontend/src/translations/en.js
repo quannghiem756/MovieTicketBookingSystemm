@@ -552,6 +552,8 @@ const en = {
   'news.noNewsFound': 'No news found',
   'news.noNewsDescription': 'There are currently no news articles available. Please check back later for updates.',
   'news.readMore': 'Read More',
+  'news.viewAll': 'View All',
+  'news.sidebarTitle': 'News',
 
   // Age Rating
   'rating.description.p': 'All ages',

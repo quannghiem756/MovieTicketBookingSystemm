@@ -13,13 +13,13 @@ Establish the necessary services and translations to support the news sidebar.
 ## Phase 2: Sidebar Component Development
 Build the `NewsSidebar` component that will be integrated into the home page.
 
-- [ ] Task: Create `NewsSidebar` component in `frontend/src/components/NewsSidebar.jsx`.
+- [x] Task: Create `NewsSidebar` component in `frontend/src/components/NewsSidebar.jsx`.
     - Implementation of the header with "Tin tức" and "Xem tất cả" link.
     - Implementation of the scrollable list container.
     - Integration of `SidebarNewsCard` with logic to fetch and display the 5 most recent news items.
     - Add Skeleton loading state for the sidebar.
-- [ ] Task: Write unit tests for `NewsSidebar` component.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Sidebar Component Development' (Protocol in workflow.md)
+- [x] Task: Write unit tests for `NewsSidebar` component.
+- [~] Task: Conductor - User Manual Verification 'Phase 2: Sidebar Component Development' (Protocol in workflow.md)
 
 ## Phase 3: Home Page Integration
 Update the Home page layout to accommodate the new sidebar.

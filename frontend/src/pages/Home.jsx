@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   Typography,
-  Grid,
   Box,
   Container,
   Paper,
@@ -248,8 +247,8 @@ const Home = () => {
 
       {/* Now Showing Section */}
       <Container maxWidth="lg" sx={{ mb: 8 }}>
-        <Grid container spacing={4}>
-          <Grid item xs={12} md={9}>
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 4 }}>
+          <Box sx={{ flex: { xs: '1 1 100%', md: '0 0 75%' }, maxWidth: { xs: '100%', md: '75%' } }}>
             <SectionTitle
               title={t('home.nowShowing')}
               subtitle={t('home.nowShowingSubtitle')}
@@ -288,11 +287,11 @@ const Home = () => {
                 )}
               </Box>
             )}
-          </Grid>
-          <Grid item xs={12} md={3}>
+          </Box>
+          <Box sx={{ flex: { xs: '1 1 100%', md: '0 0 25%' }, maxWidth: { xs: '100%', md: '25%' } }}>
             <NewsSidebar />
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </Container>
 
       {/* Divider */}

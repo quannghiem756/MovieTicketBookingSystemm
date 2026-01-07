@@ -39,8 +39,9 @@ class BookingService {
         showDate: showtime.showDate,
         showTime: showtime.showTime,
         seatIds: booking.seatIds,
-        totalPrice: booking.totalPrice
-      });
+        totalPrice: booking.totalPrice,
+        validationToken: booking.validationToken
+      }, 'en'); // Default to English for now
 
       await this.emailService.sendEmail(
         user.email,

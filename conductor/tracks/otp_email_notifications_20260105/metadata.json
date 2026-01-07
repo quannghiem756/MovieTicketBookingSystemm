@@ -1,0 +1,8 @@
+{
+  "track_id": "otp_email_notifications_20260105",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-01-05T23:03:00Z",
+  "updated_at": "2026-01-05T23:03:00Z",
+  "description": "implement otp for email verification and feature for email notification for sending user's receipt/purchased ticket"
+}

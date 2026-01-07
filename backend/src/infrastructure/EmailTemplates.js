@@ -46,7 +46,7 @@ class EmailTemplates {
     const t = translations[lang] || translations.en;
     
     // Generate QR Code as Buffer for attachment
-    const validationUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/api/bookings/validate?token=${booking.validationToken}`;
+    const validationUrl = `${process.env.BASE_URL || 'http://localhost:5000'}/api/bookings/validate?token=${booking.validationToken}`;
     // Using toDataURL for buffer creation via splitting base64 string or using toBuffer if available
     // QRCode.toBuffer is available in node-qrcode
     const qrCodeBuffer = await QRCode.toBuffer(validationUrl);
@@ -124,7 +124,7 @@ class EmailTemplates {
             </div>
             
             <div style="text-align: center;">
-              <a href="${process.env.BASE_URL || 'http://localhost:5000'}/api/bookings/${booking.bookingId}" class="btn">${t.viewDetails}</a>
+              <a href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/bookings/${booking.bookingId}" class="btn">${t.viewDetails}</a>
             </div>
           </div>
           <div class="footer">

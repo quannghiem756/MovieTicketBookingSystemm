@@ -40,16 +40,18 @@ class EmailTemplates {
    * Generates an HTML email template for booking confirmation.
    * @param {Object} booking - Booking details
    * @param {string} lang - Language code ('en' or 'vi')
-   * @returns {Promise<string>} HTML content
+   * @returns {Promise<Object>} { html, attachments }
    */
   async getBookingConfirmationTemplate(booking, lang = 'en') {
     const t = translations[lang] || translations.en;
     
-    // Generate QR Code as Data URL
+    // Generate QR Code as Buffer for attachment
     const validationUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/api/bookings/validate?token=${booking.validationToken}`;
-    const qrCodeDataUrl = await QRCode.toDataURL(validationUrl);
+    // Using toDataURL for buffer creation via splitting base64 string or using toBuffer if available
+    // QRCode.toBuffer is available in node-qrcode
+    const qrCodeBuffer = await QRCode.toBuffer(validationUrl);
     
-    return `
+    const html = `
       <!DOCTYPE html>
       <html>
       <head>
@@ -114,10 +116,10 @@ class EmailTemplates {
             <div class="qr-section">
               <p style="margin: 0; color: #cccccc; font-size: 14px;">${t.qrTitle}</p>
               <div class="qr-code">
-                <img src="${qrCodeDataUrl}" width="150" height="150" alt="Ticket QR Code" />
+                <img src="cid:qrCodeImage" width="150" height="150" alt="Ticket QR Code" />
               </div>
               <div>
-                <span class="booking-id">ID: ${booking.bookingId}</span>
+                <span class="booking-id">${t.bookingId}: ${booking.bookingId}</span>
               </div>
             </div>
             
@@ -133,6 +135,15 @@ class EmailTemplates {
       </body>
       </html>
     `;
+
+    return {
+      html,
+      attachments: [{
+        filename: 'qrcode.png',
+        content: qrCodeBuffer,
+        cid: 'qrCodeImage' // same cid value as in the html img src
+      }]
+    };
   }
 }
 

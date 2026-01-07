@@ -31,7 +31,7 @@ class BookingService {
         if (theater) theaterName = theater.name;
       }
 
-      const emailHtml = await emailTemplates.getBookingConfirmationTemplate({
+      const templateData = await emailTemplates.getBookingConfirmationTemplate({
         userName: user.name,
         bookingId: booking.id,
         movieTitle: movie.title,
@@ -46,7 +46,8 @@ class BookingService {
       await this.emailService.sendEmail(
         user.email,
         `Booking Confirmation - ${movie.title}`,
-        emailHtml
+        templateData.html,
+        templateData.attachments
       );
     } catch (error) {
       console.error('Failed to send confirmation email:', error);

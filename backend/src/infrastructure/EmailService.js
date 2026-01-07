@@ -23,13 +23,14 @@ class EmailService {
         this.transporter = createTransporter();
     }
 
-    async sendEmail(to, subject, html) {
+    async sendEmail(to, subject, html, attachments = []) {
         try {
             const info = await this.transporter.sendMail({
                 from: process.env.SMTP_FROM,
                 to,
                 subject,
                 html,
+                attachments
             });
             console.log('Message sent: %s', info.messageId);
             return info;

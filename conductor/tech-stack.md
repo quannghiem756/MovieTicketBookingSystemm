@@ -14,6 +14,8 @@
 - **Database:** MongoDB with Mongoose ODM.
 - **Real-time:** Socket.io for server-side WebSocket management.
 - **Payments:** MoMo E-Wallet API integration.
+- **Email:** Nodemailer for OTP and booking notifications.
+- **Utilities:** `qrcode` for generating ticket verification codes.
 - **Security:** JWT (Access/Refresh tokens) with database-backed rotation, `google-auth-library` for OAuth, `bcryptjs` for password hashing, `cookie-parser`, `express-rate-limit`.
 
 ## AI & Vector Service

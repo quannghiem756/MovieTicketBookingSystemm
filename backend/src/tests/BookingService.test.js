@@ -8,8 +8,9 @@ describe('BookingService', () => {
     let mockShowtimeRepository;
     let mockMovieRepository;
 
-    let mockCouponService;
     let mockValidationService;
+    let mockEmailService;
+    let mockTheaterRepository;
 
     beforeEach(() => {
         mockBookingRepository = {
@@ -31,6 +32,9 @@ describe('BookingService', () => {
         mockMovieRepository = {
             findById: jest.fn()
         };
+        mockTheaterRepository = {
+            findById: jest.fn()
+        };
         mockCouponService = {
             validateCoupon: jest.fn(),
             incrementUsage: jest.fn(),
@@ -40,6 +44,9 @@ describe('BookingService', () => {
             generateValidationToken: jest.fn().mockReturnValue('mock-token'),
             verifyValidationToken: jest.fn()
         };
+        mockEmailService = {
+            sendEmail: jest.fn().mockResolvedValue({ messageId: 'test-id' })
+        };
 
         bookingService = new BookingService(
             mockBookingRepository,
@@ -47,11 +54,54 @@ describe('BookingService', () => {
             mockShowtimeRepository,
             mockMovieRepository,
             mockCouponService,
-            mockValidationService
+            mockValidationService,
+            mockEmailService,
+            mockTheaterRepository
         );
     });
 
     describe('createBooking', () => {
+        it('should send confirmation email if booking is immediately confirmed (cash)', async () => {
+            const userId = 'user1';
+            const showtimeId = 'showtime1';
+            const movieId = 'movie1';
+
+            const user = new User(userId, 'Test User', 'test@example.com', '1234567890', 'hash', new Date('1990-01-01'), 0);
+            mockUserRepository.findById.mockResolvedValue(user);
+            mockShowtimeRepository.findById.mockResolvedValue({ id: showtimeId, movieId: movieId, showDate: '2026-01-10', showTime: '18:00' });
+            mockMovieRepository.findById.mockResolvedValue({ id: movieId, title: 'Test Movie', rating: 'P' });
+            
+            mockBookingRepository.findPendingBookingByUser.mockResolvedValue(null);
+            mockBookingRepository.findCollidingBooking.mockResolvedValue(null);
+            
+            const bookingResult = { 
+                id: 'booking123', 
+                status: 'confirmed', 
+                userId, 
+                showtimeId, 
+                seatIds: ['A1', 'A2'], 
+                totalPrice: 200,
+                validationToken: 'mock-token'
+            };
+            mockBookingRepository.create.mockResolvedValue(bookingResult);
+            mockBookingRepository.update.mockImplementation((id, data) => Promise.resolve(data));
+
+            const bookingData = { 
+                userId, 
+                showtimeId, 
+                seatIds: ['A1', 'A2'], 
+                totalPrice: 200, 
+                paymentMethod: 'cash' 
+            };
+
+            await bookingService.createBooking(bookingData);
+
+            expect(mockEmailService.sendEmail).toHaveBeenCalledWith(
+                'test@example.com',
+                expect.stringContaining('Booking Confirmation'),
+                expect.stringContaining('Test Movie')
+            );
+        });
         it('should throw error if user is underage for the movie', async () => {
             const userId = 'user1';
             const showtimeId = 'showtime1';
@@ -199,6 +249,39 @@ describe('BookingService', () => {
             await expect(bookingService.createBooking(bookingData))
                 .rejects
                 .toThrow('Minimum order value of 200 not met');
+        });
+    });
+
+    describe('confirmBooking', () => {
+        it('should send confirmation email when booking is confirmed', async () => {
+            const bookingId = 'booking123';
+            const userId = 'user1';
+            const showtimeId = 'showtime1';
+            const movieId = 'movie1';
+
+            const bookingData = {
+                id: bookingId,
+                userId,
+                showtimeId,
+                seatIds: ['A1'],
+                totalPrice: 100,
+                status: 'pending'
+            };
+            mockBookingRepository.findById.mockResolvedValue(bookingData);
+            mockBookingRepository.update.mockImplementation((id, data) => Promise.resolve({ ...data, id }));
+
+            const user = new User(userId, 'Test User', 'test@example.com', '1234567890', 'hash', new Date('1990-01-01'), 0);
+            mockUserRepository.findById.mockResolvedValue(user);
+            mockShowtimeRepository.findById.mockResolvedValue({ id: showtimeId, movieId, showDate: '2026-01-10', showTime: '18:00' });
+            mockMovieRepository.findById.mockResolvedValue({ id: movieId, title: 'Test Movie', rating: 'P' });
+
+            await bookingService.confirmBooking(bookingId);
+
+            expect(mockEmailService.sendEmail).toHaveBeenCalledWith(
+                'test@example.com',
+                expect.stringContaining('Booking Confirmation'),
+                expect.stringContaining('Test Movie')
+            );
         });
     });
 

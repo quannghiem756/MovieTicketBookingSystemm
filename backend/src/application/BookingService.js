@@ -1,15 +1,56 @@
-// Booking service
 const Booking = require('../domain/Booking');
 const User = require('../domain/User');
+const emailTemplates = require('../infrastructure/EmailTemplates');
 
 class BookingService {
-  constructor(bookingRepository, userRepository, showtimeRepository, movieRepository, couponService, validationService) {
+  constructor(bookingRepository, userRepository, showtimeRepository, movieRepository, couponService, validationService, emailService, theaterRepository) {
     this.bookingRepository = bookingRepository;
     this.userRepository = userRepository;
     this.showtimeRepository = showtimeRepository;
     this.movieRepository = movieRepository;
     this.couponService = couponService;
     this.validationService = validationService;
+    this.emailService = emailService;
+    this.theaterRepository = theaterRepository;
+  }
+
+  async _sendConfirmationEmail(booking) {
+    if (!this.emailService) {
+      console.warn('EmailService not initialized in BookingService, skipping confirmation email');
+      return;
+    }
+
+    try {
+      const user = await this.userRepository.findById(booking.userId);
+      const showtime = await this.showtimeRepository.findById(booking.showtimeId);
+      const movie = await this.movieRepository.findById(showtime.movieId);
+      
+      let theaterName = 'Cinema Theater';
+      if (this.theaterRepository) {
+        const theater = await this.theaterRepository.findById(showtime.theaterId);
+        if (theater) theaterName = theater.name;
+      }
+
+      const emailHtml = await emailTemplates.getBookingConfirmationTemplate({
+        userName: user.name,
+        bookingId: booking.id,
+        movieTitle: movie.title,
+        theaterName: theaterName,
+        showDate: showtime.showDate,
+        showTime: showtime.showTime,
+        seatIds: booking.seatIds,
+        totalPrice: booking.totalPrice
+      });
+
+      await this.emailService.sendEmail(
+        user.email,
+        `Booking Confirmation - ${movie.title}`,
+        emailHtml
+      );
+    } catch (error) {
+      console.error('Failed to send confirmation email:', error);
+      // We don't want to throw error here as the booking is already confirmed
+    }
   }
 
   async _checkAgeEligibility(userId, showtimeId) {
@@ -108,7 +149,13 @@ class BookingService {
         updatedBooking.expiresAt = new Date(Date.now() + 15 * 60 * 1000); 
       }
 
-      return await this.bookingRepository.update(existingHold.id, updatedBooking);
+      const result = await this.bookingRepository.update(existingHold.id, updatedBooking);
+      
+      if (result.status === 'confirmed') {
+        await this._sendConfirmationEmail(result);
+      }
+      
+      return result;
     }
 
     // New booking (fallback)
@@ -141,9 +188,14 @@ class BookingService {
 
     const result = await this.bookingRepository.create(booking);
     
-    if (result.status === 'confirmed' && this.validationService && !result.validationToken) {
-      result.validationToken = this.validationService.generateValidationToken(result.id);
-      return await this.bookingRepository.update(result.id, result);
+    if (result.status === 'confirmed') {
+      if (this.validationService && !result.validationToken) {
+        result.validationToken = this.validationService.generateValidationToken(result.id);
+        const updated = await this.bookingRepository.update(result.id, result);
+        await this._sendConfirmationEmail(updated);
+        return updated;
+      }
+      await this._sendConfirmationEmail(result);
     }
 
     return result;
@@ -232,7 +284,11 @@ class BookingService {
         updateData.validationToken = this.validationService.generateValidationToken(id);
     }
     
-    return await this.bookingRepository.update(id, updateData);
+    const result = await this.bookingRepository.update(id, updateData);
+    if (result && result.status === 'confirmed') {
+      await this._sendConfirmationEmail(result);
+    }
+    return result;
   }
 
   async validateBooking(token) {

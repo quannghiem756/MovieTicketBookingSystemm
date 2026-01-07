@@ -4,9 +4,11 @@ const MongoBookingRepository = require('../../../infrastructure/repositories/Mon
 const MongoUserRepository = require('../../../infrastructure/repositories/MongoUserRepository');
 const MongoShowtimeRepository = require('../../../infrastructure/repositories/MongoShowtimeRepository');
 const MongoMovieRepository = require('../../../infrastructure/repositories/MongoMovieRepository');
+const MongoTheaterRepository = require('../../../infrastructure/repositories/MongoTheaterRepository');
 const BookingService = require('../../../application/BookingService');
 const CouponService = require('../../../application/CouponService');
 const ValidationService = require('../../../application/ValidationService');
+const EmailService = require('../../../infrastructure/EmailService');
 const MongoCouponRepository = require('../../../infrastructure/repositories/MongoCouponRepository');
 const { authenticate, authorizeAdmin } = require('../middleware/auth');
 const { seatHoldLimiter } = require('../middleware/rateLimiter');
@@ -16,10 +18,20 @@ const bookingRepository = new MongoBookingRepository();
 const userRepository = new MongoUserRepository();
 const showtimeRepository = new MongoShowtimeRepository();
 const movieRepository = new MongoMovieRepository();
+const theaterRepository = new MongoTheaterRepository();
 const couponRepository = new MongoCouponRepository();
 const couponService = new CouponService(couponRepository, bookingRepository);
 const validationService = new ValidationService();
-const bookingService = new BookingService(bookingRepository, userRepository, showtimeRepository, movieRepository, couponService, validationService);
+const bookingService = new BookingService(
+  bookingRepository, 
+  userRepository, 
+  showtimeRepository, 
+  movieRepository, 
+  couponService, 
+  validationService,
+  EmailService,
+  theaterRepository
+);
 const bookingController = new BookingController(bookingService);
 
 const router = express.Router();

@@ -28,10 +28,8 @@
 - [x] Task: Conductor - User Manual Verification 'Frontend OTP Integration' (Protocol in workflow.md) c70e076
 
 ## Phase 5: Booking Notification Email
-- [ ] Task: Create HTML Email Template.
-    - Create `backend/src/templates/bookingEmail.html` (or a helper function to generate HTML).
-    - Style to match `BookingConfirmation.jsx` (embed CSS inline).
-- [ ] Task: Integrate QR Code Generation.
+- [x] Task: Create HTML Email Template. 72e2f9c
+- [x] Task: Integrate QR Code Generation. 72e2f9c
     - Ensure backend can generate QR code image (using `qrcode` lib) or embed frontend-generated data.
 - [ ] Task: Integrate into Booking Flow.
     - Update `BookingService.js`.

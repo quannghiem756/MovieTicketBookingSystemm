@@ -48,4 +48,4 @@
     - Use `attachments` and `cid` for QR code image in `EmailTemplates.js`.
     - Update `EmailService.js` to support attachments.
     - Revert layout to Red Gradient style.
-- [ ] Task: Conductor - User Manual Verification 'Booking Notification Email' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Booking Notification Email' (Protocol in workflow.md)

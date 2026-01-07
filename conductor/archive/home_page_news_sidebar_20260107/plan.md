@@ -27,12 +27,12 @@ Update the Home page layout to accommodate the new sidebar.
 - [x] Task: Modify `frontend/src/pages/Home.jsx` to use a 75/25 grid layout for the "Now Showing" section.
 - [x] Task: Integrate `NewsSidebar` into the 25% column of the grid.
 - [x] Task: Ensure proper spacing and alignment between the movie cards and the news sidebar.
-- [~] Task: Conductor - User Manual Verification 'Phase 3: Home Page Integration' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Home Page Integration' (Protocol in workflow.md)
 
 ## Phase 4: Responsive Design & Polishing
 Ensure the sidebar looks great across all devices and handle edge cases.
 
-- [ ] Task: Implement responsive behavior: stack the sidebar below movies or hide it on small screens (based on MUI breakpoints).
-- [ ] Task: Verify image scaling/cropping in `SidebarNewsCard` to ensure it fits the sidebar width.
-- [ ] Task: Final visual polish: match colors, fonts, and shadows with the existing theme.
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Responsive Design & Polishing' (Protocol in workflow.md)
+- [x] Task: Implement responsive behavior: stack the sidebar below movies or hide it on small screens (based on MUI breakpoints).
+- [x] Task: Verify image scaling/cropping in `SidebarNewsCard` to ensure it fits the sidebar width.
+- [x] Task: Final visual polish: match colors, fonts, and shadows with the existing theme.
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Responsive Design & Polishing' (Protocol in workflow.md)

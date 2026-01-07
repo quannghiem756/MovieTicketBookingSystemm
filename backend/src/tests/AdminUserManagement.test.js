@@ -35,7 +35,7 @@ describe('AdminUserManagement', () => {
         await userController.createUserByAdmin(req, res);
 
         expect(res.statusCode).toBe(201);
-        expect(mockUserService.createUser).toHaveBeenCalledWith(userData, true); // true for isAdmin context
+        expect(mockUserService.createUser).toHaveBeenCalledWith({ ...userData, isVerified: true }, true); // true for isAdmin context
         const data = JSON.parse(res._getData());
         expect(data.role).toBe('staff');
     });

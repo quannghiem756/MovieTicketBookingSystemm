@@ -99,7 +99,8 @@ describe('BookingService', () => {
             expect(mockEmailService.sendEmail).toHaveBeenCalledWith(
                 'test@example.com',
                 expect.stringContaining('Booking Confirmation'),
-                expect.stringContaining('Test Movie')
+                expect.stringContaining('Test Movie'),
+                expect.any(Array)
             );
         });
         it('should throw error if user is underage for the movie', async () => {
@@ -280,7 +281,8 @@ describe('BookingService', () => {
             expect(mockEmailService.sendEmail).toHaveBeenCalledWith(
                 'test@example.com',
                 expect.stringContaining('Booking Confirmation'),
-                expect.stringContaining('Test Movie')
+                expect.stringContaining('Test Movie'),
+                expect.any(Array)
             );
         });
     });

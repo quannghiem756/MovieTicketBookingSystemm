@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const crypto = require('crypto');
 
 const supportTicketSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
@@ -21,7 +22,12 @@ const supportTicketSchema = new mongoose.Schema({
       default: 'Open',
       enum: ['Open', 'In Progress', 'Resolved', 'Closed', 'Replied']
   },
-  accessToken: { type: String, unique: true, sparse: true }
+  accessToken: { 
+    type: String, 
+    unique: true, 
+    sparse: true,
+    default: () => crypto.randomBytes(32).toString('hex')
+  }
 }, {
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
 });

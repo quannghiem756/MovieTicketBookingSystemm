@@ -485,6 +485,17 @@ const vi = {
   'admin.support.message': 'Nội dung',
   'admin.support.priority': 'Độ ưu tiên',
   'admin.support.status': 'Trạng thái',
+  'admin.support.actions': 'Hành động',
+  'admin.support.view': 'Xem',
+  'admin.support.ticket': 'Yêu cầu',
+  'admin.support.loading': 'Đang tải...',
+  'admin.support.resolve': 'Giải quyết',
+  'admin.support.confirmResolve': 'Bạn có chắc chắn muốn đánh dấu yêu cầu này là đã giải quyết?',
+  'admin.support.conversation': 'Cuộc trò chuyện',
+  'admin.support.noReplies': 'Chưa có phản hồi nào.',
+  'admin.support.typeReply': 'Nhập phản hồi của bạn tại đây...',
+  'admin.support.sendReply': 'Gửi phản hồi',
+  'admin.support.errorLoading': 'Lỗi tải chi tiết yêu cầu.',
 
   // Theater Form
   'admin.theaterForm.seatTooltip': '{{seatId}} - {{seatType}}',

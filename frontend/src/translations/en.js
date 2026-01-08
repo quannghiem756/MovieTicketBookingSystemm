@@ -454,6 +454,17 @@ const en = {
   'admin.support.message': 'Message',
   'admin.support.priority': 'Priority',
   'admin.support.status': 'Status',
+  'admin.support.actions': 'Actions',
+  'admin.support.view': 'View',
+  'admin.support.ticket': 'Ticket',
+  'admin.support.loading': 'Loading...',
+  'admin.support.resolve': 'Resolve',
+  'admin.support.confirmResolve': 'Are you sure you want to mark this ticket as resolved?',
+  'admin.support.conversation': 'Conversation',
+  'admin.support.noReplies': 'No replies yet.',
+  'admin.support.typeReply': 'Type your reply here...',
+  'admin.support.sendReply': 'Send Reply',
+  'admin.support.errorLoading': 'Error loading ticket details.',
 
   // Theater Form
   'admin.theaterForm.seatTooltip': '{{seatId}} - {{seatType}}',

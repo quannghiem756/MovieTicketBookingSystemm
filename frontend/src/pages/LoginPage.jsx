@@ -173,6 +173,10 @@ const LoginPage = () => {
           navigate('/');
         }
       } else {
+        if (result.response && result.response.status === 403) {
+          navigate('/register', { state: { email: formData.email, otpMode: true } });
+          return;
+        }
         setServerError(result.error);
       }
     } catch (err) {

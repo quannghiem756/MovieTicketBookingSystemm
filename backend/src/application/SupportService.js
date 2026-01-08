@@ -1,6 +1,7 @@
 class SupportService {
-  constructor(supportTicketRepository) {
+  constructor(supportTicketRepository, ticketCommentRepository) {
     this.supportTicketRepository = supportTicketRepository;
+    this.ticketCommentRepository = ticketCommentRepository;
   }
 
   async createTicket(ticketData) {
@@ -14,6 +15,20 @@ class SupportService {
 
   async getAllTickets() {
     return await this.supportTicketRepository.findAllSortedByCreatedAt();
+  }
+
+  async getTicketByToken(token) {
+    const ticket = await this.supportTicketRepository.findByAccessToken(token);
+    if (!ticket) {
+      throw new Error('Ticket not found');
+    }
+    
+    let comments = [];
+    if (this.ticketCommentRepository) {
+        comments = await this.ticketCommentRepository.findByTicketId(ticket._id);
+    }
+    
+    return { ticket, comments };
   }
 
   _calculatePriority(category) {

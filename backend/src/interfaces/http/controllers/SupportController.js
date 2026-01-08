@@ -29,6 +29,20 @@ class SupportController {
       res.status(500).json({ message: error.message });
     }
   }
+
+  async getTicketByToken(req, res) {
+    try {
+      const { token } = req.params;
+      const data = await this.supportService.getTicketByToken(token);
+      res.json(data);
+    } catch (error) {
+      if (error.message === 'Ticket not found') {
+        res.status(404).json({ message: error.message });
+      } else {
+        res.status(500).json({ message: error.message });
+      }
+    }
+  }
 }
 
 module.exports = SupportController;

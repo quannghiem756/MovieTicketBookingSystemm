@@ -15,6 +15,10 @@ class MongoSupportTicketRepository extends SupportTicketRepository {
     return await SupportTicketModel.findById(id);
   }
 
+  async findByAccessToken(token) {
+    return await SupportTicketModel.findOne({ accessToken: token });
+  }
+
   async update(id, ticketData) {
     return await SupportTicketModel.findByIdAndUpdate(id, ticketData, { new: true });
   }

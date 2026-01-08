@@ -30,6 +30,20 @@ class SupportController {
     }
   }
 
+  async getTicketById(req, res) {
+    try {
+      const { id } = req.params;
+      const data = await this.supportService.getTicketById(id);
+      res.json(data);
+    } catch (error) {
+      if (error.message === 'Ticket not found') {
+        res.status(404).json({ message: error.message });
+      } else {
+        res.status(500).json({ message: error.message });
+      }
+    }
+  }
+
   async getTicketByToken(req, res) {
     try {
       const { token } = req.params;
@@ -68,6 +82,21 @@ class SupportController {
 
       const comment = await this.supportService.addInternalReply(id, senderId, senderRole, content);
       res.status(201).json(comment);
+    } catch (error) {
+      if (error.message === 'Ticket not found') {
+        res.status(404).json({ message: error.message });
+      } else {
+        res.status(500).json({ message: error.message });
+      }
+    }
+  }
+
+  async updateTicketStatus(req, res) {
+    try {
+      const { id } = req.params;
+      const { status } = req.body;
+      const ticket = await this.supportService.updateTicketStatus(id, status);
+      res.json(ticket);
     } catch (error) {
       if (error.message === 'Ticket not found') {
         res.status(404).json({ message: error.message });

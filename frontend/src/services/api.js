@@ -251,9 +251,37 @@ export const getPerformanceStats = () => api.get('/dashboard/performance-stats')
 
 // Support API
 
+
+
 export const createSupportTicket = (ticket) => api.post('/support/tickets', ticket);
 
+
+
 export const getSupportTickets = () => api.get('/support/tickets');
+
+
+
+export const getSupportTicketById = (id) => api.get(`/support/tickets/${id}`);
+
+
+
+export const getPublicSupportTicket = (token) => api.get(`/support/public/${token}`);
+
+
+
+export const addSupportReply = (ticketId, content) => api.post(`/support/tickets/${ticketId}/reply`, { content });
+
+
+
+export const updateSupportTicketStatus = (ticketId, status) => api.patch(`/support/tickets/${ticketId}/status`, { status });
+
+
+
+export const addPublicSupportReply = (token, content) => api.post(`/support/public/${token}/reply`, { content });
+
+
+
+
 
 
 

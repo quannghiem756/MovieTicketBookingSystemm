@@ -29,7 +29,13 @@ router.post('/public/:token/reply', (req, res) => supportController.addPublicRep
 // Admin route for viewing tickets (Admin and Staff)
 router.get('/tickets', authenticate, authorizeStaff, (req, res) => supportController.getAllTickets(req, res));
 
+// Admin/Staff route for viewing a specific ticket with comments
+router.get('/tickets/:id', authenticate, authorizeStaff, (req, res) => supportController.getTicketById(req, res));
+
 // Admin/Staff route for replying to a ticket
 router.post('/tickets/:id/reply', authenticate, authorizeStaff, (req, res) => supportController.addInternalReply(req, res));
+
+// Admin/Staff route for updating ticket status
+router.patch('/tickets/:id/status', authenticate, authorizeStaff, (req, res) => supportController.updateTicketStatus(req, res));
 
 module.exports = router;

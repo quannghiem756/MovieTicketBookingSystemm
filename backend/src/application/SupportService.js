@@ -20,6 +20,20 @@ class SupportService {
     return await this.supportTicketRepository.findAllSortedByCreatedAt();
   }
 
+  async getTicketById(id) {
+    const ticket = await this.supportTicketRepository.findById(id);
+    if (!ticket) {
+      throw new Error('Ticket not found');
+    }
+    
+    let comments = [];
+    if (this.ticketCommentRepository) {
+        comments = await this.ticketCommentRepository.findByTicketId(id);
+    }
+    
+    return { ticket, comments };
+  }
+
   async getTicketByToken(token) {
     const ticket = await this.supportTicketRepository.findByAccessToken(token);
     if (!ticket) {
@@ -88,6 +102,14 @@ class SupportService {
     }
     
     return comment;
+  }
+
+  async updateTicketStatus(id, status) {
+    const ticket = await this.supportTicketRepository.findById(id);
+    if (!ticket) {
+      throw new Error('Ticket not found');
+    }
+    return await this.supportTicketRepository.update(id, { status });
   }
 
   _calculatePriority(category) {

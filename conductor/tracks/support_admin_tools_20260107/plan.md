@@ -28,11 +28,11 @@
     - [x] Implement `PATCH /api/admin/bookings/:id/manual-redeem` in `BookingService`
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Admin Booking Management (Backend)' (Protocol in workflow.md)
 
-## Phase 4: Admin Dashboard UI Integration
+## Phase 4: Admin Dashboard UI Integration [checkpoint: 14ac45f]
 - [x] Task: Create Support Ticket Management View
     - [x] Write tests for ticket list display (sorting by oldest first)
     - [x] Implement `SupportTicketList` component in Admin Dashboard
-- [~] Task: Create Booking Search & Redemption UI
-    - [ ] Write tests for search results list and expansion logic
-    - [ ] Implement `AdminBookingSearch` component with "Manual Redeem" functionality and Confirmation Modal
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Admin Dashboard UI' (Protocol in workflow.md)
+- [x] Task: Create Booking Search & Redemption UI
+    - [x] Write tests for search results list and expansion logic
+    - [x] Implement `AdminBookingSearch` component with "Manual Redeem" functionality and Confirmation Modal
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Admin Dashboard UI' (Protocol in workflow.md)

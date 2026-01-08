@@ -12,9 +12,9 @@ This plan outlines the implementation of a database-backed support ticket commen
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Database & Backend Foundation' (Protocol in workflow.md) a5d6d52
 
 ## Phase 2: Email Notification System
-- [ ] Task: Create email template for "New Support Reply".
-- [ ] Task: Update `Nodemailer` service to include the new template and logic.
-- [ ] Task: Integrate email trigger into the Admin/Staff reply endpoint.
+- [x] Task: Create email template for "New Support Reply". e77fbd2
+- [x] Task: Update `Nodemailer` service to include the new template and logic. e77fbd2
+- [x] Task: Integrate email trigger into the Admin/Staff reply endpoint. e77fbd2
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Email Notification System' (Protocol in workflow.md)
 
 ## Phase 3: Admin Dashboard Fixes

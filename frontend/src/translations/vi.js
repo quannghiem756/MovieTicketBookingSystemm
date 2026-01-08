@@ -622,7 +622,26 @@ const vi = {
   'auth.resetPassword.newPassword': 'Mật khẩu mới',
   'auth.resetPassword.confirmPassword': 'Xác nhận mật khẩu mới',
   'auth.resetPassword.success': 'Đặt lại mật khẩu thành công! Vui lòng đăng nhập.',
-  'auth.resetPassword.failed': 'Đặt lại mật khẩu không thành công'
+  'auth.resetPassword.failed': 'Đặt lại mật khẩu không thành công',
+
+  // Contact Us
+  'contactUs.button': 'Liên hệ',
+  'contactUs.title': 'Liên hệ chúng tôi',
+  'contactUs.name': 'Họ tên',
+  'contactUs.email': 'Email',
+  'contactUs.phone': 'Số điện thoại',
+  'contactUs.category': 'Danh mục',
+  'contactUs.message': 'Nội dung',
+  'contactUs.submit': 'Gửi',
+  'contactUs.submitting': 'Đang gửi...',
+  'contactUs.cancel': 'Hủy',
+  'contactUs.success': 'Yêu cầu của bạn đã được gửi thành công!',
+  'contactUs.error': 'Gửi yêu cầu không thành công. Vui lòng thử lại.',
+  'contactUs.submitted': 'Đã gửi yêu cầu!',
+  'contactUs.category.payment': 'Vấn đề thanh toán',
+  'contactUs.category.ticket': 'Vấn đề vé/QR',
+  'contactUs.category.account': 'Tài khoản',
+  'contactUs.category.general': 'Câu hỏi chung'
 };
 
 export default vi;

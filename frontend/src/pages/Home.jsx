@@ -19,6 +19,7 @@ import { PlayArrow, ArrowForward } from '@mui/icons-material';
 import MovieCard from '../components/MovieCard';
 import NewsSidebar from '../components/NewsSidebar';
 import MovieRecommendationChat from '../components/MovieRecommendationChat';
+import ContactUsModal from '../components/ContactUsModal';
 import { getNowShowing, getComingSoon } from '../services/api';
 import { useTranslation } from '../context/I18nContext';
 
@@ -192,6 +193,7 @@ const Home = () => {
   const [nowShowing, setNowShowing] = useState([]);
   const [comingSoon, setComingSoon] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [contactModalOpen, setContactModalOpen] = useState(false);
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -327,6 +329,30 @@ const Home = () => {
           )}
         </Box>
       </Container>
+
+      {/* Contact Us Button and Modal */}
+      <Button 
+        variant="contained" 
+        color="info" 
+        onClick={() => setContactModalOpen(true)}
+        sx={{ 
+          position: 'fixed', 
+          bottom: 32, 
+          left: 32, 
+          zIndex: 1000, 
+          borderRadius: 8, 
+          px: 4, 
+          py: 1.5,
+          fontWeight: 'bold',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+          '&:hover': {
+            boxShadow: '0 6px 25px rgba(0,0,0,0.4)',
+          }
+        }}
+      >
+        {t('contactUs.button')}
+      </Button>
+      <ContactUsModal open={contactModalOpen} onClose={() => setContactModalOpen(false)} />
     </Container>
   );
 };

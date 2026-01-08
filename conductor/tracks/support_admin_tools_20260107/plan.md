@@ -10,10 +10,10 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Database Foundation' (Protocol in workflow.md)
 
 ## Phase 2: Support Ticket Submission System
-- [ ] Task: Implement Support Ticket Creation API
-    - [ ] Write tests for Ticket creation with auto-priority logic (Category -> Priority)
-    - [ ] Implement `POST /api/support/tickets` endpoint in `SupportService`
-- [ ] Task: Create "Contact Us" Frontend Component
+- [x] Task: Implement Support Ticket Creation API
+    - [x] Write tests for Ticket creation with auto-priority logic (Category -> Priority)
+    - [x] Implement `POST /api/support/tickets` endpoint in `SupportService`
+- [~] Task: Create "Contact Us" Frontend Component
     - [ ] Write unit tests for the Contact Form modal
     - [ ] Implement `ContactUsModal` using MUI in `frontend/src/components/`
     - [ ] Add "Contact Us" button to `HomePage` to trigger modal

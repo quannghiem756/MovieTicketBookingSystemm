@@ -83,6 +83,7 @@ const dashboardRoutes = require('./src/interfaces/http/routes/dashboard');
 const paymentRoutes = require('./src/interfaces/paymentRoutes');
 const recommendationRoutes = require('./src/interfaces/http/routes/recommendations');
 const couponRoutes = require('./src/interfaces/http/routes/coupons');
+const supportRoutes = require('./src/interfaces/http/routes/support');
 
 // Use routes
 app.use('/api/movies', movieRoutes);
@@ -95,6 +96,7 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/recommendations', recommendationRoutes);
 app.use('/api/coupons', couponRoutes);
+app.use('/api/support', supportRoutes);
 
 // Replace app.listen with server.listen
 server.listen(PORT, () => {

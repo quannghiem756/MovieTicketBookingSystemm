@@ -248,4 +248,12 @@ export const getPerformanceStats = () => api.get('/dashboard/performance-stats')
 
 
 
+// Support API
+
+export const createSupportTicket = (ticket) => api.post('/support/tickets', ticket);
+
+export const getSupportTickets = () => api.get('/support/tickets');
+
+
+
 export default api;

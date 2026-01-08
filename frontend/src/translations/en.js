@@ -591,7 +591,26 @@ const en = {
   'auth.resetPassword.newPassword': 'New Password',
   'auth.resetPassword.confirmPassword': 'Confirm New Password',
   'auth.resetPassword.success': 'Password reset successful! Please login.',
-  'auth.resetPassword.failed': 'Password reset failed'
+  'auth.resetPassword.failed': 'Password reset failed',
+
+  // Contact Us
+  'contactUs.button': 'Contact Us',
+  'contactUs.title': 'Contact Us',
+  'contactUs.name': 'Name',
+  'contactUs.email': 'Email',
+  'contactUs.phone': 'Phone',
+  'contactUs.category': 'Category',
+  'contactUs.message': 'Message',
+  'contactUs.submit': 'Submit',
+  'contactUs.submitting': 'Submitting...',
+  'contactUs.cancel': 'Cancel',
+  'contactUs.success': 'Your inquiry has been submitted successfully!',
+  'contactUs.error': 'Failed to submit inquiry. Please try again.',
+  'contactUs.submitted': 'Inquiry submitted!',
+  'contactUs.category.payment': 'Payment Issue',
+  'contactUs.category.ticket': 'Ticket/QR Problem',
+  'contactUs.category.account': 'Account',
+  'contactUs.category.general': 'General Question'
 };
 
 export default en;

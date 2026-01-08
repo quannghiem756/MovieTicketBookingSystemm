@@ -19,6 +19,7 @@ import ProfilePage from './pages/ProfilePage';
 import ShowtimesPage from './pages/ShowtimesPage';
 import NewsPage from './pages/NewsPage';
 import NewsDetailPage from './pages/NewsDetailPage';
+import PublicTicketDetail from './pages/PublicTicketDetail';
 // Admin components
 import AdminLayout from './pages/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -81,6 +82,7 @@ const AppRouter = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot-password" element={<ResetPasswordPage />} />
+          <Route path="/support/ticket/:token" element={<PublicTicketDetail />} />
 
           {/* Admin routes */}
           <Route path="/admin" element={

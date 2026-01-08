@@ -177,6 +177,7 @@ export const createMomoPayment = (bookingId) => api.post(`/payments/create-momo/
 // Users API
 export const createUser = (user) => api.post('/users', user);
 export const verifyRegistration = (email, otp) => api.post('/users/verify-registration', { email, otp });
+export const resendVerificationOTP = (email) => api.post('/users/resend-verification-otp', { email });
 export const forgotPassword = (email) => api.post('/users/forgot-password', { email });
 export const resetPassword = (email, otp, newPassword) => api.post('/users/reset-password', { email, otp, newPassword });
 export const loginUser = (credentials) => api.post('/users/login', credentials);

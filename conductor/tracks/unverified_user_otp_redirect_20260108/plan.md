@@ -16,4 +16,5 @@
 - [x] Task: Add `resendVerificationOTP` function to `frontend/src/services/api.js`. a218e88
 - [x] Task: Implement `handleResendOTP` in `RegisterPage.jsx` and trigger it automatically when `otpMode` is detected on mount. a404c5e
 - [x] Task: Add a "Resend OTP" button to the OTP step in `RegisterPage.jsx` with a 60-second cooldown timer. 3191624
-- [x] Task: Conductor - User Manual Verification 'Phase 3: Resend OTP Logic & UI' (Protocol in workflow.md) 9233a63
+- [x] Task: Prevent duplicate OTP resend on `RegisterPage` mount using ref (fix for Strict Mode/double-invocation). fac5b9e
+- [ ] Task: Conductor - User Manual Verification 'Phase 3: Resend OTP Logic & UI' (Protocol in workflow.md)

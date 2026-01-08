@@ -1,0 +1,31 @@
+# Plan: Support Ticket System Overhaul
+
+This plan outlines the implementation of a database-backed support ticket comment system, fixing the admin dashboard interactivity, and creating a public ticket detail page for users.
+
+## Phase 1: Database & Backend Foundation
+- [x] Task: Create `TicketComment` Mongoose schema and model. <!-- id: acc2fa8 -->
+- [ ] Task: Update `SupportTicket` schema with `status` and `accessToken` fields.
+- [ ] Task: Implement `SupportTicket` pre-save hook to generate unique `accessToken`.
+- [ ] Task: Implement `GET /api/support/public/:token` to fetch ticket details and comments.
+- [ ] Task: Implement `POST /api/support/public/:token/reply` for user replies.
+- [ ] Task: Implement `POST /api/support/:id/reply` for Admin/Staff replies (Protected).
+- [ ] Task: Conductor - User Manual Verification 'Phase 1: Database & Backend Foundation' (Protocol in workflow.md)
+
+## Phase 2: Email Notification System
+- [ ] Task: Create email template for "New Support Reply".
+- [ ] Task: Update `Nodemailer` service to include the new template and logic.
+- [ ] Task: Integrate email trigger into the Admin/Staff reply endpoint.
+- [ ] Task: Conductor - User Manual Verification 'Phase 2: Email Notification System' (Protocol in workflow.md)
+
+## Phase 3: Admin Dashboard Fixes
+- [ ] Task: Update the Admin Support Ticket list component to make rows clickable or add "View/Reply" buttons.
+- [ ] Task: Create the `ReplyModal` component to show conversation history and the reply form.
+- [ ] Task: Integrate `ReplyModal` with the list and backend endpoints.
+- [ ] Task: Conductor - User Manual Verification 'Phase 3: Admin Dashboard Fixes' (Protocol in workflow.md)
+
+## Phase 4: Public Ticket Detail Page
+- [ ] Task: Create the `PublicTicketDetail` page component in the frontend.
+- [ ] Task: Implement the conversation thread view with sender role differentiation.
+- [ ] Task: Implement the reply form and submission logic.
+- [ ] Add routing for `/support/ticket/:token`.
+- [ ] Task: Conductor - User Manual Verification 'Phase 4: Public Ticket Detail Page' (Protocol in workflow.md)

@@ -8,7 +8,7 @@
 
 ## Phase 2: Frontend Redirection & OTP Mode
 - [x] Task: Update `AuthContext.jsx`'s `login` function to return the full error response when it fails, allowing the caller to check the status code. 6b495e6
-- [ ] Task: Update `LoginPage.jsx` to catch `403` errors and redirect to `/register` with `state: { email, otpMode: true }`.
+- [x] Task: Update `LoginPage.jsx` to catch `403` errors and redirect to `/register` with `state: { email, otpMode: true }`. 1f312f7
 - [ ] Task: Refactor `RegisterPage.jsx` to check `location.state` for `otpMode` and `email` on mount, setting the internal step to `'otp'`.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Frontend Redirection & OTP Mode' (Protocol in workflow.md)
 

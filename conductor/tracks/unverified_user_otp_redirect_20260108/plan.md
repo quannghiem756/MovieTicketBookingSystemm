@@ -13,7 +13,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Frontend Redirection & OTP Mode' (Protocol in workflow.md) 26f6296
 
 ## Phase 3: Resend OTP Logic & UI
-- [ ] Task: Add `resendVerificationOTP` function to `frontend/src/services/api.js`.
+- [x] Task: Add `resendVerificationOTP` function to `frontend/src/services/api.js`. a218e88
 - [ ] Task: Implement `handleResendOTP` in `RegisterPage.jsx` and trigger it automatically when `otpMode` is detected on mount.
 - [ ] Task: Add a "Resend OTP" button to the OTP step in `RegisterPage.jsx` with a 60-second cooldown timer.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Resend OTP Logic & UI' (Protocol in workflow.md)

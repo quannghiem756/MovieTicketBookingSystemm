@@ -1,10 +1,10 @@
 # Implementation Plan: Redirect Unverified Users to OTP Verification
 
-## Phase 1: Backend Infrastructure
+## Phase 1: Backend Infrastructure [checkpoint: 0b1c7f8]
 - [x] Task: Update `UserController.authenticateUser` to return `403 Forbidden` when `userService.authenticateUser` throws "Email not verified". eda092f
 - [x] Task: Implement `resendVerificationOTP` method in `UserController` to handle sending a new OTP. eda092f
 - [x] Task: Add `POST /api/users/resend-verification-otp` route in `backend/src/interfaces/http/routes/users.js`. 9430d2d
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Backend Infrastructure' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Backend Infrastructure' (Protocol in workflow.md) 0b1c7f8
 
 ## Phase 2: Frontend Redirection & OTP Mode
 - [ ] Task: Update `AuthContext.jsx`'s `login` function to return the full error response when it fails, allowing the caller to check the status code.

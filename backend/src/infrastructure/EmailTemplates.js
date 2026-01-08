@@ -114,7 +114,7 @@ class EmailTemplates {
    * @param {string} lang - Language code ('en' or 'vi')
    * @returns {Promise<Object>} { html, attachments }
    */
-  async getBookingConfirmationTemplate(booking, lang = 'vn') {
+  async getBookingConfirmationTemplate(booking, lang = 'en') {
     const t = translations[lang] || translations.en;
     
     // Generate QR Code as Buffer for attachment

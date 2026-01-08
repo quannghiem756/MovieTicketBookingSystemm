@@ -83,6 +83,8 @@ const en = {
   'bookings.status.confirmed': 'Confirmed',
   'bookings.status.pending': 'Pending',
   'bookings.status.cancelled': 'Cancelled',
+  'bookings.status.paid': 'Paid',
+  'bookings.status.redeemed': 'Redeemed',
   'bookings.details.notAvailable': 'Not available',
   'bookings.details.noSynopsis': 'No synopsis',
   'bookings.details.qrCodeTitle': 'Digital Ticket QR Code',
@@ -203,6 +205,8 @@ const en = {
   'common.all': 'All',
   'common.back': 'Back',
   'common.required': 'Required',
+  'common.search': 'Search',
+  'common.reset': 'Reset',
 
   // Pagination
   'pagination.previous': 'Previous',
@@ -435,6 +439,7 @@ const en = {
   'admin.bookings.booking': 'Booking',
   'admin.bookings.dialogCancel': 'Cancel',
   'admin.bookings.searchPlaceholder': 'Search by Email or Phone',
+  'admin.bookings.searchError': 'Search failed. Please try again.',
   'admin.bookings.manualRedeem': 'Manual Redeem',
   'admin.bookings.confirmManualRedeem': 'Confirm Manual Redemption',
   'admin.bookings.manualRedeemMessage': 'Are you sure? Please ensure you have verified the customer\'s ID or identity.',

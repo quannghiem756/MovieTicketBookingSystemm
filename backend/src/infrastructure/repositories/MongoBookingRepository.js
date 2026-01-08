@@ -89,6 +89,7 @@ class MongoBookingRepository extends BookingRepository {
 
   async findAll() {
     const bookingDocs = await BookingModel.find({})
+      .populate('userId')
       .populate({
         path: 'showtimeId',
         populate: [
@@ -103,7 +104,19 @@ class MongoBookingRepository extends BookingRepository {
         ]
       });
 
-    return bookingDocs.map(doc => this.mapBookingDoc(doc));
+    return bookingDocs.map(doc => {
+      const booking = this.mapBookingDoc(doc);
+      if (doc.userId && doc.userId._id) {
+          booking.userId = doc.userId._id;
+          booking.user = {
+              id: doc.userId._id,
+              name: doc.userId.name,
+              email: doc.userId.email,
+              phone: doc.userId.phone
+          };
+      }
+      return booking;
+    });
   }
 
   async findById(id) {

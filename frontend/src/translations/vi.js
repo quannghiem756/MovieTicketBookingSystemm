@@ -79,6 +79,8 @@ const vi = {
   'bookings.status.confirmed': 'Đã xác nhận',
   'bookings.status.pending': 'Đang chờ',
   'bookings.status.cancelled': 'Đã hủy',
+  'bookings.status.paid': 'Đã thanh toán',
+  'bookings.status.redeemed': 'Đã sử dụng',
   'bookings.movieTitle': 'Tên phim',
 
   // Booking Details Page
@@ -225,6 +227,8 @@ const vi = {
   'common.back': 'Quay lại',
   'common.save': 'Lưu',
   'common.required': 'Bắt buộc',
+  'common.search': 'Tìm kiếm',
+  'common.reset': 'Đặt lại',
 
   // Pagination
   'pagination.previous': 'Trước',
@@ -466,6 +470,7 @@ const vi = {
   'admin.bookings.booking': 'Vé đặt',
   'admin.bookings.dialogCancel': 'Hủy',
   'admin.bookings.searchPlaceholder': 'Tìm kiếm theo Email hoặc Số điện thoại',
+  'admin.bookings.searchError': 'Tìm kiếm thất bại. Vui lòng thử lại.',
   'admin.bookings.manualRedeem': 'Xác nhận thủ công',
   'admin.bookings.confirmManualRedeem': 'Xác nhận đổi vé thủ công',
   'admin.bookings.manualRedeemMessage': 'Bạn có chắc chắn không? Vui lòng đảm bảo bạn đã xác minh ID hoặc danh tính của khách hàng.',

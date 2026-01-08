@@ -261,6 +261,7 @@ const BookingsPage = () => {
                           booking.status === 'confirmed' ? t('bookings.status.confirmed') :
                           booking.status === 'pending' ? t('bookings.status.pending') :
                           booking.status === 'cancelled' ? t('bookings.status.cancelled') :
+                          booking.status === 'redeemed' ? t('bookings.status.redeemed') :
                           booking.status
                         }
                         color={

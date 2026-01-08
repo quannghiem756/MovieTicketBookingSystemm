@@ -23,9 +23,9 @@ This plan outlines the implementation of a database-backed support ticket commen
 - [x] Task: Integrate `ReplyModal` with the list and backend endpoints. 0281fb1
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Admin Dashboard Fixes' (Protocol in workflow.md) 0a09356
 
-## Phase 4: Public Ticket Detail Page
+## Phase 4: Public Ticket Detail Page [checkpoint: 0469aef]
 - [x] Task: Create the `PublicTicketDetail` page component in the frontend. a585c64
 - [x] Task: Implement the conversation thread view with sender role differentiation. a585c64
 - [x] Task: Implement the reply form and submission logic. a585c64
 - [x] Add routing for `/support/ticket/:token`. a585c64
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Public Ticket Detail Page' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Public Ticket Detail Page' (Protocol in workflow.md) 0469aef

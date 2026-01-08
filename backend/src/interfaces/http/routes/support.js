@@ -3,13 +3,14 @@ const SupportController = require('../controllers/SupportController');
 const SupportService = require('../../../application/SupportService');
 const MongoSupportTicketRepository = require('../../../infrastructure/repositories/MongoSupportTicketRepository');
 const MongoTicketCommentRepository = require('../../../infrastructure/repositories/MongoTicketCommentRepository');
+const emailService = require('../../../infrastructure/EmailService');
 const { authenticate, authorizeStaff } = require('../middleware/auth');
 
 const router = express.Router();
 
 const supportTicketRepository = new MongoSupportTicketRepository();
 const ticketCommentRepository = new MongoTicketCommentRepository();
-const supportService = new SupportService(supportTicketRepository, ticketCommentRepository);
+const supportService = new SupportService(supportTicketRepository, ticketCommentRepository, emailService);
 const supportController = new SupportController(supportService);
 
 // Public route for creating tickets

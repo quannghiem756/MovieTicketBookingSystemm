@@ -14,6 +14,11 @@ const translations = {
     bookingId: 'Booking ID',
     qrTitle: 'Scan this QR code at the cinema entrance',
     viewDetails: 'View Booking Details',
+    supportTitle: 'New Reply to Your Support Ticket',
+    supportGreeting: 'Hello',
+    supportSubtitle: 'A member of our team has replied to your support ticket.',
+    ticketSubject: 'Subject',
+    viewTicket: 'View Ticket & Reply',
     footer: 'Movie Ticket Booking System',
     automated: 'This is an automated message, please do not reply.'
   },
@@ -30,12 +35,79 @@ const translations = {
     bookingId: 'Mã đặt vé',
     qrTitle: 'Quét mã QR này tại lối vào rạp',
     viewDetails: 'Xem chi tiết vé',
+    supportTitle: 'Phản hồi mới cho yêu cầu hỗ trợ của bạn',
+    supportGreeting: 'Xin chào',
+    supportSubtitle: 'Đội ngũ hỗ trợ của chúng tôi đã phản hồi yêu cầu của bạn.',
+    ticketSubject: 'Tiêu đề',
+    viewTicket: 'Xem yêu cầu và Phản hồi',
     footer: 'Hệ thống đặt vé xem phim',
     automated: 'Đây là tin nhắn tự động, vui lòng không trả lời.'
   }
 };
 
 class EmailTemplates {
+  /**
+   * Generates an HTML email template for support ticket reply notification.
+   * @param {Object} data - Ticket and reply details
+   * @param {string} lang - Language code ('en' or 'vi')
+   * @returns {Object} { html }
+   */
+  getSupportReplyTemplate(data, lang = 'en') {
+    const t = translations[lang] || translations.en;
+    const ticketUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/support/ticket/${data.accessToken}`;
+
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <title>${t.supportTitle}</title>
+        <style>
+          body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4; color: #333333; margin: 0; padding: 0; }
+          .container { max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+          .header { background-color: #e53935; padding: 20px; text-align: center; color: #ffffff; }
+          .header h1 { margin: 0; font-size: 24px; }
+          .content { padding: 30px; line-height: 1.6; }
+          .greeting { font-size: 18px; font-weight: bold; margin-bottom: 20px; }
+          .reply-preview { background-color: #f9f9f9; border-left: 4px solid #e53935; padding: 15px; margin: 20px 0; font-style: italic; }
+          .ticket-info { margin-bottom: 20px; font-size: 14px; color: #666; }
+          .footer { text-align: center; padding: 20px; color: #999; font-size: 12px; background-color: #f4f4f4; }
+          .btn { display: inline-block; background-color: #e53935; color: white !important; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold; margin-top: 20px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>${t.supportTitle}</h1>
+          </div>
+          <div class="content">
+            <p class="greeting">${t.supportGreeting},</p>
+            <p>${t.supportSubtitle}</p>
+            
+            <div class="ticket-info">
+              <strong>${t.ticketSubject}:</strong> ${data.subject}
+            </div>
+
+            <div class="reply-preview">
+              "${data.replyContent.length > 200 ? data.replyContent.substring(0, 200) + '...' : data.replyContent}"
+            </div>
+            
+            <div style="text-align: center;">
+              <a href="${ticketUrl}" class="btn">${t.viewTicket}</a>
+            </div>
+          </div>
+          <div class="footer">
+            &copy; ${new Date().getFullYear()} ${t.footer}.<br/>
+            ${t.automated}
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    return { html };
+  }
+
   /**
    * Generates an HTML email template for booking confirmation.
    * @param {Object} booking - Booking details

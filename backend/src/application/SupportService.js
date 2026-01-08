@@ -1,7 +1,10 @@
+const emailTemplates = require('../infrastructure/EmailTemplates');
+
 class SupportService {
-  constructor(supportTicketRepository, ticketCommentRepository) {
+  constructor(supportTicketRepository, ticketCommentRepository, emailService) {
     this.supportTicketRepository = supportTicketRepository;
     this.ticketCommentRepository = ticketCommentRepository;
+    this.emailService = emailService;
   }
 
   async createTicket(ticketData) {
@@ -64,6 +67,25 @@ class SupportService {
     
     // Update ticket status to Replied
     await this.supportTicketRepository.update(ticketId, { status: 'Replied' });
+
+    // Send email notification to user
+    if (this.emailService && ticket.email) {
+      try {
+        const template = emailTemplates.getSupportReplyTemplate({
+          subject: ticket.subject,
+          replyContent: content,
+          accessToken: ticket.accessToken
+        }, 'en'); // Default to English for now
+
+        await this.emailService.sendEmail(
+          ticket.email,
+          'New Reply to Your Support Ticket',
+          template.html
+        );
+      } catch (error) {
+        console.error('Failed to send support reply email:', error);
+      }
+    }
     
     return comment;
   }

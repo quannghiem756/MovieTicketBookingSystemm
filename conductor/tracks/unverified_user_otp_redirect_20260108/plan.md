@@ -14,6 +14,6 @@
 
 ## Phase 3: Resend OTP Logic & UI
 - [x] Task: Add `resendVerificationOTP` function to `frontend/src/services/api.js`. a218e88
-- [ ] Task: Implement `handleResendOTP` in `RegisterPage.jsx` and trigger it automatically when `otpMode` is detected on mount.
+- [x] Task: Implement `handleResendOTP` in `RegisterPage.jsx` and trigger it automatically when `otpMode` is detected on mount. a404c5e
 - [ ] Task: Add a "Resend OTP" button to the OTP step in `RegisterPage.jsx` with a 60-second cooldown timer.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Resend OTP Logic & UI' (Protocol in workflow.md)

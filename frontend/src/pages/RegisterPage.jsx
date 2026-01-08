@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { createUser, verifyRegistration } from '../services/api';
 import { useTranslation } from '../context/I18nContext';
 import {
@@ -36,6 +36,7 @@ import {
 
 const RegisterPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [step, setStep] = useState('register'); // 'register' or 'otp'
   const [otp, setOtp] = useState('');
   const [formData, setFormData] = useState({
@@ -54,6 +55,13 @@ const RegisterPage = () => {
   const { t } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  useEffect(() => {
+    if (location.state && location.state.otpMode && location.state.email) {
+      setStep('otp');
+      setFormData(prev => ({ ...prev, email: location.state.email }));
+    }
+  }, [location.state]);
 
   const validateField = (name, value) => {
     let error = '';

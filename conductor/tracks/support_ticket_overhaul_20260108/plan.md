@@ -24,8 +24,8 @@ This plan outlines the implementation of a database-backed support ticket commen
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Admin Dashboard Fixes' (Protocol in workflow.md) 0a09356
 
 ## Phase 4: Public Ticket Detail Page
-- [ ] Task: Create the `PublicTicketDetail` page component in the frontend.
-- [ ] Task: Implement the conversation thread view with sender role differentiation.
-- [ ] Task: Implement the reply form and submission logic.
-- [ ] Add routing for `/support/ticket/:token`.
+- [x] Task: Create the `PublicTicketDetail` page component in the frontend. a585c64
+- [x] Task: Implement the conversation thread view with sender role differentiation. a585c64
+- [x] Task: Implement the reply form and submission logic. a585c64
+- [x] Add routing for `/support/ticket/:token`. a585c64
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Public Ticket Detail Page' (Protocol in workflow.md)

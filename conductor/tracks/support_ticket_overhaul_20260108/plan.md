@@ -11,11 +11,11 @@ This plan outlines the implementation of a database-backed support ticket commen
 - [x] Task: Implement `POST /api/support/:id/reply` for Admin/Staff replies (Protected). <!-- id: fb3d558 -->
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Database & Backend Foundation' (Protocol in workflow.md) a5d6d52
 
-## Phase 2: Email Notification System
+## Phase 2: Email Notification System [checkpoint: f0ab566]
 - [x] Task: Create email template for "New Support Reply". e77fbd2
 - [x] Task: Update `Nodemailer` service to include the new template and logic. e77fbd2
 - [x] Task: Integrate email trigger into the Admin/Staff reply endpoint. e77fbd2
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Email Notification System' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Email Notification System' (Protocol in workflow.md) f0ab566
 
 ## Phase 3: Admin Dashboard Fixes
 - [ ] Task: Update the Admin Support Ticket list component to make rows clickable or add "View/Reply" buttons.

@@ -9,5 +9,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [~] Track: Redirect unverified users to OTP verification form upon login failure
-*Link: [./conductor/tracks/unverified_user_otp_redirect_20260108/](./conductor/tracks/unverified_user_otp_redirect_20260108/)*
+## [~] Track: Customer Support Admin Workflow Documentation
+*Link: [./conductor/tracks/support_workflow_docs_20260108/](./conductor/tracks/support_workflow_docs_20260108/)*

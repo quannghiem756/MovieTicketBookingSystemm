@@ -58,6 +58,24 @@ class SupportController {
       }
     }
   }
+
+  async addInternalReply(req, res) {
+    try {
+      const { id } = req.params;
+      const { content } = req.body;
+      const senderId = req.user.id;
+      const senderRole = req.user.role; // Staff or Admin
+
+      const comment = await this.supportService.addInternalReply(id, senderId, senderRole, content);
+      res.status(201).json(comment);
+    } catch (error) {
+      if (error.message === 'Ticket not found') {
+        res.status(404).json({ message: error.message });
+      } else {
+        res.status(500).json({ message: error.message });
+      }
+    }
+  }
 }
 
 module.exports = SupportController;

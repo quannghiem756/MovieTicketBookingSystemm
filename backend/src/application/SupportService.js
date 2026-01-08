@@ -47,6 +47,27 @@ class SupportService {
     return await this.ticketCommentRepository.create(commentData);
   }
 
+  async addInternalReply(ticketId, senderId, senderRole, content) {
+    const ticket = await this.supportTicketRepository.findById(ticketId);
+    if (!ticket) {
+      throw new Error('Ticket not found');
+    }
+
+    const commentData = {
+      ticketId,
+      senderId,
+      senderRole,
+      content
+    };
+
+    const comment = await this.ticketCommentRepository.create(commentData);
+    
+    // Update ticket status to Replied
+    await this.supportTicketRepository.update(ticketId, { status: 'Replied' });
+    
+    return comment;
+  }
+
   _calculatePriority(category) {
     if (category === 'Payment Issue' || category === 'Ticket/QR Problem') {
       return 'High';

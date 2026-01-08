@@ -133,7 +133,7 @@ const ReplyModal = ({ open, onClose, ticketId, onReplySuccess }) => {
         ) : ticketData ? (
           <Box>
             {/* Original Message */}
-            <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.100', mb: 3, borderRadius: 2 }}>
+            <Paper elevation={0} sx={{ p: 2, bgcolor: 'black', mb: 3, borderRadius: 2 }}>
               <Box display="flex" justifyContent="space-between" mb={1}>
                 <Typography variant="subtitle2" color="primary">
                   {ticketData.name} ({ticketData.email})

@@ -13,7 +13,7 @@ const ticketCommentSchema = new mongoose.Schema({
     },
     senderRole: {
         type: String,
-        enum: ['User', 'Staff', 'Admin'],
+        enum: ['admin', 'user', 'staff'],
         required: true
     },
     content: {

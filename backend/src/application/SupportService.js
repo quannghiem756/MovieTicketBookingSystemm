@@ -57,7 +57,7 @@ class SupportService {
     const commentData = {
       ticketId: ticket._id,
       senderId: null,
-      senderRole: 'User',
+      senderRole: 'user',
       content
     };
 

@@ -12,9 +12,9 @@
 - [x] Task: Refactor `RegisterPage.jsx` to check `location.state` for `otpMode` and `email` on mount, setting the internal step to `'otp'`. ef43e08
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Frontend Redirection & OTP Mode' (Protocol in workflow.md) 26f6296
 
-## Phase 3: Resend OTP Logic & UI [checkpoint: 9233a63]
+## Phase 3: Resend OTP Logic & UI [checkpoint: ee58179]
 - [x] Task: Add `resendVerificationOTP` function to `frontend/src/services/api.js`. a218e88
 - [x] Task: Implement `handleResendOTP` in `RegisterPage.jsx` and trigger it automatically when `otpMode` is detected on mount. a404c5e
 - [x] Task: Add a "Resend OTP" button to the OTP step in `RegisterPage.jsx` with a 60-second cooldown timer. 3191624
 - [x] Task: Prevent duplicate OTP resend on `RegisterPage` mount using ref (fix for Strict Mode/double-invocation). fac5b9e
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Resend OTP Logic & UI' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Resend OTP Logic & UI' (Protocol in workflow.md) ee58179

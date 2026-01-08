@@ -3,7 +3,7 @@
 ## Phase 1: Backend Infrastructure
 - [x] Task: Update `UserController.authenticateUser` to return `403 Forbidden` when `userService.authenticateUser` throws "Email not verified". eda092f
 - [x] Task: Implement `resendVerificationOTP` method in `UserController` to handle sending a new OTP. eda092f
-- [ ] Task: Add `POST /api/users/resend-verification-otp` route in `backend/src/interfaces/http/routes/users.js`.
+- [x] Task: Add `POST /api/users/resend-verification-otp` route in `backend/src/interfaces/http/routes/users.js`. 9430d2d
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Backend Infrastructure' (Protocol in workflow.md)
 
 ## Phase 2: Frontend Redirection & OTP Mode

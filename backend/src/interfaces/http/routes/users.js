@@ -25,6 +25,7 @@ router.post('/google-login', (req, res) => userController.googleLogin(req, res))
 router.post('/refresh-token', (req, res) => userController.refreshToken(req, res));
 router.post('/logout', (req, res) => userController.logout(req, res));
 router.post('/verify-registration', (req, res) => userController.verifyRegistration(req, res));
+router.post('/resend-verification-otp', (req, res) => userController.resendVerificationOTP(req, res));
 router.post('/forgot-password', (req, res) => userController.forgotPassword(req, res));
 router.post('/reset-password', (req, res) => userController.resetPassword(req, res));
 

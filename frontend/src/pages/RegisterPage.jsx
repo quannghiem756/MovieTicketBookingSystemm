@@ -50,12 +50,23 @@ const RegisterPage = () => {
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [cooldown, setCooldown] = useState(0);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { t } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  useEffect(() => {
+    let timer;
+    if (cooldown > 0) {
+      timer = setInterval(() => {
+        setCooldown(prev => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [cooldown]);
 
   useEffect(() => {
     if (location.state && location.state.otpMode && location.state.email) {
@@ -65,18 +76,24 @@ const RegisterPage = () => {
       
       // Trigger automatic resend
       resendVerificationOTP(email)
-        .then(() => setSuccessMessage('A new OTP has been sent to your email.'))
+        .then(() => {
+          setSuccessMessage('A new OTP has been sent to your email.');
+          setCooldown(60);
+        })
         .catch(err => setServerError(err.response?.data?.error || 'Failed to send OTP'));
     }
   }, [location.state]);
 
   const handleResendOTP = async () => {
+    if (cooldown > 0) return;
+
     setLoading(true);
     setServerError('');
     setSuccessMessage('');
     try {
       await resendVerificationOTP(formData.email);
       setSuccessMessage('A new OTP has been sent to your email.');
+      setCooldown(60);
     } catch (err) {
       setServerError(err.response?.data?.error || 'Failed to resend OTP');
     } finally {
@@ -328,6 +345,18 @@ const RegisterPage = () => {
                     }
                   }}
                 />
+                <Box sx={{ textAlign: 'center' }}>
+                  <Button
+                    variant="text"
+                    onClick={handleResendOTP}
+                    disabled={cooldown > 0 || loading}
+                    sx={{ color: 'primary.main', textTransform: 'none' }}
+                  >
+                    {cooldown > 0 
+                      ? `Resend OTP in ${cooldown}s` 
+                      : 'Resend OTP'}
+                  </Button>
+                </Box>
               </Box>
             ) : (
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>

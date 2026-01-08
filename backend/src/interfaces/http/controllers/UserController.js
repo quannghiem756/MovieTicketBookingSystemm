@@ -182,6 +182,34 @@ class UserController {
     }
   }
 
+  async resendVerificationOTP(req, res) {
+    try {
+      const { email } = req.body;
+      const user = await this.userService.getUserByEmail(email);
+
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      if (user.isVerified) {
+        return res.status(400).json({ error: 'User is already verified' });
+      }
+
+      const otp = this.otpService.generateOTP();
+      await this.otpService.saveOTP(email, otp, 'registration');
+
+      await this.emailService.sendEmail(
+        email,
+        'Verify your email',
+        `<p>Your OTP for registration is: <b>${otp}</b>. It expires in 5 minutes.</p>`
+      );
+
+      res.status(200).json({ message: 'OTP sent successfully' });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
   async authenticateUser(req, res) {
     try {
       const { email, password } = req.body;
@@ -203,6 +231,9 @@ class UserController {
 
       res.json({ user, accessToken });
     } catch (error) {
+      if (error.message === 'Email not verified') {
+        return res.status(403).json({ error: 'Email not verified' });
+      }
       res.status(500).json({ error: error.message });
     }
   }

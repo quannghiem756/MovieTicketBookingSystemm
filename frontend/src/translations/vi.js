@@ -465,6 +465,21 @@ const vi = {
   'admin.bookings.actionMessage': 'Bạn có chắc chắn muốn',
   'admin.bookings.booking': 'Vé đặt',
   'admin.bookings.dialogCancel': 'Hủy',
+  'admin.bookings.searchPlaceholder': 'Tìm kiếm theo Email hoặc Số điện thoại',
+  'admin.bookings.manualRedeem': 'Xác nhận thủ công',
+  'admin.bookings.confirmManualRedeem': 'Xác nhận đổi vé thủ công',
+  'admin.bookings.manualRedeemMessage': 'Bạn có chắc chắn không? Vui lòng đảm bảo bạn đã xác minh ID hoặc danh tính của khách hàng.',
+
+  // Admin Support
+  'admin.sidebar.support': 'Hỗ trợ',
+  'admin.support.title': 'Quản lý yêu cầu hỗ trợ',
+  'admin.support.noTickets': 'Không tìm thấy yêu cầu hỗ trợ nào.',
+  'admin.support.date': 'Ngày',
+  'admin.support.user': 'Người dùng',
+  'admin.support.category': 'Danh mục',
+  'admin.support.message': 'Nội dung',
+  'admin.support.priority': 'Độ ưu tiên',
+  'admin.support.status': 'Trạng thái',
 
   // Theater Form
   'admin.theaterForm.seatTooltip': '{{seatId}} - {{seatType}}',

@@ -434,6 +434,21 @@ const en = {
   'admin.bookings.actionMessage': 'Are you sure you want to',
   'admin.bookings.booking': 'Booking',
   'admin.bookings.dialogCancel': 'Cancel',
+  'admin.bookings.searchPlaceholder': 'Search by Email or Phone',
+  'admin.bookings.manualRedeem': 'Manual Redeem',
+  'admin.bookings.confirmManualRedeem': 'Confirm Manual Redemption',
+  'admin.bookings.manualRedeemMessage': 'Are you sure? Please ensure you have verified the customer\'s ID or identity.',
+
+  // Admin Support
+  'admin.sidebar.support': 'Support',
+  'admin.support.title': 'Support Ticket Management',
+  'admin.support.noTickets': 'No support tickets found.',
+  'admin.support.date': 'Date',
+  'admin.support.user': 'User',
+  'admin.support.category': 'Category',
+  'admin.support.message': 'Message',
+  'admin.support.priority': 'Priority',
+  'admin.support.status': 'Status',
 
   // Theater Form
   'admin.theaterForm.seatTooltip': '{{seatId}} - {{seatType}}',

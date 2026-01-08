@@ -19,8 +19,9 @@ const supportTicketSchema = new mongoose.Schema({
   status: { 
       type: String, 
       default: 'Open',
-      enum: ['Open', 'In Progress', 'Resolved', 'Closed']
-  }
+      enum: ['Open', 'In Progress', 'Resolved', 'Closed', 'Replied']
+  },
+  accessToken: { type: String, unique: true, sparse: true }
 }, {
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
 });

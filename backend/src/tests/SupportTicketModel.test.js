@@ -83,4 +83,48 @@ describe('SupportTicket Model Schema', () => {
         const error = ticket.validateSync();
         expect(error.errors['priority']).toBeDefined();
     });
+
+    it('should enforce enum values for status', () => {
+        const ticket = new SupportTicket({
+            name: 'John Doe',
+            email: 'john@example.com',
+            phone: '1234567890',
+            category: 'Account',
+            message: 'Msg',
+            priority: 'Medium',
+            status: 'UnknownStatus' // Invalid
+        });
+
+        const error = ticket.validateSync();
+        expect(error.errors['status']).toBeDefined();
+    });
+
+    it('should accept "Replied" as a valid status', () => {
+        const ticket = new SupportTicket({
+            name: 'John Doe',
+            email: 'john@example.com',
+            phone: '1234567890',
+            category: 'Account',
+            message: 'Msg',
+            priority: 'Medium',
+            status: 'Replied'
+        });
+
+        const error = ticket.validateSync();
+        expect(error).toBeUndefined();
+    });
+
+    it('should have an accessToken field', () => {
+        const ticket = new SupportTicket({
+            name: 'John Doe',
+            email: 'john@example.com',
+            phone: '1234567890',
+            category: 'Account',
+            message: 'Msg',
+            priority: 'Medium',
+            accessToken: 'some-token'
+        });
+        
+        expect(ticket.accessToken).toBe('some-token');
+    });
 });

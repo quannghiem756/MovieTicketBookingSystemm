@@ -8,7 +8,7 @@ This plan outlines the implementation of a database-backed support ticket commen
 - [x] Task: Implement `SupportTicket` pre-save hook to generate unique `accessToken`. <!-- id: bbbafb9 -->
 - [x] Task: Implement `GET /api/support/public/:token` to fetch ticket details and comments. <!-- id: 5efdffd -->
 - [x] Task: Implement `POST /api/support/public/:token/reply` for user replies. <!-- id: 12d8295 -->
-- [ ] Task: Implement `POST /api/support/:id/reply` for Admin/Staff replies (Protected).
+- [x] Task: Implement `POST /api/support/:id/reply` for Admin/Staff replies (Protected). <!-- id: fb3d558 -->
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Database & Backend Foundation' (Protocol in workflow.md)
 
 ## Phase 2: Email Notification System

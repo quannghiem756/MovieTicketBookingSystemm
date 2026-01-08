@@ -5,7 +5,7 @@ This plan outlines the implementation of a database-backed support ticket commen
 ## Phase 1: Database & Backend Foundation
 - [x] Task: Create `TicketComment` Mongoose schema and model. <!-- id: acc2fa8 -->
 - [x] Task: Update `SupportTicket` schema with `status` and `accessToken` fields. <!-- id: 17ab53a -->
-- [ ] Task: Implement `SupportTicket` pre-save hook to generate unique `accessToken`.
+- [x] Task: Implement `SupportTicket` pre-save hook to generate unique `accessToken`. <!-- id: bbbafb9 -->
 - [ ] Task: Implement `GET /api/support/public/:token` to fetch ticket details and comments.
 - [ ] Task: Implement `POST /api/support/public/:token/reply` for user replies.
 - [ ] Task: Implement `POST /api/support/:id/reply` for Admin/Staff replies (Protected).

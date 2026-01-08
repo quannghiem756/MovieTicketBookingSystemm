@@ -12,7 +12,8 @@ describe('SupportService Public Access', () => {
             findAllSortedByCreatedAt: jest.fn()
         };
         mockTicketCommentRepository = {
-            findByTicketId: jest.fn()
+            findByTicketId: jest.fn(),
+            create: jest.fn()
         };
         supportService = new SupportService(mockSupportTicketRepository, mockTicketCommentRepository);
     });
@@ -36,5 +37,25 @@ describe('SupportService Public Access', () => {
         mockSupportTicketRepository.findByAccessToken.mockResolvedValue(null);
 
         await expect(supportService.getTicketByToken('invalid')).rejects.toThrow('Ticket not found');
+    });
+
+    it('should create a comment for valid token', async () => {
+        const token = 'valid-token';
+        const mockTicket = { _id: 'ticket1', accessToken: token };
+        const replyContent = 'User reply';
+
+        mockSupportTicketRepository.findByAccessToken.mockResolvedValue(mockTicket);
+        mockTicketCommentRepository.create.mockResolvedValue({ content: replyContent });
+
+        const result = await supportService.addPublicReply(token, replyContent);
+
+        expect(mockSupportTicketRepository.findByAccessToken).toHaveBeenCalledWith(token);
+        expect(mockTicketCommentRepository.create).toHaveBeenCalledWith({
+            ticketId: 'ticket1',
+            senderId: null,
+            senderRole: 'User',
+            content: replyContent
+        });
+        expect(result).toEqual({ content: replyContent });
     });
 });

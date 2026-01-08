@@ -43,6 +43,21 @@ class SupportController {
       }
     }
   }
+
+  async addPublicReply(req, res) {
+    try {
+      const { token } = req.params;
+      const { content } = req.body;
+      const comment = await this.supportService.addPublicReply(token, content);
+      res.status(201).json(comment);
+    } catch (error) {
+      if (error.message === 'Ticket not found') {
+        res.status(404).json({ message: error.message });
+      } else {
+        res.status(500).json({ message: error.message });
+      }
+    }
+  }
 }
 
 module.exports = SupportController;

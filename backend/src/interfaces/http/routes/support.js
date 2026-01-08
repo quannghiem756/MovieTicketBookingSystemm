@@ -22,6 +22,9 @@ router.post('/tickets', (req, res, next) => {
 // Public route for viewing ticket by token
 router.get('/public/:token', (req, res) => supportController.getTicketByToken(req, res));
 
+// Public route for user reply by token
+router.post('/public/:token/reply', (req, res) => supportController.addPublicReply(req, res));
+
 // Admin route for viewing tickets (Admin and Staff)
 router.get('/tickets', authenticate, authorizeStaff, (req, res) => supportController.getAllTickets(req, res));
 

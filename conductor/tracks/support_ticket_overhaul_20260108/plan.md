@@ -7,7 +7,7 @@ This plan outlines the implementation of a database-backed support ticket commen
 - [x] Task: Update `SupportTicket` schema with `status` and `accessToken` fields. <!-- id: 17ab53a -->
 - [x] Task: Implement `SupportTicket` pre-save hook to generate unique `accessToken`. <!-- id: bbbafb9 -->
 - [x] Task: Implement `GET /api/support/public/:token` to fetch ticket details and comments. <!-- id: 5efdffd -->
-- [ ] Task: Implement `POST /api/support/public/:token/reply` for user replies.
+- [x] Task: Implement `POST /api/support/public/:token/reply` for user replies. <!-- id: 12d8295 -->
 - [ ] Task: Implement `POST /api/support/:id/reply` for Admin/Staff replies (Protected).
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Database & Backend Foundation' (Protocol in workflow.md)
 

@@ -17,11 +17,11 @@ This plan outlines the implementation of a database-backed support ticket commen
 - [x] Task: Integrate email trigger into the Admin/Staff reply endpoint. e77fbd2
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Email Notification System' (Protocol in workflow.md) f0ab566
 
-## Phase 3: Admin Dashboard Fixes
+## Phase 3: Admin Dashboard Fixes [checkpoint: 0a09356]
 - [x] Task: Update the Admin Support Ticket list component to make rows clickable or add "View/Reply" buttons. 0281fb1
 - [x] Task: Create the `ReplyModal` component to show conversation history and the reply form. 0281fb1
 - [x] Task: Integrate `ReplyModal` with the list and backend endpoints. 0281fb1
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Admin Dashboard Fixes' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Admin Dashboard Fixes' (Protocol in workflow.md) 0a09356
 
 ## Phase 4: Public Ticket Detail Page
 - [ ] Task: Create the `PublicTicketDetail` page component in the frontend.

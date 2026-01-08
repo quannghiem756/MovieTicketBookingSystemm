@@ -9,15 +9,15 @@
     - [x] Implement `AuditLog` schema in `backend/src/infrastructure/AuditLogModel.js`
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Database Foundation' (Protocol in workflow.md)
 
-## Phase 2: Support Ticket Submission System
+## Phase 2: Support Ticket Submission System [checkpoint: 2c8fc55]
 - [x] Task: Implement Support Ticket Creation API
     - [x] Write tests for Ticket creation with auto-priority logic (Category -> Priority)
     - [x] Implement `POST /api/support/tickets` endpoint in `SupportService`
-- [~] Task: Create "Contact Us" Frontend Component
-    - [ ] Write unit tests for the Contact Form modal
-    - [ ] Implement `ContactUsModal` using MUI in `frontend/src/components/`
-    - [ ] Add "Contact Us" button to `HomePage` to trigger modal
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Support Ticket Submission' (Protocol in workflow.md)
+- [x] Task: Create "Contact Us" Frontend Component
+    - [x] Write unit tests for the Contact Form modal
+    - [x] Implement `ContactUsModal` using MUI in `frontend/src/components/`
+    - [x] Add "Contact Us" button to `HomePage` to trigger modal
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Support Ticket Submission' (Protocol in workflow.md)
 
 ## Phase 3: Admin Booking Management (Backend)
 - [ ] Task: Implement Booking Search API

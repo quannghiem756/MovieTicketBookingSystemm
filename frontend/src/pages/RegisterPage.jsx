@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { createUser, verifyRegistration } from '../services/api';
+import { createUser, verifyRegistration, resendVerificationOTP } from '../services/api';
 import { useTranslation } from '../context/I18nContext';
 import {
   Container,
@@ -49,6 +49,7 @@ const RegisterPage = () => {
   });
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -59,11 +60,29 @@ const RegisterPage = () => {
   useEffect(() => {
     if (location.state && location.state.otpMode && location.state.email) {
       setStep('otp');
-      setFormData(prev => ({ ...prev, email: location.state.email }));
+      const email = location.state.email;
+      setFormData(prev => ({ ...prev, email }));
+      
+      // Trigger automatic resend
+      resendVerificationOTP(email)
+        .then(() => setSuccessMessage('A new OTP has been sent to your email.'))
+        .catch(err => setServerError(err.response?.data?.error || 'Failed to send OTP'));
     }
   }, [location.state]);
 
-  const validateField = (name, value) => {
+  const handleResendOTP = async () => {
+    setLoading(true);
+    setServerError('');
+    setSuccessMessage('');
+    try {
+      await resendVerificationOTP(formData.email);
+      setSuccessMessage('A new OTP has been sent to your email.');
+    } catch (err) {
+      setServerError(err.response?.data?.error || 'Failed to resend OTP');
+    } finally {
+      setLoading(false);
+    }
+  };
     let error = '';
     
     switch (name) {
@@ -280,6 +299,7 @@ const RegisterPage = () => {
           </Box>
           
           {serverError && <Alert severity="error" sx={{ mb: 3 }}>{serverError}</Alert>}
+          {successMessage && <Alert severity="success" sx={{ mb: 3 }}>{successMessage}</Alert>}
           
           <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
             {step === 'otp' ? (

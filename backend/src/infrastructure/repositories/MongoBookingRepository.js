@@ -144,6 +144,40 @@ class MongoBookingRepository extends BookingRepository {
     return bookingDocs.map(doc => this.mapBookingDoc(doc));
   }
 
+  async findByUserIds(userIds) {
+    const bookingDocs = await BookingModel.find({ userId: { $in: userIds } })
+      .sort({ bookingDate: -1 })
+      .populate('userId')
+      .populate({
+        path: 'showtimeId',
+        populate: [
+          {
+            path: 'movieId',
+            model: 'Movie'
+          },
+          {
+            path: 'theaterId',
+            model: 'Theater'
+          }
+        ]
+      });
+
+    return bookingDocs.map(doc => {
+      const booking = this.mapBookingDoc(doc);
+      // Ensure userId is string ID if populated and attach user details
+      if (doc.userId && doc.userId._id) {
+          booking.userId = doc.userId._id;
+          booking.user = {
+              id: doc.userId._id,
+              name: doc.userId.name,
+              email: doc.userId.email,
+              phone: doc.userId.phone
+          };
+      }
+      return booking;
+    });
+  }
+
   async findByShowtimeId(showtimeId) {
     const bookingDocs = await BookingModel.find({ showtimeId })
       .populate({

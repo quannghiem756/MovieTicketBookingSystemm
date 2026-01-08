@@ -37,6 +37,17 @@ class MongoUserRepository extends UserRepository {
     return this._mapToDomain(userDoc);
   }
 
+  async searchByEmailOrPhone(query) {
+    const regex = new RegExp(query, 'i'); // Case-insensitive partial match
+    const userDocs = await UserModel.find({
+      $or: [
+        { email: regex },
+        { phone: regex }
+      ]
+    });
+    return userDocs.map(doc => this._mapToDomain(doc));
+  }
+
   async update(id, user) {
     const updatedUser = await UserModel.findByIdAndUpdate(id, {
       name: user.name,

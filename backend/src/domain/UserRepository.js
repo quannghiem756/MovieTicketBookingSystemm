@@ -16,6 +16,10 @@ class UserRepository {
     throw new Error('Method not implemented');
   }
 
+  async searchByEmailOrPhone(query) {
+    throw new Error('Method not implemented');
+  }
+
   async update(id, user) {
     throw new Error('Method not implemented');
   }

@@ -3,7 +3,7 @@ const User = require('../domain/User');
 const emailTemplates = require('../infrastructure/EmailTemplates');
 
 class BookingService {
-  constructor(bookingRepository, userRepository, showtimeRepository, movieRepository, couponService, validationService, emailService, theaterRepository) {
+  constructor(bookingRepository, userRepository, showtimeRepository, movieRepository, couponService, validationService, emailService, theaterRepository, auditLogRepository) {
     this.bookingRepository = bookingRepository;
     this.userRepository = userRepository;
     this.showtimeRepository = showtimeRepository;
@@ -12,6 +12,37 @@ class BookingService {
     this.validationService = validationService;
     this.emailService = emailService;
     this.theaterRepository = theaterRepository;
+    this.auditLogRepository = auditLogRepository;
+  }
+
+  async manualRedeem(bookingId, staffId) {
+    const booking = await this.bookingRepository.findById(bookingId);
+    if (!booking) {
+      throw new Error('Booking not found');
+    }
+
+    if (booking.status !== 'paid' && booking.status !== 'confirmed') {
+      throw new Error('Booking must be paid or confirmed to redeem');
+    }
+    
+    if (booking.status === 'redeemed') {
+      throw new Error('Booking is already redeemed');
+    }
+
+    const updatedBooking = await this.bookingRepository.update(bookingId, {
+      ...booking,
+      status: 'redeemed'
+    });
+
+    if (this.auditLogRepository) {
+      await this.auditLogRepository.create({
+        staffId,
+        bookingId,
+        action: 'MANUAL_REDEEM'
+      });
+    }
+
+    return updatedBooking;
   }
 
   async _sendConfirmationEmail(booking) {
@@ -256,6 +287,19 @@ class BookingService {
 
   async getLockedSeats(showtimeId) {
     return await this.bookingRepository.findLockedSeats(showtimeId);
+  }
+
+  async searchBookings(query) {
+    // 1. Find users by email or phone
+    const users = await this.userRepository.searchByEmailOrPhone(query);
+    if (!users || users.length === 0) {
+      return [];
+    }
+    
+    const userIds = users.map(user => user.id);
+    
+    // 2. Find bookings for these users
+    return await this.bookingRepository.findByUserIds(userIds);
   }
 
   async getAllBookings() {

@@ -10,7 +10,8 @@ const CouponService = require('../../../application/CouponService');
 const ValidationService = require('../../../application/ValidationService');
 const EmailService = require('../../../infrastructure/EmailService');
 const MongoCouponRepository = require('../../../infrastructure/repositories/MongoCouponRepository');
-const { authenticate, authorizeAdmin } = require('../middleware/auth');
+const MongoAuditLogRepository = require('../../../infrastructure/repositories/MongoAuditLogRepository');
+const { authenticate, authorizeAdmin, authorizeStaff } = require('../middleware/auth');
 const { seatHoldLimiter } = require('../middleware/rateLimiter');
 
 // Initialize service and controller
@@ -20,6 +21,7 @@ const showtimeRepository = new MongoShowtimeRepository();
 const movieRepository = new MongoMovieRepository();
 const theaterRepository = new MongoTheaterRepository();
 const couponRepository = new MongoCouponRepository();
+const auditLogRepository = new MongoAuditLogRepository();
 const couponService = new CouponService(couponRepository, bookingRepository);
 const validationService = new ValidationService();
 const bookingService = new BookingService(
@@ -30,7 +32,8 @@ const bookingService = new BookingService(
   couponService, 
   validationService,
   EmailService,
-  theaterRepository
+  theaterRepository,
+  auditLogRepository
 );
 const bookingController = new BookingController(bookingService);
 
@@ -38,12 +41,14 @@ const router = express.Router();
 
 // Protected routes
 router.get('/validate', (req, res) => bookingController.validateBooking(req, res));
+router.get('/search', authenticate, authorizeStaff, (req, res) => bookingController.searchBookings(req, res));
 router.get('/', authenticate, authorizeAdmin, (req, res) => bookingController.getAllBookings(req, res));
 router.post('/', authenticate, (req, res) => bookingController.createBooking(req, res));
 router.get('/:id', authenticate, (req, res) => bookingController.getBookingById(req, res));
 router.get('/user/:userId', authenticate, (req, res) => bookingController.getBookingsByUserId(req, res));
 router.put('/:id/confirm', authenticate, authorizeAdmin, (req, res) => bookingController.confirmBooking(req, res));
 router.put('/:id/cancel', authenticate, (req, res) => bookingController.cancelBooking(req, res));
+router.patch('/:id/manual-redeem', authenticate, authorizeStaff, (req, res) => bookingController.manualRedeem(req, res));
 
 // Seat holding routes
 router.post('/hold', authenticate, seatHoldLimiter, (req, res) => bookingController.holdSeat(req, res));

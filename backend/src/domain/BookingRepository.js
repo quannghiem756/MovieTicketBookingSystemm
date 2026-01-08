@@ -16,6 +16,10 @@ class BookingRepository {
     throw new Error('Method not implemented');
   }
 
+  async findByUserIds(userIds) {
+    throw new Error('Method not implemented');
+  }
+
   async findByShowtimeId(showtimeId) {
     throw new Error('Method not implemented');
   }

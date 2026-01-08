@@ -20,10 +20,10 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Support Ticket Submission' (Protocol in workflow.md)
 
 ## Phase 3: Admin Booking Management (Backend)
-- [ ] Task: Implement Booking Search API
-    - [ ] Write tests for searching bookings by email/phone (with indexing check)
-    - [ ] Implement search logic in `BookingService`
-- [ ] Task: Implement Manual Redemption API
+- [x] Task: Implement Booking Search API
+    - [x] Write tests for searching bookings by email/phone (with indexing check)
+    - [x] Implement search logic in `BookingService`
+- [~] Task: Implement Manual Redemption API
     - [ ] Write tests for manual redemption: check status update and AuditLog creation
     - [ ] Implement `PATCH /api/admin/bookings/:id/manual-redeem` in `BookingService`
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Admin Booking Management (Backend)' (Protocol in workflow.md)

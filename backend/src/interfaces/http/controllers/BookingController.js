@@ -24,6 +24,19 @@ class BookingController {
     }
   }
 
+  async searchBookings(req, res) {
+    try {
+      const { query } = req.query;
+      if (!query) {
+        return res.status(400).json({ error: 'Query parameter is required' });
+      }
+      const bookings = await this.bookingService.searchBookings(query);
+      res.json(bookings);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
   async getAllBookings(req, res) {
     try {
       const bookings = await this.bookingService.getAllBookings();
@@ -75,6 +88,17 @@ class BookingController {
       res.json(booking);
     } catch (error) {
       res.status(500).json({ error: error.message });
+    }
+  }
+
+  async manualRedeem(req, res) {
+    try {
+      const { id } = req.params;
+      const staffId = req.user.id; // From auth
+      const booking = await this.bookingService.manualRedeem(id, staffId);
+      res.json(booking);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
     }
   }
 

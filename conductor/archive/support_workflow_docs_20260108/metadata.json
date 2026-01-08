@@ -1,0 +1,8 @@
+{
+  "track_id": "support_workflow_docs_20260108",
+  "type": "docs",
+  "status": "new",
+  "created_at": "2026-01-08T15:24:00Z",
+  "updated_at": "2026-01-08T15:24:00Z",
+  "description": "Create documentation for the customer support admin workflows implemented in support_admin_tools_20260107."
+}

@@ -9,5 +9,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [~] Track: Customer Support Admin Workflow Documentation
-*Link: [./conductor/tracks/support_workflow_docs_20260108/](./conductor/tracks/support_workflow_docs_20260108/)*
+## [~] Track: currently the admin support ticket list is not interactable so the admin and staff cant reply to the support ticket fix it
+*Link: [./conductor/tracks/support_ticket_overhaul_20260108/](./conductor/tracks/support_ticket_overhaul_20260108/)*

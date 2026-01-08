@@ -100,6 +100,8 @@ const RegisterPage = () => {
       setLoading(false);
     }
   };
+
+  const validateField = (name, value) => {
     let error = '';
     
     switch (name) {

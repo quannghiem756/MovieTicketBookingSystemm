@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { createUser, verifyRegistration, resendVerificationOTP } from '../services/api';
 import { useTranslation } from '../context/I18nContext';
@@ -57,6 +57,7 @@ const RegisterPage = () => {
   const { t } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const resendTriggered = useRef(false);
 
   useEffect(() => {
     let timer;
@@ -74,6 +75,9 @@ const RegisterPage = () => {
       const email = location.state.email;
       setFormData(prev => ({ ...prev, email }));
       
+      if (resendTriggered.current) return;
+      resendTriggered.current = true;
+
       // Trigger automatic resend
       resendVerificationOTP(email)
         .then(() => {

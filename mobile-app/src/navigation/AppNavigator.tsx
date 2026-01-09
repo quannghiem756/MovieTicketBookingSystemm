@@ -2,11 +2,13 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { MyTicketsScreen } from '../screens/PlaceholderScreens';
 import ProfileScreen from '../screens/ProfileScreen';
 import HomeScreen from '../screens/HomeScreen';
 import MoviesScreen from '../screens/MoviesScreen';
 import MovieDetailsScreen from '../screens/MovieDetailsScreen';
+import SeatSelectionScreen from '../screens/SeatSelectionScreen';
+import CheckoutScreen from '../screens/CheckoutScreen';
+import MyTicketsScreen from '../screens/MyTicketsScreen';
 import { useTheme, ActivityIndicator } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthContext';
@@ -22,6 +24,8 @@ function MoviesStack() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="MoviesList" component={MoviesScreen} />
       <Stack.Screen name="MovieDetails" component={MovieDetailsScreen} />
+      <Stack.Screen name="SeatSelection" component={SeatSelectionScreen} />
+      <Stack.Screen name="Checkout" component={CheckoutScreen} />
     </Stack.Navigator>
   );
 }

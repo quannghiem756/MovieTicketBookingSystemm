@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, ScrollView, Image, Dimensions, TouchableOpacity } from 'react-native';
 import { Text, Title, useTheme, Paragraph, ActivityIndicator, Divider, List, Chip } from 'react-native-paper';
 import { useTranslation } from '../context/I18nContext';
-import { getMovieById } from '../services/movieService';
+import { getMovieById, getFutureShowtimesByMovieId } from '../services/movieService';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Button from '../components/Button';
@@ -15,20 +15,31 @@ const MovieDetailsScreen = ({ route, navigation }: any) => {
   const theme = useTheme();
   
   const [movie, setMovie] = useState<any>(null);
+  const [showtimes, setShowtimes] = useState<any[]>([]);
+  const [selectedShowtime, setSelectedShowtime] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [playing, setPlaying] = useState(false);
 
   useEffect(() => {
     fetchMovie();
+    fetchShowtimes();
   }, [movieId]);
 
   const fetchMovie = async () => {
     try {
-      setLoading(true);
       const data = await getMovieById(movieId);
       setMovie(data);
     } catch (error) {
       console.error('Error fetching movie details:', error);
+    }
+  };
+
+  const fetchShowtimes = async () => {
+    try {
+      const data = await getFutureShowtimesByMovieId(movieId);
+      setShowtimes(data);
+    } catch (error) {
+      console.error('Error fetching showtimes:', error);
     } finally {
       setLoading(false);
     }
@@ -40,10 +51,15 @@ const MovieDetailsScreen = ({ route, navigation }: any) => {
     }
   }, []);
 
-  const extractYoutubeId = (url: string) => {
-    if (!url) return null;
-    const match = url.match(/(?:youtu\.be\/|youtube\.js\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
-    return match ? match[1] : null;
+  const handleBook = () => {
+    if (!selectedShowtime) {
+      return;
+    }
+    navigation.navigate('SeatSelection', { 
+      showtimeId: selectedShowtime.id,
+      movieTitle: movie.title,
+      movieId: movie.id
+    });
   };
 
   if (loading) {
@@ -62,7 +78,7 @@ const MovieDetailsScreen = ({ route, navigation }: any) => {
     );
   }
 
-  const youtubeId = extractYoutubeId(movie.trailerUrl);
+  const youtubeId = movie.trailerUrl ? movie.trailerUrl.match(/(?:youtu\.be\/|youtube\.js\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/)?.[1] : null;
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -96,6 +112,39 @@ const MovieDetailsScreen = ({ route, navigation }: any) => {
 
         <Divider style={styles.divider} />
 
+        <Title style={styles.sectionTitle}>Showtimes</Title>
+        <View style={styles.showtimeContainer}>
+          {showtimes.length > 0 ? (
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {showtimes.map((st) => (
+                <TouchableOpacity
+                  key={st.id}
+                  style={[
+                    styles.showtimeItem,
+                    selectedShowtime?.id === st.id && styles.selectedShowtime,
+                    { borderColor: theme.colors.outline }
+                  ]}
+                  onPress={() => setSelectedShowtime(st)}
+                >
+                  <Text style={[styles.showtimeDate, selectedShowtime?.id === st.id && styles.selectedText]}>
+                    {new Date(st.showDate).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' })}
+                  </Text>
+                  <Text style={[styles.showtimeTime, selectedShowtime?.id === st.id && styles.selectedText]}>
+                    {st.showTime}
+                  </Text>
+                  <Text style={[styles.showtimeFormat, selectedShowtime?.id === st.id && styles.selectedText]}>
+                    {st.format}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          ) : (
+            <Text style={{ color: '#666' }}>No upcoming showtimes available.</Text>
+          )}
+        </View>
+
+        <Divider style={styles.divider} />
+
         <Title style={styles.sectionTitle}>Synopsis</Title>
         <Paragraph style={styles.description}>{movie.description}</Paragraph>
 
@@ -118,10 +167,11 @@ const MovieDetailsScreen = ({ route, navigation }: any) => {
 
         <Button
           mode="contained"
-          onPress={() => console.log('Navigate to seat selection', movie.id)}
+          onPress={handleBook}
+          disabled={!selectedShowtime}
           style={styles.bookButton}
         >
-          Book Tickets
+          {selectedShowtime ? `Book for ${selectedShowtime.showTime}` : 'Select a Showtime'}
         </Button>
       </View>
     </ScrollView>
@@ -182,6 +232,38 @@ const styles = StyleSheet.create({
   genreText: {
     fontSize: 12,
     color: '#d32f2f',
+  },
+  showtimeContainer: {
+    marginVertical: 10,
+  },
+  showtimeItem: {
+    padding: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    marginRight: 10,
+    alignItems: 'center',
+    minWidth: 80,
+  },
+  selectedShowtime: {
+    backgroundColor: '#d32f2f',
+    borderColor: '#d32f2f',
+  },
+  showtimeDate: {
+    fontSize: 12,
+    color: '#b3b3b3',
+  },
+  showtimeTime: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginVertical: 2,
+  },
+  showtimeFormat: {
+    fontSize: 10,
+    color: '#b3b3b3',
+  },
+  selectedText: {
+    color: '#fff',
   },
   divider: {
     marginVertical: 20,

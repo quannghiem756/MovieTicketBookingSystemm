@@ -26,7 +26,7 @@ Goal: Enable users to sign in and manage their identity on mobile.
 - [x] Task: Implement Login and Registration screens. 749cd58
     - [x] Write unit tests for auth forms and validation. 749cd58
     - [x] Implement email/password login. 749cd58
-- [ ] Task: Integrate Google OAuth for mobile using Expo AuthSession.
+- [x] Task: Integrate Google OAuth for mobile using Expo AuthSession. d9bcf61
 - [ ] Task: Implement Secure Token storage using `expo-secure-store`.
 - [ ] Task: Build the Profile screen and booking history list.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Authentication & User Profile' (Protocol in workflow.md)

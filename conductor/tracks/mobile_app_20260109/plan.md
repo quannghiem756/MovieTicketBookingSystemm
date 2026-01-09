@@ -12,7 +12,7 @@ Goal: Initialize the mobile environment and enable the backend to support mobile
     - [x] Implement token extraction from Authorization header. f7f603b
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Project Scaffolding & Backend Authentication Upgrade' (Protocol in workflow.md)
 
-## Phase 2: Navigation & Core Layout
+## Phase 2: Navigation & Core Layout [checkpoint: f348136]
 Goal: Establish the primary navigation structure and brand-consistent styling.
 
 - [x] Task: Implement Bottom Tab Navigation (Home, Movies, My Tickets, Profile). fc311b7

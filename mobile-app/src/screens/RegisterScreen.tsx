@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { Text, Title, useTheme, HelperText } from 'react-native-paper';
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from '../context/I18nContext';
 import Button from '../components/Button';
 import Input from '../components/Input';
 
@@ -13,6 +14,7 @@ const RegisterScreen = ({ navigation }: any) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
+  const { t } = useTranslation();
   const theme = useTheme();
 
   const handleRegister = async () => {
@@ -47,20 +49,20 @@ const RegisterScreen = ({ navigation }: any) => {
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.header}>
-          <Title style={[styles.title, { color: theme.colors.primary }]}>Create Account</Title>
-          <Text style={styles.subtitle}>Join us and start booking your favorite movies</Text>
+          <Title style={[styles.title, { color: theme.colors.primary }]}>{t('auth.createAccount')}</Title>
+          <Text style={styles.subtitle}>{t('auth.joinUs')}</Text>
         </View>
 
         <View style={styles.form}>
           <Input
-            label="Full Name"
+            label={t('auth.name')}
             value={name}
             onChangeText={setName}
             autoCapitalize="words"
             error={!!error}
           />
           <Input
-            label="Email"
+            label={t('auth.email')}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
@@ -68,14 +70,14 @@ const RegisterScreen = ({ navigation }: any) => {
             error={!!error}
           />
           <Input
-            label="Password"
+            label={t('auth.password')}
             value={password}
             onChangeText={setPassword}
             secureTextEntry
             error={!!error}
           />
           <Input
-            label="Confirm Password"
+            label={t('auth.confirmPassword')}
             value={confirmPassword}
             onChangeText={setConfirmPassword}
             secureTextEntry
@@ -90,7 +92,7 @@ const RegisterScreen = ({ navigation }: any) => {
             disabled={loading}
             style={styles.button}
           >
-            Register
+            {t('auth.register')}
           </Button>
 
           <TouchableOpacity
@@ -98,7 +100,7 @@ const RegisterScreen = ({ navigation }: any) => {
             style={styles.linkContainer}
           >
             <Text style={styles.linkText}>
-              Already have an account? <Text style={{ color: theme.colors.primary, fontWeight: 'bold' }}>Login</Text>
+              {t('auth.alreadyHaveAccount')} <Text style={{ color: theme.colors.primary, fontWeight: 'bold' }}>{t('auth.login')}</Text>
             </Text>
           </TouchableOpacity>
         </View>
@@ -106,6 +108,7 @@ const RegisterScreen = ({ navigation }: any) => {
     </KeyboardAvoidingView>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {

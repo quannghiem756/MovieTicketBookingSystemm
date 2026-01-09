@@ -1,0 +1,46 @@
+export default {
+  common: {
+    loading: 'Đang tải...',
+    error: 'Đã xảy ra lỗi',
+    retry: 'Thử lại',
+  },
+  auth: {
+    login: 'Đăng nhập',
+    register: 'Đăng ký',
+    logout: 'Đăng xuất',
+    email: 'Email',
+    password: 'Mật khẩu',
+    confirmPassword: 'Xác nhận mật khẩu',
+    name: 'Họ và tên',
+    welcomeBack: 'Chào mừng trở lại',
+    signInSubtitle: 'Đăng nhập để tiếp tục đặt vé xem phim yêu thích',
+    createAccount: 'Tạo tài khoản',
+    joinUs: 'Tham gia cùng chúng tôi để đặt vé dễ dàng',
+    dontHaveAccount: "Chưa có tài khoản?",
+    alreadyHaveAccount: 'Đã có tài khoản?',
+    continueWithGoogle: 'Tiếp tục với Google',
+    or: 'HOẶC',
+  },
+  nav: {
+    home: 'Trang chủ',
+    movies: 'Phim',
+    myTickets: 'Vé của tôi',
+    profile: 'Hồ sơ',
+  },
+  home: {
+    nowShowing: 'Đang chiếu',
+    comingSoon: 'Sắp chiếu',
+    news: 'Tin tức & Khuyến mãi',
+  },
+  movies: {
+    searchPlaceholder: 'Tìm kiếm phim...',
+    noResults: 'Không tìm thấy phim',
+    formats: 'Định dạng',
+  },
+  profile: {
+    bookings: 'Lượt đặt',
+    points: 'Điểm',
+    bookingHistory: 'Lịch sử đặt vé',
+    noBookings: 'Chưa có lịch sử đặt vé.',
+  },
+};

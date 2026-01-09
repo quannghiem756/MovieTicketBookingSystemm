@@ -1,0 +1,46 @@
+export default {
+  common: {
+    loading: 'Loading...',
+    error: 'An error occurred',
+    retry: 'Retry',
+  },
+  auth: {
+    login: 'Login',
+    register: 'Register',
+    logout: 'Logout',
+    email: 'Email',
+    password: 'Password',
+    confirmPassword: 'Confirm Password',
+    name: 'Full Name',
+    welcomeBack: 'Welcome Back',
+    signInSubtitle: 'Sign in to continue booking your favorite movies',
+    createAccount: 'Create Account',
+    joinUs: 'Join us and start booking your favorite movies',
+    dontHaveAccount: "Don't have an account?",
+    alreadyHaveAccount: 'Already have an account?',
+    continueWithGoogle: 'Continue with Google',
+    or: 'OR',
+  },
+  nav: {
+    home: 'Home',
+    movies: 'Movies',
+    myTickets: 'My Tickets',
+    profile: 'Profile',
+  },
+  home: {
+    nowShowing: 'Now Showing',
+    comingSoon: 'Coming Soon',
+    news: 'News & Promotions',
+  },
+  movies: {
+    searchPlaceholder: 'Search movies...',
+    noResults: 'No movies found',
+    formats: 'Formats',
+  },
+  profile: {
+    bookings: 'Bookings',
+    points: 'Points',
+    bookingHistory: 'Booking History',
+    noBookings: 'No bookings found yet.',
+  },
+};

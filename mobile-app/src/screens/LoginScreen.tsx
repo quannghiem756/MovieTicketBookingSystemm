@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { Text, Title, useTheme, HelperText, Divider } from 'react-native-paper';
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from '../context/I18nContext';
 import Button from '../components/Button';
 import Input from '../components/Input';
 import * as Google from 'expo-auth-session/providers/google';
@@ -15,6 +16,7 @@ const LoginScreen = ({ navigation }: any) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login, googleLogin } = useAuth();
+  const { t } = useTranslation();
   const theme = useTheme();
 
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -63,13 +65,13 @@ const LoginScreen = ({ navigation }: any) => {
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.header}>
-          <Title style={[styles.title, { color: theme.colors.primary }]}>Welcome Back</Title>
-          <Text style={styles.subtitle}>Sign in to continue booking your favorite movies</Text>
+          <Title style={[styles.title, { color: theme.colors.primary }]}>{t('auth.welcomeBack')}</Title>
+          <Text style={styles.subtitle}>{t('auth.signInSubtitle')}</Text>
         </View>
 
         <View style={styles.form}>
           <Input
-            label="Email"
+            label={t('auth.email')}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
@@ -77,7 +79,7 @@ const LoginScreen = ({ navigation }: any) => {
             error={!!error}
           />
           <Input
-            label="Password"
+            label={t('auth.password')}
             value={password}
             onChangeText={setPassword}
             secureTextEntry
@@ -92,12 +94,12 @@ const LoginScreen = ({ navigation }: any) => {
             disabled={loading}
             style={styles.button}
           >
-            Login
+            {t('auth.login')}
           </Button>
 
           <View style={styles.dividerContainer}>
             <Divider style={styles.divider} />
-            <Text style={styles.dividerText}>OR</Text>
+            <Text style={styles.dividerText}>{t('auth.or')}</Text>
             <Divider style={styles.divider} />
           </View>
 
@@ -108,7 +110,7 @@ const LoginScreen = ({ navigation }: any) => {
             icon="google"
             style={styles.googleButton}
           >
-            Continue with Google
+            {t('auth.continueWithGoogle')}
           </Button>
 
           <TouchableOpacity
@@ -116,7 +118,7 @@ const LoginScreen = ({ navigation }: any) => {
             style={styles.linkContainer}
           >
             <Text style={styles.linkText}>
-              Don't have an account? <Text style={{ color: theme.colors.primary, fontWeight: 'bold' }}>Register</Text>
+              {t('auth.dontHaveAccount')} <Text style={{ color: theme.colors.primary, fontWeight: 'bold' }}>{t('auth.register')}</Text>
             </Text>
           </TouchableOpacity>
         </View>
@@ -124,6 +126,7 @@ const LoginScreen = ({ navigation }: any) => {
     </KeyboardAvoidingView>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {

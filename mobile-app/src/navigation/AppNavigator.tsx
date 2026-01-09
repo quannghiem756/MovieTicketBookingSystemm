@@ -7,6 +7,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import { useTheme, ActivityIndicator } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from '../context/I18nContext';
 import AuthNavigator from './AuthNavigator';
 import { View } from 'react-native';
 
@@ -15,6 +16,7 @@ const Stack = createNativeStackNavigator();
 
 function MainNavigator() {
   const theme = useTheme();
+  const { t } = useTranslation();
 
   return (
     <Tab.Navigator
@@ -43,10 +45,26 @@ function MainNavigator() {
         },
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Movies" component={MoviesScreen} />
-      <Tab.Screen name="My Tickets" component={MyTicketsScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen 
+        name="Home" 
+        component={HomeScreen} 
+        options={{ title: t('nav.home') }}
+      />
+      <Tab.Screen 
+        name="Movies" 
+        component={MoviesScreen} 
+        options={{ title: t('nav.movies') }}
+      />
+      <Tab.Screen 
+        name="My Tickets" 
+        component={MyTicketsScreen} 
+        options={{ title: t('nav.myTickets') }}
+      />
+      <Tab.Screen 
+        name="Profile" 
+        component={ProfileScreen} 
+        options={{ title: t('nav.profile') }}
+      />
     </Tab.Navigator>
   );
 }

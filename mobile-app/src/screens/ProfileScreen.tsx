@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, FlatList } from 'react-native';
 import { Text, Title, useTheme, Avatar, List, Divider, ActivityIndicator } from 'react-native-paper';
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from '../context/I18nContext';
 import authService from '../services/authService';
 import Button from '../components/Button';
 import Card from '../components/Card';
 
 const ProfileScreen = () => {
   const { user, logout } = useAuth();
+  const { t } = useTranslation();
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const theme = useTheme();
@@ -60,17 +62,17 @@ const ProfileScreen = () => {
         <View style={styles.statsRow}>
           <View style={styles.statItem}>
             <Text style={styles.statValue}>{user?.loyaltyPoints || 0}</Text>
-            <Text style={styles.statLabel}>Points</Text>
+            <Text style={styles.statLabel}>{t('profile.points')}</Text>
           </View>
           <View style={styles.statItem}>
             <Text style={styles.statValue}>{bookings.length}</Text>
-            <Text style={styles.statLabel}>Bookings</Text>
+            <Text style={styles.statLabel}>{t('profile.bookings')}</Text>
           </View>
         </View>
       </View>
 
       <View style={styles.content}>
-        <Title style={styles.sectionTitle}>Booking History</Title>
+        <Title style={styles.sectionTitle}>{t('profile.bookingHistory')}</Title>
         {loading ? (
           <ActivityIndicator style={{ marginTop: 20 }} color={theme.colors.primary} />
         ) : (
@@ -80,7 +82,7 @@ const ProfileScreen = () => {
             keyExtractor={item => item.id}
             ItemSeparatorComponent={() => <Divider style={{ backgroundColor: theme.colors.outline }} />}
             ListEmptyComponent={() => (
-              <Text style={styles.emptyText}>No bookings found yet.</Text>
+              <Text style={styles.emptyText}>{t('profile.noBookings')}</Text>
             )}
             contentContainerStyle={{ paddingBottom: 20 }}
           />
@@ -92,11 +94,12 @@ const ProfileScreen = () => {
         onPress={logout}
         style={styles.logoutButton}
       >
-        Logout
+        {t('auth.logout')}
       </Button>
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {

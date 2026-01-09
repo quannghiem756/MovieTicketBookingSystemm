@@ -3,3 +3,16 @@
 /frontend/node_modules
 /backend/coverage
 /frontend/coverage
+
+# Mobile App (Expo/React Native)
+.expo/
+/mobile-app/node_modules
+/mobile-app/dist
+/mobile-app/android
+/mobile-app/ios
+*.jks
+*.p12
+*.key
+*.mobileprovision
+.env.local
+.env.*.local

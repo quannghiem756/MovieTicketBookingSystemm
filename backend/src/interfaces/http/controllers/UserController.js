@@ -229,7 +229,7 @@ class UserController {
         maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days (match REFRESH_TOKEN_EXPIRATION)
       });
 
-      res.json({ user, accessToken });
+      res.json({ user, accessToken, refreshToken });
     } catch (error) {
       if (error.message === 'Email not verified') {
         return res.status(403).json({ error: 'Email not verified' });
@@ -258,7 +258,7 @@ class UserController {
         maxAge: 7 * 24 * 60 * 60 * 1000
       });
 
-      res.json({ user, accessToken });
+      res.json({ user, accessToken, refreshToken });
     } catch (error) {
       console.error('Google login error:', error.message);
       res.status(401).json({ error: error.message });
@@ -283,7 +283,7 @@ class UserController {
         maxAge: 7 * 24 * 60 * 60 * 1000
       });
 
-      res.json({ accessToken });
+      res.json({ accessToken, refreshToken: newRefreshToken });
     } catch (error) {
       console.error('Refresh token error:', error.message);
       res.status(401).json({ error: 'Invalid refresh token' });
@@ -292,7 +292,7 @@ class UserController {
 
   async logout(req, res) {
     try {
-      const refreshToken = req.cookies.refreshToken;
+      const refreshToken = req.cookies.refreshToken || req.body.refreshToken;
       if (refreshToken) {
         await this.authService.logout(refreshToken);
       }

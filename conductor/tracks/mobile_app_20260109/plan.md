@@ -56,10 +56,10 @@ Goal: Replicate the complex seat selection and payment flow for mobile.
 ## Phase 6: AI Chatbot Integration
 Goal: Provide personalized assistance via the AI Sparkle FAB.
 
-- [ ] Task: Implement the persistent Floating Action Button (FAB) on Home and Discovery screens.
-- [ ] Task: Build the Chatbot interface in a slide-up modal/overlay.
-    - [ ] Write tests for chat message state and API interaction.
-    - [ ] Connect to the existing Python Vector Service via the Node.js gateway.
+- [x] Task: Implement the persistent Floating Action Button (FAB) on Home and Discovery screens. 8f76d0c
+- [x] Task: Build the Chatbot interface in a slide-up modal/overlay. ac838b8
+    - [x] Write tests for chat message state and API interaction. ac838b8
+    - [x] Connect to the existing Python Vector Service via the Node.js gateway. ac838b8
 - [ ] Task: Conductor - User Manual Verification 'Phase 6: AI Chatbot Integration' (Protocol in workflow.md)
 
 ## Phase 7: Final Integration & Polish

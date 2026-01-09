@@ -1,48 +1,76 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HomeScreen, MoviesScreen, MyTicketsScreen, ProfileScreen } from '../screens/PlaceholderScreens';
-import { useTheme } from 'react-native-paper';
+import { useTheme, ActivityIndicator } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useAuth } from '../context/AuthContext';
+import AuthNavigator from './AuthNavigator';
+import { View } from 'react-native';
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
-export default function AppNavigator() {
+function MainNavigator() {
   const theme = useTheme();
 
   return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: theme.colors.background,
+          borderTopColor: theme.colors.outline,
+        },
+        tabBarActiveTintColor: theme.colors.primary,
+        tabBarInactiveTintColor: theme.colors.onSurfaceVariant,
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName: any;
+
+          if (route.name === 'Home') {
+            iconName = focused ? 'home' : 'home-outline';
+          } else if (route.name === 'Movies') {
+            iconName = focused ? 'movie' : 'movie-outline';
+          } else if (route.name === 'My Tickets') {
+            iconName = focused ? 'ticket' : 'ticket-outline';
+          } else if (route.name === 'Profile') {
+            iconName = focused ? 'account' : 'account-outline';
+          }
+
+          return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
+        },
+      })}
+    >
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Movies" component={MoviesScreen} />
+      <Tab.Screen name="My Tickets" component={MyTicketsScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
+    </Tab.Navigator>
+  );
+}
+
+export default function AppNavigator() {
+  const { isAuthenticated, loading } = useAuth();
+  const theme = useTheme();
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#0f0f0f' }}>
+        <ActivityIndicator size="large" color={theme.colors.primary} />
+      </View>
+    );
+  }
+
+  return (
     <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          headerShown: false,
-          tabBarStyle: {
-            backgroundColor: theme.colors.background,
-            borderTopColor: theme.colors.outline,
-          },
-          tabBarActiveTintColor: theme.colors.primary,
-          tabBarInactiveTintColor: theme.colors.onSurfaceDisabled,
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
-
-            if (route.name === 'Home') {
-              iconName = focused ? 'home' : 'home-outline';
-            } else if (route.name === 'Movies') {
-              iconName = focused ? 'movie' : 'movie-outline';
-            } else if (route.name === 'My Tickets') {
-              iconName = focused ? 'ticket' : 'ticket-outline';
-            } else if (route.name === 'Profile') {
-              iconName = focused ? 'account' : 'account-outline';
-            }
-
-            return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
-          },
-        })}
-      >
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Movies" component={MoviesScreen} />
-        <Tab.Screen name="My Tickets" component={MyTicketsScreen} />
-        <Tab.Screen name="Profile" component={ProfileScreen} />
-      </Tab.Navigator>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {isAuthenticated ? (
+          <Stack.Screen name="Main" component={MainNavigator} />
+        ) : (
+          <Stack.Screen name="Auth" component={AuthNavigator} />
+        )}
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }

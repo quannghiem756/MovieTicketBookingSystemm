@@ -2,10 +2,11 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { MyTicketsScreen } from '../screens/PlaceholderScreens';
+import { HomeScreen, MoviesScreen, MyTicketsScreen } from '../screens/PlaceholderScreens';
 import ProfileScreen from '../screens/ProfileScreen';
 import HomeScreen from '../screens/HomeScreen';
 import MoviesScreen from '../screens/MoviesScreen';
+import MovieDetailsScreen from '../screens/MovieDetailsScreen';
 import { useTheme, ActivityIndicator } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthContext';
@@ -15,6 +16,15 @@ import { View } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+
+function MoviesStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="MoviesList" component={MoviesScreen} />
+      <Stack.Screen name="MovieDetails" component={MovieDetailsScreen} />
+    </Stack.Navigator>
+  );
+}
 
 function MainNavigator() {
   const theme = useTheme();
@@ -35,7 +45,7 @@ function MainNavigator() {
 
           if (route.name === 'Home') {
             iconName = focused ? 'home' : 'home-outline';
-          } else if (route.name === 'Movies') {
+          } else if (route.name === 'MoviesTab') {
             iconName = focused ? 'movie' : 'movie-outline';
           } else if (route.name === 'My Tickets') {
             iconName = focused ? 'ticket' : 'ticket-outline';
@@ -53,8 +63,8 @@ function MainNavigator() {
         options={{ title: t('nav.home') }}
       />
       <Tab.Screen 
-        name="Movies" 
-        component={MoviesScreen} 
+        name="MoviesTab" 
+        component={MoviesStack} 
         options={{ title: t('nav.movies') }}
       />
       <Tab.Screen 

@@ -59,7 +59,7 @@ const MoviesScreen = () => {
   };
 
   const renderMovieItem = ({ item }: { item: any }) => (
-    <TouchableOpacity onPress={() => console.log('Navigate to movie detail', item.id)}>
+    <TouchableOpacity onPress={() => navigation.navigate('MovieDetails', { movieId: item.id })}>
       <Card
         style={[styles.movieCard, { backgroundColor: theme.colors.surface }]}
         coverUrl={item.posterUrl}
@@ -77,7 +77,7 @@ const MoviesScreen = () => {
       </Paragraph>
       <Button 
         mode="contained" 
-        onPress={() => console.log('Open Chatbot')}
+        onPress={() => navigation.navigate('Home')} // Placeholder, should probably open Chatbot FAB modal
         icon="robot"
         style={styles.chatbotButton}
       >

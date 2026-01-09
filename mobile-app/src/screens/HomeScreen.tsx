@@ -41,7 +41,7 @@ const HomeScreen = () => {
   };
 
   const renderMovieItem = ({ item }: { item: any }) => (
-    <TouchableOpacity onPress={() => console.log('Navigate to movie detail', item.id)}>
+    <TouchableOpacity onPress={() => navigation.navigate('MoviesTab', { screen: 'MovieDetails', params: { movieId: item.id } })}>
       <Card style={[styles.movieCard, { backgroundColor: theme.colors.surface }]}>
         <Card.Cover source={{ uri: item.posterUrl }} style={styles.moviePoster} />
         <Card.Content>

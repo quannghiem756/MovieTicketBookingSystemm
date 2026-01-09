@@ -14,15 +14,9 @@ const MoviesScreen = () => (
 );
 
 const MyTicketsScreen = () => (
-  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <Text>My Tickets Screen</Text>
+  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#0f0f0f' }}>
+    <Text style={{ color: '#fff' }}>My Tickets Screen</Text>
   </View>
 );
 
-const ProfileScreen = () => (
-  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <Text>Profile Screen</Text>
-  </View>
-);
-
-export { HomeScreen, MoviesScreen, MyTicketsScreen, ProfileScreen };
+export { HomeScreen, MoviesScreen, MyTicketsScreen };

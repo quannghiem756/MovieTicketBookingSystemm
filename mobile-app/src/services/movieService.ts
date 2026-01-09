@@ -73,3 +73,8 @@ export const createMomoPayment = async (bookingId: string) => {
   const response = await api.post(`/payments/create-momo/${bookingId}`);
   return response.data;
 };
+
+export const getMovieRecommendations = async (query: string) => {
+  const response = await api.post('/recommendations', { query });
+  return response.data;
+};

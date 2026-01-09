@@ -1,13 +1,117 @@
-import React from 'react';
-import { View, StyleSheet, Modal, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
-import { Text, Title, useTheme, IconButton, Surface, TextInput } from 'react-native-paper';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, StyleSheet, Modal, ScrollView, KeyboardAvoidingView, Platform, TouchableOpacity, Image } from 'react-native';
+import { Text, Title, useTheme, IconButton, Surface, TextInput, ActivityIndicator, Card, Paragraph } from 'react-native-paper';
 import { useChatbot } from '../context/ChatbotContext';
+import { useAuth } from '../context/AuthContext';
+import { useTranslation } from '../context/I18nContext';
+import { getMovieRecommendations } from '../services/movieService';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+
+interface Message {
+  id: string;
+  text: string;
+  sender: 'user' | 'bot';
+  timestamp: Date;
+  movies?: any[];
+}
 
 const ChatbotModal = () => {
   const { isOpen, closeChatbot } = useChatbot();
+  const { user } = useAuth();
+  const { t, locale } = useTranslation();
   const theme = useTheme();
-  const [message, setMessage] = React.useState('');
+  const navigation = useNavigation();
+  
+  const [inputText, setInputText] = useState('');
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: '1',
+      text: locale === 'vi' 
+        ? `Xin chào ${user?.name || ''}! Tôi là trợ lý AI của CineBook. Tôi có thể giúp gì cho bạn? ✨`
+        : `Hello ${user?.name || ''}! I'm your CineBook AI assistant. How can I help you today? ✨`,
+      sender: 'bot',
+      timestamp: new Date(),
+    },
+  ]);
+  const [loading, setLoading] = useState(false);
+  const scrollViewRef = useRef<ScrollView>(null);
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      setTimeout(() => {
+        scrollViewRef.current?.scrollToEnd({ animated: true });
+      }, 100);
+    }
+  }, [messages]);
+
+  const handleSend = async () => {
+    if (!inputText.trim() || loading) return;
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      text: inputText,
+      sender: 'user',
+      timestamp: new Date(),
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    const query = inputText;
+    setInputText('');
+    setLoading(true);
+
+    try {
+      const response = await getMovieRecommendations(query);
+      
+      const botMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: response.message || (locale === 'vi' ? 'Đây là một số gợi ý cho bạn:' : 'Here are some suggestions for you:'),
+        sender: 'bot',
+        timestamp: new Date(),
+        movies: response.recommendations || [],
+      };
+
+      setMessages(prev => [...prev, botMessage]);
+    } catch (error) {
+      console.error('Chatbot error:', error);
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: locale === 'vi' 
+          ? 'Rất tiếc, đã có lỗi xảy ra. Vui lòng thử lại sau.'
+          : 'Sorry, something went wrong. Please try again later.',
+        sender: 'bot',
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const navigateToMovie = (movieId: string) => {
+    closeChatbot();
+    // Assuming we navigate via MoviesTab stack
+    navigation.navigate('MoviesTab' as never, { 
+      screen: 'MovieDetails', 
+      params: { movieId } 
+    } as never);
+  };
+
+  const renderMovieCard = (movie: any) => (
+    <TouchableOpacity 
+      key={movie.id} 
+      style={styles.movieCardWrapper}
+      onPress={() => navigateToMovie(movie.id)}
+    >
+      <Card style={styles.movieCard}>
+        <Card.Cover source={{ uri: movie.posterUrl }} style={styles.moviePoster} />
+        <Card.Content style={styles.movieCardContent}>
+          <Text numberOfLines={1} style={styles.movieTitle}>{movie.title}</Text>
+          <Text style={styles.movieMeta}>{movie.rating} • {movie.duration}m</Text>
+        </Card.Content>
+      </Card>
+    </TouchableOpacity>
+  );
 
   return (
     <Modal
@@ -23,31 +127,63 @@ const ChatbotModal = () => {
         <Surface style={styles.header}>
           <View style={styles.headerTitle}>
             <MaterialCommunityIcons name="sparkles" size={24} color={theme.colors.primary} />
-            <Title style={styles.title}>AI Assistant</Title>
+            <Title style={styles.title}>CineAI Assistant</Title>
           </View>
           <IconButton icon="close" onPress={closeChatbot} />
         </Surface>
 
-        <ScrollView contentContainerStyle={styles.chatContent}>
-          <Surface style={styles.botMessage}>
-            <Text style={styles.messageText}>
-              Hello! I'm your cinema assistant. How can I help you today? ✨
-            </Text>
-          </Surface>
+        <ScrollView 
+          ref={scrollViewRef}
+          contentContainerStyle={styles.chatContent}
+        >
+          {messages.map((msg) => (
+            <View key={msg.id} style={[
+              styles.messageWrapper,
+              msg.sender === 'user' ? styles.userMessageWrapper : styles.botMessageWrapper
+            ]}>
+              <Surface style={[
+                styles.messageBubble,
+                msg.sender === 'user' ? styles.userBubble : styles.botBubble
+              ]}>
+                <Text style={styles.messageText}>{msg.text}</Text>
+              </Surface>
+              
+              {msg.movies && msg.movies.length > 0 && (
+                <View style={styles.moviesContainer}>
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    {msg.movies.map(renderMovieCard)}
+                  </ScrollView>
+                </View>
+              )}
+            </View>
+          ))}
           
-          <Text style={styles.placeholderInfo}>
-            (Chatbot logic will be implemented in Phase 6)
-          </Text>
+          {loading && (
+            <View style={styles.botMessageWrapper}>
+              <Surface style={[styles.messageBubble, styles.botBubble, styles.loadingBubble]}>
+                <ActivityIndicator size="small" color={theme.colors.primary} />
+              </Surface>
+            </View>
+          )}
         </ScrollView>
 
-        <View style={styles.inputContainer}>
+        <View style={styles.inputArea}>
           <TextInput
             mode="outlined"
-            placeholder="Type your message..."
-            value={message}
-            onChangeText={setMessage}
+            placeholder={locale === 'vi' ? 'Nhập tin nhắn...' : 'Type your message...'}
+            value={inputText}
+            onChangeText={setInputText}
             style={styles.input}
-            right={<TextInput.Icon icon="send" color={theme.colors.primary} />}
+            outlineColor="#333"
+            activeOutlineColor={theme.colors.primary}
+            onSubmitEditing={handleSend}
+            right={
+              <TextInput.Icon 
+                icon="send" 
+                color={inputText.trim() ? theme.colors.primary : '#666'} 
+                onPress={handleSend}
+              />
+            }
           />
         </View>
       </KeyboardAvoidingView>
@@ -69,6 +205,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#333',
     elevation: 4,
+    backgroundColor: '#1a1a1a',
   },
   headerTitle: {
     flexDirection: 'row',
@@ -78,34 +215,80 @@ const styles = StyleSheet.create({
   title: {
     marginLeft: 10,
     fontSize: 18,
+    color: '#fff',
   },
   chatContent: {
-    padding: 20,
+    padding: 15,
     flexGrow: 1,
   },
-  botMessage: {
+  messageWrapper: {
+    marginBottom: 15,
+    width: '100%',
+  },
+  userMessageWrapper: {
+    alignItems: 'flex-end',
+  },
+  botMessageWrapper: {
+    alignItems: 'flex-start',
+  },
+  messageBubble: {
     padding: 12,
-    borderRadius: 12,
-    backgroundColor: '#1e1e1e',
+    borderRadius: 18,
     maxWidth: '85%',
-    alignSelf: 'flex-start',
-    marginBottom: 10,
+    elevation: 2,
+  },
+  userBubble: {
+    backgroundColor: '#d32f2f',
+    borderBottomRightRadius: 2,
+  },
+  botBubble: {
+    backgroundColor: '#1e1e1e',
+    borderBottomLeftRadius: 2,
+  },
+  loadingBubble: {
+    paddingVertical: 8,
+    paddingHorizontal: 15,
   },
   messageText: {
     color: '#fff',
+    fontSize: 15,
     lineHeight: 20,
   },
-  placeholderInfo: {
-    color: '#666',
-    textAlign: 'center',
-    marginTop: 20,
-    fontStyle: 'italic',
+  moviesContainer: {
+    marginTop: 10,
+    width: '100%',
   },
-  inputContainer: {
-    padding: 15,
+  movieCardWrapper: {
+    width: 140,
+    marginRight: 12,
+  },
+  movieCard: {
+    backgroundColor: '#252525',
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+  moviePoster: {
+    height: 180,
+  },
+  movieCardContent: {
+    padding: 8,
+  },
+  movieTitle: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  movieMeta: {
+    fontSize: 10,
+    color: '#b3b3b3',
+    marginTop: 2,
+  },
+  inputArea: {
+    padding: 10,
+    paddingBottom: Platform.OS === 'ios' ? 30 : 10,
+    backgroundColor: '#1a1a1a',
     borderTopWidth: 1,
     borderTopColor: '#333',
-    backgroundColor: '#1a1a1a',
   },
   input: {
     backgroundColor: '#0f0f0f',

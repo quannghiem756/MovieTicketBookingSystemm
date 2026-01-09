@@ -2,7 +2,7 @@
 
 This plan outlines the step-by-step development of the mobile application, following a TDD approach and utilizing the existing backend and vector service.
 
-## Phase 1: Project Scaffolding & Backend Authentication Upgrade
+## Phase 1: Project Scaffolding & Backend Authentication Upgrade [checkpoint: b9ea09d]
 Goal: Initialize the mobile environment and enable the backend to support mobile token-based authentication.
 
 - [x] Task: Initialize Expo project with TypeScript and MUI-inspired styling. 7275cc8

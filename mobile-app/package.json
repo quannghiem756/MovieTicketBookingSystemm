@@ -21,6 +21,7 @@
     "@react-navigation/native-stack": "^7.9.0",
     "axios": "^1.13.2",
     "expo": "~54.0.31",
+    "expo-constants": "~18.0.13",
     "expo-secure-store": "~15.0.8",
     "expo-status-bar": "~3.0.9",
     "lucide-react-native": "^0.562.0",

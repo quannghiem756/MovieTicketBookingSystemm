@@ -8,6 +8,16 @@
 - **Utilities:** `qrcode.react` for generating digital tickets.
 - **Real-time:** Socket.io-client for live seat updates.
 
+## Mobile (CineBook)
+- **Framework:** React Native with Expo (SDK 54)
+- **UI Library:** React Native Paper for Material Design.
+- **Navigation:** React Navigation (Bottom Tabs, Native Stack).
+- **State Management:** React Context (Auth, I18n, Chatbot).
+- **Utilities:** `expo-secure-store`, `expo-image`, `react-native-qrcode-svg`, `react-native-youtube-iframe`.
+- **Real-time:** Socket.io-client.
+- **Localization:** `i18n-js`, `expo-localization`.
+- **Authentication:** `expo-auth-session` for Google OAuth.
+
 ## Backend
 - **Runtime:** Node.js
 - **Framework:** Express.js

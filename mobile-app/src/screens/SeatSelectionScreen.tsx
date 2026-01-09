@@ -1,28 +1,32 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Alert } from 'react-native';
-import { Text, Title, useTheme, ActivityIndicator, Divider, Surface } from 'react-native-paper';
+import { Text, Title, useTheme, ActivityIndicator, Divider, Surface, IconButton } from 'react-native-paper';
 import { useTranslation } from '../context/I18nContext';
-import { getShowtimeById, getTheaterById, getLockedSeats, holdSeat, releaseSeat } from '../services/movieService';
+import { getShowtimeById, getTheaterById, getLockedSeats, holdSeat, releaseSeat, getBookingsByUserId } from '../services/movieService';
 import { io, Socket } from 'socket.io-client';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useAuth } from '../context/AuthContext';
 import Button from '../components/Button';
 import Constants from 'expo-constants';
 
-const { width } = Dimensions.get('window');
-const SEAT_SIZE = (width - 60) / 10;
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const SeatSelectionScreen = ({ route, navigation }: any) => {
   const { showtimeId, movieTitle, movieId } = route.params;
   const { t } = useTranslation();
   const theme = useTheme();
   
+  const { user } = useAuth();
+  
   const [showtime, setShowtime] = useState<any>(null);
   const [theater, setTheater] = useState<any>(null);
   const [lockedSeats, setLockedSeats] = useState<string[]>([]);
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const [timeLeft, setTimeLeft] = useState<number>(0);
   
   const socketRef = useRef<Socket | null>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     fetchInitialData();
@@ -33,10 +37,40 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
         socketRef.current.emit('leave_showtime', showtimeId);
         socketRef.current.disconnect();
       }
-      // Release selected seats when leaving
-      selectedSeats.forEach(seatId => releaseSeat(showtimeId, seatId));
+      if (timerRef.current) clearInterval(timerRef.current);
     };
   }, [showtimeId]);
+
+  useEffect(() => {
+    if (selectedSeats.length > 0) {
+      if (!timerRef.current) {
+        // ... (rest of the timer logic)
+        setTimeLeft(600); // 10 minutes default
+        timerRef.current = setInterval(() => {
+          setTimeLeft(prev => {
+            if (prev <= 1) {
+              clearInterval(timerRef.current!);
+              timerRef.current = null;
+              handleTimerExpire();
+              return 0;
+            }
+            return prev - 1;
+          });
+        }, 1000);
+      }
+    } else {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+        setTimeLeft(0);
+      }
+    }
+  }, [selectedSeats]);
+
+  const handleTimerExpire = () => {
+    Alert.alert('Time expired', 'Your seat holds have expired.');
+    setSelectedSeats([]);
+  };
 
   const fetchInitialData = async () => {
     try {
@@ -49,6 +83,24 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
       
       const locked = await getLockedSeats(showtimeId);
       setLockedSeats(locked);
+
+      // Fetch user's held seats for this showtime
+      if (user?.id) {
+        const userBookings = await getBookingsByUserId(user.id);
+        const currentHold = userBookings.find((b: any) => 
+          b.showtimeId === showtimeId && (b.status === 'held' || b.status === 'pending')
+        );
+        if (currentHold) {
+          setSelectedSeats(currentHold.seatIds);
+          // Set timer based on expiry if available
+          if (currentHold.expiresAt) {
+            const expiry = new Date(currentHold.expiresAt).getTime();
+            const now = new Date().getTime();
+            const diff = Math.floor((expiry - now) / 1000);
+            if (diff > 0) setTimeLeft(diff);
+          }
+        }
+      }
     } catch (error) {
       console.error('Error fetching seat data:', error);
       Alert.alert('Error', 'Failed to load seat layout');
@@ -67,8 +119,16 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
       socketRef.current?.emit('join_showtime', showtimeId);
     });
 
-    socketRef.current.on('seats_updated', (updatedLockedSeats: string[]) => {
-      setLockedSeats(updatedLockedSeats);
+    socketRef.current.on('seat_held', ({ seatId, userId: holderId }: any) => {
+      setLockedSeats(prev => [...new Set([...prev, seatId])]);
+    });
+
+    socketRef.current.on('seat_released', ({ seatId }: any) => {
+      setLockedSeats(prev => prev.filter(id => id !== seatId));
+    });
+
+    socketRef.current.on('seat_confirmed', ({ seatId }: any) => {
+      setLockedSeats(prev => [...new Set([...prev, seatId])]);
     });
   };
 
@@ -88,6 +148,7 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
         }
         await holdSeat(showtimeId, seatId);
         setSelectedSeats(prev => [...prev, seatId]);
+        setTimeLeft(600); // Reset timer to 10 minutes on new hold
       }
     } catch (error: any) {
       Alert.alert('Error', error.response?.data?.error || 'Could not update seat status');
@@ -107,7 +168,7 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
     });
   };
 
-  if (loading || !theater) {
+  if (loading || !theater || !theater.seatMap) {
     return (
       <View style={[styles.container, styles.center]}>
         <ActivityIndicator size="large" color={theme.colors.primary} />
@@ -115,8 +176,21 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
     );
   }
 
-  const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'].slice(0, theater.rows);
-  const seatsPerRow = theater.seatsPerRow;
+  // Fixed seat size for better touch targets, with horizontal scroll if needed
+  const SEAT_SIZE = 36;
+  const SEAT_MARGIN = 4;
+
+  const getSeatColor = (seat: any) => {
+    if (selectedSeats.includes(seat.id)) return '#4caf50'; // success.main (Green)
+    if (lockedSeats.includes(seat.id) || seat.isDisabled) return '#757575'; // grey.600
+    
+    switch (seat.type) {
+      case 'vip': return '#f44336'; // error.main (Red)
+      case 'double': return '#ff9800'; // warning.main (Orange)
+      case 'standard': return '#424242'; // grey.700
+      default: return '#424242';
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -134,51 +208,87 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
           <Text style={styles.screenText}>SCREEN</Text>
         </View>
 
-        <View style={styles.seatGrid}>
-          {rows.map(row => (
-            <View key={row} style={styles.row}>
-              <Text style={styles.rowLabel}>{row}</Text>
-              <View style={styles.rowSeats}>
-                {Array.from({ length: seatsPerRow }).map((_, i) => {
-                  const seatId = `${row}${i + 1}`;
-                  const isSelected = selectedSeats.includes(seatId);
-                  const isLocked = lockedSeats.includes(seatId);
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.horizontalScroll}>
+          <View style={styles.seatGrid}>
+            {theater.seatMap.map((rowSeats: any[], rowIndex: number) => {
+              const rowLabel = rowSeats[0]?.row || String.fromCharCode(65 + rowIndex);
+              return (
+                <View key={`row-${rowIndex}`} style={styles.row}>
+                  <Text style={styles.rowLabel}>{rowLabel}</Text>
+                  <View style={styles.rowSeats}>
+                    {rowSeats.map((seat: any, seatIndex: number) => {
+                      if (seat.type === 'space') {
+                        return (
+                          <View 
+                            key={`space-${rowIndex}-${seatIndex}`} 
+                            style={{ width: SEAT_SIZE, height: SEAT_SIZE, margin: SEAT_MARGIN / 2 }} 
+                          />
+                        );
+                      }
+
+                      const seatId = seat.id;
+                      const isSelected = selectedSeats.includes(seatId);
+                      const isLocked = lockedSeats.includes(seatId) || seat.isDisabled;
+                      const bgColor = getSeatColor(seat);
+                      
+                      return (
+                        <TouchableOpacity
+                          key={seatId}
+                          style={[
+                            styles.seat,
+                            { 
+                              width: SEAT_SIZE, 
+                              height: SEAT_SIZE, 
+                              margin: SEAT_MARGIN / 2,
+                              backgroundColor: bgColor,
+                              borderColor: isSelected ? '#4caf50' : 'transparent',
+                              borderWidth: isSelected ? 2 : 0
+                            }
+                          ]}
+                          onPress={() => toggleSeat(seatId)}
+                          disabled={isLocked && !isSelected}
+                        >
+                          <Text style={[styles.seatText, { color: '#fff', fontSize: SEAT_SIZE * 0.35 }]}>
+                            {seat.number}
+                          </Text>
+                          {(seat.type === 'vip' || seat.type === 'double') && !isSelected && !isLocked && (
+                             <View style={styles.typeDot} />
+                          )}
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </View>
                   
-                  return (
-                    <TouchableOpacity
-                      key={seatId}
-                      style={[
-                        styles.seat,
-                        isSelected && styles.selectedSeat,
-                        isLocked && !isSelected && styles.lockedSeat
-                      ]}
-                      onPress={() => toggleSeat(seatId)}
-                      disabled={isLocked && !isSelected}
-                    >
-                      <Text style={[styles.seatText, (isSelected || isLocked) && { color: '#fff' }]}>
-                        {i + 1}
-                      </Text>
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
-              <Text style={styles.rowLabel}>{row}</Text>
-            </View>
-          ))}
-        </View>
+                </View>
+              );
+            })}
+          </View>
+        </ScrollView>
 
         <View style={styles.legend}>
-          <View style={styles.legendItem}>
-            <View style={[styles.seat, styles.legendBox]} />
-            <Text style={styles.legendText}>Available</Text>
+          <View style={styles.legendRow}>
+            <View style={styles.legendItem}>
+              <View style={[styles.seat, styles.legendBox, { backgroundColor: '#424242' }]} />
+              <Text style={styles.legendText}>Available</Text>
+            </View>
+            <View style={styles.legendItem}>
+              <View style={[styles.seat, styles.legendBox, { backgroundColor: '#4caf50' }]} />
+              <Text style={styles.legendText}>Selected</Text>
+            </View>
+            <View style={styles.legendItem}>
+              <View style={[styles.seat, styles.legendBox, { backgroundColor: '#757575' }]} />
+              <Text style={styles.legendText}>Taken</Text>
+            </View>
           </View>
-          <View style={styles.legendItem}>
-            <View style={[styles.seat, styles.selectedSeat, styles.legendBox]} />
-            <Text style={styles.legendText}>Selected</Text>
-          </View>
-          <View style={styles.legendItem}>
-            <View style={[styles.seat, styles.lockedSeat, styles.legendBox]} />
-            <Text style={styles.legendText}>Taken</Text>
+          <View style={styles.legendRow}>
+            <View style={styles.legendItem}>
+              <View style={[styles.seat, styles.legendBox, { backgroundColor: '#f44336' }]} />
+              <Text style={styles.legendText}>VIP</Text>
+            </View>
+            <View style={styles.legendItem}>
+              <View style={[styles.seat, styles.legendBox, { backgroundColor: '#ff9800' }]} />
+              <Text style={styles.legendText}>Double</Text>
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -186,6 +296,11 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
       <Surface style={styles.footer}>
         <View style={styles.footerInfo}>
           <Text style={styles.selectedCount}>{selectedSeats.length} seats selected</Text>
+          {timeLeft > 0 && (
+            <Text style={styles.timerText}>
+              Hold expires in: {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
+            </Text>
+          )}
           <Title style={styles.totalPrice}>
             {(selectedSeats.length * showtime.price).toLocaleString()} VND
           </Title>
@@ -202,9 +317,6 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
     </View>
   );
 };
-
-// Supporting component
-import { IconButton } from 'react-native-paper';
 
 const styles = StyleSheet.create({
   container: {
@@ -261,14 +373,15 @@ const styles = StyleSheet.create({
     letterSpacing: 4,
   },
   seatGrid: {
-    width: '100%',
     paddingHorizontal: 10,
+  },
+  horizontalScroll: {
+    paddingHorizontal: 20,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 10,
+    marginBottom: 5,
   },
   rowLabel: {
     color: '#666',
@@ -278,16 +391,20 @@ const styles = StyleSheet.create({
   },
   rowSeats: {
     flexDirection: 'row',
-    marginHorizontal: 10,
   },
   seat: {
-    width: SEAT_SIZE,
-    height: SEAT_SIZE,
-    backgroundColor: '#333',
-    margin: 2,
     borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  typeDot: {
+    position: 'absolute',
+    top: 2,
+    right: 2,
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: 'rgba(255,255,255,0.5)',
   },
   selectedSeat: {
     backgroundColor: '#d32f2f',
@@ -298,24 +415,27 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   seatText: {
-    fontSize: 10,
-    color: '#666',
+    fontWeight: 'bold',
   },
   legend: {
-    flexDirection: 'row',
-    marginTop: 40,
-    justifyContent: 'center',
+    marginTop: 30,
+    alignItems: 'center',
     width: '100%',
+  },
+  legendRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 10,
   },
   legendItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: 15,
+    marginHorizontal: 10,
   },
   legendBox: {
-    width: 16,
-    height: 16,
-    marginRight: 8,
+    width: 18,
+    height: 18,
+    marginRight: 6,
   },
   legendText: {
     color: '#b3b3b3',
@@ -338,6 +458,11 @@ const styles = StyleSheet.create({
   selectedCount: {
     fontSize: 12,
     color: '#b3b3b3',
+  },
+  timerText: {
+    fontSize: 12,
+    color: '#ff9800',
+    fontWeight: 'bold',
   },
   totalPrice: {
     fontSize: 20,

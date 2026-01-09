@@ -14,6 +14,11 @@
 - **Visual Richness:** Prioritize the display of high-quality movie assets. The interface should feel like a curated gallery of cinematic content.
 - **Mobile-First Responsiveness:** Every feature must be fully functional and visually optimized for mobile devices, acknowledging that many users will book on the go.
 
+### Mobile Experience (CineBook)
+- **Native Feel:** Adhere to platform-specific gestures and navigation patterns (Bottom Tabs).
+- **AI Accessibility:** The AI Assistant should be a primary interaction point, represented by a persistent "Sparkle" FAB.
+- **Immediate Personalization:** Require language selection on first launch to ensure immediate accessibility.
+
 ## Admin Panel Standards
 - **Utility-Focused Hybrid:** The admin interface should prioritize functionality and data density while maintaining a clean, modern aesthetic. Use intuitive dashboards and well-structured tables to allow for efficient management of movies and showtimes.
 - **Efficiency Over Flare:** While consistent with the brand's polish, the admin panel should focus on reducing the time and effort required for administrative tasks.

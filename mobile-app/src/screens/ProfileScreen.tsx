@@ -81,10 +81,10 @@ const ProfileScreen = () => {
             right={() => (
               <View style={styles.langRow}>
                 <TouchableOpacity onPress={() => setLocale('en')} style={[styles.langBtn, locale === 'en' && styles.activeLang]}>
-                  <CircleFlag countryCode="us" size={24} />
+                  <View style={{ width: 24, height: 24, borderRadius: 12, backgroundColor: '#3b5998' }} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => setLocale('vi')} style={[styles.langBtn, locale === 'vi' && styles.activeLang]}>
-                  <CircleFlag countryCode="vn" size={24} />
+                  <View style={{ width: 24, height: 24, borderRadius: 12, backgroundColor: '#da251d' }} />
                 </TouchableOpacity>
               </View>
             )}
@@ -179,73 +179,6 @@ const styles = StyleSheet.create({
   },
   activeLang: {
     borderColor: '#d32f2f',
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 20,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    marginBottom: 10,
-  },
-  statusContainer: {
-    justifyContent: 'center',
-  },
-  statusText: {
-    fontSize: 10,
-    fontWeight: 'bold',
-  },
-  emptyText: {
-    textAlign: 'center',
-    marginTop: 40,
-    color: '#b3b3b3',
-  },
-  logoutButton: {
-    margin: 20,
-    borderColor: '#d32f2f',
-  },
-});
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#0f0f0f',
-    paddingTop: 60,
-  },
-  header: {
-    alignItems: 'center',
-    paddingBottom: 30,
-    borderBottomWidth: 1,
-    borderBottomColor: '#1e1e1e',
-  },
-  userName: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginTop: 15,
-  },
-  userEmail: {
-    color: '#b3b3b3',
-    fontSize: 14,
-  },
-  statsRow: {
-    flexDirection: 'row',
-    marginTop: 20,
-    width: '100%',
-    justifyContent: 'space-around',
-  },
-  statItem: {
-    alignItems: 'center',
-  },
-  statValue: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#d32f2f',
-  },
-  statLabel: {
-    fontSize: 12,
-    color: '#b3b3b3',
   },
   content: {
     flex: 1,

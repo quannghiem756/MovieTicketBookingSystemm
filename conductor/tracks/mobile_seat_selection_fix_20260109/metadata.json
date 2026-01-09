@@ -1,0 +1,8 @@
+{
+  "track_id": "mobile_seat_selection_fix_20260109",
+  "type": "bug",
+  "status": "new",
+  "created_at": "2026-01-09T10:00:00Z",
+  "updated_at": "2026-01-09T10:00:00Z",
+  "description": "currently my mobile app seat selection screen is messed up seat cannot be choosen and it doesn't have the realtime socket mechannic for concurrency and seathold. And also got this error on the checkout screen ERROR [Error: TransformError src\screens\CheckoutScreen.tsx: Duplicate declaration \"IconButton\""]
+}

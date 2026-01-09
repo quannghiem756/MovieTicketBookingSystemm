@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Dimensions, Image, FlatList, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ScrollView, Dimensions, FlatList, TouchableOpacity } from 'react-native';
 import { Text, Title, useTheme, Card, Paragraph, ActivityIndicator } from 'react-native-paper';
 import { useTranslation } from '../context/I18nContext';
 import { getNowShowing, getComingSoon, getNews } from '../services/movieService';
 import { useNavigation } from '@react-navigation/native';
+import { Image } from 'expo-image';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = width * 0.7;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, StyleSheet, FlatList, TouchableOpacity, Dimensions } from 'react-native';
+import { View, StyleSheet, FlatList, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
 import { Text, Searchbar, Chip, useTheme, ActivityIndicator, Paragraph } from 'react-native-paper';
 import { useTranslation } from '../context/I18nContext';
 import { useChatbot } from '../context/ChatbotContext';

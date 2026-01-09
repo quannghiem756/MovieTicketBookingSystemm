@@ -64,6 +64,11 @@ export const createBooking = async (bookingData: any) => {
   return response.data;
 };
 
+export const getBookingsByUserId = async (userId: string) => {
+  const response = await api.get(`/bookings/user/${userId}`);
+  return response.data;
+};
+
 export const validateCoupon = async (code: string, orderTotal: number, movieId: string) => {
   const response = await api.post('/coupons/validate', { code, orderTotal, movieId });
   return response.data;

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, StyleSheet, Modal, ScrollView, KeyboardAvoidingView, Platform, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, Modal, ScrollView, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
 import { Text, Title, useTheme, IconButton, Surface, TextInput, ActivityIndicator, Card, Paragraph } from 'react-native-paper';
 import { useChatbot } from '../context/ChatbotContext';
 import { useAuth } from '../context/AuthContext';
@@ -7,6 +7,7 @@ import { useTranslation } from '../context/I18nContext';
 import { getMovieRecommendations } from '../services/movieService';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { Image } from 'expo-image';
 
 interface Message {
   id: string;

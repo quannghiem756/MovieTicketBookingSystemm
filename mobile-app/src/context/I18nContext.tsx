@@ -1,8 +1,8 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import * as Localization from 'expo-localization';
 import { I18n } from 'i18n-js';
-import en from '../../translations/en';
-import vi from '../../translations/vi';
+import en from '../translations/en';
+import vi from '../translations/vi';
 import * as SecureStore from 'expo-secure-store';
 
 const translations = { en, vi };

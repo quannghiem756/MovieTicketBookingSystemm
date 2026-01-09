@@ -4,7 +4,7 @@ import { PaperProvider } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
 import theme from './src/theme';
 import AppNavigator from './src/navigation/AppNavigator';
-import { AuthProvider } from './src/context/AuthContext';
+import { AuthProvider, useAuth } from './src/context/AuthContext';
 import { I18nProvider, useTranslation } from './src/context/I18nContext';
 import LanguageSelectionModal from './src/components/LanguageSelectionModal';
 import { ChatbotProvider, useChatbot } from './src/context/ChatbotContext';
@@ -25,8 +25,6 @@ const AppContent = () => {
     <>
       <StatusBar style="light" />
       <AppNavigator />
-      {isAuthenticated && <ChatbotFAB />}
-      <ChatbotModal />
       <LanguageSelectionModal 
         visible={modalVisible} 
         onComplete={() => setModalVisible(false)} 

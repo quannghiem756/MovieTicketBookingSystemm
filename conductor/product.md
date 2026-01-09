@@ -1,7 +1,7 @@
 # Product Guide - Movie Ticket Booking System
 
 ## Initial Concept
-A comprehensive Movie Ticket Booking System with a Node.js backend, React frontend, and a Python-based vector service for recommendations.
+A comprehensive Movie Ticket Booking System with a Node.js backend, React frontend, **React Native mobile application (CineBook)**, and a Python-based vector service for recommendations.
 
 ## Target Users
 - **Moviegoers:** Regular customers who want to browse movies, view trailers, select seats, and book tickets seamlessly via web or mobile.
@@ -9,7 +9,7 @@ A comprehensive Movie Ticket Booking System with a Node.js backend, React fronte
 - **On-site Staff:** Cinema personnel responsible for scanning and validating customer tickets at entry points.
 
 ## Core Goals
-- **Seamless Booking Experience:** Provide a unified booking flow across web and mobile platforms, including digital ticket generation with QR codes for future kiosk integration.
+- **Seamless Booking Experience:** Provide a unified booking flow across web and mobile platforms (**CineBook app**), including digital ticket generation with QR codes for future kiosk integration.
 - **AI-Driven Personalization:** Leverage a vector-based recommendation service to provide users with tailored movie suggestions.
 - **Operational Efficiency:** Empower administrators with intuitive tools for managing complex schedules, theater layouts, and content.
 
@@ -23,9 +23,10 @@ A comprehensive Movie Ticket Booking System with a Node.js backend, React fronte
 - **Promotional Coupons:** Ability to apply discount codes during checkout for reduced ticket prices.
 - **Email Notifications & Verification:** Automated HTML emails for booking confirmations (with scannable QR codes) and OTP-based email verification for registration and password resets, with proactive redirection and automatic OTP resend for unverified users attempting to login.
 - **Secure Payments & QR Tickets:** Integration with MoMo E-Wallet for secure transactions and generation of digital tickets with secure QR codes for on-site validation.
-- **AI Recommendation Chatbot:** An intelligent assistant for personalized movie suggestions with strict grounding to prevent hallucinations and full bilingual support (English/Vietnamese).
+- **AI Recommendation Chatbot:** An intelligent assistant for personalized movie suggestions with strict grounding to prevent hallucinations and full bilingual support (English/Vietnamese). **Accessible via a persistent Floating Action Button (FAB) on mobile.**
 - **User Profiles:** Management of personal information, **Google OAuth login**, and access to a detailed booking history.
 - **Secure Sessions:** Implementation of database-backed refresh tokens with rotation, concurrency-safe grace periods, and HttpOnly cookies for enhanced security and reliability.
+- **Multi-language Support:** Full bilingual support (English/Vietnamese) across web and mobile, with a mandatory language selection on first mobile app launch.
 
 ### Admin Panel
 - **Catalog Management:** Full CRUD operations for movies, including poster image uploads and theater configuration.

@@ -29,7 +29,7 @@ const LanguageSelectionModal = ({ visible, onComplete }: { visible: boolean; onC
               style={[styles.option, locale === 'en' && styles.selectedOption]} 
               onPress={() => handleSelect('en')}
             >
-              <CircleFlag countryCode="us" size={40} />
+              <View style={[styles.flagPlaceholder, { backgroundColor: '#3b5998' }]} />
               <Text style={styles.optionText}>English</Text>
             </TouchableOpacity>
 
@@ -37,7 +37,7 @@ const LanguageSelectionModal = ({ visible, onComplete }: { visible: boolean; onC
               style={[styles.option, locale === 'vi' && styles.selectedOption]} 
               onPress={() => handleSelect('vi')}
             >
-              <CircleFlag countryCode="vn" size={40} />
+              <View style={[styles.flagPlaceholder, { backgroundColor: '#da251d' }]} />
               <Text style={styles.optionText}>Tiếng Việt</Text>
             </TouchableOpacity>
           </View>
@@ -81,6 +81,11 @@ const styles = StyleSheet.create({
   selectedOption: {
     borderColor: '#d32f2f',
     backgroundColor: 'rgba(211, 47, 47, 0.1)',
+  },
+  flagPlaceholder: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
   },
   optionText: {
     marginTop: 8,

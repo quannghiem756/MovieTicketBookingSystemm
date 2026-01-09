@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, Alert, Linking } from 'react-native';
-import { Text, Title, useTheme, Surface, Divider, List, TextInput, ActivityIndicator } from 'react-native-paper';
+import { Text, Title, useTheme, Surface, Divider, List, TextInput, ActivityIndicator, IconButton, Card } from 'react-native-paper';
 import { useTranslation } from '../context/I18nContext';
 import { createBooking, validateCoupon, createMomoPayment } from '../services/movieService';
 import { useAuth } from '../context/AuthContext';
@@ -64,7 +64,11 @@ const CheckoutScreen = ({ route, navigation }: any) => {
       const booking = await createBooking(bookingData);
       
       // 2. Create MoMo payment
-      const paymentUrl = await createMomoPayment(booking.id);
+      const response = await createMomoPayment(booking.id);
+      console.log('MoMo Payment Response:', response);
+
+      // Extract the actual URL string from the response object
+      const paymentUrl = response.data;
       
       // 3. Open MoMo App/Web
       const supported = await Linking.canOpenURL(paymentUrl);
@@ -174,8 +178,6 @@ const CheckoutScreen = ({ route, navigation }: any) => {
     </View>
   );
 };
-
-import { IconButton, Card } from 'react-native-paper';
 
 const styles = StyleSheet.create({
   container: {

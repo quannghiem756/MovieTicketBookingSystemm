@@ -15,6 +15,8 @@ import { useAuth } from '../context/AuthContext';
 import { useTranslation } from '../context/I18nContext';
 import AuthNavigator from './AuthNavigator';
 import { View } from 'react-native';
+import ChatbotFAB from '../components/ChatbotFAB';
+import ChatbotModal from '../components/ChatbotModal';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -97,15 +99,32 @@ export default function AppNavigator() {
     );
   }
 
-  return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {isAuthenticated ? (
-          <Stack.Screen name="Main" component={MainNavigator} />
-        ) : (
-          <Stack.Screen name="Auth" component={AuthNavigator} />
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
+    return (
+
+      <NavigationContainer>
+
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+
+          {isAuthenticated ? (
+
+            <Stack.Screen name="Main" component={MainNavigator} />
+
+          ) : (
+
+            <Stack.Screen name="Auth" component={AuthNavigator} />
+
+          )}
+
+        </Stack.Navigator>
+
+        {isAuthenticated && <ChatbotFAB />}
+
+        <ChatbotModal />
+
+      </NavigationContainer>
+
+    );
+
+  }
+
+  

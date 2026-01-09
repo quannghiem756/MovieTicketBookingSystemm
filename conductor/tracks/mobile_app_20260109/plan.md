@@ -6,7 +6,7 @@ This plan outlines the step-by-step development of the mobile application, follo
 Goal: Initialize the mobile environment and enable the backend to support mobile token-based authentication.
 
 - [x] Task: Initialize Expo project with TypeScript and MUI-inspired styling. 7275cc8
-- [ ] Task: Configure Axios with interceptors for Bearer Token handling.
+- [x] Task: Configure Axios with interceptors for Bearer Token handling. 93685fe
 - [ ] Task: Update Backend `AuthService` and middleware to support both HttpOnly Cookies (Web) and Bearer Tokens (Mobile).
     - [ ] Write tests for hybrid authentication logic.
     - [ ] Implement token extraction from `Authorization` header.

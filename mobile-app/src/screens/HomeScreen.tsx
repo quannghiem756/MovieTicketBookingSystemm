@@ -57,12 +57,15 @@ const HomeScreen = () => {
   const renderNewsItem = ({ item }: { item: any }) => (
     <TouchableOpacity onPress={() => console.log('Navigate to news detail', item.id)}>
       <Card style={[styles.newsCard, { backgroundColor: theme.colors.surfaceVariant }]}>
-        <Card.Content>
-          <Title numberOfLines={2} style={styles.newsTitle}>{item.title}</Title>
-          <Paragraph numberOfLines={2} style={{ color: theme.colors.onSurfaceVariant }}>
-            {item.summary}
-          </Paragraph>
-        </Card.Content>
+        <View style={styles.newsContent}>
+          {item.imageUrl && <Image source={{ uri: item.imageUrl }} style={styles.newsImage} />}
+          <View style={styles.newsTextContainer}>
+            <Title numberOfLines={1} style={styles.newsTitle}>{item.title}</Title>
+            <Paragraph numberOfLines={2} style={{ color: theme.colors.onSurfaceVariant, fontSize: 12 }}>
+              {item.summary}
+            </Paragraph>
+          </View>
+        </View>
       </Card>
     </TouchableOpacity>
   );
@@ -159,6 +162,19 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginBottom: 10,
     borderRadius: 8,
+    overflow: 'hidden',
+  },
+  newsContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  newsImage: {
+    width: 80,
+    height: 80,
+  },
+  newsTextContainer: {
+    flex: 1,
+    padding: 12,
   },
   newsTitle: {
     fontSize: 16,

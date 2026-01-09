@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card as PaperCard, Title, Paragraph, useTheme } from 'react-native-paper';
 import { StyleSheet, ViewStyle, ImageSourcePropType } from 'react-native';
+import { Image } from 'expo-image';
 
 interface CardProps {
   title?: string;
@@ -21,10 +22,17 @@ const Card = ({ title, subtitle, content, coverUrl, onPress, style, children }: 
       onPress={onPress}
       elevation={2}
     >
-      {coverUrl && <PaperCard.Cover source={typeof coverUrl === 'string' ? { uri: coverUrl } : coverUrl} style={styles.cover} />}
+      {coverUrl && (
+        <Image
+          source={typeof coverUrl === 'string' ? { uri: coverUrl } : coverUrl}
+          style={styles.cover}
+          contentFit="cover"
+          transition={300}
+        />
+      )}
       <PaperCard.Content style={styles.content}>
-        {title && <Title style={{ color: theme.colors.onSurface }}>{title}</Title>}
-        {subtitle && <Paragraph style={{ color: theme.colors.onSurfaceVariant }}>{subtitle}</Paragraph>}
+        {title && <Title numberOfLines={1} style={{ color: theme.colors.onSurface }}>{title}</Title>}
+        {subtitle && <Paragraph numberOfLines={1} style={{ color: theme.colors.onSurfaceVariant }}>{subtitle}</Paragraph>}
         {content && <Paragraph style={{ color: theme.colors.onSurface }}>{content}</Paragraph>}
         {children}
       </PaperCard.Content>

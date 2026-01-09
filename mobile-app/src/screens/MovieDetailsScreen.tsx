@@ -6,6 +6,7 @@ import { getMovieById, getFutureShowtimesByMovieId } from '../services/movieServ
 import YoutubePlayer from 'react-native-youtube-iframe';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Button from '../components/Button';
+import { Image } from 'expo-image';
 
 const { width } = Dimensions.get('window');
 
@@ -92,7 +93,12 @@ const MovieDetailsScreen = ({ route, navigation }: any) => {
           />
         </View>
       ) : (
-        <Image source={{ uri: movie.posterUrl }} style={styles.heroPoster} />
+        <Image 
+          source={{ uri: movie.posterUrl }} 
+          style={styles.heroPoster} 
+          contentFit="cover"
+          transition={300}
+        />
       )}
 
       <View style={styles.infoSection}>

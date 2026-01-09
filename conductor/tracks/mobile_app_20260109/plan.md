@@ -45,12 +45,12 @@ Goal: Deliver the core browsing experience for movies.
 ## Phase 5: Booking Workflow & Payments
 Goal: Replicate the complex seat selection and payment flow for mobile.
 
-- [ ] Task: Develop an interactive, touch-optimized Seat Selection map.
-    - [ ] Write tests for seat selection state management.
-    - [ ] Integrate Socket.io for real-time seat availability.
-- [ ] Task: Implement Checkout screen with Coupon application functionality.
-- [ ] Task: Integrate MoMo E-Wallet payment flow for mobile.
-- [ ] Task: Implement "My Tickets" screen with QR code generation for valid bookings.
+- [x] Task: Develop an interactive, touch-optimized Seat Selection map. 5421af0
+    - [x] Write tests for seat selection state management. 5421af0
+    - [x] Integrate Socket.io for real-time seat availability. 5421af0
+- [x] Task: Implement Checkout screen with Coupon application functionality. 5421af0
+- [x] Task: Integrate MoMo E-Wallet payment flow for mobile. 5421af0
+- [x] Task: Implement "My Tickets" screen with QR code generation for valid bookings. 5421af0
 - [ ] Task: Conductor - User Manual Verification 'Phase 5: Booking Workflow & Payments' (Protocol in workflow.md)
 
 ## Phase 6: AI Chatbot Integration

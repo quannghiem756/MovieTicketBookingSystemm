@@ -28,6 +28,14 @@ class MovieController {
         }
       }
 
+      if (req.body.formats && typeof req.body.formats === 'string') {
+        try {
+          processedBody.formats = JSON.parse(req.body.formats);
+        } catch (e) {
+          processedBody.formats = req.body.formats.split(',').map(item => item.trim()).filter(item => item);
+        }
+      }
+
       // If a file was uploaded, add the file path to the processed body
       if (req.file) {
         processedBody.posterUrl = `/uploads/${req.file.filename}`;
@@ -63,10 +71,10 @@ class MovieController {
   //Get all movies with pagination
   async getAllMovies(req, res) {
     try {
-      let { page = 1, limit = 10 } = req.query;
+      let { page = 1, limit = 10, search = '', format = '' } = req.query;
       page = parseInt(page);
       limit = parseInt(limit);
-      const { movies, totalMovies, currentPage, totalPages } = await this.movieService.getAllMovies(page, limit);
+      const { movies, totalMovies, currentPage, totalPages } = await this.movieService.getAllMovies(page, limit, search, format);
       res.json({ movies, totalMovies, currentPage, totalPages });
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -76,10 +84,10 @@ class MovieController {
   // Get now showing movies with pagination
   async getNowShowing(req, res) {
     try {
-      let { page = 1, limit = 10 } = req.query;
+      let { page = 1, limit = 10, format = '' } = req.query;
       page = parseInt(page);
       limit = parseInt(limit);
-      const { movies, totalMovies, currentPage, totalPages } = await this.movieService.getNowShowing(page, limit);
+      const { movies, totalMovies, currentPage, totalPages } = await this.movieService.getNowShowing(page, limit, format);
       res.json({ movies, totalMovies, currentPage, totalPages });
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -89,10 +97,10 @@ class MovieController {
   // Get coming soon movies with pagination
   async getComingSoon(req, res) {
     try {
-      let { page = 1, limit = 10 } = req.query;
+      let { page = 1, limit = 10, format = '' } = req.query;
       page = parseInt(page);
       limit = parseInt(limit);
-      const { movies, totalMovies, currentPage, totalPages } = await this.movieService.getComingSoon(page, limit);
+      const { movies, totalMovies, currentPage, totalPages } = await this.movieService.getComingSoon(page, limit, format);
       res.json({ movies, totalMovies, currentPage, totalPages });
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -119,6 +127,14 @@ class MovieController {
         } catch (e) {
           // If JSON parsing fails, treat as comma-separated string
           processedBody.genre = req.body.genre.split(',').map(item => item.trim()).filter(item => item);
+        }
+      }
+
+      if (req.body.formats && typeof req.body.formats === 'string') {
+        try {
+          processedBody.formats = JSON.parse(req.body.formats);
+        } catch (e) {
+          processedBody.formats = req.body.formats.split(',').map(item => item.trim()).filter(item => item);
         }
       }
 

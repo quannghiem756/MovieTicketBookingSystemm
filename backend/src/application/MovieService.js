@@ -19,7 +19,8 @@ class MovieService {
       movieData.posterUrl || '', // Use the uploaded file path or empty string
       movieData.trailerUrl,
       movieData.releaseDate,
-      movieData.endDate
+      movieData.endDate,
+      movieData.formats || ['2D']
     );
 
     return await this.movieRepository.create(movie);
@@ -29,16 +30,16 @@ class MovieService {
     return await this.movieRepository.findById(id);
   }
 
-  async getAllMovies(page, limit) {
-    return await this.movieRepository.findAll(page, limit);
+  async getAllMovies(page, limit, search, format) {
+    return await this.movieRepository.findAll(page, limit, search, format);
   }
 
-  async getNowShowing(page, limit) {
-    return await this.movieRepository.findNowShowing(page, limit);
+  async getNowShowing(page, limit, format) {
+    return await this.movieRepository.findNowShowing(page, limit, format);
   }
 
-  async getComingSoon(page, limit) {
-    return await this.movieRepository.findComingSoon(page, limit);
+  async getComingSoon(page, limit, format) {
+    return await this.movieRepository.findComingSoon(page, limit, format);
   }
 
   async updateMovie(id, movieData) {
@@ -54,7 +55,8 @@ class MovieService {
       movieData.posterUrl || '', // Use the uploaded file path or empty string
       movieData.trailerUrl,
       movieData.releaseDate,
-      movieData.endDate
+      movieData.endDate,
+      movieData.formats
     );
 
     return await this.movieRepository.update(id, movie);

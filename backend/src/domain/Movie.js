@@ -1,6 +1,6 @@
 // Movie domain model
 class Movie {
-  constructor(id, title, director, cast, synopsis, duration, genre, rating, posterUrl, trailerUrl, releaseDate, endDate) {
+  constructor(id, title, director, cast, synopsis, duration, genre, rating, posterUrl, trailerUrl, releaseDate, endDate, formats = ['2D']) {
     this.id = id;
     this.title = title;
     this.director = director;
@@ -13,6 +13,7 @@ class Movie {
     this.trailerUrl = trailerUrl;
     this.releaseDate = releaseDate;
     this.endDate = endDate;
+    this.formats = formats;
   }
 }
 

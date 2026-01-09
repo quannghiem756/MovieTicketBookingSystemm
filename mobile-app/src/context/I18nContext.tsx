@@ -16,6 +16,8 @@ interface I18nContextType {
   locale: string;
   setLocale: (locale: string) => Promise<void>;
   t: (key: string, options?: any) => string;
+  isLanguageSet: boolean;
+  completeLanguageSetup: () => Promise<void>;
 }
 
 const I18nContext = createContext<I18nContextType | undefined>(undefined);
@@ -30,6 +32,7 @@ export const useTranslation = () => {
 
 export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [locale, setLocaleState] = useState(i18n.locale);
+  const [isLanguageSet, setIsLanguageSet] = useState(true); // Default true until checked
 
   useEffect(() => {
     loadLocale();
@@ -38,21 +41,21 @@ export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const loadLocale = async () => {
     try {
       const storedLocale = await SecureStore.getItemAsync('user-locale');
+      const hasSet = await SecureStore.getItemAsync('has-set-language');
+      
       if (storedLocale) {
         setLocaleState(storedLocale);
         i18n.locale = storedLocale;
       } else {
-        const deviceLocale = Localization.getLocales()[0]?.languageCode;
-        if (deviceLocale && ['en', 'vi'].includes(deviceLocale)) {
-            setLocaleState(deviceLocale);
-            i18n.locale = deviceLocale;
-        } else {
-            setLocaleState('en');
-            i18n.locale = 'en';
-        }
+        // Default to Vietnamese if no preference stored
+        setLocaleState('vi');
+        i18n.locale = 'vi';
       }
+      
+      setIsLanguageSet(hasSet === 'true');
     } catch (error) {
       console.error('Error loading locale', error);
+      setIsLanguageSet(false);
     }
   };
 
@@ -62,10 +65,15 @@ export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await SecureStore.setItemAsync('user-locale', newLocale);
   };
 
+  const completeLanguageSetup = async () => {
+    setIsLanguageSet(true);
+    await SecureStore.setItemAsync('has-set-language', 'true');
+  };
+
   const t = (key: string, options?: any) => i18n.t(key, options);
 
   return (
-    <I18nContext.Provider value={{ locale, setLocale, t }}>
+    <I18nContext.Provider value={{ locale, setLocale, t, isLanguageSet, completeLanguageSetup }}>
       {children}
     </I18nContext.Provider>
   );

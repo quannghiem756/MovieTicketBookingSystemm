@@ -42,10 +42,20 @@ class MongoMovieRepository extends MovieRepository {
     };
   }
 
-  async findAll(page, limit) {
+  async findAll(page, limit, search = '', format = '') {
     const skip = (page - 1) * limit;
-    const movieDocs = await MovieModel.find().skip(skip).limit(limit);
-    const totalMovies = await MovieModel.countDocuments();
+    const query = {};
+    
+    if (search) {
+      query.title = new RegExp(search, 'i');
+    }
+    
+    if (format) {
+      query.formats = format;
+    }
+
+    const movieDocs = await MovieModel.find(query).skip(skip).limit(limit);
+    const totalMovies = await MovieModel.countDocuments(query);
 
     const movies = movieDocs.map(doc => ({
       id: doc._id,
@@ -59,7 +69,8 @@ class MongoMovieRepository extends MovieRepository {
       posterUrl: doc.posterUrl || '',
       trailerUrl: doc.trailerUrl,
       releaseDate: doc.releaseDate,
-      endDate: doc.endDate
+      endDate: doc.endDate,
+      formats: doc.formats || ['2D']
     }));
 
     return {
@@ -82,7 +93,8 @@ class MongoMovieRepository extends MovieRepository {
       posterUrl: movie.posterUrl || '',
       trailerUrl: movie.trailerUrl,
       releaseDate: movie.releaseDate,
-      endDate: movie.endDate
+      endDate: movie.endDate,
+      formats: movie.formats
     }, { new: true });
 
     if (!updatedMovie) return null;
@@ -99,7 +111,8 @@ class MongoMovieRepository extends MovieRepository {
       posterUrl: updatedMovie.posterUrl,
       trailerUrl: updatedMovie.trailerUrl,
       releaseDate: updatedMovie.releaseDate,
-      endDate: updatedMovie.endDate
+      endDate: updatedMovie.endDate,
+      formats: updatedMovie.formats
     };
   }
 
@@ -124,23 +137,26 @@ class MongoMovieRepository extends MovieRepository {
       posterUrl: movieDoc.posterUrl || '',
       trailerUrl: movieDoc.trailerUrl,
       releaseDate: movieDoc.releaseDate,
-      endDate: movieDoc.endDate
+      endDate: movieDoc.endDate,
+      formats: movieDoc.formats || ['2D']
     };
   }
 
-  async findNowShowing(page = 1, limit = 10) {
+  async findNowShowing(page = 1, limit = 10, format = '') {
     const today = new Date();
     const skip = (page - 1) * limit;
-
-    const movieDocs = await MovieModel.find({
+    const query = {
       releaseDate: { $lte: today },
       endDate: { $gte: today }
-    }).skip(skip).limit(limit);
+    };
 
-    const totalMovies = await MovieModel.countDocuments({
-      releaseDate: { $lte: today },
-      endDate: { $gte: today }
-    });
+    if (format) {
+      query.formats = format;
+    }
+
+    const movieDocs = await MovieModel.find(query).skip(skip).limit(limit);
+
+    const totalMovies = await MovieModel.countDocuments(query);
 
     const movies = movieDocs.map(doc => ({
       id: doc._id,
@@ -154,7 +170,8 @@ class MongoMovieRepository extends MovieRepository {
       posterUrl: doc.posterUrl || '',
       trailerUrl: doc.trailerUrl,
       releaseDate: doc.releaseDate,
-      endDate: doc.endDate
+      endDate: doc.endDate,
+      formats: doc.formats || ['2D']
     }));
 
     return {
@@ -165,17 +182,20 @@ class MongoMovieRepository extends MovieRepository {
     };
   }
 
-  async findComingSoon(page = 1, limit = 10) {
+  async findComingSoon(page = 1, limit = 10, format = '') {
     const today = new Date().setHours(0, 0, 0, 0);
     const skip = (page - 1) * limit;
-    
-    const movieDocs = await MovieModel.find({
+    const query = {
       releaseDate: { $gt: today }
-    }).skip(skip).limit(limit);
+    };
+
+    if (format) {
+      query.formats = format;
+    }
     
-    const totalMovies = await MovieModel.countDocuments({
-      releaseDate: { $gt: today }
-    });
+    const movieDocs = await MovieModel.find(query).skip(skip).limit(limit);
+    
+    const totalMovies = await MovieModel.countDocuments(query);
 
     const movies = movieDocs.map(doc => ({
       id: doc._id,
@@ -189,7 +209,8 @@ class MongoMovieRepository extends MovieRepository {
       posterUrl: doc.posterUrl || '',
       trailerUrl: doc.trailerUrl,
       releaseDate: doc.releaseDate,
-      endDate: doc.endDate
+      endDate: doc.endDate,
+      formats: doc.formats || ['2D']
     }));
 
     return {

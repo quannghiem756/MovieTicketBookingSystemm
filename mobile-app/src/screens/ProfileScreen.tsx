@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, FlatList } from 'react-native';
+import { View, StyleSheet, ScrollView, FlatList, TouchableOpacity } from 'react-native';
 import { Text, Title, useTheme, Avatar, List, Divider, ActivityIndicator } from 'react-native-paper';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from '../context/I18nContext';
 import authService from '../services/authService';
 import Button from '../components/Button';
-import Card from '../components/Card';
+import { CircleFlag } from 'react-native-circle-flags';
 
 const ProfileScreen = () => {
   const { user, logout } = useAuth();
-  const { t } = useTranslation();
+  const { t, locale, setLocale } = useTranslation();
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const theme = useTheme();
@@ -50,55 +50,162 @@ const ProfileScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Avatar.Text
-          size={80}
-          label={user?.name ? user.name.substring(0, 2).toUpperCase() : 'U'}
-          style={{ backgroundColor: theme.colors.primary }}
-        />
-        <Title style={styles.userName}>{user?.name}</Title>
-        <Text style={styles.userEmail}>{user?.email}</Text>
-        
-        <View style={styles.statsRow}>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>{user?.loyaltyPoints || 0}</Text>
-            <Text style={styles.statLabel}>{t('profile.points')}</Text>
-          </View>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>{bookings.length}</Text>
-            <Text style={styles.statLabel}>{t('profile.bookings')}</Text>
+      <ScrollView>
+        <View style={styles.header}>
+          <Avatar.Text
+            size={80}
+            label={user?.name ? user.name.substring(0, 2).toUpperCase() : 'U'}
+            style={{ backgroundColor: theme.colors.primary }}
+          />
+          <Title style={styles.userName}>{user?.name}</Title>
+          <Text style={styles.userEmail}>{user?.email}</Text>
+          
+          <View style={styles.statsRow}>
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>{user?.loyaltyPoints || 0}</Text>
+              <Text style={styles.statLabel}>{t('profile.points')}</Text>
+            </View>
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>{bookings.length}</Text>
+              <Text style={styles.statLabel}>{t('profile.bookings')}</Text>
+            </View>
           </View>
         </View>
-      </View>
 
-      <View style={styles.content}>
-        <Title style={styles.sectionTitle}>{t('profile.bookingHistory')}</Title>
-        {loading ? (
-          <ActivityIndicator style={{ marginTop: 20 }} color={theme.colors.primary} />
-        ) : (
-          <FlatList
-            data={bookings}
-            renderItem={renderBookingItem}
-            keyExtractor={item => item.id}
-            ItemSeparatorComponent={() => <Divider style={{ backgroundColor: theme.colors.outline }} />}
-            ListEmptyComponent={() => (
-              <Text style={styles.emptyText}>{t('profile.noBookings')}</Text>
+        <View style={styles.settingsSection}>
+          <Title style={styles.sectionTitle}>Settings</Title>
+          <List.Item
+            title="Language"
+            description={locale === 'en' ? 'English' : 'Tiếng Việt'}
+            left={props => <List.Icon {...props} icon="translate" />}
+            right={() => (
+              <View style={styles.langRow}>
+                <TouchableOpacity onPress={() => setLocale('en')} style={[styles.langBtn, locale === 'en' && styles.activeLang]}>
+                  <CircleFlag countryCode="us" size={24} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setLocale('vi')} style={[styles.langBtn, locale === 'vi' && styles.activeLang]}>
+                  <CircleFlag countryCode="vn" size={24} />
+                </TouchableOpacity>
+              </View>
             )}
-            contentContainerStyle={{ paddingBottom: 20 }}
           />
-        )}
-      </View>
+        </View>
 
-      <Button
-        mode="outlined"
-        onPress={logout}
-        style={styles.logoutButton}
-      >
-        {t('auth.logout')}
-      </Button>
+        <View style={styles.content}>
+          <Title style={styles.sectionTitle}>{t('profile.bookingHistory')}</Title>
+          {loading ? (
+            <ActivityIndicator style={{ marginTop: 20 }} color={theme.colors.primary} />
+          ) : (
+            <FlatList
+              data={bookings}
+              renderItem={renderBookingItem}
+              keyExtractor={item => item.id}
+              scrollEnabled={false}
+              ItemSeparatorComponent={() => <Divider style={{ backgroundColor: theme.colors.outline }} />}
+              ListEmptyComponent={() => (
+                <Text style={styles.emptyText}>{t('profile.noBookings')}</Text>
+              )}
+              contentContainerStyle={{ paddingBottom: 20 }}
+            />
+          )}
+        </View>
+
+        <Button
+          mode="outlined"
+          onPress={logout}
+          style={styles.logoutButton}
+        >
+          {t('auth.logout')}
+        </Button>
+      </ScrollView>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#0f0f0f',
+    paddingTop: 60,
+  },
+  header: {
+    alignItems: 'center',
+    paddingBottom: 30,
+    borderBottomWidth: 1,
+    borderBottomColor: '#1e1e1e',
+  },
+  userName: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginTop: 15,
+  },
+  userEmail: {
+    color: '#b3b3b3',
+    fontSize: 14,
+  },
+  statsRow: {
+    flexDirection: 'row',
+    marginTop: 20,
+    width: '100%',
+    justifyContent: 'space-around',
+  },
+  statItem: {
+    alignItems: 'center',
+  },
+  statValue: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#d32f2f',
+  },
+  statLabel: {
+    fontSize: 12,
+    color: '#b3b3b3',
+  },
+  settingsSection: {
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#1e1e1e',
+  },
+  langRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  langBtn: {
+    marginLeft: 15,
+    padding: 4,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: 'transparent',
+  },
+  activeLang: {
+    borderColor: '#d32f2f',
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    marginBottom: 10,
+  },
+  statusContainer: {
+    justifyContent: 'center',
+  },
+  statusText: {
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
+  emptyText: {
+    textAlign: 'center',
+    marginTop: 40,
+    color: '#b3b3b3',
+  },
+  logoutButton: {
+    margin: 20,
+    borderColor: '#d32f2f',
+  },
+});
 
 
 const styles = StyleSheet.create({

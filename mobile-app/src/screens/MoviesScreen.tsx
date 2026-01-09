@@ -2,15 +2,18 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, FlatList, TouchableOpacity, Dimensions } from 'react-native';
 import { Text, Searchbar, Chip, useTheme, ActivityIndicator, Paragraph } from 'react-native-paper';
 import { useTranslation } from '../context/I18nContext';
+import { useChatbot } from '../context/ChatbotContext';
 import { getMovies } from '../services/movieService';
 import Card from '../components/Card';
 import Button from '../components/Button';
 import { useNavigation } from '@react-navigation/native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
 
 const MoviesScreen = () => {
   const { t } = useTranslation();
+  const { openChatbot } = useChatbot();
   const theme = useTheme();
   const navigation = useNavigation();
 
@@ -71,13 +74,14 @@ const MoviesScreen = () => {
 
   const renderZeroResults = () => (
     <View style={styles.zeroResultsContainer}>
+      <MaterialCommunityIcons name="sparkles" size={48} color={theme.colors.primary} />
       <Text style={styles.zeroResultsText}>{t('movies.noResults')}</Text>
       <Paragraph style={styles.zeroResultsSubtext}>
-        Can't find what you're looking for? Let our AI assistant help you!
+        Can't find what you're looking for? Let our AI assistant help you find the perfect movie! ✨
       </Paragraph>
       <Button 
         mode="contained" 
-        onPress={() => navigation.navigate('Home')} // Placeholder, should probably open Chatbot FAB modal
+        onPress={openChatbot}
         icon="robot"
         style={styles.chatbotButton}
       >

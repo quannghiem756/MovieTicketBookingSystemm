@@ -8,7 +8,7 @@ class MovieRepository {
     throw new Error('Method not implemented');
   }
 
-  async findAll() {
+  async findAll(page, limit, search, format) {
     throw new Error('Method not implemented');
   }
 
@@ -24,11 +24,11 @@ class MovieRepository {
     throw new Error('Method not implemented');
   }
 
-  async findNowShowing() {
+  async findNowShowing(page, limit, format) {
     throw new Error('Method not implemented');
   }
 
-  async findComingSoon() {
+  async findComingSoon(page, limit, format) {
     throw new Error('Method not implemented');
   }
 }

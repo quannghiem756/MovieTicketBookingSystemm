@@ -15,6 +15,7 @@ const movieSchema = new mongoose.Schema({
   }, // Vietnamese Cinema Standard
   posterUrl: { type: String },
   trailerUrl: { type: String },
+  formats: [{ type: String, enum: ['2D', '3D', 'IMAX'], default: ['2D'] }],
   releaseDate: { type: Date, required: true },
   endDate: { type: Date, required: true }
 }, {

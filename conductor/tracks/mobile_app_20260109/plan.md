@@ -62,10 +62,10 @@ Goal: Provide personalized assistance via the AI Sparkle FAB.
     - [x] Connect to the existing Python Vector Service via the Node.js gateway. ac838b8
 - [ ] Task: Conductor - User Manual Verification 'Phase 6: AI Chatbot Integration' (Protocol in workflow.md)
 
-## Phase 7: Final Integration & Polish
+## Phase 7: Final Integration & Polish [checkpoint: 6f67d7e]
 Goal: Ensure stability, performance, and cross-platform consistency.
 
-- [ ] Task: Run comprehensive E2E tests using Detox or Cypress (if applicable to the chosen mobile test stack).
-- [ ] Task: Optimize image loading and list performance (FlatLists).
-- [ ] Task: Perform final brand and UI polish.
-- [ ] Task: Conductor - User Manual Verification 'Phase 7: Final Integration & Polish' (Protocol in workflow.md)
+- [x] Task: Run comprehensive E2E tests using Detox or Cypress (if applicable to the chosen mobile test stack). 6f67d7e
+- [x] Task: Optimize image loading and list performance (FlatLists). 6f67d7e
+- [x] Task: Perform final brand and UI polish. 6f67d7e
+- [x] Task: Conductor - User Manual Verification 'Phase 7: Final Integration & Polish' (Protocol in workflow.md) 6f67d7e

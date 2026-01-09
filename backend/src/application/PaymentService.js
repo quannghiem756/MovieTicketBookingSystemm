@@ -5,7 +5,7 @@ const validationService = new ValidationService();
 const crypto = require('crypto');
 
 // Create MoMo payment URL for movie booking
-const createMomoPaymentUrl = async (bookingId) => {
+const createMomoPaymentUrl = async (bookingId, customRedirectUrl = null) => {
   try {
     // Get the booking information
     const booking = await bookingRepository.findById(bookingId);
@@ -21,7 +21,7 @@ const createMomoPaymentUrl = async (bookingId) => {
     const requestId = `${bookingId}-${Date.now()}`;
     const orderId = bookingId.toString();
     const orderInfo = `Thanh toan cho don dat ve phim ${bookingId.toString()}`;
-    const redirectUrl = process.env.MOMO_REDIRECT_URL || `${process.env.API_BASE_URL || 'http://localhost:5000'}/api/payments/momo/return`;
+    const redirectUrl = customRedirectUrl || process.env.MOMO_REDIRECT_URL || `${process.env.API_BASE_URL || 'http://localhost:5000'}/api/payments/momo/return`;
     const ipnUrl = process.env.MOMO_IPN_URL || `${process.env.API_BASE_URL || 'http://localhost:5000'}/api/payments/momo/callback`;
     const amount = booking.totalPrice.toString(); // Amount in VND
     const requestType = 'payWithMethod';

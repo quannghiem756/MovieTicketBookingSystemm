@@ -34,6 +34,7 @@ Goal: Enable users to sign in and manage their identity on mobile.
 ## Phase 4: Movie Discovery & Catalog
 Goal: Deliver the core browsing experience for movies.
 
+- [x] Task: Implement Translation Context (I18n) for mobile app. 730446d
 - [ ] Task: Implement Home screen with "Now Showing" carousel and News section.
 - [ ] Task: Build Movie Discovery screen with search and format filtering (2D/3D/IMAX).
     - [ ] Write tests for filtering logic.

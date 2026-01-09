@@ -20,7 +20,7 @@ Goal: Establish the primary navigation structure and brand-consistent styling.
 - [x] Task: Implement reusable UI components (Buttons, Inputs, Cards). add2f20
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Navigation & Core Layout' (Protocol in workflow.md)
 
-## Phase 3: Authentication & User Profile
+## Phase 3: Authentication & User Profile [checkpoint: 666d92f]
 Goal: Enable users to sign in and manage their identity on mobile.
 
 - [x] Task: Implement Login and Registration screens. 749cd58

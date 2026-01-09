@@ -8,6 +8,7 @@ const bookingRepository = new BookingRepository();
 router.post('/create/:bookingId', async (req, res) => {
   try {
     const { bookingId } = req.params;
+    const { redirectUrl: customRedirectUrl } = req.body;
 
     // Get booking to check payment method preference
     const booking = await bookingRepository.findById(bookingId);
@@ -15,7 +16,7 @@ router.post('/create/:bookingId', async (req, res) => {
 
     // Check if booking specifies a payment method
     if (booking && booking.paymentMethod === 'momo') {
-      paymentUrl = await createMomoPaymentUrl(bookingId);
+      paymentUrl = await createMomoPaymentUrl(bookingId, customRedirectUrl);
     } else if (booking && booking.paymentMethod === 'cash') {
       // For cash payment, return a success response directly
       return res.json({
@@ -28,7 +29,7 @@ router.post('/create/:bookingId', async (req, res) => {
       });
     } else {
       // Default to MoMo if no preference specified
-      paymentUrl = await createMomoPaymentUrl(bookingId);
+      paymentUrl = await createMomoPaymentUrl(bookingId, customRedirectUrl);
     }
 
     res.json({
@@ -48,8 +49,9 @@ router.post('/create/:bookingId', async (req, res) => {
 router.post('/create-momo/:bookingId', async (req, res) => {
   try {
     const { bookingId } = req.params;
+    const { redirectUrl: customRedirectUrl } = req.body;
 
-    const paymentUrl = await createMomoPaymentUrl(bookingId);
+    const paymentUrl = await createMomoPaymentUrl(bookingId, customRedirectUrl);
 
     res.json({
       code: '00',

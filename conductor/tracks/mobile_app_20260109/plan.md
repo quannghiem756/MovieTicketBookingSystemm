@@ -35,7 +35,7 @@ Goal: Enable users to sign in and manage their identity on mobile.
 Goal: Deliver the core browsing experience for movies.
 
 - [x] Task: Implement Translation Context (I18n) for mobile app. 730446d
-- [ ] Task: Implement Home screen with "Now Showing" carousel and News section.
+- [x] Task: Implement Home screen with "Now Showing" carousel and News section. 505453c
 - [ ] Task: Build Movie Discovery screen with search and format filtering (2D/3D/IMAX).
     - [ ] Write tests for filtering logic.
     - [ ] Implement "Zero Results" banner with Chatbot call-to-action.

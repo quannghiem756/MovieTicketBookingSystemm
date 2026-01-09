@@ -17,7 +17,7 @@ Goal: Establish the primary navigation structure and brand-consistent styling.
 
 - [x] Task: Implement Bottom Tab Navigation (Home, Movies, My Tickets, Profile). fc311b7
 - [x] Task: Create a shared theme/styles object mirroring the web app's MUI configuration. b88a64d
-- [ ] Task: Implement reusable UI components (Buttons, Inputs, Cards).
+- [x] Task: Implement reusable UI components (Buttons, Inputs, Cards). add2f20
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Navigation & Core Layout' (Protocol in workflow.md)
 
 ## Phase 3: Authentication & User Profile

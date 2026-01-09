@@ -36,9 +36,9 @@ Goal: Deliver the core browsing experience for movies.
 
 - [x] Task: Implement Translation Context (I18n) for mobile app. 730446d
 - [x] Task: Implement Home screen with "Now Showing" carousel and News section. 505453c
-- [ ] Task: Build Movie Discovery screen with search and format filtering (2D/3D/IMAX).
-    - [ ] Write tests for filtering logic.
-    - [ ] Implement "Zero Results" banner with Chatbot call-to-action.
+- [x] Task: Build Movie Discovery screen with search and format filtering (2D/3D/IMAX). 01b810a
+    - [x] Write tests for filtering logic. 01b810a
+    - [x] Implement "Zero Results" banner with Chatbot call-to-action. 01b810a
 - [ ] Task: Create Movie Detail screen with video trailer integration and rich metadata.
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Movie Discovery & Catalog' (Protocol in workflow.md)
 

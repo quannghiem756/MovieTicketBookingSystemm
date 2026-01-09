@@ -89,7 +89,7 @@ class SupportService {
           subject: ticket.subject,
           replyContent: content,
           accessToken: ticket.accessToken
-        }, 'vi'); // Default to English for now
+        }, 'vi'); // Default to Vietnameses for now
 
         await this.emailService.sendEmail(
           ticket.email,

@@ -237,11 +237,18 @@ const vi = {
   // Profile Page
   'profile.title': 'Hồ sơ của tôi',
   'profile.edit': 'Chỉnh sửa hồ sơ',
+  'profile.editProfile': 'Chỉnh sửa hồ sơ',
   'profile.save': 'Lưu thay đổi',
   'profile.cancel': 'Hủy',
   'profile.saving': 'Đang lưu...',
   'profile.updateSuccess': 'Cập nhật hồ sơ thành công',
   'profile.updateError': 'Cập nhật hồ sơ không thành công',
+  'profile.memberSince': 'Thành viên từ',
+  'profile.profileDescription': 'Mô tả hồ sơ',
+  'profile.accountOverview': 'Tổng quan tài khoản',
+  'profile.role': 'Vai trò',
+  'profile.profileStatus': 'Trạng thái hồ sơ',
+  'profile.verified': 'Đã xác thực',
 
   // Admin Sidebar
   'admin.sidebar.adminPanel': 'Bảng điều khiển',

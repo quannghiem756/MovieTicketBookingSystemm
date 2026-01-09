@@ -72,7 +72,7 @@ class BookingService {
         seatIds: booking.seatIds,
         totalPrice: booking.totalPrice,
         validationToken: booking.validationToken
-      }, 'vi'); // Default to English for now
+      }, 'vi'); // Default to Vietnamese for now
 
       await this.emailService.sendEmail(
         user.email,

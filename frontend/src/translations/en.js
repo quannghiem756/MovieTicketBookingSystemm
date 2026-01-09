@@ -15,11 +15,18 @@ const en = {
   // Profile Page
   'profile.title': 'My Profile',
   'profile.edit': 'Edit Profile',
+  'profile.editProfile': 'Edit Profile',
   'profile.save': 'Save Changes',
   'profile.cancel': 'Cancel',
   'profile.saving': 'Saving...', 
   'profile.updateSuccess': 'Profile updated successfully',
   'profile.updateError': 'Failed to update profile',
+  'profile.memberSince': 'Member Since',
+  'profile.profileDescription': 'Profile Description',
+  'profile.accountOverview': 'Account Overview',
+  'profile.role': 'Role',
+  'profile.profileStatus': 'Profile Status',
+  'profile.verified': 'Verified',
 
   // Home Page
   'home.welcomeTitle': 'Welcome to MovieTicketBooking',

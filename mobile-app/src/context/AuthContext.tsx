@@ -8,6 +8,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   loading: boolean;
   login: (credentials: any) => Promise<{ success: boolean; error?: string; response?: any }>;
+  googleLogin: (idToken: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
   register: (userData: any) => Promise<{ success: boolean; error?: string }>;
   checkAuth: () => Promise<void>;
@@ -69,6 +70,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         success: false,
         error: error.response?.data?.error || 'Login failed',
         response: error.response
+      };
+    }
+  };
+
+  const googleLogin = async (idToken: string) => {
+    try {
+      const data = await authService.googleLogin(idToken);
+      const { user, accessToken, refreshToken } = data;
+
+      await SecureStore.setItemAsync('accessToken', accessToken);
+      await SecureStore.setItemAsync('refreshToken', refreshToken);
+      await SecureStore.setItemAsync('user', JSON.stringify(user));
+
+      setUser(user);
+      setIsAuthenticated(true);
+      api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+
+      return { success: true };
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.response?.data?.error || 'Google login failed'
       };
     }
   };

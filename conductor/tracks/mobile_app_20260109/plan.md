@@ -28,7 +28,7 @@ Goal: Enable users to sign in and manage their identity on mobile.
     - [x] Implement email/password login. 749cd58
 - [x] Task: Integrate Google OAuth for mobile using Expo AuthSession. d9bcf61
 - [x] Task: Implement Secure Token storage using expo-secure-store. d9bcf61
-- [ ] Task: Build the Profile screen and booking history list.
+- [x] Task: Build the Profile screen and booking history list. 2933df5
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Authentication & User Profile' (Protocol in workflow.md)
 
 ## Phase 4: Movie Discovery & Catalog

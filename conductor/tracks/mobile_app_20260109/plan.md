@@ -23,9 +23,9 @@ Goal: Establish the primary navigation structure and brand-consistent styling.
 ## Phase 3: Authentication & User Profile
 Goal: Enable users to sign in and manage their identity on mobile.
 
-- [ ] Task: Implement Login and Registration screens.
-    - [ ] Write unit tests for auth forms and validation.
-    - [ ] Implement email/password login.
+- [x] Task: Implement Login and Registration screens. 749cd58
+    - [x] Write unit tests for auth forms and validation. 749cd58
+    - [x] Implement email/password login. 749cd58
 - [ ] Task: Integrate Google OAuth for mobile using Expo AuthSession.
 - [ ] Task: Implement Secure Token storage using `expo-secure-store`.
 - [ ] Task: Build the Profile screen and booking history list.

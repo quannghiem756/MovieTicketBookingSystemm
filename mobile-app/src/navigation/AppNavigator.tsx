@@ -2,6 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import * as Linking from 'expo-linking';
 import ProfileScreen from '../screens/ProfileScreen';
 import HomeScreen from '../screens/HomeScreen';
 import MoviesScreen from '../screens/MoviesScreen';
@@ -91,6 +92,35 @@ export default function AppNavigator() {
   const { isAuthenticated, loading } = useAuth();
   const theme = useTheme();
 
+  const prefix = Linking.createURL('/');
+
+  const linking = {
+    prefixes: [prefix],
+    config: {
+      screens: {
+        Main: {
+          screens: {
+            'My Tickets': 'payment-result',
+            Home: 'home',
+            MoviesTab: {
+              screens: {
+                MoviesList: 'movies',
+                MovieDetails: 'movie/:id',
+              }
+            },
+            Profile: 'profile'
+          }
+        },
+        Auth: {
+          screens: {
+            Login: 'login',
+            Register: 'register'
+          }
+        }
+      }
+    }
+  };
+
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#0f0f0f' }}>
@@ -101,7 +131,7 @@ export default function AppNavigator() {
 
     return (
 
-      <NavigationContainer>
+      <NavigationContainer linking={linking}>
 
         <Stack.Navigator screenOptions={{ headerShown: false }}>
 

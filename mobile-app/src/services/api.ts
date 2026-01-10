@@ -7,6 +7,12 @@ const host = Constants.expoConfig?.hostUri?.split(':').shift();
 const API_BASE_URL = host ? `http://${host}:5000/api` : 'http://localhost:5000/api';
 const BACKEND_URL = host ? `http://${host}:5000` : 'http://localhost:5000';
 
+let onAuthFailure: (() => void) | null = null;
+
+export const setOnAuthFailure = (callback: () => void) => {
+  onAuthFailure = callback;
+};
+
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -84,9 +90,14 @@ api.interceptors.response.use(
       } catch (refreshError) {
         await SecureStore.deleteItemAsync('accessToken');
         await SecureStore.deleteItemAsync('refreshToken');
-        // Navigation logout should be handled at a higher level (e.g. AuthContext)
+        if (onAuthFailure) onAuthFailure();
         return Promise.reject(refreshError);
       }
+    } else if (error.response?.status === 401) {
+      // If we already tried to retry and still got 401, logout
+      await SecureStore.deleteItemAsync('accessToken');
+      await SecureStore.deleteItemAsync('refreshToken');
+      if (onAuthFailure) onAuthFailure();
     }
     return Promise.reject(error);
   }

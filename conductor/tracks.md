@@ -19,5 +19,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [~] Track: adjust the redirectUrl for the momopaymentUrl so that it could redirect back correctly on mobile app checkout
+## [x] Track: adjust the redirectUrl for the momopaymentUrl so that it could redirect back correctly on mobile app checkout
 *Link: [./conductor/tracks/momo_mobile_redirect_20260110/](./conductor/tracks/momo_mobile_redirect_20260110/)*

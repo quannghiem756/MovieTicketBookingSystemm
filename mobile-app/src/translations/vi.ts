@@ -43,4 +43,24 @@ export default {
     bookingHistory: 'Lịch sử đặt vé',
     noBookings: 'Chưa có lịch sử đặt vé.',
   },
+  booking: {
+    confirmation: {
+      title: 'Đặt vé thành công!',
+      subtitle: 'Vé xem phim của bạn đã được đặt thành công.',
+      invalid: 'Dữ liệu đặt vé không hợp lệ',
+      bookMore: 'Tiếp tục đặt vé',
+      theater: 'Rạp chiếu',
+      date: 'Ngày chiếu',
+      time: 'Giờ chiếu',
+      seats: 'Ghế',
+      total: 'Tổng cộng',
+      bookingDetails: 'Chi tiết đặt vé',
+      bookingId: 'Mã đặt vé',
+      bookingDate: 'Ngày đặt',
+      qrCodeTitle: 'Mã QR vé',
+      qrCodeSubtitle: 'Quét mã này tại quầy vé hoặc lối vào',
+      viewBookings: 'Xem vé của tôi',
+      info: 'Email xác nhận kèm theo vé đã được gửi đến địa chỉ email của bạn.',
+    }
+  }
 };

@@ -10,12 +10,12 @@
     "test": "jest"
   },
   "jest": {
-    "preset": "jest-expo",
+    "preset": "react-native",
     "setupFilesAfterEnv": [
       "./jest.setup.js"
     ],
     "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|react-native-paper|lucide-react-native|@lucide/lab|expo-font|expo-asset)"
+      "node_modules/(?!(jest-)?react-native|@react-native|expo|@expo|react-navigation|@react-navigation|@unimodules|unimodules|sentry-expo|native-base|react-native-svg|react-native-paper|lucide-react-native|@lucide/lab|i18n-js|make-plural)"
     ]
   },
   "dependencies": {

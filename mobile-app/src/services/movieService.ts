@@ -64,6 +64,11 @@ export const createBooking = async (bookingData: any) => {
   return response.data;
 };
 
+export const getBookingById = async (id: string) => {
+  const response = await api.get(`/bookings/${id}`);
+  return response.data;
+};
+
 export const getBookingsByUserId = async (userId: string) => {
   const response = await api.get(`/bookings/user/${userId}`);
   return response.data;

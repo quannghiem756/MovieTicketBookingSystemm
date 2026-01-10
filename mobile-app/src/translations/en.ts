@@ -43,4 +43,24 @@ export default {
     bookingHistory: 'Booking History',
     noBookings: 'No bookings found yet.',
   },
+  booking: {
+    confirmation: {
+      title: 'Booking Confirmed!',
+      subtitle: 'Your movie ticket has been successfully booked.',
+      invalid: 'Invalid Booking Data',
+      bookMore: 'Book More',
+      theater: 'Theater',
+      date: 'Date',
+      time: 'Time',
+      seats: 'Seats',
+      total: 'Total Amount',
+      bookingDetails: 'Booking Details',
+      bookingId: 'Booking ID',
+      bookingDate: 'Booking Date',
+      qrCodeTitle: 'Ticket QR Code',
+      qrCodeSubtitle: 'Scan this at the cinema entrance',
+      viewBookings: 'View My Bookings',
+      info: 'A confirmation email with your ticket has been sent to your email address.',
+    }
+  }
 };

@@ -24,4 +24,6 @@ This track implements dynamic redirect URLs for MoMo payments to support mobile 
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Backend Refactor' (Protocol in workflow.md) 187bfd2
 
 ## Phase 4: Verification & Polish
-- [ ] Task: Verify end-to-end payment flow on Web (default fallback).
+- [x] Task: Verify end-to-end payment flow on Web (default fallback). feb29e5
+- [x] Task: Verify end-to-end payment flow on Android Emulator (dynamic redirect). feb29e5
+- [~] Task: Conductor - User Manual Verification 'Phase 4: Verification & Polish' (Protocol in workflow.md)

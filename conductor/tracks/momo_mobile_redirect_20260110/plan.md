@@ -11,7 +11,7 @@ This track implements dynamic redirect URLs for MoMo payments to support mobile 
 
 ## Phase 2: Mobile App Integration
 - [x] Task: Update `mobile-app/src/services/movieService.ts` to support passing `redirectUrl` in `createMomoPayment`. 23fc1af
-- [ ] Task: Update `mobile-app/src/screens/CheckoutScreen.tsx` to generate and pass the Expo Go redirect URL.
+- [x] Task: Update `mobile-app/src/screens/CheckoutScreen.tsx` to generate and pass the Expo Go redirect URL. 599c3ce
 - [ ] Task: Configure deep linking in the mobile app to handle the redirect back from MoMo.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Mobile App Integration' (Protocol in workflow.md)
 

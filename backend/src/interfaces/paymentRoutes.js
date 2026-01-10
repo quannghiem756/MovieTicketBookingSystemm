@@ -18,13 +18,18 @@ router.post('/create/:bookingId', async (req, res) => {
     const { bookingId } = req.params;
     const { redirectUrl: customRedirectUrl } = req.body;
 
+    // Construct dynamic base return URL using request host to support emulators/devices
+    const protocol = req.protocol;
+    const host = req.get('host');
+    const baseReturnUrl = `${protocol}://${host}/api/payments/momo/return`;
+
     // Get booking to check payment method preference
     const booking = await bookingRepository.findById(bookingId);
     let paymentUrl;
 
     // Check if booking specifies a payment method
     if (booking && booking.paymentMethod === 'momo') {
-      paymentUrl = await createMomoPaymentUrl(bookingId, customRedirectUrl);
+      paymentUrl = await createMomoPaymentUrl(bookingId, customRedirectUrl, baseReturnUrl);
     } else if (booking && booking.paymentMethod === 'cash') {
       // For cash payment, return a success response directly
       return res.json({
@@ -37,7 +42,7 @@ router.post('/create/:bookingId', async (req, res) => {
       });
     } else {
       // Default to MoMo if no preference specified
-      paymentUrl = await createMomoPaymentUrl(bookingId, customRedirectUrl);
+      paymentUrl = await createMomoPaymentUrl(bookingId, customRedirectUrl, baseReturnUrl);
     }
 
     res.json({
@@ -59,7 +64,12 @@ router.post('/create-momo/:bookingId', async (req, res) => {
     const { bookingId } = req.params;
     const { redirectUrl: customRedirectUrl } = req.body;
 
-    const paymentUrl = await createMomoPaymentUrl(bookingId, customRedirectUrl);
+    // Construct dynamic base return URL using request host to support emulators/devices
+    const protocol = req.protocol;
+    const host = req.get('host');
+    const baseReturnUrl = `${protocol}://${host}/api/payments/momo/return`;
+
+    const paymentUrl = await createMomoPaymentUrl(bookingId, customRedirectUrl, baseReturnUrl);
 
     res.json({
       code: '00',

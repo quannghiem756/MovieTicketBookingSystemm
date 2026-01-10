@@ -1,8 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const { createMomoPaymentUrl, verifyMomoResponse, processPaymentResult } = require('../application/PaymentService');
+const { createMomoPaymentUrl, verifyMomoResponse, processPaymentResult, setBookingService } = require('../application/PaymentService');
 const BookingRepository = require('../infrastructure/repositories/MongoBookingRepository');
 const bookingRepository = new BookingRepository();
+
+// Initialize payment routes with BookingService
+const initializePaymentRoutes = (bookingService) => {
+  setBookingService(bookingService);
+};
+
+// Export initialization function
+router.initializePaymentRoutes = initializePaymentRoutes;
 
 // Create payment URL for a booking
 router.post('/create/:bookingId', async (req, res) => {
@@ -117,7 +125,7 @@ router.post('/momo/callback', async (req, res) => {
 router.get('/momo/return', async (req, res) => {
   try {
     const momoResponse = req.query;
-    const { orderId, resultCode, message } = momoResponse;
+    const { orderId, resultCode, message, clientRedirect } = momoResponse;
 
     console.log('MoMo return received:', momoResponse);
 
@@ -130,8 +138,18 @@ router.get('/momo/return', async (req, res) => {
       }
     }
 
-    // Redirect user to frontend payment result page
-    let redirectUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/payment/result?bookingId=${orderId}&paymentMethod=momo`;
+    // Determine redirect URL
+    let redirectUrl;
+    
+    if (clientRedirect) {
+      // Use the client-provided redirect URL (e.g. mobile deep link)
+      // Check if it already has query parameters
+      const separator = clientRedirect.includes('?') ? '&' : '?';
+      redirectUrl = `${clientRedirect}${separator}bookingId=${orderId}&paymentMethod=momo`;
+    } else {
+      // Use default frontend URL
+      redirectUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/payment/result?bookingId=${orderId}&paymentMethod=momo`;
+    }
 
     if (resultCode) {
       redirectUrl += `&resultCode=${resultCode}`;

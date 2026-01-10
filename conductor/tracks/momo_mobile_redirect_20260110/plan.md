@@ -9,13 +9,17 @@ This track implements dynamic redirect URLs for MoMo payments to support mobile 
 - [x] Task: Update `paymentRoutes.js` to extract `redirectUrl` from request body and pass it to the service. 4dea653
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Backend Implementation' (Protocol in workflow.md) d8434b5
 
-## Phase 2: Mobile App Integration
+## Phase 2: Mobile App Integration [checkpoint: d8434b5]
 - [x] Task: Update `mobile-app/src/services/movieService.ts` to support passing `redirectUrl` in `createMomoPayment`. 23fc1af
 - [x] Task: Update `mobile-app/src/screens/CheckoutScreen.tsx` to generate and pass the Expo Go redirect URL. 599c3ce
 - [x] Task: Configure deep linking in the mobile app to handle the redirect back from MoMo. 94c12af
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Mobile App Integration' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Mobile App Integration' (Protocol in workflow.md)
 
-## Phase 3: Verification & Polish
+## Phase 3: Backend Refactor (Intermediary Redirect)
+- [x] Task: Update `PaymentService.js` to append `redirectUrl` as a query param to the backend return URL instead of replacing it. f9feda9
+- [ ] Task: Update `paymentRoutes.js` `/momo/return` to detect and use the `redirectUrl` query param for the final redirect.
+- [ ] Task: Update tests to verify the intermediary redirect logic.
+- [ ] Task: Conductor - User Manual Verification 'Phase 3: Backend Refactor' (Protocol in workflow.md)
+
+## Phase 4: Verification & Polish
 - [ ] Task: Verify end-to-end payment flow on Web (default fallback).
-- [ ] Task: Verify end-to-end payment flow on Android Emulator (dynamic redirect).
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Verification & Polish' (Protocol in workflow.md)

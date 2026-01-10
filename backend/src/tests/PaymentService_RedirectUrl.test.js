@@ -76,4 +76,35 @@ describe('PaymentService - Dynamic Redirect URL', () => {
       })
     );
   });
+
+  it('should use baseReturnUrl if provided', async () => {
+    const mockBooking = {
+      _id: 'booking123',
+      totalPrice: 100000,
+      toString: () => 'booking123'
+    };
+    mockFindById.mockResolvedValue(mockBooking);
+
+    global.fetch.mockResolvedValue({
+      json: jest.fn().mockResolvedValue({
+        payUrl: 'https://momo.vn/pay',
+        resultCode: 0,
+        message: 'Success'
+      })
+    });
+
+    const baseReturnUrl = 'http://10.0.2.2:5000/api/payments/momo/return';
+    const customRedirectUrl = 'exp://10.0.2.2:8081/--/payment/result';
+    
+    await createMomoPaymentUrl('booking123', customRedirectUrl, baseReturnUrl);
+
+    const expectedRedirectUrl = `${baseReturnUrl}?clientRedirect=${encodeURIComponent(customRedirectUrl)}`;
+
+    expect(global.fetch).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({
+        body: expect.stringContaining(`"redirectUrl":"${expectedRedirectUrl}"`)
+      })
+    );
+  });
 });

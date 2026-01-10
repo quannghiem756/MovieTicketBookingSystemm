@@ -85,6 +85,44 @@ const recommendationRoutes = require('./src/interfaces/http/routes/recommendatio
 const couponRoutes = require('./src/interfaces/http/routes/coupons');
 const supportRoutes = require('./src/interfaces/http/routes/support');
 
+// Initialize BookingService for payment routes
+// Import necessary repositories and services
+const MongoBookingRepository = require('./src/infrastructure/repositories/MongoBookingRepository');
+const MongoUserRepository = require('./src/infrastructure/repositories/MongoUserRepository');
+const MongoShowtimeRepository = require('./src/infrastructure/repositories/MongoShowtimeRepository');
+const MongoMovieRepository = require('./src/infrastructure/repositories/MongoMovieRepository');
+const MongoTheaterRepository = require('./src/infrastructure/repositories/MongoTheaterRepository');
+const MongoCouponRepository = require('./src/infrastructure/repositories/MongoCouponRepository');
+const MongoAuditLogRepository = require('./src/infrastructure/repositories/MongoAuditLogRepository');
+const BookingService = require('./src/application/BookingService');
+const CouponService = require('./src/application/CouponService');
+const ValidationService = require('./src/application/ValidationService');
+const EmailService = require('./src/infrastructure/EmailService');
+
+const bookingRepository = new MongoBookingRepository();
+const userRepository = new MongoUserRepository();
+const showtimeRepository = new MongoShowtimeRepository();
+const movieRepository = new MongoMovieRepository();
+const theaterRepository = new MongoTheaterRepository();
+const couponRepository = new MongoCouponRepository();
+const auditLogRepository = new MongoAuditLogRepository();
+const couponService = new CouponService(couponRepository, bookingRepository);
+const validationService = new ValidationService();
+const bookingService = new BookingService(
+  bookingRepository, 
+  userRepository, 
+  showtimeRepository, 
+  movieRepository, 
+  couponService, 
+  validationService,
+  EmailService,
+  theaterRepository,
+  auditLogRepository
+);
+
+// Initialize payment routes with BookingService
+paymentRoutes.initializePaymentRoutes(bookingService);
+
 // Use routes
 app.use('/api/movies', movieRoutes);
 app.use('/api/showtimes', showtimeRoutes);

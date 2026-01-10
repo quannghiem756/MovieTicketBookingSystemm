@@ -28,7 +28,8 @@ describe('PaymentRoutes - Dynamic Redirect URL', () => {
       method: 'POST',
       url: `/create-momo/${bookingId}`,
       params: { bookingId },
-      body: { redirectUrl: customRedirectUrl }
+      body: { redirectUrl: customRedirectUrl },
+      headers: { host: 'localhost:5000' }
     });
     const res = httpMocks.createResponse();
 
@@ -38,7 +39,18 @@ describe('PaymentRoutes - Dynamic Redirect URL', () => {
 
     await handler(req, res);
 
-    expect(PaymentService.createMomoPaymentUrl).toHaveBeenCalledWith(bookingId, customRedirectUrl);
+    // Should receive bookingId, customRedirectUrl, and constructed baseReturnUrl
+    // Mock req.protocol is undefined in node-mocks-http by default unless set?
+    // node-mocks-http defaults: protocol: 'http', get('host'): undefined
+    
+    // We can't easily mock req.get('host') with the current setup unless we explicitly set it on the mock request
+    // The previous test passed because I didn't check the 3rd arg.
+    // Let's verify it now.
+    expect(PaymentService.createMomoPaymentUrl).toHaveBeenCalledWith(
+      bookingId, 
+      customRedirectUrl, 
+      expect.stringContaining('/api/payments/momo/return')
+    );
     expect(res.statusCode).toBe(200);
     expect(JSON.parse(res._getData()).data).toBe('https://momo.vn/pay');
   });
@@ -59,7 +71,8 @@ describe('PaymentRoutes - Dynamic Redirect URL', () => {
       method: 'POST',
       url: `/create/${bookingId}`,
       params: { bookingId },
-      body: { redirectUrl: customRedirectUrl }
+      body: { redirectUrl: customRedirectUrl },
+      headers: { host: 'localhost:5000' }
     });
     const res = httpMocks.createResponse();
 
@@ -68,7 +81,11 @@ describe('PaymentRoutes - Dynamic Redirect URL', () => {
 
     await handler(req, res);
 
-    expect(PaymentService.createMomoPaymentUrl).toHaveBeenCalledWith(bookingId, customRedirectUrl);
+    expect(PaymentService.createMomoPaymentUrl).toHaveBeenCalledWith(
+      bookingId, 
+      customRedirectUrl, 
+      expect.stringContaining('/api/payments/momo/return')
+    );
   });
 
   it('should still work without redirectUrl in request body', async () => {
@@ -80,7 +97,8 @@ describe('PaymentRoutes - Dynamic Redirect URL', () => {
       method: 'POST',
       url: `/create-momo/${bookingId}`,
       params: { bookingId },
-      body: {}
+      body: {},
+      headers: { host: 'localhost:5000' }
     });
     const res = httpMocks.createResponse();
 
@@ -90,7 +108,11 @@ describe('PaymentRoutes - Dynamic Redirect URL', () => {
     await handler(req, res);
 
     // Should be called with undefined or null for redirectUrl
-    expect(PaymentService.createMomoPaymentUrl).toHaveBeenCalledWith(bookingId, undefined);
+    expect(PaymentService.createMomoPaymentUrl).toHaveBeenCalledWith(
+      bookingId, 
+      undefined,
+      expect.stringContaining('/api/payments/momo/return')
+    );
   });
 
   it('should redirect to clientRedirect URL in /momo/return if present', async () => {

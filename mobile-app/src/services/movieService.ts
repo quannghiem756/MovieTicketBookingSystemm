@@ -74,8 +74,8 @@ export const validateCoupon = async (code: string, orderTotal: number, movieId: 
   return response.data;
 };
 
-export const createMomoPayment = async (bookingId: string) => {
-  const response = await api.post(`/payments/create-momo/${bookingId}`);
+export const createMomoPayment = async (bookingId: string, redirectUrl?: string) => {
+  const response = await api.post(`/payments/create-momo/${bookingId}`, { redirectUrl });
   return response.data;
 };
 

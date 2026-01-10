@@ -7,7 +7,7 @@ This track implements dynamic redirect URLs for MoMo payments to support mobile 
 - [x] Task: Update `PaymentService.js` to accept and use the optional `redirectUrl`. a1d1e1f
 - [x] Task: Create integration tests for `/api/payments/create-momo/:bookingId` endpoint with dynamic `redirectUrl`. 4dea653
 - [x] Task: Update `paymentRoutes.js` to extract `redirectUrl` from request body and pass it to the service. 4dea653
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Backend Implementation' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Phase 1: Backend Implementation' (Protocol in workflow.md)
 
 ## Phase 2: Mobile App Integration
 - [ ] Task: Update `mobile-app/src/services/movieService.ts` to support passing `redirectUrl` in `createMomoPayment`.

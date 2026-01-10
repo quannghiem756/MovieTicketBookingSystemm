@@ -20,7 +20,7 @@ This track implements dynamic redirect URLs for MoMo payments to support mobile 
 - [x] Task: Update `paymentRoutes.js` `/momo/return` to detect and use the `redirectUrl` query param for the final redirect. 96c9bb0
 - [x] Task: Update tests to verify the intermediary redirect logic. ec78bb7
 - [x] Task: Update `PaymentService.js` to accept a dynamic `baseReturnUrl` argument. 561d915
-- [ ] Task: Update `paymentRoutes.js` to construct `baseReturnUrl` from request headers and pass it to the service.
+- [x] Task: Update `paymentRoutes.js` to construct `baseReturnUrl` from request headers and pass it to the service. e3f01e9
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Backend Refactor' (Protocol in workflow.md)
 
 ## Phase 4: Verification & Polish

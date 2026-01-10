@@ -92,4 +92,36 @@ describe('PaymentRoutes - Dynamic Redirect URL', () => {
     // Should be called with undefined or null for redirectUrl
     expect(PaymentService.createMomoPaymentUrl).toHaveBeenCalledWith(bookingId, undefined);
   });
+
+  it('should redirect to clientRedirect URL in /momo/return if present', async () => {
+    const clientRedirect = 'exp://10.0.2.2:8081/--/payment/result';
+    const orderId = 'booking123';
+    
+    // Mock verify and process logic if needed, or just focus on the redirect
+    // But verifyMomoResponse is not called in return handler? 
+    // Wait, the return handler calls processPaymentResult. We need to mock it.
+    
+    // Actually, processPaymentResult is imported from PaymentService.
+    PaymentService.processPaymentResult = jest.fn().mockResolvedValue({ success: true });
+
+    const req = httpMocks.createRequest({
+      method: 'GET',
+      url: '/momo/return',
+      query: { 
+        orderId, 
+        resultCode: '0', 
+        message: 'Success',
+        clientRedirect 
+      }
+    });
+    const res = httpMocks.createResponse();
+
+    const layer = router.stack.find(l => l.route && l.route.path === '/momo/return');
+    const handler = layer.route.stack[0].handle;
+
+    await handler(req, res);
+
+    const expectedRedirect = `${clientRedirect}?bookingId=${orderId}&paymentMethod=momo&resultCode=0&message=Success`;
+    expect(res._getRedirectUrl()).toBe(expectedRedirect);
+  });
 });

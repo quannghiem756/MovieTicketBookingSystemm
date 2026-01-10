@@ -37,11 +37,15 @@ describe('PaymentService - Dynamic Redirect URL', () => {
     const customRedirectUrl = 'exp://10.0.2.2:8081/--/payment/result';
     await createMomoPaymentUrl('booking123', customRedirectUrl);
 
-    // Verify fetch was called with the custom redirectUrl
+    // Verify fetch was called with the custom redirectUrl appended as a query param
+    // The base URL is MOMO_REDIRECT_URL or localhost/api/payments/momo/return
+    // Since MOMO_REDIRECT_URL is set in beforeEach:
+    const expectedRedirectUrl = `${process.env.MOMO_REDIRECT_URL}?clientRedirect=${encodeURIComponent(customRedirectUrl)}`;
+
     expect(global.fetch).toHaveBeenCalledWith(
       expect.any(String),
       expect.objectContaining({
-        body: expect.stringContaining(`"redirectUrl":"${customRedirectUrl}"`)
+        body: expect.stringContaining(`"redirectUrl":"${expectedRedirectUrl}"`)
       })
     );
   });

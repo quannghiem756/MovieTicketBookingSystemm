@@ -4,6 +4,8 @@ const bookingRepository = new BookingRepository();
 const validationService = new ValidationService();
 const crypto = require('crypto');
 
+let bookingService = null;
+
 // Create MoMo payment URL for movie booking
 const createMomoPaymentUrl = async (bookingId, customRedirectUrl = null) => {
   try {
@@ -21,7 +23,17 @@ const createMomoPaymentUrl = async (bookingId, customRedirectUrl = null) => {
     const requestId = `${bookingId}-${Date.now()}`;
     const orderId = bookingId.toString();
     const orderInfo = `Thanh toan cho don dat ve phim ${bookingId.toString()}`;
-    const redirectUrl = customRedirectUrl || process.env.MOMO_REDIRECT_URL || `${process.env.API_BASE_URL || 'http://localhost:5000'}/api/payments/momo/return`;
+    
+    // Determine the base redirect URL (Backend Endpoint)
+    const baseRedirectUrl = process.env.MOMO_REDIRECT_URL || `${process.env.API_BASE_URL || 'http://localhost:5000'}/api/payments/momo/return`;
+    
+    // If a custom redirect URL is provided (e.g. from mobile app), append it as a query parameter
+    let redirectUrl = baseRedirectUrl;
+    if (customRedirectUrl) {
+      const separator = baseRedirectUrl.includes('?') ? '&' : '?';
+      redirectUrl = `${baseRedirectUrl}${separator}clientRedirect=${encodeURIComponent(customRedirectUrl)}`;
+    }
+
     const ipnUrl = process.env.MOMO_IPN_URL || `${process.env.API_BASE_URL || 'http://localhost:5000'}/api/payments/momo/callback`;
     const amount = booking.totalPrice.toString(); // Amount in VND
     const requestType = 'payWithMethod';
@@ -123,8 +135,13 @@ const processPaymentResult = async (momoResponse) => {
       booking.validationToken = validationService.generateValidationToken(orderId);
     }
 
-    await bookingRepository.update(orderId, booking);
-    console.log(`Booking ${orderId} marked as confirmed.`);
+    const result = await bookingRepository.update(orderId, booking);
+    
+    // Send confirmation email if BookingService is available
+    if (bookingService) {
+      await bookingService._sendConfirmationEmail(result);
+    }
+    
     return { success: true, booking };
   } else {
     booking.status = 'cancelled';
@@ -134,8 +151,14 @@ const processPaymentResult = async (momoResponse) => {
   }
 };
 
+// Set BookingService instance (call this during initialization)
+const setBookingService = (service) => {
+  bookingService = service;
+};
+
 module.exports = {
   createMomoPaymentUrl,
   verifyMomoResponse,
-  processPaymentResult
+  processPaymentResult,
+  setBookingService
 };

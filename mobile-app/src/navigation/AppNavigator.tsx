@@ -9,6 +9,7 @@ import MoviesScreen from '../screens/MoviesScreen';
 import MovieDetailsScreen from '../screens/MovieDetailsScreen';
 import SeatSelectionScreen from '../screens/SeatSelectionScreen';
 import CheckoutScreen from '../screens/CheckoutScreen';
+import BookingConfirmation from '../screens/BookingConfirmation';
 import MyTicketsScreen from '../screens/MyTicketsScreen';
 import { useTheme, ActivityIndicator } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -29,6 +30,7 @@ function MoviesStack() {
       <Stack.Screen name="MovieDetails" component={MovieDetailsScreen} />
       <Stack.Screen name="SeatSelection" component={SeatSelectionScreen} />
       <Stack.Screen name="Checkout" component={CheckoutScreen} />
+      <Stack.Screen name="BookingConfirmation" component={BookingConfirmation} />
     </Stack.Navigator>
   );
 }
@@ -100,14 +102,15 @@ export default function AppNavigator() {
       screens: {
         Main: {
           screens: {
-            'My Tickets': 'payment-result',
             Home: 'home',
             MoviesTab: {
               screens: {
                 MoviesList: 'movies',
                 MovieDetails: 'movie/:id',
+                BookingConfirmation: 'payment-result'
               }
             },
+            'My Tickets': 'tickets',
             Profile: 'profile'
           }
         },

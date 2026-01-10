@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, Alert, Linking } from 'react-native';
+import { View, StyleSheet, ScrollView, Alert } from 'react-native';
+import * as Linking from 'expo-linking';
 import { Text, Title, useTheme, Surface, Divider, List, TextInput, ActivityIndicator, IconButton, Card } from 'react-native-paper';
 import { useTranslation } from '../context/I18nContext';
 import { createBooking, validateCoupon, createMomoPayment } from '../services/movieService';
@@ -63,8 +64,13 @@ const CheckoutScreen = ({ route, navigation }: any) => {
       
       const booking = await createBooking(bookingData);
       
-      // 2. Create MoMo payment
-      const response = await createMomoPayment(booking.id);
+      // 2. Create MoMo payment with dynamic redirect URL
+      const redirectUrl = Linking.createURL('payment-result', {
+        queryParams: { bookingId: booking.id }
+      });
+      console.log('Mobile Redirect URL:', redirectUrl);
+
+      const response = await createMomoPayment(booking.id, redirectUrl);
       console.log('MoMo Payment Response:', response);
 
       // Extract the actual URL string from the response object
@@ -74,9 +80,9 @@ const CheckoutScreen = ({ route, navigation }: any) => {
       const supported = await Linking.canOpenURL(paymentUrl);
       if (supported) {
         await Linking.openURL(paymentUrl);
-        // After opening payment, we might want to navigate to a status screen
-        // or My Tickets. For now, let's go to My Tickets.
-        navigation.navigate('My Tickets');
+        // Note: We don't navigate here anymore. 
+        // The MoMo app will redirect back to our app via the redirectUrl,
+        // and our deep link handler should take over.
       } else {
         Alert.alert('Error', 'Cannot open payment URL');
       }

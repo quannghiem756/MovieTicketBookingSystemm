@@ -18,7 +18,7 @@ This track implements dynamic redirect URLs for MoMo payments to support mobile 
 ## Phase 3: Backend Refactor (Intermediary Redirect)
 - [x] Task: Update `PaymentService.js` to append `redirectUrl` as a query param to the backend return URL instead of replacing it. f9feda9
 - [x] Task: Update `paymentRoutes.js` `/momo/return` to detect and use the `redirectUrl` query param for the final redirect. 96c9bb0
-- [ ] Task: Update tests to verify the intermediary redirect logic.
+- [x] Task: Update tests to verify the intermediary redirect logic. ec78bb7
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Backend Refactor' (Protocol in workflow.md)
 
 ## Phase 4: Verification & Polish

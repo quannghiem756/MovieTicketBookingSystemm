@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Alert } from 'react-native';
 import { Text, Title, useTheme, ActivityIndicator, Divider, Surface, IconButton } from 'react-native-paper';
 import { useTranslation } from '../context/I18nContext';
 import { getShowtimeById, getTheaterById, getLockedSeats, holdSeat, releaseSeat, getBookingsByUserId } from '../services/movieService';
+import { useFocusEffect } from '@react-navigation/native';
 import { io, Socket } from 'socket.io-client';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthContext';
@@ -40,6 +41,13 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
   }, [showtimeId]);
+
+  useFocusEffect(
+    useCallback(() => {
+      // Refresh locked seats on focus
+      getLockedSeats(showtimeId).then(setLockedSeats).catch(console.error);
+    }, [showtimeId])
+  );
 
   useEffect(() => {
     if (selectedSeats.length > 0) {

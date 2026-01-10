@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, FlatList, RefreshControl, Dimensions, Modal, TouchableOpacity } from 'react-native';
 import { Text, Title, useTheme, Card, ActivityIndicator, Surface, IconButton, Divider } from 'react-native-paper';
 import { useTranslation } from '../context/I18nContext';
 import { useAuth } from '../context/AuthContext';
+import { useFocusEffect } from '@react-navigation/native';
 import authService from '../services/authService';
 import QRCode from 'react-native-qrcode-svg';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -16,30 +17,31 @@ const MyTicketsScreen = () => {
   
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshng] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState<any>(null);
 
-  useEffect(() => {
-    fetchTickets();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchTickets();
+    }, [user?.id])
+  );
 
   const fetchTickets = async () => {
     try {
       if (user) {
         const data = await authService.getBookingHistory(user.id);
-        // Only show confirmed and upcoming? No, let's show all and filter in UI or just show confirmed as 'Tickets'
         setBookings(data.filter((b: any) => b.status === 'confirmed'));
       }
     } catch (error) {
       console.error('Error fetching tickets:', error);
     } finally {
       setLoading(false);
-      setRefreshng(false);
+      setRefreshing(false);
     }
   };
 
   const onRefresh = () => {
-    setRefreshng(true);
+    setRefreshing(true);
     fetchTickets();
   };
 

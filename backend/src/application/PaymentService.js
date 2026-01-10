@@ -7,7 +7,7 @@ const crypto = require('crypto');
 let bookingService = null;
 
 // Create MoMo payment URL for movie booking
-const createMomoPaymentUrl = async (bookingId, customRedirectUrl = null) => {
+const createMomoPaymentUrl = async (bookingId, customRedirectUrl = null, baseReturnUrl = null) => {
   try {
     // Get the booking information
     const booking = await bookingRepository.findById(bookingId);
@@ -25,13 +25,14 @@ const createMomoPaymentUrl = async (bookingId, customRedirectUrl = null) => {
     const orderInfo = `Thanh toan cho don dat ve phim ${bookingId.toString()}`;
     
     // Determine the base redirect URL (Backend Endpoint)
-    const baseRedirectUrl = process.env.MOMO_REDIRECT_URL || `${process.env.API_BASE_URL || 'http://localhost:5000'}/api/payments/momo/return`;
+    // Use the provided baseReturnUrl (dynamic from request) or fallback to env vars
+    const backendEndpoint = baseReturnUrl || process.env.MOMO_REDIRECT_URL || `${process.env.API_BASE_URL || 'http://localhost:5000'}/api/payments/momo/return`;
     
     // If a custom redirect URL is provided (e.g. from mobile app), append it as a query parameter
-    let redirectUrl = baseRedirectUrl;
+    let redirectUrl = backendEndpoint;
     if (customRedirectUrl) {
-      const separator = baseRedirectUrl.includes('?') ? '&' : '?';
-      redirectUrl = `${baseRedirectUrl}${separator}clientRedirect=${encodeURIComponent(customRedirectUrl)}`;
+      const separator = backendEndpoint.includes('?') ? '&' : '?';
+      redirectUrl = `${backendEndpoint}${separator}clientRedirect=${encodeURIComponent(customRedirectUrl)}`;
     }
 
     const ipnUrl = process.env.MOMO_IPN_URL || `${process.env.API_BASE_URL || 'http://localhost:5000'}/api/payments/momo/callback`;

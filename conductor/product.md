@@ -17,6 +17,7 @@ A comprehensive Movie Ticket Booking System with a Node.js backend, React fronte
 ### Customer-Facing
 - **Movie Discovery:** Advanced search and browsing of movies with rich metadata (posters, trailers, release dates, and durations).
 - **Home Page News Sidebar:** A dedicated sidebar on the home page displaying the latest news, promotions, and cinema updates.
+- **Mobile News Details:** A dedicated screen in the mobile application mirroring the web experience for reading full news articles and promotion details, including rich text and image support.
 - **Real-time Data Freshness:** Automatic data refresh on screen focus and manual "Pull-to-Refresh" functionality on the mobile home screen and movie details.
 - **Customer Support:** A "Contact Us" form accessible from the home page for users to submit inquiries with automatic priority assignment. Includes a complete ticket management system with email notifications, public ticket tracking links, and a dedicated admin interface for handling replies.
 - **Format Filtering:** Seamlessly filter showtimes by format (e.g., 2D, 3D, IMAX) directly within movie listings.

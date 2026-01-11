@@ -19,7 +19,8 @@ Implement a dedicated News Details screen in the mobile application to allow use
 
 ## Phase 3: Integration
 - [x] Task: Update `HomeScreen.tsx` to navigate to `NewsDetailsScreen` when a news item is pressed 7b328ef
-- [ ] Task: Verify data flow from `HomeScreen` to `NewsDetailsScreen`
+- [~] Task: Verify data flow from `HomeScreen` to `NewsDetailsScreen`
+- [x] Task: Verify data flow from `HomeScreen` to `NewsDetailsScreen` 7b328ef
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Integration' (Protocol in workflow.md)
 
 ## Phase 4: Final Polish

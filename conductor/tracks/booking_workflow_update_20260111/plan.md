@@ -1,6 +1,6 @@
 # Plan: Update Booking Service Workflow Documentation
 
-## Phase 1: Analysis and Verification
+## Phase 1: Analysis and Verification [checkpoint: 9c00ddc]
 - [x] Task: Analyze Booking Service Code
     - [x] Sub-task: Review `backend/src/application/services` for booking-related logic.
     - [x] Sub-task: Review `backend/src/domain/models` for booking entities and state transitions.

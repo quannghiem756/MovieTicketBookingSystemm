@@ -18,5 +18,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [ ] Track: Update Booking Service Workflow Documentation
+## [~] Track: Update Booking Service Workflow Documentation
 *Link: [./conductor/tracks/booking_workflow_update_20260111/](./conductor/tracks/booking_workflow_update_20260111/)*

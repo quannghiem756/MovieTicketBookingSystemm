@@ -22,7 +22,7 @@ Implement a dedicated News Details screen in the mobile application to allow use
 - [x] Task: Verify data flow from `HomeScreen` to `NewsDetailsScreen` 7b328ef
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Integration' (Protocol in workflow.md) c2d4429
 
-## Phase 4: Final Polish
+## Phase 4: Final Polish [checkpoint: 1daf1ab]
 - [x] Task: Final styling and responsiveness check on different screen sizes d5166d9
 - [x] Task: Add JSDoc documentation for new components and services 61d983d
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Final Polish' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Final Polish' (Protocol in workflow.md) 1daf1ab

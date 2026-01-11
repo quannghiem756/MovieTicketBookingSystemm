@@ -3,12 +3,12 @@
 ## Overview
 Implement a dedicated News Details screen in the mobile application to allow users to read the full content of news articles, mirroring the functionality and layout of the web version.
 
-## Phase 1: Setup and Infrastructure
+## Phase 1: Setup and Infrastructure [checkpoint: e2624e6]
 - [x] Task: Install `react-native-render-html` and `domhandler` b3694c4
 - [x] Task: Add `getNewsById` to `mobile-app/src/services/movieService.ts` d4c70f7
 - [x] Task: Add news-related translations (title, categories) to `mobile-app/src/translations/en.ts` and `vi.ts` d7c0c75
 - [x] Task: Define `NewsDetails` route in `mobile-app/src/navigation/AppNavigator.tsx` c054376
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Setup and Infrastructure' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Setup and Infrastructure' (Protocol in workflow.md) e2624e6
 
 ## Phase 2: Screen Development (TDD)
 - [ ] Task: Create `NewsDetailsScreen` component skeleton and tests

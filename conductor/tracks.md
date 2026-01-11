@@ -19,5 +19,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [x] Track: adjust the redirectUrl for the momopaymentUrl so that it could redirect back correctly on mobile app checkout
-*Link: [./conductor/tracks/momo_mobile_redirect_20260110/](./conductor/tracks/momo_mobile_redirect_20260110/)*
+
+
+## [x] Track: Mobile Booking Flow and Auth Refresh
+
+*Link: [./conductor/tracks/mobile_booking_auth_refresh_20260110/](./conductor/tracks/mobile_booking_auth_refresh_20260110/)*

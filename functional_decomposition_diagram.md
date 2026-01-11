@@ -2,126 +2,79 @@
 
 ```mermaid
 graph TB
-    subgraph "Frontend Client"
-        A[Web/Mobile UI]
+    subgraph "Client Layer"
+        UI[Web & Mobile UI]
     end
-    
-    subgraph "Backend Services"
-        B[User Service]
-        C[Movie Service]
-        D[Theater Service]
-        E[Showtime Service]
-        F[Booking Service]
-        G[Payment Service]
-        H[Recommendation Service]
+
+    subgraph "API Gateway / Auth"
+        Auth[Auth Service]
     end
-    
-    subgraph "Authentication & Authorization"
-        I[Auth Service]
+
+    subgraph "Feature Modules"
+        User[User Management]
+        Movie[Movie Management]
+        Theater[Theater Management]
+        Showtime[Showtime Management]
+        Booking[Booking Management]
+        Payment[Payment Processing]
+        Rec[Recommendation Engine]
     end
-    
-    subgraph "Infrastructure Services"
-        J[MongoDB Repositories]
-        K[ChromaDB Vector Store]
-        L[External APIs]
+
+    subgraph "Data & Infrastructure"
+        DB[(MongoDB)]
+        VectorDB[(ChromaDB)]
     end
-    
-    subgraph "Controllers Layer"
-        M[User Controller]
-        N[Movie Controller]
-        O[Theater Controller]
-        P[Showtime Controller]
-        Q[Booking Controller]
-        R[Payment Controller]
-        S[Recommendation Controller]
+
+    subgraph "External Integrations"
+        MoMo[MoMo Payment API]
+        ExtMovie[External Movie APIs]
     end
-    
-    subgraph "Application Services Layer"
-        T[User Service App]
-        U[Movie Service App]
-        V[Theater Service App]
-        W[Showtime Service App]
-        X[Booking Service App]
-        Y[Payment Service App]
-        Z[Recommendation Service App]
-    end
-    
-    subgraph "Domain Models & Repositories"
-        AA[User Domain]
-        BB[Movie Domain]
-        CC[Theater Domain]
-        DD[Showtime Domain]
-        EE[Booking Domain]
-        FF[Payment Logic]
-        GG[MongoUser Repo]
-        HH[MongoMovie Repo]
-        II[MongoTheater Repo]
-        JJ[MongoShowtime Repo]
-        KK[MongoBooking Repo]
-        LL[Vector Service]
-    end
-    
-    subgraph "External Systems"
-        MM[MoMo Payment API]
-        NN[Movie APIs]
-    end
-    
-    A -- "Register/Login/Profile requests" --> B
-    A -- "Get/Find movies" --> C
-    A -- "Get/Find theaters" --> D
-    A -- "Get/Find showtimes" --> E
-    A -- "Create/View bookings" --> F
-    A -- "Payment requests" --> G
-    A -- "Recommendation requests" --> H
-    
-    A -- "Authentication tokens" --> I
-    
-    B -- "Validate/Manage user data" --> M
-    C -- "Validate/Manage movie data" --> N
-    D -- "Validate/Manage theater data" --> O
-    E -- "Validate/Manage showtime data" --> P
-    F -- "Validate/Manage booking data" --> Q
-    G -- "Process payments" --> R
-    H -- "Generate recommendations" --> S
-    
-    M -- "Business logic" --> T
-    N -- "Business logic" --> U
-    O -- "Business logic" --> V
-    P -- "Business logic" --> W
-    Q -- "Business logic" --> X
-    R -- "Business logic" --> Y
-    S -- "Business logic" --> Z
-    
-    T -- "Domain validation" --> AA
-    U -- "Domain validation" --> BB
-    V -- "Domain validation" --> CC
-    W -- "Domain validation" --> DD
-    X -- "Domain validation" --> EE
-    Y -- "Domain validation" --> FF
-    Z -- "Domain validation" --> LL
-    
-    AA -- "Persist user data" --> GG
-    BB -- "Persist movie data" --> HH
-    CC -- "Persist theater data" --> II
-    DD -- "Persist showtime data" --> JJ
-    EE -- "Persist booking data" --> KK
-    
-    GG -- "MongoDB Storage" --> J
-    HH -- "MongoDB Storage" --> J
-    II -- "MongoDB Storage" --> J
-    JJ -- "MongoDB Storage" --> J
-    KK -- "MongoDB Storage" --> J
-    
-    Z -- "Query vectors" --> K
-    K -- "Vector similarity" --> LL
-    LL -- "Fetch movie data" --> NN
-    
-    Y -- "Process payment" --> MM
-    
-    style A fill:#e1f5fe
-    style Backend fill:#f3e5f5
-    style Infrastructure fill:#e8f5e8
-    style External fill:#fff3e0
+
+    %% Client Interactions
+    UI -->|Auth & Tokens| Auth
+    UI -->|User Actions| User
+    UI -->|Browse Movies| Movie
+    UI -->|View Theaters| Theater
+    UI -->|Check Showtimes| Showtime
+    UI -->|Book Tickets| Booking
+    UI -->|Pay| Payment
+    UI -->|Get Recommendations| Rec
+
+    %% Feature Dependencies
+    Booking -->|Verify| User
+    Booking -->|Verify| Showtime
+    Payment -->|Process| Booking
+    Rec -->|Analyze| User
+    Rec -->|Analyze| Movie
+
+    %% Data Access
+    User --> DB
+    Movie --> DB
+    Theater --> DB
+    Showtime --> DB
+    Booking --> DB
+    Payment --> DB
+
+    %% Vector Search
+    Rec --> VectorDB
+    Movie --> VectorDB
+
+    %% External Calls
+    Payment --> MoMo
+    Movie --> ExtMovie
+
+    %% Styling
+    classDef client fill:#e3f2fd,stroke:#1565c0,stroke-width:2px;
+    classDef auth fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px;
+    classDef feature fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
+    classDef infra fill:#fff3e0,stroke:#ef6c00,stroke-width:2px;
+    classDef ext fill:#eceff1,stroke:#455a64,stroke-width:2px;
+
+    class UI client;
+    class Auth auth;
+    class User,Movie,Theater,Showtime,Booking,Payment,Rec feature;
+    class DB,VectorDB infra;
+    class MoMo,ExtMovie ext;
 ```
 
 ## System Architecture Overview

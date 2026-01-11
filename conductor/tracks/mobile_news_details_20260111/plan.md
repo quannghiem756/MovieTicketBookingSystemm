@@ -5,7 +5,7 @@ Implement a dedicated News Details screen in the mobile application to allow use
 
 ## Phase 1: Setup and Infrastructure
 - [x] Task: Install `react-native-render-html` and `domhandler` b3694c4
-- [ ] Task: Add `getNewsById` to `mobile-app/src/services/movieService.ts`
+- [x] Task: Add `getNewsById` to `mobile-app/src/services/movieService.ts` d4c70f7
 - [ ] Task: Add news-related translations (title, categories) to `mobile-app/src/translations/en.ts` and `vi.ts`
 - [ ] Task: Define `NewsDetails` route in `mobile-app/src/navigation/AppNavigator.tsx`
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Setup and Infrastructure' (Protocol in workflow.md)

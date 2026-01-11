@@ -1,183 +1,105 @@
 # Booking Service Workflow
 
-## Create Booking
+The Booking Service handles the end-to-end process of reserving seats, processing payments (via MoMo or Cash), and validating tickets at the theater.
 
-### Actors
-- Frontend (Client)
-- Booking Routes
-- Booking Controller
-- Booking Service
-- MongoBooking Repository
+## Core States
+- `held`: Temporary lock on seats (Expires in 10 minutes).
+- `pending`: Booking created, awaiting payment (Expires in 15 minutes).
+- `confirmed`: Payment successful or Cash booking confirmed.
+- `redeemed`: Ticket has been validated and used at the theater.
+- `cancelled`: Booking cancelled by user or system (timeout).
 
-### Workflow
-1. **Frontend** sends a POST request to `/bookings` endpoint with booking data (showtimeId, userId, seatIds)
-2. **Booking Routes** receives the request and validates the request body format and required fields
-3. **Booking Routes** calls the controller method `createBooking()`
-4. **Booking Controller** validates the booking data structure and required fields
-5. **Booking Controller** calls the service method `createBooking(bookingData)`
-6. **Booking Service** validates business rules (seat availability, showtime validity, user existence, etc.)
-7. **Booking Service** checks seat availability and conflicts
-8. **Booking Service** calls the repository method `create(booking)` to save the booking to the database
-9. **MongoBooking Repository** creates the booking in the database
-10. **MongoBooking Repository** returns the created booking data to the **Booking Service**
-11. **Booking Service** returns the booking data to the **Booking Controller**
-12. **Booking Controller** returns the booking data to **Booking Routes**
-13. **Booking Routes** returns the booking data to **Frontend**
+---
 
-### Data Flow
-- Request: POST `/bookings` with booking data
-- Repository Operation: `create(booking)`
-- Response: Created booking object with details
+## 1. Seat Locking (Hold/Release)
 
-### Validation Points
-- **Booking Routes**: Validates request body format, content type, and presence of required fields
-- **Booking Controller**: Validates data structure and field types
-- **Booking Service**: Validates business rules (seat availability, showtime existence, user validity, etc.)
-- **MongoBooking Repository**: Validates data integrity constraints at database level
+### Hold Seat
+**Endpoint:** `POST /bookings/hold`
 
-### Success Path
-- All components successfully pass data between each other
-- Booking is successfully created in the database
-- Frontend receives the complete booking information
+1. **Age Check:** Service verifies if the user meets the movie's age rating.
+2. **Collision Check:** Verifies if the seat is already reserved or held by another user.
+3. **Manage Hold:**
+    - If user has an existing `held` booking for this showtime: Adds seat to it (Max 8 seats).
+    - Otherwise: Creates a new booking with status `held`.
+4. **Expiration:** Sets `expiresAt` to 10 minutes from now.
+5. **Socket Event:** Emits `seat_held` to the showtime room.
 
-### Error Path
-- Invalid request format results in 400 error at route level
-- Business rule violations result in 400/409 errors at service level
-- Database constraint violations result in 409/500 errors
+### Release Seat
+**Endpoint:** `POST /bookings/release`
 
-## Get Booking by ID
+1. **Remove Seat:** Removes the specified seat from the user's active hold.
+2. **Cleanup:** If no seats remain in the booking, the booking record is deleted.
+3. **Socket Event:** Emits `seat_released`.
 
-### Actors
-- Frontend (Client)
-- Booking Routes
-- Booking Controller
-- Booking Service
-- MongoBooking Repository
+---
 
-### Workflow
-1. **Frontend** sends a GET request to `/bookings/:id` endpoint
-2. **Booking Routes** receives the request and validates the booking ID format in the URL
-3. **Booking Routes** calls the controller method `getBooking()`
-4. **Booking Controller** validates the booking ID parameter format
-5. **Booking Controller** calls the service method `getBooking(bookingId)`
-6. **Booking Service** validates the booking ID format and access permissions
-7. **Booking Service** calls the repository method `findById(bookingId)` to retrieve booking from the database
-8. **MongoBooking Repository** retrieves the booking data from the database
-9. **MongoBooking Repository** returns the booking data to the **Booking Service**
-10. **Booking Service** returns the booking data to the **Booking Controller** (excluding sensitive information)
-11. **Booking Controller** returns the booking data to **Booking Routes**
-12. **Booking Routes** returns the booking data to **Frontend**
+## 2. Booking Creation & Payment
 
-### Data Flow
-- Request: GET `/bookings/:id`
-- Repository Query: `findById(bookingId)`
-- Response: Booking object with details
+### Create Booking
+**Endpoint:** `POST /bookings`
 
-### Validation Points
-- **Booking Routes**: Validates booking ID format in URL path parameter
-- **Booking Controller**: Validates booking ID parameter format and type
-- **Booking Service**: Validates booking ID format and checks access permissions
-- **MongoBooking Repository**: Validates data integrity constraints at database level
+1. **Eligibility:** Re-verifies age and seat availability.
+2. **Coupons:** Validates and applies coupon codes if provided.
+3. **Process Upgrade:**
+    - Typically upgrades an existing `held` booking to `pending` or `confirmed`.
+    - If `paymentMethod` is `cash`, status becomes `confirmed`.
+    - If `paymentMethod` is `momo`, status becomes `pending`.
+4. **Expirations:** 
+    - `pending` bookings expire in 15 minutes.
+    - `confirmed` bookings have no expiration (`null`).
+5. **Validation Token:** If confirmed immediately, a JWT `validationToken` is generated.
+6. **Socket Event:** If confirmed, emits `seat_confirmed`.
 
-### Success Path
-- All components successfully pass data between each other
-- Booking is successfully retrieved from the database
-- Frontend receives the booking information
+### Confirm Booking
+**Endpoint:** `POST /bookings/:id/confirm` (MoMo Callback/Simulation)
 
-### Error Path
-- Invalid booking ID format results in 400 error at route level
-- Unauthorized access results in 403 error at service level
-- Booking not found results in 404 error at service level
-- Database constraint violations result in 409/500 errors
+1. **Status Update:** Updates status to `confirmed`.
+2. **Finalize:**
+    - Clears `expiresAt`.
+    - Generates `validationToken`.
+    - Sends confirmation email with QR code data.
+3. **Socket Event:** Emits `seat_confirmed`.
 
-## Get Bookings by User
+---
 
-### Actors
-- Frontend (Client)
-- Booking Routes
-- Booking Controller
-- Booking Service
-- MongoBooking Repository
+## 3. Ticket Validation (Theater)
 
-### Workflow
-1. **Frontend** sends a GET request to `/bookings/user/:userId` endpoint with authentication token
-2. **Booking Routes** receives the request and validates the authentication token and user ID format
-3. **Booking Routes** authenticates the user and checks authorization
-4. **Booking Routes** calls the controller method `getBookingsByUser()`
-5. **Booking Controller** validates the user ID parameter format and authorization context
-6. **Booking Controller** calls the service method `getBookingsByUser(userId)`
-7. **Booking Service** validates the user ID format and access permissions
-8. **Booking Service** calls the repository method `findByUserId(userId)` to retrieve user's bookings from the database
-9. **MongoBooking Repository** retrieves the booking data for the user from the database
-10. **MongoBooking Repository** returns the booking list to the **Booking Service**
-11. **Booking Service** returns the booking list to the **Booking Controller** (excluding sensitive information)
-12. **Booking Controller** returns the booking list to **Booking Routes**
-13. **Booking Routes** returns the booking list to **Frontend**
+### Validate Ticket
+**Endpoint:** `GET /bookings/validate?token=<JWT>`
 
-### Data Flow
-- Request: GET `/bookings/user/:userId` with authentication
-- Repository Query: `findByUserId(userId)`
-- Response: List of booking objects for the user
+1. **Token Verification:** Decodes JWT to get `bookingId`.
+2. **Time Window Check:** 
+    - Ticket is valid starting **60 minutes before** show start.
+    - Ticket expires **30 minutes after** show start.
+3. **Status Check:** Must be `confirmed` and not already `redeemed`.
+4. **Redeem:** Updates status to `redeemed`.
+5. **Response:** Returns booking details (Seats, ID) for staff verification.
 
-### Validation Points
-- **Booking Routes**: Validates authentication token format and user ID format
-- **Booking Controller**: Validates user ID parameter format and authorization context
-- **Booking Service**: Validates user ID format and checks access permissions
-- **MongoBooking Repository**: Validates data integrity constraints at database level
+---
 
-### Success Path
-- All components successfully pass data between each other
-- User's bookings are successfully retrieved from the database
-- Frontend receives the user's booking information
+## 4. Administrative Actions
 
-### Error Path
-- Invalid token or user ID format results in 400/401 error at route level
-- Unauthorized access results in 403 error at service level
-- Database constraint violations result in 409/500 errors
+### Manual Redeem
+**Endpoint:** `POST /bookings/:id/redeem` (Staff only)
+- Directly marks a `confirmed` or `paid` booking as `redeemed`.
+- Creates an audit log entry.
 
-## Cancel Booking
+### Search Bookings
+**Endpoint:** `GET /bookings/search?query=<Email/Phone>`
+- Finds users matching the query and returns their booking history.
 
-### Actors
-- Frontend (Client)
-- Booking Routes
-- Booking Controller
-- Booking Service
-- MongoBooking Repository
+### Cancel Booking
+**Endpoint:** `POST /bookings/:id/cancel`
+- Marks status as `cancelled`.
+- Restores coupon usage if applicable.
 
-### Workflow
-1. **Frontend** sends a PUT/PATCH request to `/bookings/:id/cancel` endpoint with booking ID
-2. **Booking Routes** receives the request and validates the booking ID format in the URL
-3. **Booking Routes** authenticates the user and checks authorization to cancel the booking
-4. **Booking Routes** calls the controller method `cancelBooking()`
-5. **Booking Controller** validates the booking ID parameter format and authorization context
-6. **Booking Controller** calls the service method `cancelBooking(bookingId)`
-7. **Booking Service** validates the booking ID format, checks booking existence, and verifies cancellation eligibility
-8. **Booking Service** updates the booking status to 'cancelled' in the database
-9. **Booking Service** calls the repository method `updateStatus(bookingId, 'cancelled')` to update booking status
-10. **MongoBooking Repository** updates the booking record in the database
-11. **MongoBooking Repository** returns the updated booking data to the **Booking Service**
-12. **Booking Service** returns the updated booking data to the **Booking Controller**
-13. **Booking Controller** returns the booking data to **Booking Routes**
-14. **Booking Routes** returns the booking data to **Frontend**
+---
 
-### Data Flow
-- Request: PUT/PATCH `/bookings/:id/cancel` with booking ID
-- Repository Operation: `updateStatus(bookingId, 'cancelled')`
-- Response: Updated booking object with cancelled status
+## Data Flow Summary
 
-### Validation Points
-- **Booking Routes**: Validates booking ID format in URL path parameter and user authorization
-- **Booking Controller**: Validates booking ID parameter format and authorization context
-- **Booking Service**: Validates booking ID format, checks existence, and verifies cancellation eligibility (e.g., not already cancelled, within cancellation window)
-- **MongoBooking Repository**: Validates data integrity constraints at database level
-
-### Success Path
-- All components successfully pass data between each other
-- Booking is successfully cancelled in the database
-- Frontend receives the updated booking information with cancelled status
-
-### Error Path
-- Invalid booking ID format results in 400 error at route level
-- Unauthorized access results in 403 error at service level
-- Invalid cancellation attempt (e.g., already cancelled, past showtime) results in 400/409 error at service level
-- Database constraint violations result in 409/500 errors
+| Action | API Method | Initial Status | Final Status | Key Logic |
+| :--- | :--- | :--- | :--- | :--- |
+| **Pick Seat** | `POST /hold` | N/A | `held` | Age Check, Collision Check |
+| **Checkout** | `POST /` | `held` | `pending` | Coupon, Price Calc |
+| **Pay** | `POST /confirm` | `pending` | `confirmed` | Email, Validation Token |
+| **Entry** | `GET /validate` | `confirmed` | `redeemed` | Time Window Check |

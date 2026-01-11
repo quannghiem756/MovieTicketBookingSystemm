@@ -14,8 +14,8 @@
 - [x] Task: Conductor - User Manual Verification 'Analysis and Verification' (Protocol in workflow.md)
 
 ## Phase 2: Documentation Update
-- [ ] Task: Update `booking-service-workflow.md`
-    - [ ] Sub-task: Correct outdated sections based on analysis.
-    - [ ] Sub-task: Add missing details for complex logic or new features.
-    - [ ] Sub-task: Ensure formatting and style consistency.
-- [ ] Task: Conductor - User Manual Verification 'Documentation Update' (Protocol in workflow.md)
+- [x] Task: Update `booking-service-workflow.md`
+    - [x] Sub-task: Correct outdated sections based on analysis.
+    - [x] Sub-task: Add missing details for complex logic or new features.
+    - [x] Sub-task: Ensure formatting and style consistency.
+- [x] Task: Conductor - User Manual Verification 'Documentation Update' (Protocol in workflow.md)

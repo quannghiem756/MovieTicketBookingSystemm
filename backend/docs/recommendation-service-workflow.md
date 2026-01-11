@@ -52,3 +52,38 @@
 - Invalid query parameters result in 400 error at service level
 - ChromaDB connection/search errors result in 500 errors
 - Movie API unavailability results in partial recommendations or 500 errors
+
+## Biểu đồ tuần tự
+
+```mermaid
+sequenceDiagram
+    actor User as Người dùng
+    participant Client as Frontend
+    participant Route as Recommendation Routes
+    participant Controller as Recommendation Controller
+    participant VectorSvc as Vector Service (Python)
+    participant Chroma as ChromaDB
+    participant MovieAPI as Movie API (Node.js)
+
+    %% Get Movie Recommendations
+    Note over User, MovieAPI: Quy trình Gợi ý Phim
+    User->>Client: Yêu cầu gợi ý (Sở thích/Query)
+    Client->>Route: POST /recommendations
+    Route->>Controller: getMovieRecommendations()
+    Controller->>VectorSvc: POST /recommend (Query Data)
+    VectorSvc->>VectorSvc: Validate Input & Vectorize
+    VectorSvc->>Chroma: Vector Similarity Search
+    Chroma-->>VectorSvc: Relevant Movie IDs
+    
+    par Fetch Additional Details
+        VectorSvc->>MovieAPI: GET /movies/now-showing
+        VectorSvc->>MovieAPI: GET /movies/coming-soon
+    end
+    
+    MovieAPI-->>VectorSvc: Movie Lists
+    VectorSvc->>VectorSvc: Filter & Enrich Results
+    VectorSvc-->>Controller: Recommended Movies List
+    Controller-->>Route: Recommended Movies List
+    Route-->>Client: JSON Response
+    Client->>User: Hiển thị danh sách gợi ý
+```

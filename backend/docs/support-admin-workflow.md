@@ -110,3 +110,56 @@ The logic is encapsulated within the `SupportService._calculatePriority(category
 2. **Admin** clicks "Manual Redeem".
 3. **Frontend** sends PATCH request to `/api/bookings/:id/manual-redeem`.
 4. **Booking Service** verifies status (`paid`/`confirmed`), updates to `redeemed`, and logs the action in `AuditLogs`.
+
+## Biểu đồ tuần tự
+
+```mermaid
+sequenceDiagram
+    actor User as Người dùng
+    actor Admin as Quản trị viên/Staff
+    participant Client as Frontend
+    participant Route as Support Routes
+    participant Controller as Support Controller
+    participant Service as Support Service
+    participant Repo as Ticket Repository
+    participant Email as Email Service
+
+    %% Create Ticket (User)
+    Note over User, Email: 1. Tạo yêu cầu hỗ trợ (User)
+    User->>Client: Gửi Form "Liên hệ"
+    Client->>Route: POST /api/support/tickets
+    Route->>Service: createTicket(data)
+    Service->>Service: _calculatePriority(category)
+    Service->>Repo: Lưu Ticket (Status: Open)
+    Repo-->>Service: Ticket Created
+    Service-->>Client: Success
+
+    %% Admin Reply
+    Note over Admin, Email: 2. Phản hồi yêu cầu (Admin)
+    Admin->>Client: Trả lời Ticket
+    Client->>Route: POST /api/support/tickets/:id/reply
+    Route->>Service: addReply(content, role='Staff')
+    Service->>Repo: Lưu Comment & Cập nhật Status: Replied
+    Service->>Email: Gửi Email thông báo (kèm Link Secure)
+    Email-->>User: Email Notification
+
+    %% User Reply (Public)
+    Note over User, Email: 3. Người dùng phản hồi (Public Link)
+    User->>Client: Click Link trong Email
+    Client->>Route: GET /api/support/public/:token
+    Route->>Service: verifyToken() & getDetails()
+    Service-->>Client: Ticket Details
+    User->>Client: Gửi phản hồi
+    Client->>Route: POST /api/support/public/:token/reply
+    Route->>Service: addReply(content, role='User')
+    Service->>Repo: Lưu Comment
+    Service-->>Client: Success (Cập nhật giao diện)
+
+    %% Resolve Ticket
+    Note over Admin, Email: 4. Giải quyết yêu cầu (Resolve)
+    Admin->>Client: Click "Resolve"
+    Client->>Route: PATCH /.../status (Resolved)
+    Route->>Service: updateStatus('Resolved')
+    Service->>Repo: Cập nhật DB
+    Service-->>Client: Success
+```

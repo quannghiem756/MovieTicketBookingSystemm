@@ -103,3 +103,86 @@ The Booking Service handles the end-to-end process of reserving seats, processin
 | **Checkout** | `POST /` | `held` | `pending` | Coupon, Price Calc |
 | **Pay** | `POST /confirm` | `pending` | `confirmed` | Email, Validation Token |
 | **Entry** | `GET /validate` | `confirmed` | `redeemed` | Time Window Check |
+
+## Biểu đồ tuần tự
+
+```mermaid
+sequenceDiagram
+    actor User as Người dùng
+    participant Client as Frontend
+    participant Route as Booking Routes
+    participant Controller as Booking Controller
+    participant Service as Booking Service
+    participant Repo as Booking Repo
+    participant Socket as Socket.io
+    participant MoMo as MoMo API
+
+    %% Seat Locking
+    Note over User, MoMo: 1. Giữ Chỗ (Hold Seat)
+    User->>Client: Chọn ghế
+    Client->>Route: POST /bookings/hold
+    Route->>Controller: holdSeat()
+    Controller->>Service: holdSeat(userId, showtimeId, seats)
+    Service->>Service: Kiểm tra độ tuổi & Xung đột ghế
+    alt Ghế đã bị giữ
+        Service-->>Controller: Lỗi: Ghế không khả dụng
+        Controller-->>Client: 409 Conflict
+    else Ghế khả dụng
+        Service->>Repo: Tạo/Cập nhật Booking (Status: held)
+        Repo-->>Service: Booking đã lưu
+        Service->>Socket: Emit 'seat_held'
+        Service-->>Controller: Booking Details
+        Controller-->>Client: 200 OK (Booking ID)
+    end
+
+    %% Booking Creation
+    Note over User, MoMo: 2. Tạo Đặt Vé (Create Booking)
+    User->>Client: Xác nhận đặt vé (Chọn thanh toán)
+    Client->>Route: POST /bookings
+    Route->>Controller: createBooking()
+    Controller->>Service: createBooking(bookingId, paymentMethod, coupon)
+    Service->>Service: Kiểm tra lại ghế & Áp dụng Coupon
+    alt Thanh toán Tiền mặt
+        Service->>Repo: Cập nhật Status: confirmed
+        Repo-->>Service: Updated Booking
+        Service->>Socket: Emit 'seat_confirmed'
+        Service-->>Controller: Booking Details (Confirmed)
+        Controller-->>Client: 200 OK
+    else Thanh toán MoMo
+        Service->>Repo: Cập nhật Status: pending
+        Repo-->>Service: Updated Booking
+        Service-->>Controller: Booking Details (Pending)
+        Controller-->>Client: 200 OK
+        Client->>Route: POST /payment/create/:id
+        Route->>Controller: PaymentController.createUrl()
+        Controller->>MoMo: Tạo yêu cầu thanh toán
+        MoMo-->>Client: URL Thanh toán
+    end
+
+    %% Payment Confirmation (MoMo)
+    Note over User, MoMo: 3. Xác nhận Thanh toán (Webhook)
+    MoMo->>Route: POST /payment/callback
+    Route->>Controller: PaymentController.callback()
+    Controller->>Service: confirmBooking()
+    Service->>Repo: Cập nhật Status: confirmed
+    Service->>Service: Tạo Validation Token & Gửi Email
+    Service->>Socket: Emit 'seat_confirmed'
+    Service-->>Controller: Success
+    Controller-->>MoMo: 204 No Content
+
+    %% Ticket Validation
+    Note over User, MoMo: 4. Soát Vé (Tại Rạp)
+    User->>Client: Đưa mã QR cho nhân viên
+    Client->>Route: GET /bookings/validate?token=...
+    Route->>Controller: validateTicket()
+    Controller->>Service: validateTicket(token)
+    Service->>Service: Verify JWT & Kiểm tra thời gian
+    alt Vé hợp lệ
+        Service->>Repo: Cập nhật Status: redeemed
+        Service-->>Controller: Booking Details
+        Controller-->>Client: 200 OK (Cho phép vào)
+    else Vé không hợp lệ / Hết hạn
+        Service-->>Controller: Lỗi Validation
+        Controller-->>Client: 400 Bad Request
+    end
+```

@@ -88,3 +88,42 @@
 - Invalid MoMo signature results in 401 error at route level
 - Invalid callback data results in 400 error at service level
 - Database constraint violations result in 409/500 errors
+
+## Biểu đồ tuần tự
+
+```mermaid
+sequenceDiagram
+    actor User as Người dùng
+    participant Client as Frontend
+    participant Route as Payment Routes
+    participant Service as Payment Service
+    participant Repo as Booking Repository
+    participant MoMo as MoMo API
+
+    %% Create Payment URL
+    Note over User, MoMo: 1. Tạo liên kết thanh toán MoMo
+    User->>Client: Chọn thanh toán MoMo
+    Client->>Route: POST /create/:bookingId
+    Route->>Service: createMomoPaymentUrl(bookingId)
+    Service->>Repo: findById(bookingId)
+    Repo-->>Service: Booking Data
+    Service->>Service: Validate Booking (Status, Amount)
+    Service->>MoMo: POST Request (Create Payment)
+    MoMo-->>Service: Payment URL
+    Service-->>Route: Payment URL
+    Route-->>Client: Payment URL
+    Client->>User: Redirect tới MoMo
+
+    %% Payment Callback
+    Note over User, MoMo: 2. Xử lý Callback (Webhook)
+    MoMo->>Route: POST /callback (Payment Result)
+    Route->>Route: Verify Signature (Bảo mật)
+    Route->>Service: processCallback(data)
+    Service->>Service: Validate Data & Status
+    Service->>MoMo: Verify Transaction Status (Double Check)
+    MoMo-->>Service: Transaction Info
+    Service->>Repo: updatePaymentStatus()
+    Repo-->>Service: Success
+    Service-->>Route: Success
+    Route-->>MoMo: 204 No Content (Ack)
+```

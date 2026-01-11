@@ -216,6 +216,139 @@
 - Frontend receives deletion confirmation
 
 ### Error Path
+
 - Invalid theater ID format results in 400 error at route level
+
 - Theater not found results in 404 error at service level
+
 - Database constraint violations result in 409/500 errors
+
+
+
+## Biểu đồ tuần tự
+
+
+
+```mermaid
+
+sequenceDiagram
+
+    actor Admin as Admin/Frontend
+
+    participant Route as Theater Routes
+
+    participant Controller as Theater Controller
+
+    participant Service as Theater Service
+
+    participant Repo as MongoTheater Repository
+
+    participant DB as MongoDB
+
+
+
+    %% Get All Theaters
+
+    Note over Admin, DB: 1. Lấy danh sách rạp (Get All)
+
+    Admin->>Route: GET /theaters
+
+    Route->>Controller: getAllTheaters()
+
+    Controller->>Service: getAllTheaters()
+
+    Service->>Repo: findAll()
+
+    Repo->>DB: Query Theaters
+
+    DB-->>Repo: Theaters List
+
+    Repo-->>Service: Theaters List
+
+    Service-->>Controller: Theaters List
+
+    Controller-->>Route: Theaters List
+
+    Route-->>Admin: JSON Response
+
+
+
+    %% Create Theater
+
+    Note over Admin, DB: 2. Tạo rạp mới (Create)
+
+    Admin->>Route: POST /theaters (Data)
+
+    Route->>Controller: createTheater()
+
+    Controller->>Service: createTheater(data)
+
+    Service->>Service: Validate & Check Duplicates
+
+    Service->>Repo: create(data)
+
+    Repo->>DB: Insert Theater
+
+    DB-->>Repo: Created Theater
+
+    Repo-->>Service: Created Theater
+
+    Service-->>Controller: Created Theater
+
+    Controller-->>Route: Created Theater
+
+    Route-->>Admin: 201 Created
+
+
+
+    %% Update Theater
+
+    Note over Admin, DB: 3. Cập nhật rạp (Update)
+
+    Admin->>Route: PUT /theaters/:id
+
+    Route->>Controller: updateTheater()
+
+    Controller->>Service: updateTheater(id, data)
+
+    Service->>Repo: updateById(id, data)
+
+    Repo->>DB: Update Theater
+
+    DB-->>Repo: Updated Theater
+
+    Repo-->>Service: Updated Theater
+
+    Service-->>Controller: Updated Theater
+
+    Controller-->>Route: Updated Theater
+
+    Route-->>Admin: 200 OK
+
+
+
+    %% Delete Theater
+
+    Note over Admin, DB: 4. Xóa rạp (Delete)
+
+    Admin->>Route: DELETE /theaters/:id
+
+    Route->>Controller: deleteTheater()
+
+    Controller->>Service: deleteTheater(id)
+
+    Service->>Repo: deleteById(id)
+
+    Repo->>DB: Remove Document
+
+    DB-->>Repo: Success
+
+    Repo-->>Service: Success
+
+    Service-->>Controller: Success
+
+    Controller-->>Route: Success
+
+    Route-->>Admin: 200 OK
+
+```

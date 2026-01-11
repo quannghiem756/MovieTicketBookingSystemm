@@ -268,3 +268,94 @@
 ### Error Path
 - Authentication/Authorization failure returns 401/403
 - Missing file returns 400 `{ "error": "No image file provided" }`
+
+## Biểu đồ tuần tự
+
+```mermaid
+sequenceDiagram
+    actor Admin as Quản trị viên (Admin)
+    actor User as Người dùng (Public)
+    participant Client as Frontend
+    participant Route as News Routes
+    participant Controller as News Controller
+    participant Service as News Service
+    participant Repo as MongoNews Repository
+    participant DB as MongoDB
+
+    %% Get All News (Admin)
+    Note over Admin, DB: 1. Lấy tất cả tin tức (Admin)
+    Admin->>Client: Xem danh sách tin tức
+    Client->>Route: GET /news
+    Route->>Controller: getAll()
+    Controller->>Service: getAllNews(page, limit)
+    Service->>Repo: findAllWithPagination()
+    Repo->>DB: Query All News
+    DB-->>Repo: News List
+    Repo-->>Service: News List
+    Service-->>Controller: News List
+    Controller-->>Route: News List
+    Route-->>Client: Hiển thị danh sách
+
+    %% Get Published News (Public)
+    Note over User, DB: 2. Lấy tin tức đã xuất bản (Public)
+    User->>Client: Xem trang tin tức
+    Client->>Route: GET /news/published
+    Route->>Controller: getPublishedNews()
+    Controller->>Service: getPublishedNews()
+    Service->>Repo: findPublishedWithPagination()
+    Repo->>DB: Query { published: true }
+    DB-->>Repo: Published News
+    Repo-->>Service: Published News
+    Service-->>Controller: Published News
+    Controller-->>Route: Published News
+    Route-->>Client: Hiển thị tin tức
+
+    %% Create News (Admin)
+    Note over Admin, DB: 3. Tạo tin tức mới (Admin)
+    Admin->>Client: Nhập nội dung & Đăng
+    Client->>Route: POST /news
+    Route->>Controller: create()
+    Controller->>Service: createNews(data)
+    Service->>Repo: create(data)
+    Repo->>DB: Insert News
+    DB-->>Repo: Created News
+    Repo-->>Service: Created News
+    Service-->>Controller: Created News
+    Controller-->>Route: Created News
+    Route-->>Client: Thông báo thành công
+
+    %% Update News (Admin)
+    Note over Admin, DB: 4. Cập nhật tin tức (Admin)
+    Admin->>Client: Chỉnh sửa & Lưu
+    Client->>Route: PUT /news/:id
+    Route->>Controller: update()
+    Controller->>Service: updateNews(id, data)
+    Service->>Repo: update(id, data)
+    Repo->>DB: Find & Update
+    DB-->>Repo: Updated News
+    Repo-->>Service: Updated News
+    Service-->>Controller: Updated News
+    Controller-->>Route: Updated News
+    Route-->>Client: Thông báo cập nhật
+
+    %% Delete News (Admin)
+    Note over Admin, DB: 5. Xóa tin tức (Admin)
+    Admin->>Client: Chọn xóa
+    Client->>Route: DELETE /news/:id
+    Route->>Controller: delete()
+    Controller->>Service: deleteNews(id)
+    Service->>Repo: delete(id)
+    Repo->>DB: Remove Document
+    DB-->>Repo: Success
+    Repo-->>Service: Success
+    Service-->>Controller: Success
+    Controller-->>Route: Success
+    Route-->>Client: Thông báo đã xóa
+
+    %% Upload Image
+    Note over Admin, DB: 6. Tải lên hình ảnh (Admin)
+    Admin->>Client: Chọn ảnh trong Editor
+    Client->>Route: POST /news/upload-image
+    Route->>Route: Middleware Upload (Lưu file)
+    Route-->>Client: Trả về URL ảnh
+```

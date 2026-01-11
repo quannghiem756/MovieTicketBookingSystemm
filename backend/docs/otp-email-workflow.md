@@ -65,3 +65,53 @@ Sent automatically upon successful payment or manual booking confirmation.
 
 ## 4. Localized Content
 The system supports English (`en`) and Vietnamese (`vi`) for all email communication, including date formatting and currency.
+
+## Biểu đồ tuần tự
+
+```mermaid
+sequenceDiagram
+    actor User as Người dùng
+    participant Client as Frontend
+    participant Auth as Auth Service
+    participant OTP as OTP Service
+    participant Email as Email Service
+    participant SMTP as SMTP Provider
+    participant DB as Database
+
+    %% OTP Generation Flow
+    Note over User, DB: 1. Quy trình tạo & Gửi OTP
+    User->>Client: Yêu cầu Đăng ký / Quên mật khẩu
+    Client->>Auth: Request OTP (email, type)
+    Auth->>OTP: sendOTP(email, type)
+    OTP->>OTP: Generate 6-digit Code
+    OTP->>DB: Lưu OTP (Hết hạn 5 phút)
+    OTP->>Email: sendEmail(email, template)
+    Email->>SMTP: Dispatch Email
+    SMTP-->>User: Gửi Email chứa mã OTP
+
+    %% OTP Verification Flow
+    Note over User, DB: 2. Quy trình Xác thực OTP
+    User->>Client: Nhập mã OTP
+    Client->>Auth: Verify OTP (email, code)
+    Auth->>OTP: verifyOTP(email, code)
+    OTP->>DB: Truy vấn OTP
+    alt OTP Hợp lệ & Chưa hết hạn
+        DB-->>OTP: Valid Record
+        OTP->>DB: Xóa OTP (Single-use)
+        OTP-->>Auth: Success
+        Auth->>DB: Tạo User / Cho phép Reset Password
+        Auth-->>Client: 200 OK (Success)
+    else OTP Sai hoặc Hết hạn
+        DB-->>OTP: Null / Expired
+        OTP-->>Auth: Error
+        Auth-->>Client: 400 Bad Request
+    end
+
+    %% Booking Notification Flow
+    Note over User, DB: 3. Thông báo Đặt vé (Booking Confirmation)
+    Auth->>Email: Gửi Email xác nhận (Booking Data)
+    Email->>Email: Generate QR Code (Validation Token)
+    Email->>Email: Build HTML Template (Dark Theme)
+    Email->>SMTP: Gửi Email (Có QR Code đính kèm)
+    SMTP-->>User: Nhận Email Vé điện tử
+```

@@ -9,14 +9,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [ ] Track: Mobile Seat Selection and Checkout Fixes
-*Link: [./conductor/tracks/mobile_seat_selection_fix_20260109/](./conductor/tracks/mobile_seat_selection_fix_20260109/)*
----
+## [~] Track: Simplify Functional Decomposition Diagram
+*Link: [./conductor/tracks/simplify_functional_decomposition_20260111/](./conductor/tracks/simplify_functional_decomposition_20260111/)*
 
-## [x] Track: analyze the news workflow and make a markdown docs like other docs about it
-*Link: [./conductor/tracks/news_workflow_docs_20260111/](./conductor/tracks/news_workflow_docs_20260111/)*
 
----
-
-## [~] Track: Update Booking Service Workflow Documentation
-*Link: [./conductor/tracks/booking_workflow_update_20260111/](./conductor/tracks/booking_workflow_update_20260111/)*

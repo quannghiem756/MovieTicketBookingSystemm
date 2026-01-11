@@ -222,3 +222,80 @@
 - Showtime not found results in 404 error at service level
 - Active bookings associated with showtime result in 409 error at service level
 - Database constraint violations result in 409/500 errors
+
+## Biểu đồ tuần tự
+
+```mermaid
+sequenceDiagram
+    actor Client as Frontend/Admin
+    participant Route as Showtime Routes
+    participant Controller as Showtime Controller
+    participant Service as Showtime Service
+    participant Repo as MongoShowtime Repository
+    participant DB as MongoDB
+
+    %% Get All Showtimes
+    Note over Client, DB: 1. Lấy danh sách suất chiếu (Get All)
+    Client->>Route: GET /showtimes
+    Route->>Controller: getAllShowtimes()
+    Controller->>Service: getAllShowtimes()
+    Service->>Repo: findAll()
+    Repo->>DB: Query Showtimes
+    DB-->>Repo: Showtimes List
+    Repo-->>Service: Showtimes List
+    Service-->>Controller: Showtimes List
+    Controller-->>Route: Showtimes List
+    Route-->>Client: JSON Response
+
+    %% Create Showtime
+    Note over Client, DB: 2. Tạo suất chiếu mới (Create)
+    Client->>Route: POST /showtimes (Data)
+    Route->>Controller: createShowtime()
+    Controller->>Service: createShowtime(data)
+    Service->>Service: Validate & Check Conflicts
+    alt Có xung đột thời gian
+        Service-->>Controller: Error (409 Conflict)
+        Controller-->>Client: 409 Error
+    else Hợp lệ
+        Service->>Repo: create(data)
+        Repo->>DB: Insert Showtime
+        DB-->>Repo: Created Showtime
+        Repo-->>Service: Created Showtime
+        Service-->>Controller: Created Showtime
+        Controller-->>Route: Created Showtime
+        Route-->>Client: 201 Created
+    end
+
+    %% Update Showtime
+    Note over Client, DB: 3. Cập nhật suất chiếu (Update)
+    Client->>Route: PUT /showtimes/:id
+    Route->>Controller: updateShowtime()
+    Controller->>Service: updateShowtime(id, data)
+    Service->>Service: Validate & Check Conflicts (Excluding self)
+    Service->>Repo: updateById(id, data)
+    Repo->>DB: Update Showtime
+    DB-->>Repo: Updated Showtime
+    Repo-->>Service: Updated Showtime
+    Service-->>Controller: Updated Showtime
+    Controller-->>Route: Updated Showtime
+    Route-->>Client: 200 OK
+
+    %% Delete Showtime
+    Note over Client, DB: 4. Xóa suất chiếu (Delete)
+    Client->>Route: DELETE /showtimes/:id
+    Route->>Controller: deleteShowtime()
+    Controller->>Service: deleteShowtime(id)
+    Service->>Service: Check Active Bookings
+    alt Có vé đã đặt
+        Service-->>Controller: Error (409 Conflict)
+        Controller-->>Client: 409 Error
+    else An toàn để xóa
+        Service->>Repo: deleteById(id)
+        Repo->>DB: Remove Showtime
+        DB-->>Repo: Success
+        Repo-->>Service: Success
+        Service-->>Controller: Success
+        Controller-->>Route: Success
+        Route-->>Client: 200 OK
+    end
+```

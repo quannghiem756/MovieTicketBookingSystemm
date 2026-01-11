@@ -81,3 +81,60 @@ The Coupon Service manages the lifecycle of promotional codes and validates them
 - `minOrderValue`: Number
 - `applicableMovieIds`: Array of ObjectIds
 - `currentUsage`: Number
+
+## Biểu đồ tuần tự
+
+```mermaid
+sequenceDiagram
+    actor Admin as Quản trị viên
+    actor User as Người dùng
+    participant Route as Coupon Routes
+    participant Controller as Coupon Controller
+    participant Service as Coupon Service
+    participant Repo as Coupon Repository
+    participant Booking as Booking Service
+
+    %% Admin Management
+    Note over Admin, Repo: 1. Quản lý Coupon (Admin)
+    Admin->>Route: POST /api/coupons (Tạo Coupon)
+    Route->>Controller: createCoupon()
+    Controller->>Service: createCoupon(data)
+    Service->>Service: Validate (Mã duy nhất, Ngày hợp lệ)
+    Service->>Repo: Lưu Coupon
+    Repo-->>Service: Coupon đã tạo
+    Service-->>Controller: Coupon
+    Controller-->>Admin: 201 Created
+
+    %% User Validation
+    Note over User, Booking: 2. Áp dụng Coupon (User)
+    User->>Route: POST /api/coupons/validate
+    Route->>Controller: validateCoupon()
+    Controller->>Service: validateCoupon(code, userId, orderTotal)
+    Service->>Repo: Tìm Coupon theo code
+    Repo-->>Service: Coupon Data
+    Service->>Service: Kiểm tra điều kiện (Hạn, Giới hạn dùng, Giá trị đơn)
+    alt Không hợp lệ
+        Service-->>Controller: Lỗi (Hết hạn / Không tồn tại)
+        Controller-->>User: 400 Bad Request
+    else Hợp lệ
+        Service-->>Controller: Thông tin giảm giá
+        Controller-->>User: 200 OK (Số tiền giảm)
+    end
+
+    %% Booking Integration
+    Note over User, Booking: 3. Tích hợp khi Đặt vé
+    User->>Booking: POST /api/bookings (Kèm mã Coupon)
+    Booking->>Service: validateCoupon(code)
+    alt Coupon Hợp lệ
+        Service-->>Booking: Discount Amount
+        Booking->>Booking: Tính Final Price = Original - Discount
+        Booking->>Service: incrementUsage(code)
+        Service->>Repo: findOneAndUpdate(inc usage)
+        Repo-->>Service: Updated Coupon
+        Booking->>Repo: Lưu Booking (kèm thông tin giảm giá)
+        Booking-->>User: Booking Confirmed
+    else Coupon Không hợp lệ
+        Service-->>Booking: Error
+        Booking-->>User: 400 Bad Request
+    end
+```

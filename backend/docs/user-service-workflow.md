@@ -137,3 +137,53 @@
 - Invalid token format results in 401 error at route level
 - Unauthorized access results in 403 error at service level
 - Database constraint violations result in 409/500 errors
+
+## Biểu đồ tuần tự
+
+```mermaid
+sequenceDiagram
+    actor Client as Frontend/User
+    participant Route as User Routes
+    participant Controller as User Controller
+    participant Service as User Service
+    participant Repo as User Repository
+    participant DB as MongoDB
+
+    %% Register
+    Note over Client, DB: 1. Đăng ký (Register)
+    Client->>Route: POST /users/register
+    Route->>Controller: createUser()
+    Controller->>Service: createUser(data)
+    Service->>Service: Validate & Hash Password
+    Service->>Repo: create(user)
+    Repo->>DB: Insert User
+    DB-->>Repo: Created User
+    Repo-->>Service: Created User
+    Service-->>Controller: User Data (No Password)
+    Controller-->>Route: User Data
+    Route-->>Client: 201 Created
+
+    %% Login
+    Note over Client, DB: 2. Đăng nhập (Login)
+    Client->>Route: POST /users/login
+    Route->>Controller: loginUser()
+    Controller->>Service: loginUser(email, password)
+    Service->>Repo: findByEmail(email)
+    Repo-->>Service: User Data
+    Service->>Service: Check Password & Generate Token
+    Service-->>Controller: User Data + Token
+    Controller-->>Route: User Data + Token
+    Route-->>Client: 200 OK
+
+    %% Get Profile
+    Note over Client, DB: 3. Lấy thông tin cá nhân (Get Profile)
+    Client->>Route: GET /users/profile (Token)
+    Route->>Route: Authenticate Token
+    Route->>Controller: getUserProfile()
+    Controller->>Service: getUserProfile(userId)
+    Service->>Repo: findById(userId)
+    Repo-->>Service: User Profile
+    Service-->>Controller: User Profile
+    Controller-->>Route: User Profile
+    Route-->>Client: 200 OK
+```

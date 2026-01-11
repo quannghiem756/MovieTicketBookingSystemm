@@ -216,5 +216,89 @@
 
 ### Error Path
 - Invalid movie ID format results in 400 error at route level
-- Movie not found results in 404 error at service level
 - Database constraint violations result in 409/500 errors
+
+## Biểu đồ tuần tự
+
+```mermaid
+sequenceDiagram
+    actor Client as Frontend/User
+    participant Route as Movie Routes
+    participant Controller as Movie Controller
+    participant Service as Movie Service
+    participant Repo as MongoMovie Repository
+    participant DB as MongoDB
+
+    %% Get All Movies
+    Note over Client, DB: 1. Lấy danh sách phim (Get All Movies)
+    Client->>Route: GET /movies?page=1&limit=10
+    Route->>Controller: getAllMovies()
+    Controller->>Service: getAllMovies(page, limit)
+    Service->>Repo: findAll(page, limit)
+    Repo->>DB: Query Movies
+    DB-->>Repo: List Movies
+    Repo-->>Service: List Movies
+    Service-->>Controller: List Movies
+    Controller-->>Route: List Movies
+    Route-->>Client: JSON Response
+
+    %% Get Movie by ID
+    Note over Client, DB: 2. Lấy chi tiết phim (Get Movie by ID)
+    Client->>Route: GET /movies/:id
+    Route->>Controller: getMovieById()
+    Controller->>Service: getMovieById(id)
+    Service->>Repo: findById(id)
+    Repo->>DB: Query Movie by ID
+    DB-->>Repo: Movie Data
+    alt Phim tồn tại
+        Repo-->>Service: Movie Data
+        Service-->>Controller: Movie Data
+        Controller-->>Route: Movie Data
+        Route-->>Client: JSON Response
+    else Không tìm thấy
+        Repo-->>Service: null
+        Service-->>Controller: Error (404 Not Found)
+        Controller-->>Route: Error
+        Route-->>Client: 404 Error Response
+    end
+
+    %% Create Movie
+    Note over Client, DB: 3. Thêm phim mới (Create Movie)
+    Client->>Route: POST /movies (Movie Data)
+    Route->>Controller: createMovie()
+    Controller->>Service: createMovie(data)
+    Service->>Service: Validate Data & Check Duplicates
+    Service->>Repo: create(data)
+    Repo->>DB: Insert Movie
+    DB-->>Repo: Created Movie
+    Repo-->>Service: Created Movie
+    Service-->>Controller: Created Movie
+    Controller-->>Route: Created Movie
+    Route-->>Client: 201 Created
+
+    %% Update Movie
+    Note over Client, DB: 4. Cập nhật phim (Update Movie)
+    Client->>Route: PUT /movies/:id (Update Data)
+    Route->>Controller: updateMovie()
+    Controller->>Service: updateMovie(id, data)
+    Service->>Repo: updateById(id, data)
+    Repo->>DB: Update Movie
+    DB-->>Repo: Updated Movie
+    Repo-->>Service: Updated Movie
+    Service-->>Controller: Updated Movie
+    Controller-->>Route: Updated Movie
+    Route-->>Client: 200 OK
+
+    %% Delete Movie
+    Note over Client, DB: 5. Xóa phim (Delete Movie)
+    Client->>Route: DELETE /movies/:id
+    Route->>Controller: deleteMovie()
+    Controller->>Service: deleteMovie(id)
+    Service->>Repo: deleteById(id)
+    Repo->>DB: Remove Movie
+    DB-->>Repo: Success
+    Repo-->>Service: Success
+    Service-->>Controller: Success
+    Controller-->>Route: Success
+    Route-->>Client: 200 OK
+```

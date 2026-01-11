@@ -13,13 +13,13 @@
 - [x] Task: Implement `useFocusEffect` in `MovieDetailsScreen.tsx` to trigger data fetching for movies and news when the screen gains focus.
 - [x] Task: Conductor - User Manual Verification 'Auto-Refresh on Focus' (Protocol in workflow.md)
 
-## Phase 3: Pull-to-Refresh
+## Phase 3: Pull-to-Refresh [checkpoint: 73b0982]
 - [x] Task: Integrate `RefreshControl` into the `HomeScreen.tsx` ScrollView.
 - [x] Task: Create an `onRefresh` handler in `HomeScreen.tsx` that manages the loading state and re-fetches movies and news.
 - [x] Task: Integrate `RefreshControl` into the `MovieDetailsScreen.tsx` ScrollView.
 - [x] Task: Create an `onRefresh` handler in `MovieDetailsScreen.tsx` that re-fetches movie details and showtimes.
-- [ ] Task: Write unit tests to verify the manual pull-to-refresh interaction and spinner behavior in `HomeScreen`.
-- [ ] Task: Conductor - User Manual Verification 'Pull-to-Refresh' (Protocol in workflow.md)
+- [x] Task: Write unit tests to verify the manual pull-to-refresh interaction and spinner behavior in `HomeScreen`.
+- [x] Task: Conductor - User Manual Verification 'Pull-to-Refresh' (Protocol in workflow.md)
 
 ## Phase 4: Integration and Error Handling
 - [ ] Task: Ensure silent failure handling is implemented in both refresh mechanisms (Focus & Pull).

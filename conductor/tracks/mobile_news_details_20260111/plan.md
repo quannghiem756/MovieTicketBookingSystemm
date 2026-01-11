@@ -10,12 +10,12 @@ Implement a dedicated News Details screen in the mobile application to allow use
 - [x] Task: Define `NewsDetails` route in `mobile-app/src/navigation/AppNavigator.tsx` c054376
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Setup and Infrastructure' (Protocol in workflow.md) e2624e6
 
-## Phase 2: Screen Development (TDD)
+## Phase 2: Screen Development (TDD) [checkpoint: ef897e2]
 - [x] Task: Create `NewsDetailsScreen` component skeleton and tests 876d03a
 - [x] Task: Implement UI layout (Image, Title, Date, Category) with tests b9dd807
 - [x] Task: Implement HTML content rendering using `react-native-render-html` with tests a8dc9fd
 - [x] Task: Implement loading and error states with tests 0ecdf42
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Screen Development' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Screen Development' (Protocol in workflow.md) ef897e2
 
 ## Phase 3: Integration
 - [ ] Task: Update `HomeScreen.tsx` to navigate to `NewsDetailsScreen` when a news item is pressed

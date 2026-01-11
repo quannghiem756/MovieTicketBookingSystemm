@@ -13,7 +13,7 @@
 - **UI Library:** React Native Paper for Material Design.
 - **Navigation:** React Navigation (Bottom Tabs, Native Stack).
 - **State Management:** React Context (Auth, I18n, Chatbot).
-- **Utilities:** `expo-secure-store`, `expo-image`, `react-native-qrcode-svg`, `react-native-youtube-iframe`.
+- **Utilities:** `expo-secure-store`, `expo-image`, `react-native-qrcode-svg`, `react-native-youtube-iframe`, `expo-linking`.
 - **Real-time:** Socket.io-client.
 - **Localization:** `i18n-js`, `expo-localization`.
 - **Authentication:** `expo-auth-session` for Google OAuth.

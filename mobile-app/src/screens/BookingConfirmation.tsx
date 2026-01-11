@@ -28,7 +28,8 @@ const BookingConfirmation = () => {
   const fetchBooking = async (id: string) => {
     setLoading(true);
     try {
-      const data = await getBookingById(id);
+      const bookingId = id.toString().split(',')[0];
+      const data = await getBookingById(bookingId);
       setBookingData(data);
     } catch (err) {
       console.error('Error fetching booking:', err);
@@ -69,7 +70,7 @@ const BookingConfirmation = () => {
   const showTime = bookingData.showTime || bookingData.showtime?.showTime;
   const seatIds = bookingData.seatIds || [];
   const totalPrice = bookingData.totalPrice || 0;
-  const bookingId = bookingData.bookingId || bookingData.id;
+  const bookingId = (bookingData.bookingId || bookingData.id || '').toString().split(',')[0];
   const validationToken = bookingData.validationToken;
 
   return (

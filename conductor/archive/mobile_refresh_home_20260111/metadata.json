@@ -1,0 +1,8 @@
+{
+  "track_id": "mobile_refresh_home_20260111",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-01-11T10:01:00Z",
+  "updated_at": "2026-01-11T10:01:00Z",
+  "description": "add auto refresh on focus and pull to refresh on mobile homescreen for data refreshing"
+}

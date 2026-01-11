@@ -111,7 +111,7 @@ const NewsPage = () => {
           </Alert>
         )}
 
-        <Box sx={{ mb: 4, display: 'flex', justifyContent: { xs: 'center', md: 'space-between' }, alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
+        {/* <Box sx={{ mb: 4, display: 'flex', justifyContent: { xs: 'center', md: 'space-between' }, alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
           <TextField
             label={t('news.searchNews', 'Search News')}
             variant="outlined"
@@ -145,7 +145,7 @@ const NewsPage = () => {
           <Typography variant="body2" color="textSecondary">
             {t('admin.news.totalNews', { count: totalNews })}
           </Typography>
-        </Box>
+        </Box> */}
 
         {loading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>

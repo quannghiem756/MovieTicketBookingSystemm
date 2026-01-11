@@ -3,7 +3,7 @@ import { View, StyleSheet, ScrollView, Dimensions, TouchableOpacity, RefreshCont
 import { Text, Title, useTheme, Paragraph, ActivityIndicator, Divider, List, Chip } from 'react-native-paper';
 import { useTranslation } from '../context/I18nContext';
 import { getMovieById, getFutureShowtimesByMovieId } from '../services/movieService';
-import { BACKEND_URL } from '../services/api';
+import { API_BASE_URL } from '../services/api';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import { useFocusEffect } from '@react-navigation/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -61,7 +61,7 @@ const MovieDetailsScreen = ({ route, navigation }: any) => {
   const getImageUrl = (url: string) => {
     if (!url) return undefined;
     if (url.startsWith('/uploads')) {
-      return `${BACKEND_URL}${url}`;
+      return `${API_BASE_URL}${url}`;
     }
     return url;
   };

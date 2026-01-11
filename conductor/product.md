@@ -17,12 +17,13 @@ A comprehensive Movie Ticket Booking System with a Node.js backend, React fronte
 ### Customer-Facing
 - **Movie Discovery:** Advanced search and browsing of movies with rich metadata (posters, trailers, release dates, and durations).
 - **Home Page News Sidebar:** A dedicated sidebar on the home page displaying the latest news, promotions, and cinema updates.
+- **Real-time Data Freshness:** Automatic data refresh on screen focus and manual "Pull-to-Refresh" functionality on the mobile home screen and movie details.
 - **Customer Support:** A "Contact Us" form accessible from the home page for users to submit inquiries with automatic priority assignment based on category.
 - **Format Filtering:** Seamlessly filter showtimes by format (e.g., 2D, 3D, IMAX) directly within movie listings.
 - **Interactive Seat Selection:** A visual seat map for choosing specific seats in real-time, with a seat-hold timer to prevent indefinite locking.
 - **Promotional Coupons:** Ability to apply discount codes during checkout for reduced ticket prices.
 - **Email Notifications & Verification:** Automated HTML emails for booking confirmations (with scannable QR codes) and OTP-based email verification for registration and password resets, with proactive redirection and automatic OTP resend for unverified users attempting to login.
-- **Secure Payments & QR Tickets:** Integration with MoMo E-Wallet for secure transactions and generation of digital tickets with secure QR codes for on-site validation.
+- **Secure Payments & QR Tickets:** Integration with MoMo E-Wallet for secure transactions, a dedicated mobile booking confirmation screen mirroring the web experience, and generation of digital tickets with secure QR codes for on-site validation.
 - **AI Recommendation Chatbot:** An intelligent assistant for personalized movie suggestions with strict grounding to prevent hallucinations and full bilingual support (English/Vietnamese). **Accessible via a persistent Floating Action Button (FAB) on mobile.**
 - **User Profiles:** Management of personal information, **Google OAuth login**, and access to a detailed booking history.
 - **Secure Sessions:** Implementation of database-backed refresh tokens with rotation, concurrency-safe grace periods, and HttpOnly cookies for enhanced security and reliability.

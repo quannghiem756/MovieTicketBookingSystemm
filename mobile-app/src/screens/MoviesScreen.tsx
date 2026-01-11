@@ -4,6 +4,7 @@ import { Text, Searchbar, Chip, useTheme, ActivityIndicator, Paragraph } from 'r
 import { useTranslation } from '../context/I18nContext';
 import { useChatbot } from '../context/ChatbotContext';
 import { getMovies } from '../services/movieService';
+import { API_BASE_URL } from '../services/api';
 import Card from '../components/Card';
 import Button from '../components/Button';
 import { useNavigation } from '@react-navigation/native';
@@ -61,11 +62,19 @@ const MoviesScreen = () => {
     }
   };
 
+  const getImageUrl = (url: string) => {
+    if (!url) return undefined;
+    if (url.startsWith('/uploads')) {
+      return `${API_BASE_URL}${url}`;
+    }
+    return url;
+  };
+
   const renderMovieItem = ({ item }: { item: any }) => (
     <TouchableOpacity onPress={() => navigation.navigate('MovieDetails', { movieId: item.id })}>
       <Card
         style={[styles.movieCard, { backgroundColor: theme.colors.surface }]}
-        coverUrl={item.posterUrl}
+        coverUrl={getImageUrl(item.posterUrl)}
         title={item.title}
         subtitle={item.genre.join(', ')}
       />

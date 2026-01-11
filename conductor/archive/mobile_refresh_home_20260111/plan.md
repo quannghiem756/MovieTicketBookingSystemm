@@ -21,7 +21,7 @@
 - [x] Task: Write unit tests to verify the manual pull-to-refresh interaction and spinner behavior in `HomeScreen`.
 - [x] Task: Conductor - User Manual Verification 'Pull-to-Refresh' (Protocol in workflow.md)
 
-## Phase 4: Integration and Error Handling
+## Phase 4: Integration and Error Handling [checkpoint: c9e62e9]
 - [x] Task: Ensure silent failure handling is implemented in both refresh mechanisms (Focus & Pull).
 - [x] Task: Verify that the `refreshing` state is correctly reset even if API calls fail.
 - [x] Task: Perform final integration testing across both mechanisms.

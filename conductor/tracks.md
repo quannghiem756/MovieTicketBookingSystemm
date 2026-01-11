@@ -17,8 +17,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 ## [ ] Track: Mobile Seat Selection and Checkout Fixes
 *Link: [./conductor/tracks/mobile_seat_selection_fix_20260109/](./conductor/tracks/mobile_seat_selection_fix_20260109/)*
 
----
 
-## [~] Track: Mobile Home Screen Data Refreshing
-*Link: [./conductor/tracks/mobile_refresh_home_20260111/](./conductor/tracks/mobile_refresh_home_20260111/)*
 

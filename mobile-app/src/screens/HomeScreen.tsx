@@ -3,7 +3,7 @@ import { View, StyleSheet, ScrollView, Dimensions, FlatList, TouchableOpacity, R
 import { Text, Title, useTheme, Card, Paragraph, ActivityIndicator } from 'react-native-paper';
 import { useTranslation } from '../context/I18nContext';
 import { getNowShowing, getComingSoon, getNews } from '../services/movieService';
-import { BACKEND_URL } from '../services/api';
+import { API_BASE_URL } from '../services/api';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { Image } from 'expo-image';
 
@@ -54,7 +54,7 @@ const HomeScreen = () => {
   const getImageUrl = (url: string) => {
     if (!url) return undefined;
     if (url.startsWith('/uploads')) {
-      return `${BACKEND_URL}${url}`;
+      return `${API_BASE_URL}${url}`;
     }
     return url;
   };

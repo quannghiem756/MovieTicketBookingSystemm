@@ -1,0 +1,8 @@
+{
+  "track_id": "mobile_booking_auth_refresh_20260110",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-01-10T22:12:00Z",
+  "updated_at": "2026-01-10T22:12:00Z",
+  "description": "after successfully booking on mobile i want it to redirect to a confirmation screen just like on the web (BookingConfirmation.jsx) and currently when ever there is something wrong with the authentication problem the app just dont refresh imediately so that people could login again and also i want it to refresh the ticket list and the seat selection screen."
+}

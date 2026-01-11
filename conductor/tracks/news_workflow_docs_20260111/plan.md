@@ -1,6 +1,6 @@
 # Plan: News Workflow Documentation
 
-## Phase 1: Technical Analysis
+## Phase 1: Technical Analysis [checkpoint: faf11b4]
 ### [x] Task: Analyze Route and Controller Layer
 - [x] Trace request flow in `backend/src/interfaces/http/routes/news.js`
 - [x] Trace logic and validation in `backend/src/interfaces/http/controllers/NewsController.js`

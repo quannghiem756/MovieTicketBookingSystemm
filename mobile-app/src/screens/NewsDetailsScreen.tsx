@@ -4,6 +4,8 @@ import { Text, ActivityIndicator, useTheme, Surface } from 'react-native-paper';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useTranslation } from '../context/I18nContext';
 import { getNewsById } from '../services/movieService';
+import { API_BASE_URL } from '../services/api';
+import { Image } from 'expo-image';
 
 const NewsDetailsScreen = () => {
   const route = useRoute<any>();
@@ -34,6 +36,19 @@ const NewsDetailsScreen = () => {
     }
   };
 
+  const getImageUrl = (url: string) => {
+    if (!url) return undefined;
+    if (url.startsWith('/uploads')) {
+      return `${API_BASE_URL}${url}`;
+    }
+    return url;
+  };
+
+  const formatDate = (dateString: string) => {
+    if (!dateString) return 'N/A';
+    return new Date(dateString).toLocaleDateString();
+  };
+
   if (loading) {
     return (
       <View style={[styles.container, styles.center]}>
@@ -52,9 +67,20 @@ const NewsDetailsScreen = () => {
 
   return (
     <ScrollView style={styles.container}>
+      {news.featuredImage && (
+        <Image
+          testID="news-image"
+          source={{ uri: getImageUrl(news.featuredImage) }}
+          style={styles.featuredImage}
+          contentFit="cover"
+        />
+      )}
       <Surface style={styles.content}>
+        <View style={styles.header}>
+          <Text variant="labelMedium" style={styles.category}>{news.category}</Text>
+          <Text variant="labelSmall" style={styles.date}>{formatDate(news.publishDate)}</Text>
+        </View>
         <Text variant="headlineMedium" style={styles.title}>{news.title}</Text>
-        <Text variant="labelMedium" style={styles.category}>{news.category}</Text>
       </Surface>
     </ScrollView>
   );
@@ -73,13 +99,31 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: 'transparent',
   },
+  featuredImage: {
+    width: '100%',
+    height: 250,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
   title: {
     fontWeight: 'bold',
     marginBottom: 10,
+    color: '#ffffff',
   },
   category: {
+    backgroundColor: 'rgba(255, 107, 53, 0.2)',
     color: '#ff6b35',
     fontWeight: 'bold',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+  },
+  date: {
+    color: '#999999',
   },
 });
 

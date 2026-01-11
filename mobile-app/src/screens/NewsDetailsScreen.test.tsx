@@ -19,6 +19,13 @@ jest.mock('@react-navigation/native', () => ({
 
 jest.mock('../services/movieService');
 
+jest.mock('expo-image', () => {
+  const { View } = require('react-native');
+  return {
+    Image: (props: any) => require('react').createElement(View, props),
+  };
+});
+
 jest.mock('../context/I18nContext', () => ({
   useTranslation: () => ({
     t: (key: string) => {
@@ -81,6 +88,8 @@ describe('NewsDetailsScreen', () => {
     await waitFor(() => {
       expect(screen.getByText('Exciting News')).toBeTruthy();
       expect(screen.getByText('Promotion')).toBeTruthy();
+      expect(screen.getByTestId('news-image')).toBeTruthy();
+      expect(screen.getByText('1/11/2026')).toBeTruthy(); // Default locale formatting
     });
   });
 

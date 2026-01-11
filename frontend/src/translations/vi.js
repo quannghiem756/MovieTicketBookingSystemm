@@ -161,6 +161,7 @@ const vi = {
   'booking.confirmation.invalid': 'Thông tin đặt vé không hợp lệ',
   'booking.confirmation.bookingConfirmed': 'Đặt vé thành công',
   'booking.confirmation.paymentStatus': 'Trạng thái thanh toán:',
+  'booking.confirmation.paymentMethod': 'Phương thức thanh toán',
   'booking.confirmation.paymentSuccess': 'Thanh toán thành công',
   'payment.result.failedTitle': 'Thanh toán thất bại',
   'payment.result.failedSubtitle': 'Thanh toán của bạn không thể được xử lý. Vui lòng thử lại.',

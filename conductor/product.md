@@ -18,7 +18,7 @@ A comprehensive Movie Ticket Booking System with a Node.js backend, React fronte
 - **Movie Discovery:** Advanced search and browsing of movies with rich metadata (posters, trailers, release dates, and durations).
 - **Home Page News Sidebar:** A dedicated sidebar on the home page displaying the latest news, promotions, and cinema updates.
 - **Real-time Data Freshness:** Automatic data refresh on screen focus and manual "Pull-to-Refresh" functionality on the mobile home screen and movie details.
-- **Customer Support:** A "Contact Us" form accessible from the home page for users to submit inquiries with automatic priority assignment based on category.
+- **Customer Support:** A "Contact Us" form accessible from the home page for users to submit inquiries with automatic priority assignment. Includes a complete ticket management system with email notifications, public ticket tracking links, and a dedicated admin interface for handling replies.
 - **Format Filtering:** Seamlessly filter showtimes by format (e.g., 2D, 3D, IMAX) directly within movie listings.
 - **Interactive Seat Selection:** A visual seat map for choosing specific seats in real-time, with a seat-hold timer to prevent indefinite locking.
 - **Promotional Coupons:** Ability to apply discount codes during checkout for reduced ticket prices.
@@ -35,7 +35,7 @@ A comprehensive Movie Ticket Booking System with a Node.js backend, React fronte
 - **Dashboard & Analytics:** Overview of bookings and sales performance.
 - **User & News Management:** Administration of user accounts and publishing of cinema-related news and promotions.
 - **Coupon Management:** Comprehensive tools for creating and monitoring promotional discount codes with various restrictions.
-- **Support Ticket Management:** Centralized view for managing customer inquiries, sorted by oldest first with priority highlights.
+- **Support Ticket Management:** Centralized view for managing customer inquiries, sorted by oldest first with priority highlights. Features an interactive reply system with conversation history and email notifications.
 - **Advanced Booking Search:** Search functionality to find bookings by user email or phone number.
 - **Manual Redemption & Auditing:** Ability for staff to manually redeem tickets with mandatory confirmation and automatic audit logging for security.
 

@@ -77,7 +77,7 @@ const NewsForm = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('accessToken');
-      const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+      const API_BASE_URL = process.env.BACKEND_BASE_URL || 'http://localhost:5000';
 
       const response = await axios.post(`${API_BASE_URL}/api/news/upload-image`, formData, {
         headers: {

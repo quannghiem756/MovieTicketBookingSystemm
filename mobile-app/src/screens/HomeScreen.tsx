@@ -54,6 +54,7 @@ const HomeScreen = () => {
   const getImageUrl = (url: string) => {
     if (!url) return undefined;
     if (url.startsWith('/uploads')) {
+      const test = `${API_BASE_URL}${url}`;
       return `${API_BASE_URL}${url}`;
     }
     return url;
@@ -77,7 +78,7 @@ const HomeScreen = () => {
     <TouchableOpacity onPress={() => console.log('Navigate to news detail', item.id)}>
       <Card style={[styles.newsCard, { backgroundColor: theme.colors.surfaceVariant }]}>
         <View style={styles.newsContent}>
-          {item.imageUrl && <Image source={{ uri: getImageUrl(item.imageUrl) }} style={styles.newsImage} />}
+          {item.featuredImage && <Image source={{ uri: getImageUrl(item.featuredImage) }} style={styles.newsImage} />}
           <View style={styles.newsTextContainer}>
             <Title numberOfLines={1} style={styles.newsTitle}>{item.title}</Title>
             <Paragraph numberOfLines={2} style={{ color: theme.colors.onSurfaceVariant, fontSize: 12 }}>

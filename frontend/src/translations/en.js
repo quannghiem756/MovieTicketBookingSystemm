@@ -150,6 +150,7 @@ const en = {
   'booking.confirmation.invalid': 'Invalid booking information',
   'booking.confirmation.bookingConfirmed': 'Booking Confirmed',
   'booking.confirmation.paymentStatus': 'Payment Status:',
+  'booking.confirmation.paymentMethod': 'Payment Method',
   'booking.confirmation.paymentSuccess': 'Payment Successful',
   'payment.result.failedTitle': 'Payment Failed',
   'payment.result.failedSubtitle': 'Your payment could not be processed. Please try again.',

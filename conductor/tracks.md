@@ -9,13 +9,10 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [~] Track: currently the admin support ticket list is not interactable so the admin and staff cant reply to the support ticket fix it
-*Link: [./conductor/tracks/support_ticket_overhaul_20260108/](./conductor/tracks/support_ticket_overhaul_20260108/)*
-
----
-
 ## [ ] Track: Mobile Seat Selection and Checkout Fixes
 *Link: [./conductor/tracks/mobile_seat_selection_fix_20260109/](./conductor/tracks/mobile_seat_selection_fix_20260109/)*
 
+---
 
-
+## [~] Track: Implement a dedicated News Details screen in the mobile application.
+*Link: [./conductor/tracks/mobile_news_details_20260111/](./conductor/tracks/mobile_news_details_20260111/)*

@@ -15,6 +15,11 @@ export const getNews = async (page = 1, limit = 5) => {
   return response.data;
 };
 
+export const getNewsById = async (id: string) => {
+  const response = await api.get(`/news/${id}`);
+  return response.data;
+};
+
 export const getMovies = async (page = 1, limit = 10, search = '', format = '') => {
   let url = `/movies?page=${page}&limit=${limit}`;
   if (search) url += `&search=${encodeURIComponent(search)}`;

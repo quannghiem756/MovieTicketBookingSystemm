@@ -14,7 +14,7 @@ Implement a dedicated News Details screen in the mobile application to allow use
 - [x] Task: Create `NewsDetailsScreen` component skeleton and tests 876d03a
 - [x] Task: Implement UI layout (Image, Title, Date, Category) with tests b9dd807
 - [x] Task: Implement HTML content rendering using `react-native-render-html` with tests a8dc9fd
-- [ ] Task: Implement loading and error states with tests
+- [x] Task: Implement loading and error states with tests 0ecdf42
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Screen Development' (Protocol in workflow.md)
 
 ## Phase 3: Integration

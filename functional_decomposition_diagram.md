@@ -79,15 +79,21 @@ graph TB
 
 ## System Architecture Overview
 
-This functional decomposition diagram shows the layered architecture of the Movie Ticket Booking System:
+This functional decomposition diagram shows the modular architecture of the Movie Ticket Booking System:
 
-1. **Frontend Client Layer**: The UI layer that interacts with users
-2. **Backend Services Layer**: Core business services handling different domains (user, movie, theater, showtime, booking, payment)
-3. **Authentication & Authorization**: Security services managing user access
-4. **Controllers Layer**: Handles HTTP requests and validation
-5. **Application Services Layer**: Contains business logic implementations
-6. **Domain Models & Repositories**: Core business entities and data access logic
-7. **Infrastructure Services**: Database storage and external services
-8. **External Systems**: Third-party integrations like MoMo payment API
+1.  **Client Layer**: The Web & Mobile UI that interacts with users.
+2.  **API Gateway / Auth**: Handles authentication and serves as the entry point for requests.
+3.  **Feature Modules**: Encapsulated business logic for key domains:
+    *   **User Management**: Profiles and preferences.
+    *   **Movie Management**: Movie catalog and details.
+    *   **Theater Management**: Theater locations and halls.
+    *   **Showtime Management**: Scheduling of movies.
+    *   **Booking Management**: Ticket reservation and purchase flow.
+    *   **Payment Processing**: Payment transactions.
+    *   **Recommendation Engine**: Personalized movie suggestions.
+4.  **Data & Infrastructure**:
+    *   **MongoDB**: Primary transactional database.
+    *   **ChromaDB**: Vector database for recommendations.
+5.  **External Integrations**: Third-party services like MoMo Payment and External Movie APIs.
 
-The diagram illustrates the flow of data and control between these various components, showing how the system handles user registration, movie browsing, theater selection, showtime scheduling, booking creation, and payment processing.
+The diagram illustrates the high-level interactions between the client, the consolidated feature modules, and the supporting infrastructure, emphasizing a modular and service-oriented design.

@@ -37,6 +37,13 @@ export default {
     noResults: 'No movies found',
     formats: 'Formats',
   },
+  news: {
+    title: 'News & Promotions',
+    details: 'News Details',
+    published: 'Published',
+    category: 'Category',
+    noNews: 'No news details found',
+  },
   profile: {
     bookings: 'Bookings',
     points: 'Points',

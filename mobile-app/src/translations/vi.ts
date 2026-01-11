@@ -37,6 +37,13 @@ export default {
     noResults: 'Không tìm thấy phim',
     formats: 'Định dạng',
   },
+  news: {
+    title: 'Tin tức & Khuyến mãi',
+    details: 'Chi tiết tin tức',
+    published: 'Ngày đăng',
+    category: 'Danh mục',
+    noNews: 'Không tìm thấy chi tiết tin tức',
+  },
   profile: {
     bookings: 'Lượt đặt',
     points: 'Điểm',

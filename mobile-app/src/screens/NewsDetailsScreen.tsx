@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
 import { Text, ActivityIndicator, useTheme, Surface } from 'react-native-paper';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useTranslation } from '../context/I18nContext';
 import { getNewsById } from '../services/movieService';
 import { API_BASE_URL } from '../services/api';
 import { Image } from 'expo-image';
+import RenderHTML from 'react-native-render-html';
 
 const NewsDetailsScreen = () => {
   const route = useRoute<any>();
   const navigation = useNavigation();
   const { t } = useTranslation();
   const theme = useTheme();
+  const { width } = useWindowDimensions();
   const { id } = route.params;
 
   const [news, setNews] = useState<any>(null);
@@ -49,6 +51,12 @@ const NewsDetailsScreen = () => {
     return new Date(dateString).toLocaleDateString();
   };
 
+  const processImageUrls = (content: string) => {
+    if (!content) return content;
+    // Replace relative /uploads paths with full API URL
+    return content.replace(/src="\/uploads\//g, `src="${API_BASE_URL}/uploads/`);
+  };
+
   if (loading) {
     return (
       <View style={[styles.container, styles.center]}>
@@ -81,6 +89,21 @@ const NewsDetailsScreen = () => {
           <Text variant="labelSmall" style={styles.date}>{formatDate(news.publishDate)}</Text>
         </View>
         <Text variant="headlineMedium" style={styles.title}>{news.title}</Text>
+        
+        <View style={styles.htmlContainer}>
+          <RenderHTML
+            contentWidth={width - 40}
+            source={{ html: processImageUrls(news.content) }}
+            tagsStyles={{
+              p: { color: '#cccccc', fontSize: 16, lineHeight: 24, marginBottom: 15 },
+              h1: { color: '#ffffff', marginBottom: 10 },
+              h2: { color: '#ffffff', marginBottom: 10 },
+              h3: { color: '#ffffff', marginBottom: 10 },
+              li: { color: '#cccccc', fontSize: 16 },
+              img: { borderRadius: 8, marginVertical: 10 },
+            }}
+          />
+        </View>
       </Surface>
     </ScrollView>
   );
@@ -113,6 +136,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     color: '#ffffff',
+  },
+  htmlContainer: {
+    marginTop: 10,
   },
   category: {
     backgroundColor: 'rgba(255, 107, 53, 0.2)',

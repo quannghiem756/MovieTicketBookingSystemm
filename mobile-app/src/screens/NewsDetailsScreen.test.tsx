@@ -26,6 +26,16 @@ jest.mock('expo-image', () => {
   };
 });
 
+jest.mock('react-native-render-html', () => {
+  const { View, Text } = require('react-native');
+  return (props: any) => {
+    // Render a simplified version for testing
+    return require('react').createElement(View, { testID: 'html-renderer' }, 
+      require('react').createElement(Text, {}, props.source.html)
+    );
+  };
+});
+
 jest.mock('../context/I18nContext', () => ({
   useTranslation: () => ({
     t: (key: string) => {
@@ -89,7 +99,9 @@ describe('NewsDetailsScreen', () => {
       expect(screen.getByText('Exciting News')).toBeTruthy();
       expect(screen.getByText('Promotion')).toBeTruthy();
       expect(screen.getByTestId('news-image')).toBeTruthy();
-      expect(screen.getByText('1/11/2026')).toBeTruthy(); // Default locale formatting
+      expect(screen.getByText('1/11/2026')).toBeTruthy(); 
+      expect(screen.getByTestId('html-renderer')).toBeTruthy();
+      expect(screen.getByText('<p>This is some content</p>')).toBeTruthy();
     });
   });
 

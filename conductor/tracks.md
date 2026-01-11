@@ -13,7 +13,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 *Link: [./conductor/tracks/mobile_seat_selection_fix_20260109/](./conductor/tracks/mobile_seat_selection_fix_20260109/)*
 ---
 
-## [~] Track: analyze the news workflow and make a markdown docs like other docs about it
+## [x] Track: analyze the news workflow and make a markdown docs like other docs about it
 *Link: [./conductor/tracks/news_workflow_docs_20260111/](./conductor/tracks/news_workflow_docs_20260111/)*
 
 ---

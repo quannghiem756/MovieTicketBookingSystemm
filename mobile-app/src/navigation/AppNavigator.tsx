@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as Linking from 'expo-linking';
 import ProfileScreen from '../screens/ProfileScreen';
 import HomeScreen from '../screens/HomeScreen';
+import NewsDetailsScreen from '../screens/NewsDetailsScreen';
 import MoviesScreen from '../screens/MoviesScreen';
 import MovieDetailsScreen from '../screens/MovieDetailsScreen';
 import SeatSelectionScreen from '../screens/SeatSelectionScreen';
@@ -22,6 +23,15 @@ import ChatbotModal from '../components/ChatbotModal';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+
+function HomeStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="HomeScreen" component={HomeScreen} />
+      <Stack.Screen name="NewsDetails" component={NewsDetailsScreen} />
+    </Stack.Navigator>
+  );
+}
 
 function MoviesStack() {
   return (
@@ -68,7 +78,7 @@ function MainNavigator() {
     >
       <Tab.Screen 
         name="Home" 
-        component={HomeScreen} 
+        component={HomeStack} 
         options={{ title: t('nav.home') }}
       />
       <Tab.Screen 
@@ -102,7 +112,12 @@ export default function AppNavigator() {
       screens: {
         Main: {
           screens: {
-            Home: 'home',
+            Home: {
+              screens: {
+                HomeScreen: 'home',
+                NewsDetails: 'news/:id'
+              }
+            },
             MoviesTab: {
               screens: {
                 MoviesList: 'movies',
@@ -132,32 +147,17 @@ export default function AppNavigator() {
     );
   }
 
-    return (
-
-      <NavigationContainer linking={linking}>
-
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-
-          {isAuthenticated ? (
-
-            <Stack.Screen name="Main" component={MainNavigator} />
-
-          ) : (
-
-            <Stack.Screen name="Auth" component={AuthNavigator} />
-
-          )}
-
-        </Stack.Navigator>
-
-        {isAuthenticated && <ChatbotFAB />}
-
-        <ChatbotModal />
-
-      </NavigationContainer>
-
-    );
-
-  }
-
-  
+  return (
+    <NavigationContainer linking={linking}>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {isAuthenticated ? (
+          <Stack.Screen name="Main" component={MainNavigator} />
+        ) : (
+          <Stack.Screen name="Auth" component={AuthNavigator} />
+        )}
+      </Stack.Navigator>
+      {isAuthenticated && <ChatbotFAB />}
+      <ChatbotModal />
+    </NavigationContainer>
+  );
+}

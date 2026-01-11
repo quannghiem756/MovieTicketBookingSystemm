@@ -4,8 +4,8 @@ import Constants from 'expo-constants';
 
 // Use hostUri to get the local IP address of the packager host during development
 const host = Constants.expoConfig?.hostUri?.split(':').shift();
-const API_BASE_URL = host ? `http://${host}:5000/api` : 'http://localhost:5000/api';
-const BACKEND_URL = host ? `http://${host}:5000` : 'http://localhost:5000';
+export const API_BASE_URL = host ? `http://${host}:5000/api` : 'http://localhost:5000/api';
+export const BACKEND_URL = host ? `http://${host}:5000` : 'http://localhost:5000';
 
 let onAuthFailure: (() => void) | null = null;
 
@@ -25,7 +25,7 @@ const processMovieData = (data: any) => {
   if (data.posterUrl && data.posterUrl.startsWith('/uploads/')) {
     return {
       ...data,
-      posterUrl: `${BACKEND_URL}${data.posterUrl}`
+      posterUrl: `${API_BASE_URL}${data.posterUrl}`
     };
   }
   return data;

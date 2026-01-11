@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, StyleSheet, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import { Text, Title, useTheme, Paragraph, ActivityIndicator, Divider, List, Chip } from 'react-native-paper';
 import { useTranslation } from '../context/I18nContext';
 import { getMovieById, getFutureShowtimesByMovieId } from '../services/movieService';
+import { API_BASE_URL } from '../services/api';
 import YoutubePlayer from 'react-native-youtube-iframe';
+import { useFocusEffect } from '@react-navigation/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Button from '../components/Button';
 import { Image } from 'expo-image';
@@ -21,21 +23,16 @@ const MovieDetailsScreen = ({ route, navigation }: any) => {
   const [loading, setLoading] = useState(true);
   const [playing, setPlaying] = useState(false);
 
-  useEffect(() => {
-    fetchMovie();
-    fetchShowtimes();
-  }, [movieId]);
-
-  const fetchMovie = async () => {
+  const fetchMovie = useCallback(async () => {
     try {
       const data = await getMovieById(movieId);
       setMovie(data);
     } catch (error) {
       console.error('Error fetching movie details:', error);
     }
-  };
+  }, [movieId]);
 
-  const fetchShowtimes = async () => {
+  const fetchShowtimes = useCallback(async () => {
     try {
       const data = await getFutureShowtimesByMovieId(movieId);
       setShowtimes(data);
@@ -44,6 +41,21 @@ const MovieDetailsScreen = ({ route, navigation }: any) => {
     } finally {
       setLoading(false);
     }
+  }, [movieId]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchMovie();
+      fetchShowtimes();
+    }, [fetchMovie, fetchShowtimes])
+  );
+
+  const getImageUrl = (url: string) => {
+    if (!url) return undefined;
+    if (url.startsWith('/uploads')) {
+      return `${API_BASE_URL}${url}`;
+    }
+    return url;
   };
 
   const onStateChange = useCallback((state: string) => {
@@ -94,7 +106,7 @@ const MovieDetailsScreen = ({ route, navigation }: any) => {
         </View>
       ) : (
         <Image 
-          source={{ uri: movie.posterUrl }} 
+          source={{ uri: getImageUrl(movie.posterUrl) }} 
           style={styles.heroPoster} 
           contentFit="cover"
           transition={300}

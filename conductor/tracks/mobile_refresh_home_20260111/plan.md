@@ -1,13 +1,17 @@
 # Implementation Plan: Mobile Home Screen Data Refreshing
 
-## Phase 1: Research and Infrastructure Setup
+## Phase 1: Research and Infrastructure Setup [checkpoint: 7c814b2]
 - [x] Task: Analyze current data fetching in `HomeScreen.tsx`.
 - [x] Task: Verify availability of `useFocusEffect` from `@react-navigation/native` and `RefreshControl` from `react-native`.
 - [x] Task: Create unit tests for initial state verification.
-- [ ] Task: Conductor - User Manual Verification 'Research and Infrastructure Setup' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Research and Infrastructure Setup' (Protocol in workflow.md)
 
 ## Phase 2: Auto-Refresh on Focus
-- [ ] Task: Implement `useFocusEffect` in `HomeScreen.tsx` to trigger data fetching for movies and news when the screen gains focus.
+- [x] Task: Fix image URL handling for '/uploads' path to use backend API URL in `HomeScreen.tsx`.
+- [x] Task: Implement `useFocusEffect` in `HomeScreen.tsx` to trigger data fetching for movies and news when the screen gains focus.
+- [x] Task: Fix image URL handling for '/uploads' path to use backend API URL in `MovieDetailsScreen.tsx`.
+- [x] Task: Implement `useFocusEffect` in `MovieDetailsScreen.tsx` to trigger data fetching for movies and news when the screen gains focus.
+- [ ] Task: Conductor - User Manual Verification 'Auto-Refresh on Focus' (Protocol in workflow.md)
 - [ ] Task: Refactor fetching logic to ensure it can be called reliably from the focus effect.
 - [ ] Task: Write unit tests to confirm data fetching is triggered on screen focus.
 - [ ] Task: Conductor - User Manual Verification 'Auto-Refresh on Focus' (Protocol in workflow.md)

@@ -2,6 +2,7 @@ import React from 'react';
 import { render, waitFor, act } from '@testing-library/react-native';
 import HomeScreen from './HomeScreen';
 import { getNowShowing, getComingSoon, getNews } from '../services/movieService';
+import { useFocusEffect } from '@react-navigation/native';
 
 // Mock the services
 jest.mock('../services/movieService', () => ({
@@ -12,11 +13,12 @@ jest.mock('../services/movieService', () => ({
 
 // Mock navigation
 const mockNavigate = jest.fn();
+
 jest.mock('@react-navigation/native', () => ({
   useNavigation: () => ({
     navigate: mockNavigate,
   }),
-  useFocusEffect: jest.fn((callback) => callback()), // Mock useFocusEffect to execute immediately
+  useFocusEffect: jest.fn((callback) => callback()),
 }));
 
 // Mock translation
@@ -53,15 +55,17 @@ describe('HomeScreen', () => {
     (getNowShowing as jest.Mock).mockResolvedValue({ movies: [] });
     (getComingSoon as jest.Mock).mockResolvedValue({ movies: [] });
     (getNews as jest.Mock).mockResolvedValue({ news: [] });
+    (useFocusEffect as jest.Mock).mockClear();
   });
 
-  it('fetches data on mount', async () => {
+  it('fetches data on focus', async () => {
     render(<HomeScreen />);
 
     await waitFor(() => {
       expect(getNowShowing).toHaveBeenCalled();
       expect(getComingSoon).toHaveBeenCalled();
       expect(getNews).toHaveBeenCalled();
+      expect(useFocusEffect).toHaveBeenCalled();
     });
   });
 

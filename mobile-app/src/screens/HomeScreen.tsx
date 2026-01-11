@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, StyleSheet, ScrollView, Dimensions, FlatList, TouchableOpacity } from 'react-native';
 import { Text, Title, useTheme, Card, Paragraph, ActivityIndicator } from 'react-native-paper';
 import { useTranslation } from '../context/I18nContext';
 import { getNowShowing, getComingSoon, getNews } from '../services/movieService';
-import { useNavigation } from '@react-navigation/native';
+import { BACKEND_URL } from '../services/api';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { Image } from 'expo-image';
 
 const { width } = Dimensions.get('window');
@@ -19,11 +20,7 @@ const HomeScreen = () => {
   const [news, setNews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const [nowShowingData, comingSoonData, newsData] = await Promise.all([
         getNowShowing(1, 5),
@@ -39,12 +36,26 @@ const HomeScreen = () => {
     } finally {
       setLoading(false);
     }
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [fetchData])
+  );
+
+  const getImageUrl = (url: string) => {
+    if (!url) return undefined;
+    if (url.startsWith('/uploads')) {
+      return `${BACKEND_URL}${url}`;
+    }
+    return url;
   };
 
   const renderMovieItem = ({ item }: { item: any }) => (
     <TouchableOpacity onPress={() => navigation.navigate('MoviesTab', { screen: 'MovieDetails', params: { movieId: item.id } })}>
       <Card style={[styles.movieCard, { backgroundColor: theme.colors.surface }]}>
-        <Card.Cover source={{ uri: item.posterUrl }} style={styles.moviePoster} />
+        <Card.Cover source={{ uri: getImageUrl(item.posterUrl) }} style={styles.moviePoster} />
         <Card.Content>
           <Title numberOfLines={1} style={styles.movieTitle}>{item.title}</Title>
           <Paragraph numberOfLines={1} style={{ color: theme.colors.onSurfaceVariant }}>
@@ -59,7 +70,7 @@ const HomeScreen = () => {
     <TouchableOpacity onPress={() => console.log('Navigate to news detail', item.id)}>
       <Card style={[styles.newsCard, { backgroundColor: theme.colors.surfaceVariant }]}>
         <View style={styles.newsContent}>
-          {item.imageUrl && <Image source={{ uri: item.imageUrl }} style={styles.newsImage} />}
+          {item.imageUrl && <Image source={{ uri: getImageUrl(item.imageUrl) }} style={styles.newsImage} />}
           <View style={styles.newsTextContainer}>
             <Title numberOfLines={1} style={styles.newsTitle}>{item.title}</Title>
             <Paragraph numberOfLines={2} style={{ color: theme.colors.onSurfaceVariant, fontSize: 12 }}>

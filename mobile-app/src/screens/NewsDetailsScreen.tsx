@@ -9,6 +9,14 @@ import { Image } from 'expo-image';
 import RenderHTML from 'react-native-render-html';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+/**
+ * NewsDetailsScreen Component
+ * 
+ * Displays the full details of a news article or promotion.
+ * Includes a featured image, title, category, published date, and rich text content.
+ * 
+ * @returns {React.ReactElement} The rendered screen.
+ */
 const NewsDetailsScreen = () => {
   const route = useRoute<any>();
   const navigation = useNavigation();

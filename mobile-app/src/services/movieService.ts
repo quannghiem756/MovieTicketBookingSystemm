@@ -15,6 +15,12 @@ export const getNews = async (page = 1, limit = 5) => {
   return response.data;
 };
 
+/**
+ * Fetches a specific news article by its ID.
+ * 
+ * @param {string} id - The ID of the news article to fetch.
+ * @returns {Promise<any>} The news article data.
+ */
 export const getNewsById = async (id: string) => {
   const response = await api.get(`/news/${id}`);
   return response.data;

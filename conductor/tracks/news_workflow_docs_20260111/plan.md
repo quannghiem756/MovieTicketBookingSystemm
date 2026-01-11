@@ -18,21 +18,21 @@
 ### [~] Task: Conductor - User Manual Verification 'Technical Analysis' (Protocol in workflow.md)
 
 ## Phase 2: Documentation Implementation
-### [ ] Task: Create Documentation Skeleton
-- [ ] Initialize `backend/docs/news-service-workflow.md` with standard headers
-- [ ] Set up "Actors" and "Workflow" structure for each operation
+### [x] Task: Create Documentation Skeleton
+- [x] Initialize `backend/docs/news-service-workflow.md` with standard headers
+- [x] Set up "Actors" and "Workflow" structure for each operation
 
-### [ ] Task: Document Public Workflows
-- [ ] Document 'Get All News' workflow including pagination/filtering
-- [ ] Document 'Get News by ID' workflow
+### [x] Task: Document Public Workflows
+- [x] Document 'Get All News' workflow including pagination/filtering
+- [x] Document 'Get News by ID' workflow
 
-### [ ] Task: Document Admin Workflows
-- [ ] Document 'Create News' admin workflow (including validation)
-- [ ] Document 'Update News' admin workflow
-- [ ] Document 'Delete News' admin workflow
+### [x] Task: Document Admin Workflows
+- [x] Document 'Create News' admin workflow (including validation)
+- [x] Document 'Update News' admin workflow
+- [x] Document 'Delete News' admin workflow
 
-### [ ] Task: Final Review and Formatting
-- [ ] Cross-reference documentation with code for final accuracy check
-- [ ] Ensure style and tone match `movie-service-workflow.md` exactly
+### [x] Task: Final Review and Formatting
+- [x] Cross-reference documentation with code for final accuracy check
+- [x] Ensure style and tone match `movie-service-workflow.md` exactly
 
-### [ ] Task: Conductor - User Manual Verification 'Documentation Implementation' (Protocol in workflow.md)
+### [~] Task: Conductor - User Manual Verification 'Documentation Implementation' (Protocol in workflow.md)

@@ -24,5 +24,5 @@ Implement a dedicated News Details screen in the mobile application to allow use
 
 ## Phase 4: Final Polish
 - [x] Task: Final styling and responsiveness check on different screen sizes d5166d9
-- [ ] Task: Add JSDoc documentation for new components and services
+- [x] Task: Add JSDoc documentation for new components and services 61d983d
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Final Polish' (Protocol in workflow.md)

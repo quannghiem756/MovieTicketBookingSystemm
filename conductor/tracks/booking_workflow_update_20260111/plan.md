@@ -13,7 +13,7 @@
     - [x] Sub-task: List discrepancies between the code and the current documentation.
 - [x] Task: Conductor - User Manual Verification 'Analysis and Verification' (Protocol in workflow.md)
 
-## Phase 2: Documentation Update
+## Phase 2: Documentation Update [checkpoint: 699588e]
 - [x] Task: Update `booking-service-workflow.md`
     - [x] Sub-task: Correct outdated sections based on analysis.
     - [x] Sub-task: Add missing details for complex logic or new features.

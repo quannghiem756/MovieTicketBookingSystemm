@@ -19,8 +19,6 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
+## [~] Track: Mobile Home Screen Data Refreshing
+*Link: [./conductor/tracks/mobile_refresh_home_20260111/](./conductor/tracks/mobile_refresh_home_20260111/)*
 
-
-## [x] Track: Mobile Booking Flow and Auth Refresh
-
-*Link: [./conductor/tracks/mobile_booking_auth_refresh_20260110/](./conductor/tracks/mobile_booking_auth_refresh_20260110/)*

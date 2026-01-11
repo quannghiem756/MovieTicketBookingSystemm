@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react';
-import { View, StyleSheet, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ScrollView, Dimensions, TouchableOpacity, RefreshControl } from 'react-native';
 import { Text, Title, useTheme, Paragraph, ActivityIndicator, Divider, List, Chip } from 'react-native-paper';
 import { useTranslation } from '../context/I18nContext';
 import { getMovieById, getFutureShowtimesByMovieId } from '../services/movieService';
-import { API_BASE_URL } from '../services/api';
+import { BACKEND_URL } from '../services/api';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import { useFocusEffect } from '@react-navigation/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -22,6 +22,7 @@ const MovieDetailsScreen = ({ route, navigation }: any) => {
   const [selectedShowtime, setSelectedShowtime] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [playing, setPlaying] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const fetchMovie = useCallback(async () => {
     try {
@@ -40,8 +41,15 @@ const MovieDetailsScreen = ({ route, navigation }: any) => {
       console.error('Error fetching showtimes:', error);
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   }, [movieId]);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchMovie();
+    fetchShowtimes();
+  }, [fetchMovie, fetchShowtimes]);
 
   useFocusEffect(
     useCallback(() => {
@@ -53,7 +61,7 @@ const MovieDetailsScreen = ({ route, navigation }: any) => {
   const getImageUrl = (url: string) => {
     if (!url) return undefined;
     if (url.startsWith('/uploads')) {
-      return `${API_BASE_URL}${url}`;
+      return `${BACKEND_URL}${url}`;
     }
     return url;
   };
@@ -94,7 +102,13 @@ const MovieDetailsScreen = ({ route, navigation }: any) => {
   const youtubeId = movie.trailerUrl ? movie.trailerUrl.match(/(?:youtu\.be\/|youtube\.js\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/)?.[1] : null;
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+    <ScrollView 
+      style={styles.container} 
+      contentContainerStyle={styles.contentContainer}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       {youtubeId ? (
         <View style={styles.trailerContainer}>
           <YoutubePlayer

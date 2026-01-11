@@ -14,9 +14,11 @@
 - [x] Task: Conductor - User Manual Verification 'Auto-Refresh on Focus' (Protocol in workflow.md)
 
 ## Phase 3: Pull-to-Refresh
-- [ ] Task: Integrate `RefreshControl` into the `HomeScreen.tsx` ScrollView/FlatList.
-- [ ] Task: Create an `onRefresh` handler that manages the loading state and re-fetches movies and news.
-- [ ] Task: Write unit tests to verify the manual pull-to-refresh interaction and spinner behavior.
+- [x] Task: Integrate `RefreshControl` into the `HomeScreen.tsx` ScrollView.
+- [x] Task: Create an `onRefresh` handler in `HomeScreen.tsx` that manages the loading state and re-fetches movies and news.
+- [x] Task: Integrate `RefreshControl` into the `MovieDetailsScreen.tsx` ScrollView.
+- [x] Task: Create an `onRefresh` handler in `MovieDetailsScreen.tsx` that re-fetches movie details and showtimes.
+- [ ] Task: Write unit tests to verify the manual pull-to-refresh interaction and spinner behavior in `HomeScreen`.
 - [ ] Task: Conductor - User Manual Verification 'Pull-to-Refresh' (Protocol in workflow.md)
 
 ## Phase 4: Integration and Error Handling

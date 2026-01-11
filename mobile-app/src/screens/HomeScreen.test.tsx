@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, waitFor, act } from '@testing-library/react-native';
+import { RefreshControl } from 'react-native';
 import HomeScreen from './HomeScreen';
 import { getNowShowing, getComingSoon, getNews } from '../services/movieService';
 import { useFocusEffect } from '@react-navigation/native';
@@ -10,6 +11,13 @@ jest.mock('../services/movieService', () => ({
   getComingSoon: jest.fn(),
   getNews: jest.fn(),
 }));
+
+// Mock React Native components
+jest.mock('react-native', () => {
+  const RN = jest.requireActual('react-native');
+  RN.RefreshControl = (props: any) => <RN.View {...props} testID="refresh-control" />;
+  return RN;
+});
 
 // Mock navigation
 const mockNavigate = jest.fn();
@@ -66,6 +74,25 @@ describe('HomeScreen', () => {
       expect(getComingSoon).toHaveBeenCalled();
       expect(getNews).toHaveBeenCalled();
       expect(useFocusEffect).toHaveBeenCalled();
+    });
+  });
+
+  it('triggers refresh when pulled', async () => {
+    (getNowShowing as jest.Mock).mockResolvedValue({ movies: [] });
+    (getComingSoon as jest.Mock).mockResolvedValue({ movies: [] });
+    (getNews as jest.Mock).mockResolvedValue({ news: [] });
+
+    const { findByTestId } = render(<HomeScreen />);
+    
+    // Wait for initial load to finish and find RefreshControl
+    const refreshControl = await findByTestId('refresh-control');
+    
+    act(() => {
+      refreshControl.props.onRefresh();
+    });
+
+    await waitFor(() => {
+      expect(getNowShowing).toHaveBeenCalledTimes(2);
     });
   });
 

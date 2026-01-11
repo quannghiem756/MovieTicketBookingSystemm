@@ -25,7 +25,7 @@ const processMovieData = (data: any) => {
   if (data.posterUrl && data.posterUrl.startsWith('/uploads/')) {
     return {
       ...data,
-      posterUrl: `${API_BASE_URL}${data.posterUrl}`
+      posterUrl: `${BACKEND_URL}${data.posterUrl}`
     };
   }
   return data;

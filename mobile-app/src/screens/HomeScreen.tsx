@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { View, StyleSheet, ScrollView, Dimensions, FlatList, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ScrollView, Dimensions, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
 import { Text, Title, useTheme, Card, Paragraph, ActivityIndicator } from 'react-native-paper';
 import { useTranslation } from '../context/I18nContext';
 import { getNowShowing, getComingSoon, getNews } from '../services/movieService';
@@ -19,6 +19,7 @@ const HomeScreen = () => {
   const [comingSoon, setComingSoon] = useState<any[]>([]);
   const [news, setNews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   const fetchData = useCallback(async () => {
     try {
@@ -35,8 +36,14 @@ const HomeScreen = () => {
       console.error('Error fetching home data:', error);
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   }, []);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchData();
+  }, [fetchData]);
 
   useFocusEffect(
     useCallback(() => {
@@ -91,7 +98,13 @@ const HomeScreen = () => {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+    <ScrollView 
+      style={styles.container} 
+      contentContainerStyle={styles.contentContainer}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <View style={styles.section}>
         <Title style={styles.sectionTitle}>{t('home.nowShowing')}</Title>
         <FlatList

@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
   },
   featuredImage: {
     width: '100%',
-    height: 300,
+    height: 350,
   },
   backButton: {
     position: 'absolute',
@@ -168,12 +168,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: 10,
   },
   title: {
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 20,
     color: '#ffffff',
+    lineHeight: 34,
   },
   htmlContainer: {
     marginTop: 10,

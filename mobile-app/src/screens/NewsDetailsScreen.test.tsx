@@ -57,11 +57,15 @@ jest.mock('react-native-paper', () => {
   const Text = (props: any) => React.createElement(RNText, props);
   const ActivityIndicator = (props: any) => React.createElement(View, props);
   const Surface = (props: any) => React.createElement(View, props);
+  const IconButton = (props: any) => React.createElement(require('react-native').TouchableOpacity, props);
+  const Button = (props: any) => React.createElement(require('react-native').TouchableOpacity, props);
   
   return {
     Text,
     ActivityIndicator,
     Surface,
+    IconButton,
+    Button,
     useTheme: () => ({
       colors: {
         primary: 'blue',
@@ -103,6 +107,28 @@ describe('NewsDetailsScreen', () => {
       expect(screen.getByTestId('html-renderer')).toBeTruthy();
       expect(screen.getByText('<p>This is some content</p>')).toBeTruthy();
     });
+  });
+
+  it('navigates back when back button is pressed', async () => {
+    const mockNews = {
+      id: 'news1',
+      title: 'Exciting News',
+      content: '<p>This is some content</p>',
+      publishDate: '2026-01-11T10:00:00Z',
+      category: 'Promotion',
+    };
+    (movieService.getNewsById as jest.Mock).mockResolvedValue(mockNews);
+
+    render(<NewsDetailsScreen />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('back-button')).toBeTruthy();
+    });
+
+    const backButton = screen.getByTestId('back-button');
+    require('@testing-library/react-native').fireEvent.press(backButton);
+
+    expect(mockNavigation.goBack).toHaveBeenCalled();
   });
 
   it('renders error state when fetch fails', async () => {

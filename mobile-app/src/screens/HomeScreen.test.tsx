@@ -104,4 +104,24 @@ describe('HomeScreen', () => {
     // Note: ActivityIndicator doesn't have a default testID, so checking if it exists might need queryByType or adding testID in component.
     // For now, let's assume standard behavior or just check that content is not yet visible.
   });
+
+  it('navigates to NewsDetails when a news item is pressed', async () => {
+    (getNews as jest.Mock).mockResolvedValue({
+      news: [{ id: 'news1', title: 'Test News', summary: 'Summary' }]
+    });
+
+    const { getByText } = render(<HomeScreen />);
+
+    await waitFor(() => {
+      expect(getByText('Test News')).toBeTruthy();
+    });
+
+    const newsItem = getByText('Test News');
+    
+    // We need fireEvent from testing-library
+    const { fireEvent } = require('@testing-library/react-native');
+    fireEvent.press(newsItem);
+
+    expect(mockNavigate).toHaveBeenCalledWith('NewsDetails', { id: 'news1' });
+  });
 });

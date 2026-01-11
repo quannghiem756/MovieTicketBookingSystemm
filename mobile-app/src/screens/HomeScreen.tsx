@@ -75,7 +75,7 @@ const HomeScreen = () => {
   );
 
   const renderNewsItem = ({ item }: { item: any }) => (
-    <TouchableOpacity onPress={() => console.log('Navigate to news detail', item.id)}>
+    <TouchableOpacity onPress={() => navigation.navigate('NewsDetails', { id: item.id })}>
       <Card style={[styles.newsCard, { backgroundColor: theme.colors.surfaceVariant }]}>
         <View style={styles.newsContent}>
           {item.featuredImage && <Image source={{ uri: getImageUrl(item.featuredImage) }} style={styles.newsImage} />}

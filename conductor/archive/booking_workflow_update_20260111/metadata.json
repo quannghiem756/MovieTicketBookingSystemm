@@ -1,0 +1,8 @@
+{
+  "track_id": "booking_workflow_update_20260111",
+  "type": "chore",
+  "status": "new",
+  "created_at": "2026-01-11T10:00:00Z",
+  "updated_at": "2026-01-11T10:00:00Z",
+  "description": "check the current booking workflow changes and update the booking-service-workflow.md"
+}

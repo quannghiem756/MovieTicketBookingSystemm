@@ -1,3 +1,4 @@
+import { EXPO_PUBLIC_ANDROID_CLIENT_ID, EXPO_PUBLIC_IOS_CLIENT_ID, EXPO_PUBLIC_WEB_CLIENT_ID } from '@env';
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { Text, Title, useTheme, HelperText, Divider } from 'react-native-paper';
@@ -20,9 +21,9 @@ const LoginScreen = ({ navigation }: any) => {
   const theme = useTheme();
 
   const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: 'YOUR_ANDROID_CLIENT_ID',
-    iosClientId: 'YOUR_IOS_CLIENT_ID',
-    webClientId: '869249429066-b16nb420d4b11clgdtnrl38tdfa1ni60.apps.googleusercontent.com',
+    androidClientId: EXPO_PUBLIC_ANDROID_CLIENT_ID,
+    iosClientId: EXPO_PUBLIC_IOS_CLIENT_ID,
+    webClientId: EXPO_PUBLIC_WEB_CLIENT_ID,
   });
 
   useEffect(() => {
@@ -103,7 +104,7 @@ const LoginScreen = ({ navigation }: any) => {
             <Divider style={styles.divider} />
           </View>
 
-          <Button
+          {/* <Button
             mode="outlined"
             onPress={() => promptAsync()}
             disabled={!request || loading}
@@ -111,7 +112,7 @@ const LoginScreen = ({ navigation }: any) => {
             style={styles.googleButton}
           >
             {t('auth.continueWithGoogle')}
-          </Button>
+          </Button> */}
 
           <TouchableOpacity
             onPress={() => navigation.navigate('Register')}

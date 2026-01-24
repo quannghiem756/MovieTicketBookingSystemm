@@ -1,0 +1,8 @@
+{
+  "track_id": "vietnamese_sequence_diagrams_20260111",
+  "type": "chore",
+  "status": "new",
+  "created_at": "2026-01-11T14:40:00Z",
+  "updated_at": "2026-01-11T14:40:00Z",
+  "description": "check for every workflow docs in backend/docs and if the docs dont have sequenceDiagram add it"
+}

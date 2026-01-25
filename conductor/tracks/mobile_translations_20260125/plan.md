@@ -23,7 +23,7 @@
     - [x] Update translations and implement `t()`.
 - [x] Task: Conductor - User Manual Verification 'Movie Discovery & Details' (Protocol in workflow.md) 833d408
 
-## Phase 3: Booking Workflow & Payments
+## Phase 3: Booking Workflow & Payments [checkpoint: f5b515c]
 - [x] Task: Audit and translate Seat Selection & Booking ce28528
     - [x] Analyze `SeatSelectionScreen.tsx` and booking summary.
     - [x] Translate legends (Available, Taken, Selected) and alerts.
@@ -32,7 +32,7 @@
     - [x] Analyze `CheckoutScreen.tsx` and coupon modals.
     - [x] Translate payment instruction prompts and success/failure messages.
     - [x] Update translations and implement `t()`.
-- [~] Task: Conductor - User Manual Verification 'Booking Workflow & Payments' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Booking Workflow & Payments' (Protocol in workflow.md) f5b515c
 
 ## Phase 4: Support, News & Chatbot
 - [ ] Task: Audit and translate Support & News

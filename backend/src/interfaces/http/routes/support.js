@@ -23,6 +23,9 @@ router.post('/tickets', (req, res, next) => {
 // Public route for viewing ticket by token
 router.get('/public/:token', (req, res) => supportController.getTicketByToken(req, res));
 
+// Mobile app redirector route
+router.get('/mobile-launch/:token', (req, res) => supportController.mobileLaunch(req, res));
+
 // Public route for user reply by token
 router.post('/public/:token/reply', (req, res) => supportController.addPublicReply(req, res));
 

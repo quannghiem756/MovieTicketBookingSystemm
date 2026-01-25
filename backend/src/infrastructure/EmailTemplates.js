@@ -57,7 +57,7 @@ class EmailTemplates {
   getSupportReplyTemplate(data, lang = 'en') {
     const t = translations[lang] || translations.en;
     const ticketUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/support/ticket/${data.accessToken}`;
-    const mobileTicketUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/mobile-redirect/ticket/${data.accessToken}`;
+    const mobileTicketUrl = `${process.env.BASE_URL || 'http://localhost:5000'}/api/support/mobile-launch/${data.accessToken}`;
 
     const html = `
       <!DOCTYPE html>

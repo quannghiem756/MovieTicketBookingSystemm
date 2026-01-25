@@ -20,13 +20,11 @@ import ShowtimesPage from './pages/ShowtimesPage';
 import NewsPage from './pages/NewsPage';
 import NewsDetailPage from './pages/NewsDetailPage';
 import PublicTicketDetail from './pages/PublicTicketDetail';
-import MobileRedirect from './pages/MobileRedirect';
 // Admin components
 import AdminLayout from './pages/admin/AdminLayout';
 // ...
           <Route path="/forgot-password" element={<ResetPasswordPage />} />
           <Route path="/support/ticket/:token" element={<PublicTicketDetail />} />
-          <Route path="/mobile-redirect/:screen/:param" element={<MobileRedirect />} />
 
           {/* Admin routes */}
           <Route path="/admin" element={

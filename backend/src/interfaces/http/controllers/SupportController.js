@@ -105,6 +105,37 @@ class SupportController {
       }
     }
   }
+
+  async mobileLaunch(req, res) {
+    const { token } = req.params;
+    const deepLink = `cinebook://support/ticket/${token}`;
+    
+    res.send(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Opening CineBook App</title>
+        <style>
+          body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; background-color: #0f0f0f; color: white; text-align: center; }
+          .btn { background-color: #e53935; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold; margin-top: 20px; border: none; cursor: pointer; }
+          .loader { border: 4px solid #333; border-top: 4px solid #e53935; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 20px; }
+          @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        </style>
+      </head>
+      <body>
+        <div class="loader"></div>
+        <h1>Opening in CineBook App...</h1>
+        <p>If the app doesn't open automatically, click the button below.</p>
+        <a href="${deepLink}" class="btn">Open App</a>
+        <script>
+          window.location.href = "${deepLink}";
+        </script>
+      </body>
+      </html>
+    `);
+  }
 }
 
 module.exports = SupportController;

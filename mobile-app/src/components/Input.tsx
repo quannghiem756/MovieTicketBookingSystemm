@@ -12,6 +12,8 @@ interface InputProps {
   keyboardType?: 'default' | 'email-address' | 'numeric' | 'phone-pad';
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
   right?: React.ReactNode;
+  multiline?: boolean;
+  numberOfLines?: number;
 }
 
 const Input = ({
@@ -23,7 +25,9 @@ const Input = ({
   error,
   keyboardType,
   autoCapitalize = 'none',
-  right
+  right,
+  multiline,
+  numberOfLines
 }: InputProps) => {
   const theme = useTheme();
 
@@ -42,6 +46,8 @@ const Input = ({
       outlineColor={theme.colors.outline}
       activeOutlineColor={theme.colors.primary}
       right={right}
+      multiline={multiline}
+      numberOfLines={numberOfLines}
     />
   );
 };

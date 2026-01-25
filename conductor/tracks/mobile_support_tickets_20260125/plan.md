@@ -2,17 +2,17 @@
 
 Implement the "Contact Us" form and Ticket Details/Reply functionality in the React Native app, including deep linking support and bilingual translations.
 
-## Phase 1: Foundation & Translations
+## Phase 1: Foundation & Translations [checkpoint: 48a45fc]
 Set up the service layer and ensure all necessary translation keys are present.
 
 - [x] Task: Update `i18n` translations for support categories and form labels [8f632ca]
-    - [ ] Add support keys to `mobile-app/src/translations/en.ts`
-    - [ ] Add support keys to `mobile-app/src/translations/vi.ts`
+    - [x] Add support keys to `mobile-app/src/translations/en.ts`
+    - [x] Add support keys to `mobile-app/src/translations/vi.ts`
 - [x] Task: Create `supportService` for mobile [4e92838]
-    - [ ] Implement `createTicket(ticketData)`
-    - [ ] Implement `getTicketByToken(token)`
-    - [ ] Implement `replyToTicket(token, content)`
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Foundation & Translations' (Protocol in workflow.md)
+    - [x] Implement `createTicket(ticketData)`
+    - [x] Implement `getTicketByToken(token)`
+    - [x] Implement `replyToTicket(token, content)`
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Foundation & Translations' (Protocol in workflow.md) [48a45fc]
 
 ## Phase 2: Contact Us Form
 Implement the submission UI and logic.

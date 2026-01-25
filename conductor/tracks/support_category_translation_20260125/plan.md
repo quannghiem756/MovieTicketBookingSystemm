@@ -2,12 +2,12 @@
 
 This plan outlines the steps to introduce Vietnamese translations for support ticket categories in the backend, specifically for email notifications sent during internal replies.
 
-## Phase 1: Preparation & Infrastructure
+## Phase 1: Preparation & Infrastructure [checkpoint: a2a0185]
 
 - [x] Task: Define Support Category Translations constant [aac3c9a]
     - [x] Identify a suitable location for shared constants or define within `SupportService.js`
     - [x] Add `SUPPORT_CATEGORY_TRANSLATIONS` mapping English keys to Vietnamese values
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Preparation & Infrastructure' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Preparation & Infrastructure' (Protocol in workflow.md) a2a0185
 
 ## Phase 2: SupportService Enhancement (TDD)
 

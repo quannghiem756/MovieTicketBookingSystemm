@@ -3,6 +3,8 @@ export default {
     loading: 'Đang tải...',
     error: 'Đã xảy ra lỗi',
     retry: 'Thử lại',
+    back: 'Quay lại',
+    success: 'Thành công',
   },
   auth: {
     login: 'Đăng nhập',
@@ -149,6 +151,9 @@ export default {
     cancel: 'Hủy',
     success: 'Yêu cầu của bạn đã được gửi thành công!',
     error: 'Gửi yêu cầu không thành công. Vui lòng thử lại.',
+    errorFields: 'Vui lòng điền đầy đủ thông tin',
+    errorEmail: 'Định dạng email không hợp lệ',
+    errorReply: 'Gửi phản hồi thất bại',
     submitted: 'Đã gửi yêu cầu!',
     checkEmail: 'Vui lòng kiểm tra email để nhận liên kết theo dõi phiếu hỗ trợ của bạn.',
     categories: {
@@ -157,9 +162,15 @@ export default {
       account: 'Tài khoản',
       general: 'Câu hỏi chung',
     },
+    status: {
+      open: 'Mở',
+      replied: 'Đã phản hồi',
+      resolved: 'Đã giải quyết',
+      closed: 'Đã đóng',
+    },
     ticketDetails: 'Chi tiết phiếu hỗ trợ',
     subject: 'Tiêu đề',
-    status: 'Trạng thái',
+    statusLabel: 'Trạng thái',
     created: 'Ngày tạo',
     reply: 'Phản hồi',
     sendReply: 'Gửi phản hồi',
@@ -167,5 +178,12 @@ export default {
     sender: 'Người gửi',
     staff: 'Nhân viên',
     you: 'Bạn',
+  },
+  chatbot: {
+    title: 'Trợ lý CineAI',
+    welcome: 'Xin chào %{name}! Tôi là trợ lý AI của CineBook. Tôi có thể giúp gì cho bạn? ✨',
+    suggestions: 'Đây là một số gợi ý cho bạn:',
+    errorMessage: 'Rất tiếc, đã có lỗi xảy ra. Vui lòng thử lại sau.',
+    placeholder: 'Nhập tin nhắn...',
   }
 };

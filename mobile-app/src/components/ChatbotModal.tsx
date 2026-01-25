@@ -28,9 +28,7 @@ const ChatbotModal = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: locale === 'vi' 
-        ? `Xin chào ${user?.name || ''}! Tôi là trợ lý AI của CineBook. Tôi có thể giúp gì cho bạn? ✨`
-        : `Hello ${user?.name || ''}! I'm your CineBook AI assistant. How can I help you today? ✨`,
+      text: t('chatbot.welcome', { name: user?.name || '' }),
       sender: 'bot',
       timestamp: new Date(),
     },
@@ -66,7 +64,7 @@ const ChatbotModal = () => {
       
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: response.message || (locale === 'vi' ? 'Đây là một số gợi ý cho bạn:' : 'Here are some suggestions for you:'),
+        text: response.message || t('chatbot.suggestions'),
         sender: 'bot',
         timestamp: new Date(),
         movies: response.recommendations || [],
@@ -77,9 +75,7 @@ const ChatbotModal = () => {
       console.error('Chatbot error:', error);
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: locale === 'vi' 
-          ? 'Rất tiếc, đã có lỗi xảy ra. Vui lòng thử lại sau.'
-          : 'Sorry, something went wrong. Please try again later.',
+        text: t('chatbot.errorMessage'),
         sender: 'bot',
         timestamp: new Date(),
       };
@@ -108,7 +104,7 @@ const ChatbotModal = () => {
         <Card.Cover source={{ uri: movie.posterUrl }} style={styles.moviePoster} />
         <Card.Content style={styles.movieCardContent}>
           <Text numberOfLines={1} style={styles.movieTitle}>{movie.title}</Text>
-          <Text style={styles.movieMeta}>{movie.rating} • {movie.duration}m</Text>
+          <Text style={styles.movieMeta}>{movie.rating} • {movie.duration}{t('movies.durationUnit')}</Text>
         </Card.Content>
       </Card>
     </TouchableOpacity>
@@ -128,7 +124,7 @@ const ChatbotModal = () => {
         <Surface style={styles.header}>
           <View style={styles.headerTitle}>
             <MaterialCommunityIcons name="sparkles" size={24} color={theme.colors.primary} />
-            <Title style={styles.title}>CineAI Assistant</Title>
+            <Title style={styles.title}>{t('chatbot.title')}</Title>
           </View>
           <IconButton icon="close" onPress={closeChatbot} />
         </Surface>
@@ -171,7 +167,7 @@ const ChatbotModal = () => {
         <View style={styles.inputArea}>
           <TextInput
             mode="outlined"
-            placeholder={locale === 'vi' ? 'Nhập tin nhắn...' : 'Type your message...'}
+            placeholder={t('chatbot.placeholder')}
             value={inputText}
             onChangeText={setInputText}
             style={styles.input}

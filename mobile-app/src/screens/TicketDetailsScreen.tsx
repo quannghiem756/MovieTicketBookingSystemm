@@ -56,7 +56,7 @@ const TicketDetailsScreen = () => {
         flatListRef.current?.scrollToEnd({ animated: true });
       }, 500);
     } catch (err: any) {
-      Alert.alert(t('common.error'), err.response?.data?.message || 'Failed to send reply');
+      Alert.alert(t('common.error'), err.response?.data?.message || t('contactUs.errorReply'));
     } finally {
       setReplying(false);
     }
@@ -70,6 +70,11 @@ const TicketDetailsScreen = () => {
       case 'Closed': return '#f44336';
       default: return theme.colors.primary;
     }
+  };
+
+  const getStatusLabel = (status: string) => {
+    const key = `contactUs.status.${status.toLowerCase()}` as any;
+    return t(key, { defaultValue: status });
   };
 
   const renderComment = ({ item }: { item: any }) => {
@@ -91,7 +96,7 @@ const TicketDetailsScreen = () => {
               {isStaff ? t('contactUs.staff') : t('contactUs.you')}
             </Text>
             <Text style={styles.commentDate}>
-              {new Date(item.createdAt).toLocaleString()}
+              {new Date(item.createdAt).toLocaleString(locale === 'vi' ? 'vi-VN' : 'en-GB')}
             </Text>
           </View>
           <RenderHTML
@@ -112,14 +117,17 @@ const TicketDetailsScreen = () => {
       <View style={styles.titleRow}>
         <Title style={styles.ticketTitle}>{ticket.subject || ticket.category}</Title>
         <Surface style={[styles.statusBadge, { backgroundColor: getStatusColor(ticket.status) }]}>
-          <Text style={styles.statusText}>{ticket.status}</Text>
+          <Text style={styles.statusText}>{getStatusLabel(ticket.status)}</Text>
         </Surface>
       </View>
       <Text style={styles.ticketMeta}>
         {t('contactUs.category')}: {ticket.category}
       </Text>
       <Text style={styles.ticketMeta}>
-        {t('contactUs.created')}: {new Date(ticket.created_at).toLocaleString()}
+        {t('contactUs.statusLabel')}: {getStatusLabel(ticket.status)}
+      </Text>
+      <Text style={styles.ticketMeta}>
+        {t('contactUs.created')}: {new Date(ticket.created_at).toLocaleString(locale === 'vi' ? 'vi-VN' : 'en-GB')}
       </Text>
       <Divider style={styles.divider} />
       

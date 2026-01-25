@@ -36,13 +36,13 @@ const ContactUsScreen = ({ navigation }: any) => {
   const handleSubmit = async () => {
     if (!name || !email || !phone || !message) {
       setError(t('common.error'));
-      Alert.alert(t('contactUs.error'), 'Please fill in all fields');
+      Alert.alert(t('contactUs.error'), t('contactUs.errorFields'));
       return;
     }
 
     if (!validateEmail(email)) {
       setError(t('contactUs.error'));
-      Alert.Alert(t('contactUs.error'), 'Invalid email format');
+      Alert.alert(t('contactUs.error'), t('contactUs.errorEmail'));
       return;
     }
 

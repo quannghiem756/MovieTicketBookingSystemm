@@ -3,6 +3,8 @@ export default {
     loading: 'Loading...',
     error: 'An error occurred',
     retry: 'Retry',
+    back: 'Back',
+    success: 'Success',
   },
   auth: {
     login: 'Login',
@@ -149,6 +151,9 @@ export default {
     cancel: 'Cancel',
     success: 'Your inquiry has been submitted successfully!',
     error: 'Failed to submit inquiry. Please try again.',
+    errorFields: 'Please fill in all fields',
+    errorEmail: 'Invalid email format',
+    errorReply: 'Failed to send reply',
     submitted: 'Inquiry submitted!',
     checkEmail: 'Please check your email for a tracking link to view your ticket.',
     categories: {
@@ -157,9 +162,15 @@ export default {
       account: 'Account',
       general: 'General Question',
     },
+    status: {
+      open: 'Open',
+      replied: 'Replied',
+      resolved: 'Resolved',
+      closed: 'Closed',
+    },
     ticketDetails: 'Ticket Details',
     subject: 'Subject',
-    status: 'Status',
+    statusLabel: 'Status',
     created: 'Created',
     reply: 'Reply',
     sendReply: 'Send Reply',
@@ -167,5 +178,12 @@ export default {
     sender: 'Sender',
     staff: 'Staff',
     you: 'You',
+  },
+  chatbot: {
+    title: 'CineAI Assistant',
+    welcome: "Hello %{name}! I'm your CineBook AI assistant. How can I help you today? ✨",
+    suggestions: 'Here are some suggestions for you:',
+    errorMessage: 'Sorry, something went wrong. Please try again later.',
+    placeholder: 'Type your message...',
   }
 };

@@ -48,6 +48,18 @@ describe('Translation Keys', () => {
     expect((en as any).booking.checkout.payWithMomo).toBeDefined();
   });
 
+  it('should have support and status keys in English', () => {
+    expect((en as any).contactUs.errorFields).toBeDefined();
+    expect((en as any).contactUs.status.open).toBeDefined();
+    expect((en as any).common.back).toBeDefined();
+  });
+
+  it('should have chatbot keys in English', () => {
+    expect((en as any).chatbot.welcome).toBeDefined();
+    expect((en as any).chatbot.placeholder).toBeDefined();
+    expect((en as any).chatbot.suggestions).toBeDefined();
+  });
+
   it('should have authentication error keys in Vietnamese', () => {
     expect((vi as any).auth.error).toBeDefined();
     expect((vi as any).auth.error.fillAll).toBeDefined();

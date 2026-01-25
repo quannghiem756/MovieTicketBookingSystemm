@@ -46,11 +46,11 @@
 - [x] Task: Conductor - User Manual Verification 'Support, News & Chatbot' (Protocol in workflow.md) 6e5afe7
 
 ## Phase 5: Global UI & Final Polish
-- [ ] Task: Audit General UI Components
-    - [ ] Check `navigation/AppNavigator.tsx` for screen titles.
-    - [ ] Check shared components (Modals, Custom Alerts, Loading Spinners).
-    - [ ] Ensure `I18nContext` handles fallback gracefully.
-- [ ] Task: Final Translation Consistency Check
-    - [ ] Review `vi.ts` for tone consistency (formal vs. informal).
-    - [ ] Ensure no placeholder keys remain visible.
+- [x] Task: Audit General UI Components d0da127
+    - [x] Check `navigation/AppNavigator.tsx` for screen titles.
+    - [x] Check shared components (Modals, Custom Alerts, Loading Spinners).
+    - [x] Ensure `I18nContext` handles fallback gracefully.
+- [x] Task: Final Translation Consistency Check d0da127
+    - [x] Review `vi.ts` for tone consistency (formal vs. informal).
+    - [x] Ensure no placeholder keys remain visible.
 - [ ] Task: Conductor - User Manual Verification 'Global UI & Final Polish' (Protocol in workflow.md)

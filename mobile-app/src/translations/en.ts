@@ -42,6 +42,17 @@ export default {
   movies: {
     searchPlaceholder: 'Search movies...',
     noResults: 'No movies found',
+    noResultsSubtitle: "Can't find what you're looking for? Let our AI assistant help you find the perfect movie! ✨",
+    askAI: 'Ask AI Assistant',
+    notFound: 'Movie not found',
+    showtimes: 'Showtimes',
+    noShowtimes: 'No upcoming showtimes available.',
+    synopsis: 'Synopsis',
+    director: 'Director',
+    cast: 'Cast',
+    selectShowtime: 'Select a Showtime',
+    bookFor: 'Book for %{time}',
+    durationUnit: 'min',
     formats: 'Formats',
   },
   news: {

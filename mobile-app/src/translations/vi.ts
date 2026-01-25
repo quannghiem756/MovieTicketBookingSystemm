@@ -42,6 +42,17 @@ export default {
   movies: {
     searchPlaceholder: 'Tìm kiếm phim...',
     noResults: 'Không tìm thấy phim',
+    noResultsSubtitle: 'Không tìm thấy phim bạn đang tìm kiếm? Hãy để trợ lý AI giúp bạn! ✨',
+    askAI: 'Hỏi Trợ lý AI',
+    notFound: 'Không tìm thấy phim',
+    showtimes: 'Lịch chiếu',
+    noShowtimes: 'Không có lịch chiếu sắp tới.',
+    synopsis: 'Nội dung phim',
+    director: 'Đạo diễn',
+    cast: 'Diễn viên',
+    selectShowtime: 'Chọn suất chiếu',
+    bookFor: 'Đặt suất %{time}',
+    durationUnit: 'phút',
     formats: 'Định dạng',
   },
   news: {

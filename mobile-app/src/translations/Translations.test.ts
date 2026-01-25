@@ -20,6 +20,20 @@ describe('Translation Keys', () => {
     expect((en as any).profile.status.confirmed).toBeDefined();
   });
 
+  it('should have movie keys in English', () => {
+    expect((en as any).movies.noResultsSubtitle).toBeDefined();
+    expect((en as any).movies.askAI).toBeDefined();
+    expect((en as any).movies.notFound).toBeDefined();
+    expect((en as any).movies.showtimes).toBeDefined();
+    expect((en as any).movies.noShowtimes).toBeDefined();
+    expect((en as any).movies.synopsis).toBeDefined();
+    expect((en as any).movies.director).toBeDefined();
+    expect((en as any).movies.cast).toBeDefined();
+    expect((en as any).movies.selectShowtime).toBeDefined();
+    expect((en as any).movies.bookFor).toBeDefined();
+    expect((en as any).movies.durationUnit).toBeDefined();
+  });
+
   it('should have authentication error keys in Vietnamese', () => {
     expect((vi as any).auth.error).toBeDefined();
     expect((vi as any).auth.error.fillAll).toBeDefined();

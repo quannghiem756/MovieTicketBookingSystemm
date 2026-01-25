@@ -86,7 +86,7 @@ const MoviesScreen = () => {
       <MaterialCommunityIcons name="sparkles" size={48} color={theme.colors.primary} />
       <Text style={styles.zeroResultsText}>{t('movies.noResults')}</Text>
       <Paragraph style={styles.zeroResultsSubtext}>
-        Can't find what you're looking for? Let our AI assistant help you find the perfect movie! ✨
+        {t('movies.noResultsSubtitle')}
       </Paragraph>
       <Button 
         mode="contained" 
@@ -94,7 +94,7 @@ const MoviesScreen = () => {
         icon="robot"
         style={styles.chatbotButton}
       >
-        Ask AI Assistant
+        {t('movies.askAI')}
       </Button>
     </View>
   );

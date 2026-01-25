@@ -94,7 +94,7 @@ const MovieDetailsScreen = ({ route, navigation }: any) => {
   if (!movie) {
     return (
       <View style={[styles.container, styles.center]}>
-        <Text style={{ color: '#fff' }}>Movie not found</Text>
+        <Text style={{ color: '#fff' }}>{t('movies.notFound')}</Text>
       </View>
     );
   }
@@ -131,7 +131,7 @@ const MovieDetailsScreen = ({ route, navigation }: any) => {
         <Title style={styles.title}>{movie.title}</Title>
         
         <View style={styles.metaRow}>
-          <Chip icon="clock-outline" style={styles.chip}>{movie.duration} min</Chip>
+          <Chip icon="clock-outline" style={styles.chip}>{movie.duration} {t('movies.durationUnit')}</Chip>
           <Chip icon="calendar" style={styles.chip}>{new Date(movie.releaseDate).getFullYear()}</Chip>
           <Chip icon="star" style={styles.chip} selectedColor="#ffc107">{movie.rating || 'N/A'}</Chip>
         </View>
@@ -144,7 +144,7 @@ const MovieDetailsScreen = ({ route, navigation }: any) => {
 
         <Divider style={styles.divider} />
 
-        <Title style={styles.sectionTitle}>Showtimes</Title>
+        <Title style={styles.sectionTitle}>{t('movies.showtimes')}</Title>
         <View style={styles.showtimeContainer}>
           {showtimes.length > 0 ? (
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -159,7 +159,7 @@ const MovieDetailsScreen = ({ route, navigation }: any) => {
                   onPress={() => setSelectedShowtime(st)}
                 >
                   <Text style={[styles.showtimeDate, selectedShowtime?.id === st.id && styles.selectedText]}>
-                    {new Date(st.showDate).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' })}
+                    {new Date(st.showDate).toLocaleDateString(locale === 'vi' ? 'vi-VN' : 'en-GB', { day: '2-digit', month: '2-digit' })}
                   </Text>
                   <Text style={[styles.showtimeTime, selectedShowtime?.id === st.id && styles.selectedText]}>
                     {st.showTime}
@@ -171,26 +171,26 @@ const MovieDetailsScreen = ({ route, navigation }: any) => {
               ))}
             </ScrollView>
           ) : (
-            <Text style={{ color: '#666' }}>No upcoming showtimes available.</Text>
+            <Text style={{ color: '#666' }}>{t('movies.noShowtimes')}</Text>
           )}
         </View>
 
         <Divider style={styles.divider} />
 
-        <Title style={styles.sectionTitle}>Synopsis</Title>
+        <Title style={styles.sectionTitle}>{t('movies.synopsis')}</Title>
         <Paragraph style={styles.description}>{movie.description}</Paragraph>
 
         <Divider style={styles.divider} />
 
         <List.Item
-          title="Director"
+          title={t('movies.director')}
           description={movie.director}
           left={props => <List.Icon {...props} icon="account-tie" />}
           titleStyle={{ color: theme.colors.onSurface }}
           descriptionStyle={{ color: theme.colors.onSurfaceVariant }}
         />
         <List.Item
-          title="Cast"
+          title={t('movies.cast')}
           description={movie.cast.join(', ')}
           left={props => <List.Icon {...props} icon="account-group" />}
           titleStyle={{ color: theme.colors.onSurface }}
@@ -203,7 +203,7 @@ const MovieDetailsScreen = ({ route, navigation }: any) => {
           disabled={!selectedShowtime}
           style={styles.bookButton}
         >
-          {selectedShowtime ? `Book for ${selectedShowtime.showTime}` : 'Select a Showtime'}
+          {selectedShowtime ? t('movies.bookFor', { time: selectedShowtime.showTime }) : t('movies.selectShowtime')}
         </Button>
       </View>
     </ScrollView>

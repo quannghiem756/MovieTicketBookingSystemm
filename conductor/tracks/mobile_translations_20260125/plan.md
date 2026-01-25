@@ -35,14 +35,14 @@
 - [x] Task: Conductor - User Manual Verification 'Booking Workflow & Payments' (Protocol in workflow.md) f5b515c
 
 ## Phase 4: Support, News & Chatbot
-- [ ] Task: Audit and translate Support & News
-    - [ ] Analyze `SupportScreen.tsx`, `NewsDetailScreen.tsx`.
-    - [ ] Translate form labels, status badges, and static headers.
-    - [ ] Update translation files.
-- [ ] Task: Audit and translate AI Chatbot
-    - [ ] Analyze `Chatbot.tsx` (Floating Action Button and Chat Interface).
-    - [ ] Translate system messages (e.g., "How can I help you?", "Thinking...").
-    - [ ] Update translations and implement `t()`.
+- [x] Task: Audit and translate Support & News 634b33f
+    - [x] Analyze `SupportScreen.tsx`, `NewsDetailScreen.tsx`.
+    - [x] Translate form labels, status badges, and static headers.
+    - [x] Update translation files.
+- [x] Task: Audit and translate AI Chatbot 634b33f
+    - [x] Analyze `Chatbot.tsx` (Floating Action Button and Chat Interface).
+    - [x] Translate system messages (e.g., "How can I help you?", "Thinking...").
+    - [x] Update translations and implement `t()`.
 - [ ] Task: Conductor - User Manual Verification 'Support, News & Chatbot' (Protocol in workflow.md)
 
 ## Phase 5: Global UI & Final Polish

@@ -8,7 +8,7 @@ Set up the service layer and ensure all necessary translation keys are present.
 - [x] Task: Update `i18n` translations for support categories and form labels [8f632ca]
     - [ ] Add support keys to `mobile-app/src/translations/en.ts`
     - [ ] Add support keys to `mobile-app/src/translations/vi.ts`
-- [ ] Task: Create `supportService` for mobile
+- [x] Task: Create `supportService` for mobile [4e92838]
     - [ ] Implement `createTicket(ticketData)`
     - [ ] Implement `getTicketByToken(token)`
     - [ ] Implement `replyToTicket(token, content)`

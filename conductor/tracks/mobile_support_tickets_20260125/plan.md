@@ -1,0 +1,45 @@
+# Implementation Plan: Mobile Support Ticket System
+
+Implement the "Contact Us" form and Ticket Details/Reply functionality in the React Native app, including deep linking support and bilingual translations.
+
+## Phase 1: Foundation & Translations
+Set up the service layer and ensure all necessary translation keys are present.
+
+- [x] Task: Update `i18n` translations for support categories and form labels [8f632ca]
+    - [ ] Add support keys to `mobile-app/src/translations/en.ts`
+    - [ ] Add support keys to `mobile-app/src/translations/vi.ts`
+- [ ] Task: Create `supportService` for mobile
+    - [ ] Implement `createTicket(ticketData)`
+    - [ ] Implement `getTicketByToken(token)`
+    - [ ] Implement `replyToTicket(token, content)`
+- [ ] Task: Conductor - User Manual Verification 'Phase 1: Foundation & Translations' (Protocol in workflow.md)
+
+## Phase 2: Contact Us Form
+Implement the submission UI and logic.
+
+- [ ] Task: Create `ContactUsScreen` component
+    - [ ] Implement form with Name, Email, Phone, Category, and Message fields
+    - [ ] Add validation logic and pre-filling for logged-in users
+- [ ] Task: Integrate `ContactUsScreen` into `ProfileScreen`
+    - [ ] Add "Help & Support" section to `ProfileScreen` UI
+    - [ ] Set up navigation in `AppNavigator`
+- [ ] Task: Conductor - User Manual Verification 'Phase 2: Contact Us Form' (Protocol in workflow.md)
+
+## Phase 3: Ticket Details & Deep Linking
+Implement viewing/replying to tickets and handling email links.
+
+- [ ] Task: Create `TicketDetailsScreen` component
+    - [ ] Implement conversation thread display
+    - [ ] Implement reply form
+- [ ] Task: Configure Deep Linking for Support Tickets
+    - [ ] Update `linking` configuration in `AppNavigator.tsx` to handle `support/ticket/:token`
+    - [ ] Add `TicketDetails` to the navigation stack
+- [ ] Task: Conductor - User Manual Verification 'Phase 3: Ticket Details & Deep Linking' (Protocol in workflow.md)
+
+## Phase 4: Final Polish & Verification
+Final testing and ensuring a smooth user experience.
+
+- [ ] Task: Final UI/UX review and I18n verification
+    - [ ] Check keyboard avoiding behavior on both iOS and Android
+    - [ ] Verify both languages in all new screens
+- [ ] Task: Conductor - User Manual Verification 'Phase 4: Final Polish & Verification' (Protocol in workflow.md)

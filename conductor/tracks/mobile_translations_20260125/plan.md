@@ -32,7 +32,7 @@
     - [x] Analyze `CheckoutScreen.tsx` and coupon modals.
     - [x] Translate payment instruction prompts and success/failure messages.
     - [x] Update translations and implement `t()`.
-- [ ] Task: Conductor - User Manual Verification 'Booking Workflow & Payments' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Booking Workflow & Payments' (Protocol in workflow.md)
 
 ## Phase 4: Support, News & Chatbot
 - [ ] Task: Audit and translate Support & News

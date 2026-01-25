@@ -21,7 +21,7 @@
     - [x] Analyze `MovieDetailsScreen.tsx`.
     - [x] Handle static labels (e.g., "Cast", "Director", "Showtimes").
     - [x] Update translations and implement `t()`.
-- [ ] Task: Conductor - User Manual Verification 'Movie Discovery & Details' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Movie Discovery & Details' (Protocol in workflow.md)
 
 ## Phase 3: Booking Workflow & Payments
 - [ ] Task: Audit and translate Seat Selection & Booking

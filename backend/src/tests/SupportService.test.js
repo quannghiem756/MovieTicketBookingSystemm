@@ -1,4 +1,5 @@
 const SupportService = require('../application/SupportService');
+const emailTemplates = require('../infrastructure/EmailTemplates');
 
 describe('SupportService', () => {
     let supportService;
@@ -7,7 +8,9 @@ describe('SupportService', () => {
     beforeEach(() => {
         mockSupportTicketRepository = {
             create: jest.fn(),
-            findAllSortedByCreatedAt: jest.fn()
+            findAllSortedByCreatedAt: jest.fn(),
+            findById: jest.fn(),
+            update: jest.fn()
         };
         supportService = new SupportService(mockSupportTicketRepository);
     });
@@ -82,6 +85,81 @@ describe('SupportService', () => {
             mockSupportTicketRepository.findAllSortedByCreatedAt.mockResolvedValue([]);
             await supportService.getAllTickets();
             expect(mockSupportTicketRepository.findAllSortedByCreatedAt).toHaveBeenCalled();
+        });
+    });
+
+    describe('addInternalReply', () => {
+        let mockTicketCommentRepository;
+        let mockEmailService;
+
+        beforeEach(() => {
+            mockTicketCommentRepository = {
+                create: jest.fn()
+            };
+            mockEmailService = {
+                sendEmail: jest.fn()
+            };
+            jest.spyOn(emailTemplates, 'getSupportReplyTemplate');
+            
+            supportService = new SupportService(
+                mockSupportTicketRepository,
+                mockTicketCommentRepository,
+                mockEmailService
+            );
+        });
+
+        afterEach(() => {
+            jest.restoreAllMocks();
+        });
+
+        it('should send email with translated category in Vietnamese', async () => {
+            const ticketId = 'ticket123';
+            const ticket = {
+                _id: ticketId,
+                category: 'Payment Issue',
+                email: 'user@test.com',
+                accessToken: 'token123'
+            };
+            const content = 'Internal reply content';
+
+            mockSupportTicketRepository.findById.mockResolvedValue(ticket);
+            mockTicketCommentRepository.create.mockResolvedValue({ id: 'comment1' });
+            mockSupportTicketRepository.update.mockResolvedValue({});
+            mockEmailService.sendEmail.mockResolvedValue({});
+
+            await supportService.addInternalReply(ticketId, 'adminId', 'admin', content);
+
+            expect(emailTemplates.getSupportReplyTemplate).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    subject: 'Vấn đề thanh toán'
+                }),
+                'vi'
+            );
+        });
+
+        it('should fallback to original category if translation is missing', async () => {
+            const ticketId = 'ticket123';
+            const ticket = {
+                _id: ticketId,
+                category: 'Unknown Category',
+                email: 'user@test.com',
+                accessToken: 'token123'
+            };
+            const content = 'Internal reply content';
+
+            mockSupportTicketRepository.findById.mockResolvedValue(ticket);
+            mockTicketCommentRepository.create.mockResolvedValue({ id: 'comment1' });
+            mockSupportTicketRepository.update.mockResolvedValue({});
+            mockEmailService.sendEmail.mockResolvedValue({});
+
+            await supportService.addInternalReply(ticketId, 'adminId', 'admin', content);
+
+            expect(emailTemplates.getSupportReplyTemplate).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    subject: 'Unknown Category'
+                }),
+                'vi'
+            );
         });
     });
 

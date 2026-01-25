@@ -92,8 +92,9 @@ class SupportService {
     // Send email notification to user
     if (this.emailService && ticket.email) {
       try {
+        const translatedCategory = SUPPORT_CATEGORY_TRANSLATIONS[ticket.category] || ticket.category;
         const template = emailTemplates.getSupportReplyTemplate({
-          subject: ticket.category,
+          subject: translatedCategory,
           replyContent: content,
           accessToken: ticket.accessToken
         }, 'vi'); // Default to Vietnameses for now

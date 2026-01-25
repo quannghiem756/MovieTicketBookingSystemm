@@ -20,69 +20,13 @@ import ShowtimesPage from './pages/ShowtimesPage';
 import NewsPage from './pages/NewsPage';
 import NewsDetailPage from './pages/NewsDetailPage';
 import PublicTicketDetail from './pages/PublicTicketDetail';
+import MobileRedirect from './pages/MobileRedirect';
 // Admin components
 import AdminLayout from './pages/admin/AdminLayout';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminMovies from './pages/admin/AdminMovies';
-import AdminBookings from './pages/admin/AdminBookings';
-import MovieForm from './pages/admin/MovieForm';
-import ShowtimeForm from './pages/admin/ShowtimeForm';
-import TheaterForm from './pages/admin/TheaterForm';
-import AdminShowtimes from './pages/admin/AdminShowtimes';
-import AdminTheaters from './pages/admin/AdminTheaters';
-import AdminUsers from './pages/admin/AdminUsers';
-import AdminNews from './pages/admin/AdminNews';
-import AdminCoupons from './pages/admin/AdminCoupons';
-import AdminSupport from './pages/admin/AdminSupport';
-import NewsForm from './pages/admin/NewsForm';
-
-const AppRouter = () => {
-  return (
-    <Router>
-      <Header />
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 8 }}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/now-showing" element={<NowShowingPage />} />
-          <Route path="/news" element={<NewsPage />} />
-          <Route path="/news/:id" element={<NewsDetailPage />} />
-          <Route path="/coming-soon" element={<ComingSoonPage />} />
-          <Route path="/movie/:id" element={<MovieDetails />} />
-          <Route path="/showtimes" element={<ShowtimesPage />} />
-          <Route path="/book/:movieId/:showtimeId" element={
-            <ProtectedRoute>
-              <BookingPage />
-            </ProtectedRoute>
-          } />
-          <Route path="/booking/confirmation" element={
-            <ProtectedRoute>
-              <BookingConfirmation />
-            </ProtectedRoute>
-          } />
-          <Route path="/bookings" element={
-            <ProtectedRoute>
-              <BookingsPage />
-            </ProtectedRoute>
-          } />
-          <Route path="/bookings/:bookingId" element={
-            <ProtectedRoute>
-              <BookingDetailsPage />
-            </ProtectedRoute>
-          } />
-          <Route path="/payment/result" element={
-            <ProtectedRoute>
-              <PaymentResult />
-            </ProtectedRoute>
-          } />
-          <Route path="/profile" element={
-            <ProtectedRoute>
-              <ProfilePage />
-            </ProtectedRoute>
-          } />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+// ...
           <Route path="/forgot-password" element={<ResetPasswordPage />} />
           <Route path="/support/ticket/:token" element={<PublicTicketDetail />} />
+          <Route path="/mobile-redirect/:screen/:param" element={<MobileRedirect />} />
 
           {/* Admin routes */}
           <Route path="/admin" element={

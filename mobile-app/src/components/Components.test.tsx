@@ -5,9 +5,17 @@ import theme from '../theme';
 import Button from './Button';
 import Input from './Input';
 import Card from './Card';
+import ChatbotFAB from './ChatbotFAB';
+import { NavigationContainer } from '@react-navigation/native';
 
 const wrap = (component: React.ReactNode) => (
   <PaperProvider theme={theme}>{component}</PaperProvider>
+);
+
+const wrapWithNav = (component: React.ReactNode) => (
+    <PaperProvider theme={theme}>
+        <NavigationContainer>{component}</NavigationContainer>
+    </PaperProvider>
 );
 
 describe('UI Components', () => {
@@ -47,6 +55,14 @@ describe('UI Components', () => {
       
       expect(getByText('Card Title')).toBeTruthy();
       expect(getByText('Card Content')).toBeTruthy();
+    });
+  });
+
+  describe('ChatbotFAB', () => {
+    it('renders correctly', () => {
+      const { getByTestId } = render(wrapWithNav(<ChatbotFAB />));
+      const fab = getByTestId('fab');
+      expect(fab).toBeTruthy();
     });
   });
 });

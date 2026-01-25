@@ -1,0 +1,8 @@
+{
+  "track_id": "fix_chatbot_overlap_20260125",
+  "type": "bug",
+  "status": "new",
+  "created_at": "2026-01-25T10:55:00Z",
+  "updated_at": "2026-01-25T10:55:00Z",
+  "description": "currently the button on the chatbot is overlapping on the navigation bar put it up on the main screen ? on the mobile app"
+}

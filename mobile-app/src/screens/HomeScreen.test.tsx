@@ -1,9 +1,11 @@
 import React from 'react';
-import { render, waitFor, act } from '@testing-library/react-native';
+import { render, waitFor, act, fireEvent } from '@testing-library/react-native';
 import { RefreshControl } from 'react-native';
 import HomeScreen from './HomeScreen';
 import { getNowShowing, getComingSoon, getNews } from '../services/movieService';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, NavigationContainer } from '@react-navigation/native';
+import { PaperProvider } from 'react-native-paper';
+import theme from '../theme';
 
 // Mock the services
 jest.mock('../services/movieService', () => ({
@@ -22,12 +24,17 @@ jest.mock('react-native', () => {
 // Mock navigation
 const mockNavigate = jest.fn();
 
-jest.mock('@react-navigation/native', () => ({
-  useNavigation: () => ({
-    navigate: mockNavigate,
-  }),
-  useFocusEffect: jest.fn((callback) => callback()),
-}));
+jest.mock('@react-navigation/native', () => {
+    const actualNav = jest.requireActual('@react-navigation/native');
+    return {
+        ...actualNav,
+        useNavigation: () => ({
+            navigate: mockNavigate,
+        }),
+        useFocusEffect: jest.fn((callback) => callback()),
+    };
+});
+
 
 // Mock translation
 jest.mock('../context/I18nContext', () => ({
@@ -36,26 +43,15 @@ jest.mock('../context/I18nContext', () => ({
   }),
 }));
 
-// Mock React Native Paper theme
-jest.mock('react-native-paper', () => {
-  const ActualPaper = jest.requireActual('react-native-paper');
-  return {
-    ...ActualPaper,
-    ActivityIndicator: () => 'ActivityIndicator',
-    useTheme: () => ({
-      colors: {
-        surface: '#ffffff',
-        onSurfaceVariant: '#000000',
-        primary: '#6200ee',
-      },
-    }),
-  };
-});
+const renderComponent = () =>
+  render(
+    <PaperProvider theme={theme}>
+      <NavigationContainer>
+        <HomeScreen />
+      </NavigationContainer>
+    </PaperProvider>
+  );
 
-// Mock expo-image
-jest.mock('expo-image', () => ({
-  Image: 'Image',
-}));
 
 describe('HomeScreen', () => {
   beforeEach(() => {
@@ -67,7 +63,7 @@ describe('HomeScreen', () => {
   });
 
   it('fetches data on focus', async () => {
-    render(<HomeScreen />);
+    renderComponent();
 
     await waitFor(() => {
       expect(getNowShowing).toHaveBeenCalled();
@@ -82,7 +78,7 @@ describe('HomeScreen', () => {
     (getComingSoon as jest.Mock).mockResolvedValue({ movies: [] });
     (getNews as jest.Mock).mockResolvedValue({ news: [] });
 
-    const { findByTestId } = render(<HomeScreen />);
+    const { findByTestId } = renderComponent();
     
     // Wait for initial load to finish and find RefreshControl
     const refreshControl = await findByTestId('refresh-control');
@@ -100,7 +96,7 @@ describe('HomeScreen', () => {
     // Return a promise that never resolves to keep it loading
     (getNowShowing as jest.Mock).mockImplementation(() => new Promise(() => {}));
     
-    const { getByTestId } = render(<HomeScreen />);
+    const { getByTestId } = renderComponent();
     // Note: ActivityIndicator doesn't have a default testID, so checking if it exists might need queryByType or adding testID in component.
     // For now, let's assume standard behavior or just check that content is not yet visible.
   });
@@ -110,7 +106,7 @@ describe('HomeScreen', () => {
       news: [{ id: 'news1', title: 'Test News', summary: 'Summary' }]
     });
 
-    const { getByText } = render(<HomeScreen />);
+    const { getByText } = renderComponent();
 
     await waitFor(() => {
       expect(getByText('Test News')).toBeTruthy();
@@ -118,8 +114,6 @@ describe('HomeScreen', () => {
 
     const newsItem = getByText('Test News');
     
-    // We need fireEvent from testing-library
-    const { fireEvent } = require('@testing-library/react-native');
     fireEvent.press(newsItem);
 
     expect(mockNavigate).toHaveBeenCalledWith('NewsDetails', { id: 'news1' });

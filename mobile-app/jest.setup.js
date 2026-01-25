@@ -54,3 +54,10 @@ jest.mock('@expo/vector-icons', () => {
 // Resolve ReferenceError: You are trying to `import` a file outside of the scope of the test code.
 jest.mock('expo/src/winter/runtime.native', () => ({}));
 jest.mock('expo/src/winter/installGlobal', () => ({}));
+
+jest.mock('expo-image', () => {
+  const { Image } = require('react-native');
+  return {
+    Image: (props) => <Image {...props} />,
+  };
+});

@@ -37,25 +37,6 @@ jest.mock('../context/I18nContext', () => ({
   }),
 }));
 
-// Mock PaperProvider
-jest.mock('react-native-paper', () => {
-  const React = require('react');
-  const actual = jest.requireActual('react-native-paper');
-  return {
-    ...actual,
-    PaperProvider: ({ children }: any) => children,
-    useTheme: () => ({
-      colors: {
-        primary: '#000',
-        background: '#fff',
-        surface: '#fff',
-        onSurfaceVariant: '#666',
-        error: '#f00',
-      }
-    }),
-  };
-});
-
 // Mock react-native-qrcode-svg
 jest.mock('react-native-qrcode-svg', () => {
   const React = require('react');

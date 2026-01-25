@@ -20,9 +20,9 @@ This plan outlines the steps to introduce Vietnamese translations for support ti
     - [x] Ensure `_calculatePriority` implementation still uses English keys
 - [x] Task: Conductor - User Manual Verification 'Phase 2: SupportService Enhancement (TDD)' (Protocol in workflow.md) baf0ca6
 
-## Phase 3: Final Verification & Cleanup
+## Phase 3: Final Verification & Cleanup [checkpoint: c8b259e]
 
 - [x] Task: End-to-End Manual Verification [n/a]
     - [x] Trigger an internal reply from the Admin Panel
     - [x] Verify the received email notification displays the category in Vietnamese (e.g., "Vấn đề thanh toán" instead of "Payment Issue")
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Final Verification & Cleanup' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Final Verification & Cleanup' (Protocol in workflow.md) c8b259e

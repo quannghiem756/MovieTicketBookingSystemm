@@ -19,6 +19,7 @@ const translations = {
     supportSubtitle: 'A member of our team has replied to your support ticket.',
     ticketSubject: 'Subject',
     viewTicket: 'View Ticket & Reply',
+    viewTicketMobile: 'Open in Mobile App',
     footer: 'Movie Ticket Booking System',
     automated: 'This is an automated message, please do not reply.'
   },
@@ -40,6 +41,7 @@ const translations = {
     supportSubtitle: 'Đội ngũ hỗ trợ của chúng tôi đã phản hồi yêu cầu của bạn.',
     ticketSubject: 'Tiêu đề',
     viewTicket: 'Xem yêu cầu và Phản hồi',
+    viewTicketMobile: 'Mở trong ứng dụng',
     footer: 'Hệ thống đặt vé xem phim',
     automated: 'Đây là tin nhắn tự động, vui lòng không trả lời.'
   }
@@ -55,6 +57,7 @@ class EmailTemplates {
   getSupportReplyTemplate(data, lang = 'en') {
     const t = translations[lang] || translations.en;
     const ticketUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/support/ticket/${data.accessToken}`;
+    const mobileTicketUrl = `cinebook://support/ticket/${data.accessToken}`;
 
     const html = `
       <!DOCTYPE html>
@@ -72,7 +75,8 @@ class EmailTemplates {
           .reply-preview { background-color: #f9f9f9; border-left: 4px solid #e53935; padding: 15px; margin: 20px 0; font-style: italic; }
           .ticket-info { margin-bottom: 20px; font-size: 14px; color: #666; }
           .footer { text-align: center; padding: 20px; color: #999; font-size: 12px; background-color: #f4f4f4; }
-          .btn { display: inline-block; background-color: #e53935; color: white !important; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold; margin-top: 20px; }
+          .btn { display: inline-block; background-color: #e53935; color: white !important; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold; margin-top: 20px; margin-right: 10px; }
+          .btn-mobile { background-color: #333333; }
         </style>
       </head>
       <body>
@@ -94,6 +98,7 @@ class EmailTemplates {
             
             <div style="text-align: center;">
               <a href="${ticketUrl}" class="btn">${t.viewTicket}</a>
+              <a href="${mobileTicketUrl}" class="btn btn-mobile">${t.viewTicketMobile}</a>
             </div>
           </div>
           <div class="footer">

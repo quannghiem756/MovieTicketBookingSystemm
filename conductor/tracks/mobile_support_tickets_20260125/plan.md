@@ -14,16 +14,16 @@ Set up the service layer and ensure all necessary translation keys are present.
     - [x] Implement `replyToTicket(token, content)`
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Foundation & Translations' (Protocol in workflow.md) [48a45fc]
 
-## Phase 2: Contact Us Form
+## Phase 2: Contact Us Form [checkpoint: a39974b]
 Implement the submission UI and logic.
 
 - [x] Task: Create `ContactUsScreen` component [67e420a]
-    - [ ] Implement form with Name, Email, Phone, Category, and Message fields
-    - [ ] Add validation logic and pre-filling for logged-in users
+    - [x] Implement form with Name, Email, Phone, Category, and Message fields
+    - [x] Add validation logic and pre-filling for logged-in users
 - [x] Task: Integrate `ContactUsScreen` into `ProfileScreen` [e7678c1]
     - [x] Add "Help & Support" section to `ProfileScreen` UI
     - [x] Set up navigation in `AppNavigator`
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Contact Us Form' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Contact Us Form' (Protocol in workflow.md) [a39974b]
 
 ## Phase 3: Ticket Details & Deep Linking
 Implement viewing/replying to tickets and handling email links.

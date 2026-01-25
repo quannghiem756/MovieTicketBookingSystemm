@@ -17,7 +17,7 @@ Set up the service layer and ensure all necessary translation keys are present.
 ## Phase 2: Contact Us Form
 Implement the submission UI and logic.
 
-- [ ] Task: Create `ContactUsScreen` component
+- [x] Task: Create `ContactUsScreen` component [67e420a]
     - [ ] Implement form with Name, Email, Phone, Category, and Message fields
     - [ ] Add validation logic and pre-filling for logged-in users
 - [ ] Task: Integrate `ContactUsScreen` into `ProfileScreen`

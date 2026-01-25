@@ -84,4 +84,14 @@ describe('SupportService', () => {
             expect(mockSupportTicketRepository.findAllSortedByCreatedAt).toHaveBeenCalled();
         });
     });
+
+    describe('Constants', () => {
+        it('should have CATEGORY_TRANSLATIONS defined', () => {
+            expect(SupportService.CATEGORY_TRANSLATIONS).toBeDefined();
+            expect(SupportService.CATEGORY_TRANSLATIONS['Payment Issue']).toBe('Vấn đề thanh toán');
+            expect(SupportService.CATEGORY_TRANSLATIONS['Ticket/QR Problem']).toBe('Vấn đề vé/QR');
+            expect(SupportService.CATEGORY_TRANSLATIONS['Account']).toBe('Tài khoản');
+            expect(SupportService.CATEGORY_TRANSLATIONS['General Question']).toBe('Câu hỏi chung');
+        });
+    });
 });

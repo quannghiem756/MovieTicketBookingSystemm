@@ -13,14 +13,14 @@
 - [x] Task: Conductor - User Manual Verification 'Authentication & User Domain' (Protocol in workflow.md) 66f5140
 
 ## Phase 2: Movie Discovery & Details
-- [ ] Task: Audit and translate Movie Listing & Filtering
-    - [ ] Analyze `HomeScreen.tsx`, `MovieList.tsx` and filter components.
-    - [ ] Identify hardcoded categories, button labels, and empty states.
-    - [ ] Update translations and implement `t()`.
-- [ ] Task: Audit and translate Movie Details
-    - [ ] Analyze `MovieDetailScreen.tsx`.
-    - [ ] Handle static labels (e.g., "Cast", "Director", "Showtimes").
-    - [ ] Update translations and implement `t()`.
+- [x] Task: Audit and translate Movie Listing & Filtering ce526aa
+    - [x] Analyze `HomeScreen.tsx`, `MovieList.tsx` and filter components.
+    - [x] Identify hardcoded categories, button labels, and empty states.
+    - [x] Update translations and implement `t()`.
+- [x] Task: Audit and translate Movie Details 6e9f218
+    - [x] Analyze `MovieDetailsScreen.tsx`.
+    - [x] Handle static labels (e.g., "Cast", "Director", "Showtimes").
+    - [x] Update translations and implement `t()`.
 - [ ] Task: Conductor - User Manual Verification 'Movie Discovery & Details' (Protocol in workflow.md)
 
 ## Phase 3: Booking Workflow & Payments

@@ -6,8 +6,8 @@
     - [ ] Update `en.ts` and `vi.ts` with new keys.
     - [ ] Replace strings with `t()` hooks.
     - [ ] Verify using unit tests or manual walkthrough.
-- [ ] Task: Audit and translate User Profile & Settings
-    - [ ] Analyze `ProfileScreen.tsx` and related components.
+- [x] Task: Audit and translate User Profile & Settings ce526aa
+    - [x] Analyze `ProfileScreen.tsx` and related components.
     - [ ] Update translation files.
     - [ ] Replace strings and verify.
 - [ ] Task: Conductor - User Manual Verification 'Authentication & User Domain' (Protocol in workflow.md)

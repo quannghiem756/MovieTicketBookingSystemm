@@ -43,7 +43,7 @@
     - [x] Analyze `Chatbot.tsx` (Floating Action Button and Chat Interface).
     - [x] Translate system messages (e.g., "How can I help you?", "Thinking...").
     - [x] Update translations and implement `t()`.
-- [ ] Task: Conductor - User Manual Verification 'Support, News & Chatbot' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Support, News & Chatbot' (Protocol in workflow.md)
 
 ## Phase 5: Global UI & Final Polish
 - [ ] Task: Audit General UI Components

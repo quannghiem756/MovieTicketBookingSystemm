@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as Linking from 'expo-linking';
 import ProfileScreen from '../screens/ProfileScreen';
+import ContactUsScreen from '../screens/ContactUsScreen';
 import HomeScreen from '../screens/HomeScreen';
 import NewsDetailsScreen from '../screens/NewsDetailsScreen';
 import MoviesScreen from '../screens/MoviesScreen';
@@ -41,6 +42,15 @@ function MoviesStack() {
       <Stack.Screen name="SeatSelection" component={SeatSelectionScreen} />
       <Stack.Screen name="Checkout" component={CheckoutScreen} />
       <Stack.Screen name="BookingConfirmation" component={BookingConfirmation} />
+    </Stack.Navigator>
+  );
+}
+
+function ProfileStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+      <Stack.Screen name="ContactUs" component={ContactUsScreen} />
     </Stack.Navigator>
   );
 }
@@ -93,7 +103,7 @@ function MainNavigator() {
       />
       <Tab.Screen 
         name="Profile" 
-        component={ProfileScreen} 
+        component={ProfileStack} 
         options={{ title: t('nav.profile') }}
       />
     </Tab.Navigator>
@@ -126,7 +136,12 @@ export default function AppNavigator() {
               }
             },
             'My Tickets': 'tickets',
-            Profile: 'profile'
+            Profile: {
+              screens: {
+                ProfileScreen: 'profile',
+                ContactUs: 'contact-us'
+              }
+            }
           }
         },
         Auth: {

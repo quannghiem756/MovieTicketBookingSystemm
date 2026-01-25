@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { useTranslation } from '../context/I18nContext';
 import authService from '../services/authService';
 import Button from '../components/Button';
-import { CircleFlag } from 'react-native-circle-flags';
+import { useNavigation } from '@react-navigation/native';
 
 const ProfileScreen = () => {
   const { user, logout } = useAuth();
@@ -13,6 +13,7 @@ const ProfileScreen = () => {
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const theme = useTheme();
+  const navigation = useNavigation<any>();
 
   useEffect(() => {
     fetchBookings();
@@ -88,6 +89,16 @@ const ProfileScreen = () => {
                 </TouchableOpacity>
               </View>
             )}
+          />
+        </View>
+
+        <View style={styles.settingsSection}>
+          <Title style={styles.sectionTitle}>Help & Support</Title>
+          <List.Item
+            title={t('contactUs.button')}
+            left={props => <List.Icon {...props} icon="help-circle-outline" />}
+            onPress={() => navigation.navigate('ContactUs')}
+            right={props => <List.Icon {...props} icon="chevron-right" />}
           />
         </View>
 

@@ -179,6 +179,14 @@ export default {
     staff: 'Nhân viên',
     you: 'Bạn',
   },
+  tickets: {
+    noTickets: 'Bạn chưa có vé nào.',
+    tapToView: 'Nhấn để xem',
+    seatsLabel: 'Ghế',
+    totalPrice: 'Tổng tiền',
+    instruction: 'Vui lòng trình mã QR này tại lối vào để soát vé.',
+    at: 'lúc',
+  },
   chatbot: {
     title: 'Trợ lý CineAI',
     welcome: 'Xin chào %{name}! Tôi là trợ lý AI của CineBook. Tôi có thể giúp gì cho bạn? ✨',

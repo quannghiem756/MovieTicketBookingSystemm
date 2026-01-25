@@ -60,6 +60,12 @@ describe('Translation Keys', () => {
     expect((en as any).chatbot.suggestions).toBeDefined();
   });
 
+  it('should have my tickets screen keys in English', () => {
+    expect((en as any).tickets.noTickets).toBeDefined();
+    expect((en as any).tickets.tapToView).toBeDefined();
+    expect((en as any).tickets.instruction).toBeDefined();
+  });
+
   it('should have authentication error keys in Vietnamese', () => {
     expect((vi as any).auth.error).toBeDefined();
     expect((vi as any).auth.error.fillAll).toBeDefined();

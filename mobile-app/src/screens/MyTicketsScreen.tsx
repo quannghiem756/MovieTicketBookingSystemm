@@ -50,9 +50,9 @@ const MyTicketsScreen = () => {
       <Card style={styles.ticketCard}>
         <View style={styles.ticketContent}>
           <View style={styles.ticketLeft}>
-            <Title numberOfLines={1} style={styles.movieTitle}>{item.movie?.title || 'Movie'}</Title>
-            <Text style={styles.infoText}>{item.showtime?.showTime} • {new Date(item.showtime?.showDate).toLocaleDateString()}</Text>
-            <Text style={styles.infoText}>{item.theater?.name || 'Theater'}</Text>
+            <Title numberOfLines={1} style={styles.movieTitle}>{item.movie?.title || t('nav.movies')}</Title>
+            <Text style={styles.infoText}>{item.showtime?.showTime} • {new Date(item.showtime?.showDate).toLocaleDateString(locale === 'vi' ? 'vi-VN' : 'en-GB')}</Text>
+            <Text style={styles.infoText}>{item.theater?.name || t('booking.confirmation.theater')}</Text>
             <View style={styles.seatRow}>
               <MaterialCommunityIcons name="seat" size={14} color={theme.colors.primary} />
               <Text style={styles.seatText}>{item.seatIds.join(', ')}</Text>
@@ -65,7 +65,7 @@ const MyTicketsScreen = () => {
               backgroundColor="transparent"
               color="#fff"
             />
-            <Text style={styles.tapText}>Tap to view</Text>
+            <Text style={styles.tapText}>{t('tickets.tapToView')}</Text>
           </View>
         </View>
       </Card>
@@ -94,7 +94,7 @@ const MyTicketsScreen = () => {
           ListEmptyComponent={() => (
             <View style={styles.center}>
               <MaterialCommunityIcons name="ticket-outline" size={64} color="#333" />
-              <Text style={styles.emptyText}>You don't have any tickets yet.</Text>
+              <Text style={styles.emptyText}>{t('tickets.noTickets')}</Text>
             </View>
           )}
         />
@@ -119,7 +119,7 @@ const MyTicketsScreen = () => {
               <Title style={styles.modalMovieTitle}>{selectedTicket?.movie?.title}</Title>
               <Text style={styles.modalInfo}>{selectedTicket?.theater?.name}</Text>
               <Text style={styles.modalInfo}>
-                {selectedTicket && new Date(selectedTicket.showtime?.showDate).toLocaleDateString()} at {selectedTicket?.showtime?.showTime}
+                {selectedTicket && new Date(selectedTicket.showtime?.showDate).toLocaleDateString(locale === 'vi' ? 'vi-VN' : 'en-GB')} {t('tickets.at')} {selectedTicket?.showtime?.showTime}
               </Text>
             </View>
 
@@ -137,11 +137,11 @@ const MyTicketsScreen = () => {
 
             <View style={styles.modalRow}>
               <View style={styles.modalCol}>
-                <Text style={styles.modalLabel}>Seats</Text>
+                <Text style={styles.modalLabel}>{t('tickets.seatsLabel')}</Text>
                 <Text style={styles.modalValue}>{selectedTicket?.seatIds.join(', ')}</Text>
               </View>
               <View style={styles.modalCol}>
-                <Text style={styles.modalLabel}>Total Price</Text>
+                <Text style={styles.modalLabel}>{t('tickets.totalPrice')}</Text>
                 <Text style={styles.modalValue}>{selectedTicket?.totalPrice.toLocaleString()} VND</Text>
               </View>
             </View>
@@ -149,7 +149,7 @@ const MyTicketsScreen = () => {
             <View style={styles.instructions}>
               <MaterialCommunityIcons name="information-outline" size={16} color="#666" />
               <Text style={styles.instructionText}>
-                Present this QR code at the cinema entrance for validation.
+                {t('tickets.instruction')}
               </Text>
             </View>
           </Surface>

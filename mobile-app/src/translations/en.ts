@@ -179,6 +179,14 @@ export default {
     staff: 'Staff',
     you: 'You',
   },
+  tickets: {
+    noTickets: "You don't have any tickets yet.",
+    tapToView: 'Tap to view',
+    seatsLabel: 'Seats',
+    totalPrice: 'Total Price',
+    instruction: 'Present this QR code at the cinema entrance for validation.',
+    at: 'at',
+  },
   chatbot: {
     title: 'CineAI Assistant',
     welcome: "Hello %{name}! I'm your CineBook AI assistant. How can I help you today? ✨",

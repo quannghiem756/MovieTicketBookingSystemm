@@ -76,7 +76,7 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
   }, [selectedSeats]);
 
   const handleTimerExpire = () => {
-    Alert.alert('Time expired', 'Your seat holds have expired.');
+    Alert.alert(t('booking.seats.timerExpired'), t('booking.seats.timerExpiredMsg'));
     setSelectedSeats([]);
   };
 
@@ -111,7 +111,7 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
       }
     } catch (error) {
       console.error('Error fetching seat data:', error);
-      Alert.alert('Error', 'Failed to load seat layout');
+      Alert.alert(t('common.error'), t('booking.seats.errorLoadLayout'));
     } finally {
       setLoading(false);
     }
@@ -151,7 +151,7 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
         setSelectedSeats(prev => prev.filter(id => id !== seatId));
       } else {
         if (selectedSeats.length >= 8) {
-          Alert.alert('Limit reached', 'You can only select up to 8 seats.');
+          Alert.alert(t('booking.seats.limitReached'), t('booking.seats.limitReachedMsg'));
           return;
         }
         await holdSeat(showtimeId, seatId);
@@ -159,7 +159,7 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
         setTimeLeft(600); // Reset timer to 10 minutes on new hold
       }
     } catch (error: any) {
-      Alert.alert('Error', error.response?.data?.error || 'Could not update seat status');
+      Alert.alert(t('common.error'), error.response?.data?.error || t('booking.seats.errorUpdate'));
     }
   };
 
@@ -213,7 +213,7 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.screenContainer}>
           <View style={styles.screenLine} />
-          <Text style={styles.screenText}>SCREEN</Text>
+          <Text style={styles.screenText}>{t('booking.seats.screen')}</Text>
         </View>
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.horizontalScroll}>
@@ -277,25 +277,25 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
           <View style={styles.legendRow}>
             <View style={styles.legendItem}>
               <View style={[styles.seat, styles.legendBox, { backgroundColor: '#424242' }]} />
-              <Text style={styles.legendText}>Available</Text>
+              <Text style={styles.legendText}>{t('booking.seats.legend.available')}</Text>
             </View>
             <View style={styles.legendItem}>
               <View style={[styles.seat, styles.legendBox, { backgroundColor: '#4caf50' }]} />
-              <Text style={styles.legendText}>Selected</Text>
+              <Text style={styles.legendText}>{t('booking.seats.legend.selected')}</Text>
             </View>
             <View style={styles.legendItem}>
               <View style={[styles.seat, styles.legendBox, { backgroundColor: '#757575' }]} />
-              <Text style={styles.legendText}>Taken</Text>
+              <Text style={styles.legendText}>{t('booking.seats.legend.taken')}</Text>
             </View>
           </View>
           <View style={styles.legendRow}>
             <View style={styles.legendItem}>
               <View style={[styles.seat, styles.legendBox, { backgroundColor: '#f44336' }]} />
-              <Text style={styles.legendText}>VIP</Text>
+              <Text style={styles.legendText}>{t('booking.seats.legend.vip')}</Text>
             </View>
             <View style={styles.legendItem}>
               <View style={[styles.seat, styles.legendBox, { backgroundColor: '#ff9800' }]} />
-              <Text style={styles.legendText}>Double</Text>
+              <Text style={styles.legendText}>{t('booking.seats.legend.double')}</Text>
             </View>
           </View>
         </View>
@@ -303,10 +303,10 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
 
       <Surface style={styles.footer}>
         <View style={styles.footerInfo}>
-          <Text style={styles.selectedCount}>{selectedSeats.length} seats selected</Text>
+          <Text style={styles.selectedCount}>{t('booking.seats.footer.selected', { count: selectedSeats.length })}</Text>
           {timeLeft > 0 && (
             <Text style={styles.timerText}>
-              Hold expires in: {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
+              {t('booking.seats.footer.expires', { time: `${Math.floor(timeLeft / 60)}:${(timeLeft % 60).toString().padStart(2, '0')}` })}
             </Text>
           )}
           <Title style={styles.totalPrice}>
@@ -319,7 +319,7 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
           disabled={selectedSeats.length === 0}
           style={styles.confirmButton}
         >
-          Confirm Selection
+          {t('booking.seats.confirm')}
         </Button>
       </Surface>
     </View>

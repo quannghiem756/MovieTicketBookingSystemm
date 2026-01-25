@@ -34,6 +34,20 @@ describe('Translation Keys', () => {
     expect((en as any).movies.durationUnit).toBeDefined();
   });
 
+  it('should have seat selection keys in English', () => {
+    expect((en as any).booking.seats.timerExpired).toBeDefined();
+    expect((en as any).booking.seats.legend.available).toBeDefined();
+    expect((en as any).booking.seats.footer.selected).toBeDefined();
+    expect((en as any).booking.seats.confirm).toBeDefined();
+  });
+
+  it('should have checkout keys in English', () => {
+    expect((en as any).booking.checkout.title).toBeDefined();
+    expect((en as any).booking.checkout.promoCode).toBeDefined();
+    expect((en as any).booking.checkout.subtotal).toBeDefined();
+    expect((en as any).booking.checkout.payWithMomo).toBeDefined();
+  });
+
   it('should have authentication error keys in Vietnamese', () => {
     expect((vi as any).auth.error).toBeDefined();
     expect((vi as any).auth.error.fillAll).toBeDefined();

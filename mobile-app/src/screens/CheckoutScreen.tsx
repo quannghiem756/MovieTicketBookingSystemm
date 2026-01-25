@@ -40,9 +40,9 @@ const CheckoutScreen = ({ route, navigation }: any) => {
       const result = await validateCoupon(couponCode, subtotal, movieId);
       setDiscount(result.discountAmount);
       setCouponApplied(true);
-      Alert.alert('Success', 'Coupon applied successfully!');
+      Alert.alert(t('common.success'), t('booking.checkout.successCoupon'));
     } catch (error: any) {
-      Alert.alert('Invalid Coupon', error.response?.data?.error || 'Failed to apply coupon');
+      Alert.alert(t('booking.checkout.invalidCoupon'), error.response?.data?.error || t('booking.checkout.errorCoupon'));
       setDiscount(0);
       setCouponApplied(false);
     } finally {
@@ -84,11 +84,11 @@ const CheckoutScreen = ({ route, navigation }: any) => {
         // The MoMo app will redirect back to our app via the redirectUrl,
         // and our deep link handler should take over.
       } else {
-        Alert.alert('Error', 'Cannot open payment URL');
+        Alert.alert(t('common.error'), t('booking.checkout.errorOpenMomo'));
       }
     } catch (error: any) {
       console.error('Payment error:', error);
-      Alert.alert('Payment Error', error.response?.data?.error || 'Failed to initialize payment');
+      Alert.alert(t('common.error'), error.response?.data?.error || t('booking.checkout.errorPayment'));
     } finally {
       setLoading(false);
     }
@@ -98,7 +98,7 @@ const CheckoutScreen = ({ route, navigation }: any) => {
     <View style={styles.container}>
       <Surface style={styles.header}>
         <IconButton icon="chevron-left" onPress={() => navigation.goBack()} />
-        <Title style={styles.headerTitle}>Checkout</Title>
+        <Title style={styles.headerTitle}>{t('booking.checkout.title')}</Title>
       </Surface>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -107,11 +107,11 @@ const CheckoutScreen = ({ route, navigation }: any) => {
             <Title style={styles.movieTitle}>{movieTitle}</Title>
             <Text style={styles.infoText}>{theaterName}</Text>
             <Text style={styles.infoText}>
-              {new Date(showDate).toLocaleDateString()} at {showTime}
+              {new Date(showDate).toLocaleDateString(locale === 'vi' ? 'vi-VN' : 'en-GB')} at {showTime}
             </Text>
             <Divider style={styles.divider} />
             <View style={styles.row}>
-              <Text style={styles.label}>Seats ({selectedSeats.length})</Text>
+              <Text style={styles.label}>{t('booking.checkout.seatsLabel', { count: selectedSeats.length })}</Text>
               <Text style={styles.value}>{selectedSeats.join(', ')}</Text>
             </View>
           </Card.Content>
@@ -119,7 +119,7 @@ const CheckoutScreen = ({ route, navigation }: any) => {
 
         <Surface style={styles.couponSection}>
           <TextInput
-            label="Promo Code"
+            label={t('booking.checkout.promoCode')}
             value={couponCode}
             onChangeText={setCouponCode}
             mode="outlined"
@@ -137,32 +137,32 @@ const CheckoutScreen = ({ route, navigation }: any) => {
             style={styles.couponBtn}
             disabled={!couponCode || validatingCoupon}
           >
-            {couponApplied ? 'Remove' : 'Apply'}
+            {couponApplied ? t('booking.checkout.remove') : t('booking.checkout.apply')}
           </Button>
         </Surface>
 
         <Surface style={styles.priceCard}>
           <View style={styles.priceRow}>
-            <Text style={styles.priceLabel}>Subtotal</Text>
+            <Text style={styles.priceLabel}>{t('booking.checkout.subtotal')}</Text>
             <Text style={styles.priceValue}>{subtotal.toLocaleString()} VND</Text>
           </View>
           {discount > 0 && (
             <View style={styles.priceRow}>
-              <Text style={[styles.priceLabel, { color: '#4caf50' }]}>Discount</Text>
+              <Text style={[styles.priceLabel, { color: '#4caf50' }]}>{t('booking.checkout.discount')}</Text>
               <Text style={[styles.priceValue, { color: '#4caf50' }]}>-{discount.toLocaleString()} VND</Text>
             </View>
           )}
           <Divider style={styles.divider} />
           <View style={styles.priceRow}>
-            <Title style={styles.totalLabel}>Total</Title>
+            <Title style={styles.totalLabel}>{t('booking.checkout.total')}</Title>
             <Title style={styles.totalValue}>{total.toLocaleString()} VND</Title>
           </View>
         </Surface>
 
         <View style={styles.paymentMethods}>
-          <Text style={styles.sectionTitle}>Payment Method</Text>
+          <Text style={styles.sectionTitle}>{t('booking.checkout.paymentMethod')}</Text>
           <List.Item
-            title="MoMo E-Wallet"
+            title={t('booking.checkout.momoWallet')}
             left={props => <List.Icon {...props} icon="wallet" color="#ae2070" />}
             right={props => <List.Icon {...props} icon="check-circle" color={theme.colors.primary} />}
             style={styles.paymentItem}
@@ -178,7 +178,7 @@ const CheckoutScreen = ({ route, navigation }: any) => {
           disabled={loading}
           style={styles.payButton}
         >
-          Pay with MoMo
+          {t('booking.checkout.payWithMomo')}
         </Button>
       </View>
     </View>

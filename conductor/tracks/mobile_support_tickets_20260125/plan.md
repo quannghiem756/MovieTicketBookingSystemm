@@ -28,9 +28,9 @@ Implement the submission UI and logic.
 ## Phase 3: Ticket Details & Deep Linking
 Implement viewing/replying to tickets and handling email links.
 
-- [ ] Task: Create `TicketDetailsScreen` component
-    - [ ] Implement conversation thread display
-    - [ ] Implement reply form
+- [x] Task: Create `TicketDetailsScreen` component [75fce94]
+    - [x] Implement conversation thread display
+    - [x] Implement reply form
 - [ ] Task: Configure Deep Linking for Support Tickets
     - [ ] Update `linking` configuration in `AppNavigator.tsx` to handle `support/ticket/:token`
     - [ ] Add `TicketDetails` to the navigation stack

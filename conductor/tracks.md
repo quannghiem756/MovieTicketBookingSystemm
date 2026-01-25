@@ -16,3 +16,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Fix chatbot button overlapping navigation bar on mobile app**
 *Link: [./tracks/fix_chatbot_overlap_20260125/](./tracks/fix_chatbot_overlap_20260125/)*
+
+---
+
+- [x] **Track: Support Ticket Category Translations**
+*Link: [./tracks/support_category_translation_20260125/](./tracks/support_category_translation_20260125/)*

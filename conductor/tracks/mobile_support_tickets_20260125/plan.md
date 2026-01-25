@@ -31,9 +31,9 @@ Implement viewing/replying to tickets and handling email links.
 - [x] Task: Create `TicketDetailsScreen` component [75fce94]
     - [x] Implement conversation thread display
     - [x] Implement reply form
-- [ ] Task: Configure Deep Linking for Support Tickets
-    - [ ] Update `linking` configuration in `AppNavigator.tsx` to handle `support/ticket/:token`
-    - [ ] Add `TicketDetails` to the navigation stack
+- [x] Task: Configure Deep Linking for Support Tickets [4f1803d]
+    - [x] Update linking configuration in `AppNavigator.tsx` to handle `support/ticket/:token`
+    - [x] Add `TicketDetails` to the navigation stack
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Ticket Details & Deep Linking' (Protocol in workflow.md)
 
 ## Phase 4: Final Polish & Verification

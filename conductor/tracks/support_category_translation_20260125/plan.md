@@ -9,16 +9,16 @@ This plan outlines the steps to introduce Vietnamese translations for support ti
     - [x] Add `SUPPORT_CATEGORY_TRANSLATIONS` mapping English keys to Vietnamese values
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Preparation & Infrastructure' (Protocol in workflow.md) a2a0185
 
-## Phase 2: SupportService Enhancement (TDD)
+## Phase 2: SupportService Enhancement (TDD) [checkpoint: baf0ca6]
 
-- [ ] Task: Update `addInternalReply` to support localized categories
-    - [ ] Write failing unit test in `backend/src/tests/SupportService.test.js` to verify that `emailTemplates.getSupportReplyTemplate` is called with the translated Vietnamese category
-    - [ ] Update `SupportService.addInternalReply` to translate the category using the map before passing it to the email template
-    - [ ] Verify the test passes
-- [ ] Task: Ensure Priority Logic remains unaffected
-    - [ ] Write/Verify unit tests for `_calculatePriority` in `backend/src/tests/SupportService.test.js` using original English category keys
-    - [ ] Ensure `_calculatePriority` implementation still uses English keys
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: SupportService Enhancement (TDD)' (Protocol in workflow.md)
+- [x] Task: Update `addInternalReply` to support localized categories [24a675a]
+    - [x] Write failing unit test in `backend/src/tests/SupportService.test.js` to verify that `emailTemplates.getSupportReplyTemplate` is called with the translated Vietnamese category
+    - [x] Update `SupportService.addInternalReply` to translate the category using the map before passing it to the email template
+    - [x] Verify the test passes
+- [x] Task: Ensure Priority Logic remains unaffected [n/a]
+    - [x] Write/Verify unit tests for `_calculatePriority` in `backend/src/tests/SupportService.test.js` using original English category keys
+    - [x] Ensure `_calculatePriority` implementation still uses English keys
+- [x] Task: Conductor - User Manual Verification 'Phase 2: SupportService Enhancement (TDD)' (Protocol in workflow.md) baf0ca6
 
 ## Phase 3: Final Verification & Cleanup
 

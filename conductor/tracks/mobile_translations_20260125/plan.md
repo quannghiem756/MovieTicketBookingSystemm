@@ -12,7 +12,7 @@
     - [x] Replace strings and verify.
 - [x] Task: Conductor - User Manual Verification 'Authentication & User Domain' (Protocol in workflow.md) 66f5140
 
-## Phase 2: Movie Discovery & Details
+## Phase 2: Movie Discovery & Details [checkpoint: 833d408]
 - [x] Task: Audit and translate Movie Listing & Filtering ce526aa
     - [x] Analyze `HomeScreen.tsx`, `MovieList.tsx` and filter components.
     - [x] Identify hardcoded categories, button labels, and empty states.
@@ -21,7 +21,7 @@
     - [x] Analyze `MovieDetailsScreen.tsx`.
     - [x] Handle static labels (e.g., "Cast", "Director", "Showtimes").
     - [x] Update translations and implement `t()`.
-- [~] Task: Conductor - User Manual Verification 'Movie Discovery & Details' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Movie Discovery & Details' (Protocol in workflow.md) 833d408
 
 ## Phase 3: Booking Workflow & Payments
 - [ ] Task: Audit and translate Seat Selection & Booking

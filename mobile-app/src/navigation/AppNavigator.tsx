@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as Linking from 'expo-linking';
 import ProfileScreen from '../screens/ProfileScreen';
 import ContactUsScreen from '../screens/ContactUsScreen';
+import TicketDetailsScreen from '../screens/TicketDetailsScreen';
 import HomeScreen from '../screens/HomeScreen';
 import NewsDetailsScreen from '../screens/NewsDetailsScreen';
 import MoviesScreen from '../screens/MoviesScreen';
@@ -51,6 +52,7 @@ function ProfileStack() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
       <Stack.Screen name="ContactUs" component={ContactUsScreen} />
+      <Stack.Screen name="TicketDetails" component={TicketDetailsScreen} />
     </Stack.Navigator>
   );
 }
@@ -139,7 +141,8 @@ export default function AppNavigator() {
             Profile: {
               screens: {
                 ProfileScreen: 'profile',
-                ContactUs: 'contact-us'
+                ContactUs: 'contact-us',
+                TicketDetails: 'support/ticket/:token'
               }
             }
           }

@@ -1,16 +1,16 @@
 # Implementation Plan - Mobile Translation Completion
 
-## Phase 1: Authentication & User Domain
+## Phase 1: Authentication & User Domain [checkpoint: 66f5140]
 - [x] Task: Audit and translate Authentication screens (Login, Register, OTP) e9b4faa
     - [x] Analyze `LoginScreen.tsx`, `RegisterScreen.tsx`, `OtpVerificationScreen.tsx` for hardcoded strings.
-    - [ ] Update `en.ts` and `vi.ts` with new keys.
-    - [ ] Replace strings with `t()` hooks.
-    - [ ] Verify using unit tests or manual walkthrough.
+    - [x] Update `en.ts` and `vi.ts` with new keys.
+    - [x] Replace strings with `t()` hooks.
+    - [x] Verify using unit tests or manual walkthrough.
 - [x] Task: Audit and translate User Profile & Settings ce526aa
     - [x] Analyze `ProfileScreen.tsx` and related components.
-    - [ ] Update translation files.
-    - [ ] Replace strings and verify.
-- [~] Task: Conductor - User Manual Verification 'Authentication & User Domain' (Protocol in workflow.md)
+    - [x] Update translation files.
+    - [x] Replace strings and verify.
+- [x] Task: Conductor - User Manual Verification 'Authentication & User Domain' (Protocol in workflow.md) 66f5140
 
 ## Phase 2: Movie Discovery & Details
 - [ ] Task: Audit and translate Movie Listing & Filtering

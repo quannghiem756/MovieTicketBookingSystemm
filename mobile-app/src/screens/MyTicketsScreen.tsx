@@ -12,7 +12,7 @@ const { width } = Dimensions.get('window');
 
 const MyTicketsScreen = () => {
   const { user } = useAuth();
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const theme = useTheme();
   
   const [bookings, setBookings] = useState<any[]>([]);

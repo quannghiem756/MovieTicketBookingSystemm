@@ -53,4 +53,4 @@
 - [x] Task: Final Translation Consistency Check d0da127
     - [x] Review `vi.ts` for tone consistency (formal vs. informal).
     - [x] Ensure no placeholder keys remain visible.
-- [ ] Task: Conductor - User Manual Verification 'Global UI & Final Polish' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Global UI & Final Polish' (Protocol in workflow.md)

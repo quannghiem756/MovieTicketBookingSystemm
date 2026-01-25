@@ -1,5 +1,12 @@
 const emailTemplates = require('../infrastructure/EmailTemplates');
 
+const SUPPORT_CATEGORY_TRANSLATIONS = {
+  'Payment Issue': 'Vấn đề thanh toán',
+  'Ticket/QR Problem': 'Vấn đề vé/QR',
+  'Account': 'Tài khoản',
+  'General Question': 'Câu hỏi chung'
+};
+
 class SupportService {
   constructor(supportTicketRepository, ticketCommentRepository, emailService) {
     this.supportTicketRepository = supportTicketRepository;
@@ -86,7 +93,7 @@ class SupportService {
     if (this.emailService && ticket.email) {
       try {
         const template = emailTemplates.getSupportReplyTemplate({
-          subject: ticket.subject,
+          subject: ticket.category,
           replyContent: content,
           accessToken: ticket.accessToken
         }, 'vi'); // Default to Vietnameses for now
@@ -122,5 +129,7 @@ class SupportService {
     return 'Low';
   }
 }
+
+SupportService.CATEGORY_TRANSLATIONS = SUPPORT_CATEGORY_TRANSLATIONS;
 
 module.exports = SupportService;

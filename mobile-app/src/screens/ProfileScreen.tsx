@@ -32,15 +32,19 @@ const ProfileScreen = () => {
     }
   };
 
-  const renderBookingItem = ({ item }: { item: any }) => (
+  const renderBookingItem = ({ item }: { item: any }) => {
+    const statusKey = `profile.status.${item.status}` as any;
+    const statusText = t(statusKey, { defaultValue: item.status.toUpperCase() });
+
+    return (
     <List.Item
-      title={`Booking #${item.id.substring(item.id.length - 6).toUpperCase()}`}
+      title={`${t('profile.bookingPrefix')}${item.id.substring(item.id.length - 6).toUpperCase()}`}
       description={`${new Date(item.bookingDate).toLocaleDateString()} - ${item.totalPrice.toLocaleString()} VND`}
       left={props => <List.Icon {...props} icon="ticket" color={item.status === 'confirmed' ? '#4caf50' : '#f44336'} />}
       right={() => (
         <View style={styles.statusContainer}>
           <Text style={[styles.statusText, { color: item.status === 'confirmed' ? '#4caf50' : '#f44336' }]}>
-            {item.status.toUpperCase()}
+            {statusText}
           </Text>
         </View>
       )}
@@ -48,6 +52,7 @@ const ProfileScreen = () => {
       descriptionStyle={{ color: theme.colors.onSurfaceVariant }}
     />
   );
+  };
 
   return (
     <View style={styles.container}>
@@ -74,9 +79,9 @@ const ProfileScreen = () => {
         </View>
 
         <View style={styles.settingsSection}>
-          <Title style={styles.sectionTitle}>Settings</Title>
+          <Title style={styles.sectionTitle}>{t('profile.settings')}</Title>
           <List.Item
-            title="Language"
+            title={t('profile.language')}
             description={locale === 'en' ? 'English' : 'Tiếng Việt'}
             left={props => <List.Icon {...props} icon="translate" />}
             right={() => (
@@ -93,7 +98,7 @@ const ProfileScreen = () => {
         </View>
 
         <View style={styles.settingsSection}>
-          <Title style={styles.sectionTitle}>Help & Support</Title>
+          <Title style={styles.sectionTitle}>{t('profile.helpSupport')}</Title>
           <List.Item
             title={t('contactUs.button')}
             left={props => <List.Icon {...props} icon="help-circle-outline" />}

@@ -56,6 +56,15 @@ export default {
     points: 'Điểm',
     bookingHistory: 'Lịch sử đặt vé',
     noBookings: 'Chưa có lịch sử đặt vé.',
+    settings: 'Cài đặt',
+    language: 'Ngôn ngữ',
+    helpSupport: 'Trợ giúp & Hỗ trợ',
+    bookingPrefix: 'Mã vé #',
+    status: {
+      confirmed: 'ĐÃ XÁC NHẬN',
+      pending: 'ĐANG CHỜ',
+      cancelled: 'ĐÃ HỦY',
+    },
   },
   booking: {
     confirmation: {

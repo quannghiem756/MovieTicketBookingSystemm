@@ -56,6 +56,15 @@ export default {
     points: 'Points',
     bookingHistory: 'Booking History',
     noBookings: 'No bookings found yet.',
+    settings: 'Settings',
+    language: 'Language',
+    helpSupport: 'Help & Support',
+    bookingPrefix: 'Booking #',
+    status: {
+      confirmed: 'CONFIRMED',
+      pending: 'PENDING',
+      cancelled: 'CANCELLED',
+    },
   },
   booking: {
     confirmation: {

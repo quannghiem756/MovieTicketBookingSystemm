@@ -37,14 +37,14 @@ const LoginScreen = ({ navigation }: any) => {
     setLoading(true);
     const result = await googleLogin(idToken);
     if (!result.success) {
-      setError(result.error || 'Google login failed');
+      setError(result.error || t('auth.error.googleLogin'));
       setLoading(false);
     }
   };
 
   const handleLogin = async () => {
     if (!email || !password) {
-      setError('Please fill in all fields');
+      setError(t('auth.error.fillAll'));
       return;
     }
 
@@ -54,7 +54,7 @@ const LoginScreen = ({ navigation }: any) => {
     const result = await login({ email, password });
     
     if (!result.success) {
-      setError(result.error || 'Login failed');
+      setError(result.error || t('auth.error.loginFailed'));
       setLoading(false);
     }
   };

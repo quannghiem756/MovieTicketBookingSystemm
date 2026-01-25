@@ -20,6 +20,13 @@ export default {
     alreadyHaveAccount: 'Đã có tài khoản?',
     continueWithGoogle: 'Tiếp tục với Google',
     or: 'HOẶC',
+    error: {
+      fillAll: 'Vui lòng điền đầy đủ thông tin',
+      googleLogin: 'Đăng nhập Google thất bại',
+      loginFailed: 'Đăng nhập thất bại',
+      passwordMismatch: 'Mật khẩu không khớp',
+      registrationFailed: 'Đăng ký thất bại',
+    },
   },
   nav: {
     home: 'Trang chủ',

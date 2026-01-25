@@ -19,12 +19,12 @@ const RegisterScreen = ({ navigation }: any) => {
 
   const handleRegister = async () => {
     if (!name || !email || !password || !confirmPassword) {
-      setError('Please fill in all fields');
+      setError(t('auth.error.fillAll'));
       return;
     }
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
+      setError(t('auth.error.passwordMismatch'));
       return;
     }
 
@@ -37,7 +37,7 @@ const RegisterScreen = ({ navigation }: any) => {
       // Navigate to login or verification
       navigation.navigate('Login');
     } else {
-      setError(result.error || 'Registration failed');
+      setError(result.error || t('auth.error.registrationFailed'));
       setLoading(false);
     }
   };

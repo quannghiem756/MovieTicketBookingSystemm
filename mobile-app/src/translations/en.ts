@@ -20,6 +20,13 @@ export default {
     alreadyHaveAccount: 'Already have an account?',
     continueWithGoogle: 'Continue with Google',
     or: 'OR',
+    error: {
+      fillAll: 'Please fill in all fields',
+      googleLogin: 'Google login failed',
+      loginFailed: 'Login failed',
+      passwordMismatch: 'Passwords do not match',
+      registrationFailed: 'Registration failed',
+    },
   },
   nav: {
     home: 'Home',

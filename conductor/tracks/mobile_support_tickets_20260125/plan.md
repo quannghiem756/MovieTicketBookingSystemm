@@ -20,9 +20,9 @@ Implement the submission UI and logic.
 - [x] Task: Create `ContactUsScreen` component [67e420a]
     - [ ] Implement form with Name, Email, Phone, Category, and Message fields
     - [ ] Add validation logic and pre-filling for logged-in users
-- [ ] Task: Integrate `ContactUsScreen` into `ProfileScreen`
-    - [ ] Add "Help & Support" section to `ProfileScreen` UI
-    - [ ] Set up navigation in `AppNavigator`
+- [x] Task: Integrate `ContactUsScreen` into `ProfileScreen` [e7678c1]
+    - [x] Add "Help & Support" section to `ProfileScreen` UI
+    - [x] Set up navigation in `AppNavigator`
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Contact Us Form' (Protocol in workflow.md)
 
 ## Phase 3: Ticket Details & Deep Linking

@@ -111,8 +111,8 @@ const ContactUsScreen = ({ navigation }: any) => {
               onDismiss={() => setMenuVisible(false)}
               anchor={
                 <TouchableRipple
-                  onPress={() => setMenuVisible(true)}
-                  style={[styles.menuAnchor, { borderColor: theme.colors.outline }]} 
+                  onPress={() => setMenuVisible(!menuVisible)}
+                  style={[styles.menuAnchor, { borderColor: theme.colors.outline }]}
                 >
                   <View style={styles.menuAnchorContent}>
                     <Text style={{ color: theme.colors.onSurfaceVariant, fontSize: 12 }}>{t('contactUs.category')}</Text>

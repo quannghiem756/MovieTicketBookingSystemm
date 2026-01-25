@@ -39,7 +39,7 @@ Implement viewing/replying to tickets and handling email links.
 ## Phase 4: Final Polish & Verification
 Final testing and ensuring a smooth user experience.
 
-- [ ] Task: Final UI/UX review and I18n verification
+- [~] Task: Final UI/UX review and I18n verification
     - [ ] Check keyboard avoiding behavior on both iOS and Android
     - [ ] Verify both languages in all new screens
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Final Polish & Verification' (Protocol in workflow.md)

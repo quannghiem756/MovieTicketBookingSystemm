@@ -98,7 +98,6 @@ class EmailTemplates {
             
             <div style="text-align: center;">
               <a href="${ticketUrl}" class="btn">${t.viewTicket}</a>
-              <a href="${mobileTicketUrl}" class="btn btn-mobile">${t.viewTicketMobile}</a>
             </div>
           </div>
           <div class="footer">

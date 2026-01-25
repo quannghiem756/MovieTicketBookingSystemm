@@ -22,7 +22,26 @@ import NewsDetailPage from './pages/NewsDetailPage';
 import PublicTicketDetail from './pages/PublicTicketDetail';
 // Admin components
 import AdminLayout from './pages/admin/AdminLayout';
-// ...
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminMovies from './pages/admin/AdminMovies';
+import MovieForm from './pages/admin/MovieForm';
+import AdminShowtimes from './pages/admin/AdminShowtimes';
+import ShowtimeForm from './pages/admin/ShowtimeForm';
+import AdminTheaters from './pages/admin/AdminTheaters';
+import TheaterForm from './pages/admin/TheaterForm';
+import AdminBookings from './pages/admin/AdminBookings';
+import AdminUsers from './pages/admin/AdminUsers';
+import AdminNews from './pages/admin/AdminNews';
+import NewsForm from './pages/admin/NewsForm';
+import AdminCoupons from './pages/admin/AdminCoupons';
+import AdminSupport from './pages/admin/AdminSupport';
+
+const AppRouter = () => {
+  return (
+    <Router>
+      <Header />
+      <Container>
+        <Routes>
           <Route path="/forgot-password" element={<ResetPasswordPage />} />
           <Route path="/support/ticket/:token" element={<PublicTicketDetail />} />
 

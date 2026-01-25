@@ -22,3 +22,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 - [x] **Track: Implement support ticket function (Contact Us & Tracking) on mobile app**
 *Link: [./tracks/mobile_support_tickets_20260125/](./tracks/mobile_support_tickets_20260125/)*
 
+
+---
+
+- [~] **Track: add missing translation context on the mobile apps. Find and fills those missing pieces**
+*Link: [./tracks/mobile_translations_20260125/](./tracks/mobile_translations_20260125/)*

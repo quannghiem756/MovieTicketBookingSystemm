@@ -10,7 +10,7 @@
     - [x] Analyze `ProfileScreen.tsx` and related components.
     - [ ] Update translation files.
     - [ ] Replace strings and verify.
-- [ ] Task: Conductor - User Manual Verification 'Authentication & User Domain' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Authentication & User Domain' (Protocol in workflow.md)
 
 ## Phase 2: Movie Discovery & Details
 - [ ] Task: Audit and translate Movie Listing & Filtering

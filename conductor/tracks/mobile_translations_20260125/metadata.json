@@ -1,0 +1,8 @@
+{
+  "track_id": "mobile_translations_20260125",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-01-25T14:30:00Z",
+  "updated_at": "2026-01-25T14:30:00Z",
+  "description": "add missing translation context on the mobile apps. Find and fills those missing pieces"
+}

@@ -30,5 +30,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Fix Mobile Seat Selection Socket Sync**
+- [x] **Track: Fix Mobile Seat Selection Socket Sync**
 *Link: [./tracks/fix_mobile_seat_sync_20260126/](./tracks/fix_mobile_seat_sync_20260126/)*

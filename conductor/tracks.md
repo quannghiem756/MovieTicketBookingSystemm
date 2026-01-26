@@ -27,3 +27,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [~] **Track: add missing translation context on the mobile apps. Find and fills those missing pieces**
 *Link: [./tracks/mobile_translations_20260125/](./tracks/mobile_translations_20260125/)*
+
+---
+
+- [~] **Track: Fix Mobile Seat Selection Socket Sync**
+*Link: [./tracks/fix_mobile_seat_sync_20260126/](./tracks/fix_mobile_seat_sync_20260126/)*

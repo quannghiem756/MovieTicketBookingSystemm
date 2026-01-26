@@ -54,12 +54,12 @@ io.on('connection', (socket) => {
   // Join a room based on showtimeId
   socket.on('join_showtime', (showtimeId) => {
     socket.join(showtimeId);
-    console.log(`User ${socket.id} joined showtime room: ${showtimeId}`);
+    console.log(`[SOCKET] User ${socket.id} joined room: ${showtimeId} (Type: ${typeof showtimeId})`);
   });
 
   socket.on('leave_showtime', (showtimeId) => {
     socket.leave(showtimeId);
-    console.log(`User ${socket.id} left showtime room: ${showtimeId}`);
+    console.log(`[SOCKET] User ${socket.id} left room: ${showtimeId}`);
   });
 
   socket.on('disconnect', () => {

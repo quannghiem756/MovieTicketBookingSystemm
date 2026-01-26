@@ -111,6 +111,7 @@ class BookingController {
       // Emit socket event
       const io = req.app.get('io');
       if (io) {
+        console.log(`[SOCKET] Emitting seat_held to room: ${showtimeId} (Type: ${typeof showtimeId})`);
         io.to(showtimeId).emit('seat_held', { seatId, userId });
       }
 

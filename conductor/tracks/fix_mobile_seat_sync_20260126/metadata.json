@@ -1,0 +1,8 @@
+{
+  "track_id": "fix_mobile_seat_sync_20260126",
+  "type": "bug",
+  "status": "new",
+  "created_at": "2026-01-26T10:26:00Z",
+  "updated_at": "2026-01-26T10:26:00Z",
+  "description": "currently im facing a problem on the mobile apps when an user selected some seat but it does not sync with the socket when the seat is choosen only on the web that it got sync properly"
+}

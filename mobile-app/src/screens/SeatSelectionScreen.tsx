@@ -128,7 +128,10 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
     });
 
     socketRef.current.on('seat_held', ({ seatId, userId: holderId }: any) => {
-      setLockedSeats(prev => [...new Set([...prev, seatId])]);
+      // If it's not us holding the seat, add to lockedSeats
+      if (holderId !== user?.id) {
+        setLockedSeats(prev => [...new Set([...prev, seatId])]);
+      }
     });
 
     socketRef.current.on('seat_released', ({ seatId }: any) => {
@@ -145,21 +148,45 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
       return; // Seat is taken
     }
 
+    const isSelected = selectedSeats.includes(seatId);
+    
     try {
-      if (selectedSeats.includes(seatId)) {
-        await releaseSeat(showtimeId, seatId);
+      if (isSelected) {
+        // Optimistic update
         setSelectedSeats(prev => prev.filter(id => id !== seatId));
+        await releaseSeat(showtimeId, seatId);
       } else {
         if (selectedSeats.length >= 8) {
           Alert.alert(t('booking.seats.limitReached'), t('booking.seats.limitReachedMsg'));
           return;
         }
-        await holdSeat(showtimeId, seatId);
+        
+        // Optimistic update
         setSelectedSeats(prev => [...prev, seatId]);
-        setTimeLeft(600); // Reset timer to 10 minutes on new hold
+        
+        try {
+          const res = await holdSeat(showtimeId, seatId);
+          setTimeLeft(600); // Reset timer to 10 minutes on new hold
+          
+          // Sync timer if backend provides expiresAt
+          if (res && res.expiresAt) {
+            const expiry = new Date(res.expiresAt).getTime();
+            const now = new Date().getTime();
+            const diff = Math.floor((expiry - now) / 1000);
+            if (diff > 0) setTimeLeft(diff);
+          }
+        } catch (err: any) {
+          // Revert optimistic update on failure
+          setSelectedSeats(prev => prev.filter(id => id !== seatId));
+          throw err; // Re-throw to be caught by outer catch
+        }
       }
     } catch (error: any) {
       Alert.alert(t('common.error'), error.response?.data?.error || t('booking.seats.errorUpdate'));
+      
+      // Refresh state to ensure consistency
+      const locked = await getLockedSeats(showtimeId);
+      setLockedSeats(locked);
     }
   };
 

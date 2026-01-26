@@ -14,7 +14,7 @@ const { width } = Dimensions.get('window');
 
 const MovieDetailsScreen = ({ route, navigation }: any) => {
   const { movieId } = route.params;
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const theme = useTheme();
   
   const [movie, setMovie] = useState<any>(null);

@@ -40,8 +40,47 @@ const AppRouter = () => {
   return (
     <Router>
       <Header />
-      <Container>
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 8 }}>
         <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/now-showing" element={<NowShowingPage />} />
+          <Route path="/news" element={<NewsPage />} />
+          <Route path="/news/:id" element={<NewsDetailPage />} />
+          <Route path="/coming-soon" element={<ComingSoonPage />} />
+          <Route path="/movie/:id" element={<MovieDetails />} />
+          <Route path="/showtimes" element={<ShowtimesPage />} />
+          <Route path="/book/:movieId/:showtimeId" element={
+            <ProtectedRoute>
+              <BookingPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/booking/confirmation" element={
+            <ProtectedRoute>
+              <BookingConfirmation />
+            </ProtectedRoute>
+          } />
+          <Route path="/bookings" element={
+            <ProtectedRoute>
+              <BookingsPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/bookings/:bookingId" element={
+            <ProtectedRoute>
+              <BookingDetailsPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/payment/result" element={
+            <ProtectedRoute>
+              <PaymentResult />
+            </ProtectedRoute>
+          } />
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          } />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot-password" element={<ResetPasswordPage />} />
           <Route path="/support/ticket/:token" element={<PublicTicketDetail />} />
 

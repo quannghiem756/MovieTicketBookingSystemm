@@ -7,7 +7,7 @@
   - *Context*: Ensure the text description matches the new modular diagram structure.
 - [x] Task: Conductor - User Manual Verification 'Simplification and Refactoring' (Protocol in workflow.md) [checkpoint: 3653f3c]
 
-## Phase 2: Relational Diagram
+## Phase 2: Relational Diagram [checkpoint: d623298]
 - [x] Task: Create `entity_relationship_diagram.md`. 55d1d76
   - *Context*: specific relational diagram for the project's data models.
 - [x] Task: Conductor - User Manual Verification 'Relational Diagram' (Protocol in workflow.md)

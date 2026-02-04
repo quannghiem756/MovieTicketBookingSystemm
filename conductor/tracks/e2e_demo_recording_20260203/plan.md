@@ -1,13 +1,13 @@
 # Implementation Plan: E2E Demo Recording Tests
 
-## Phase 1: Environment Setup & Data Seeding
-- [x] Task: Create Demo Seeding Script
+## Phase 1: Environment Setup & Data Seeding [checkpoint: 85fd981]
+- [x] Task: Create Demo Seeding Script 85fd981
     - [x] Create `backend/src/infrastructure/database/seeds/demo_seed.js` (or similar location) to populate the database with consistent data (users, movies, theaters, showtimes).
     - [x] Ensure the script can be run independently and clears existing relevant data.
-- [x] Task: Configure Cypress for Demo Flows
+- [x] Task: Configure Cypress for Demo Flows 85fd981
     - [x] Create the directory `frontend/cypress/e2e/demo-flows/`.
     - [x] Add a `cypress.config.js` override or environment variable support for "demo mode" (e.g., setting `slowTestThreshold` or custom `baseUrl`).
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Environment Setup & Data Seeding' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Environment Setup & Data Seeding' (Protocol in workflow.md) 85fd981
 
 ## Phase 2: Booking Journey Demo Test
 - [ ] Task: Implement Full Booking Flow Test

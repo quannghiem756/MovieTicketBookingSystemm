@@ -1,0 +1,8 @@
+{
+  "track_id": "simplify_functional_decomposition_20260111",
+  "type": "chore",
+  "status": "new",
+  "created_at": "2026-01-11T23:13:00Z",
+  "updated_at": "2026-01-11T23:13:00Z",
+  "description": "Simplify the functional decomposition diagram by collapsing internal backend layers into feature modules."
+}

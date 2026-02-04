@@ -9,11 +9,6 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [x] Track: Simplify Functional Decomposition Diagram
-*Link: [./conductor/tracks/simplify_functional_decomposition_20260111/](./conductor/tracks/simplify_functional_decomposition_20260111/)*
-
----
-
 - [x] **Track: Fix chatbot button overlapping navigation bar on mobile app**
 *Link: [./tracks/fix_chatbot_overlap_20260125/](./tracks/fix_chatbot_overlap_20260125/)*
 

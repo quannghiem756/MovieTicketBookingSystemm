@@ -10,4 +10,4 @@
 ## Phase 2: Relational Diagram
 - [x] Task: Create `entity_relationship_diagram.md`. 55d1d76
   - *Context*: specific relational diagram for the project's data models.
-- [~] Task: Conductor - User Manual Verification 'Relational Diagram' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Relational Diagram' (Protocol in workflow.md)

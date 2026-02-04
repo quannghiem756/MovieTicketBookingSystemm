@@ -30,5 +30,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Make e2e test to make a recording demo of the project**
+- [~] **Track: Make e2e test to make a recording demo of the project**
 *Link: [./tracks/e2e_demo_recording_20260203/](./tracks/e2e_demo_recording_20260203/)*

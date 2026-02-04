@@ -19,7 +19,7 @@ const CheckoutScreen = ({ route, navigation }: any) => {
     movieId
   } = route.params;
   
-  const { t } = useTranslation();
+  const { t , locale} = useTranslation();
   const theme = useTheme();
   const { user } = useAuth();
   

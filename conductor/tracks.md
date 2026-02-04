@@ -9,7 +9,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-## [~] Track: Simplify Functional Decomposition Diagram
+## [x] Track: Simplify Functional Decomposition Diagram
 *Link: [./conductor/tracks/simplify_functional_decomposition_20260111/](./conductor/tracks/simplify_functional_decomposition_20260111/)*
 
 ---
@@ -32,3 +32,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Fix Mobile Seat Selection Socket Sync**
 *Link: [./tracks/fix_mobile_seat_sync_20260126/](./tracks/fix_mobile_seat_sync_20260126/)*
+
+---
+
+- [ ] **Track: Make e2e test to make a recording demo of the project**
+*Link: [./tracks/e2e_demo_recording_20260203/](./tracks/e2e_demo_recording_20260203/)*

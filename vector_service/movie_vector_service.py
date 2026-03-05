@@ -800,6 +800,92 @@ def get_movies():
             'count': 0
         })
 
+@app.route('/sync/movie', methods=['POST'])
+def sync_movie():
+    """Synchronize a single movie's data with the vector store"""
+    global vector_store, movies_data, movie_ids
+    
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'No data provided'}), 400
+            
+        action = data.get('action')
+        if action not in ['upsert', 'delete']:
+            return jsonify({'error': 'Invalid action'}), 400
+            
+        if action == 'upsert':
+            movie = data.get('movie')
+            if not movie or not movie.get('id'):
+                return jsonify({'error': 'Movie data with id is required for upsert'}), 400
+            
+            movie_id = str(movie.get('id'))
+            
+            # 1. Update in-memory cache
+            # Remove old version if exists
+            movies_data = [m for m in movies_data if str(m.get('id')) != movie_id]
+            movies_data.append(movie)
+            if movie_id not in movie_ids:
+                movie_ids.append(movie_id)
+            
+            # 2. Update vector store
+            if vector_store is not None:
+                # Create document
+                text = create_movie_text(movie)
+                doc = Document(
+                    page_content=text,
+                    metadata={
+                        'id': movie_id,
+                        'title': movie.get('title', ''),
+                        'director': movie.get('director', ''),
+                        'cast': ', '.join(movie.get('cast', [])),
+                        'synopsis': movie.get('synopsis', ''),
+                        'genre': ', '.join(movie.get('genre', [])),
+                        'rating': str(movie.get('rating', '')),
+                        'posterUrl': movie.get('posterUrl', ''),
+                        'releaseDate': str(movie.get('releaseDate', '')),
+                        'duration': str(movie.get('duration', '')),
+                        'trailerUrl': movie.get('trailerUrl', '')
+                    }
+                )
+                
+                # Delete existing if it exists (Chroma might not overwrite by default)
+                try:
+                    vector_store.delete(ids=[movie_id])
+                except Exception as e:
+                    logger.debug(f"Note: Movie {movie_id} not found in vector store before upsert (this is normal for new movies)")
+                
+                # Add new document
+                vector_store.add_documents([doc], ids=[movie_id])
+                logger.info(f"Successfully upserted movie {movie_id} in vector store")
+            
+            return jsonify({'status': 'success', 'message': f'Movie {movie_id} synced successfully'})
+            
+        elif action == 'delete':
+            movie_id = str(data.get('movie_id'))
+            if not movie_id:
+                return jsonify({'error': 'movie_id is required for delete'}), 400
+                
+            # 1. Update in-memory cache
+            movies_data = [m for m in movies_data if str(m.get('id')) != movie_id]
+            if movie_id in movie_ids:
+                movie_ids.remove(movie_id)
+                
+            # 2. Update vector store
+            if vector_store is not None:
+                try:
+                    vector_store.delete(ids=[movie_id])
+                    logger.info(f"Successfully deleted movie {movie_id} from vector store")
+                except Exception as e:
+                    logger.error(f"Error deleting movie {movie_id} from vector store: {e}")
+                    return jsonify({'error': f'Failed to delete from vector store: {str(e)}'}), 500
+                    
+            return jsonify({'status': 'success', 'message': f'Movie {movie_id} deleted from vector store'})
+
+    except Exception as e:
+        logger.error(f"Error in sync_movie: {e}")
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/reset-db', methods=['POST'])
 def reset_db():
     """Reset the vector database by deleting the collection"""

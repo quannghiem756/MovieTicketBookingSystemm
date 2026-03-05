@@ -14,7 +14,7 @@
 - [x] Task: Verify all unit tests pass and code coverage is >80%.
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Implementation' (Protocol in workflow.md)
 
-## Phase 3: Integration & Final Validation
-- [ ] Task: Verify the end-to-end flow by running the vector service and making recommendation requests.
-- [ ] Task: Ensure the service handles backend API failures gracefully by returning an empty list (as per spec).
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Integration & Final Validation' (Protocol in workflow.md)
+## Phase 3: Integration & Final Validation [checkpoint: 49b7044]
+- [x] Task: Verify the end-to-end flow by running the vector service and making recommendation requests.
+- [x] Task: Ensure the service handles backend API failures gracefully by returning an empty list (as per spec).
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Integration & Final Validation' (Protocol in workflow.md)

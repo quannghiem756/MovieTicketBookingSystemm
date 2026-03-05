@@ -34,10 +34,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 *Link: [./tracks/e2e_demo_recording_20260203/](./tracks/e2e_demo_recording_20260203/)*
 ---
 
-- [~] **Track: Automate movie data synchronization to the vector database**
+- [x] **Track: Automate movie data synchronization to the vector database**
 *Link: [./tracks/movie_sync_20260305/](./tracks/movie_sync_20260305/)*
-
----
-
-- [ ] **Track: Modify the movie vector service to only recommend movies that have showtimes today.**
-*Link: [./tracks/showtime_aware_recommendation_20260305/](./tracks/showtime_aware_recommendation_20260305/)*

@@ -5,14 +5,14 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Research & Setup' (Protocol in workflow.md)
 
 ## Phase 2: Implementation (TDD)
-- [ ] Task: Create unit tests for showtime-aware filtering in `vector_service/tests/test_showtime_filter.py`.
-    - [ ] Sub-task: Mock backend API responses for "now showing" movies.
-    - [ ] Sub-task: Test filtering logic for various scenarios (showing today, not showing today, empty list).
-- [ ] Task: Implement `get_now_showing_ids()` function in `movie_vector_service.py` to fetch movie IDs from the backend.
-- [ ] Task: Update `search_similar_movies()` to support an optional `filter_ids` list.
-- [ ] Task: Modify `get_recommendations()` to fetch "now showing" IDs and pass them to `search_similar_movies()` for pre-filtering.
-- [ ] Task: Verify all unit tests pass and code coverage is >80%.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Implementation' (Protocol in workflow.md)
+- [x] Task: Create unit tests for showtime-aware filtering in `vector_service/tests/test_showtime_filter.py`.
+    - [x] Sub-task: Mock backend API responses for "now showing" movies.
+    - [x] Sub-task: Test filtering logic for various scenarios (showing today, not showing today, empty list).
+- [x] Task: Implement `get_now_showing_ids()` function in `movie_vector_service.py` to fetch movie IDs from the backend.
+- [x] Task: Update `search_similar_movies()` to support an optional `filter_ids` list.
+- [x] Task: Modify `get_recommendations()` to fetch "now showing" IDs and pass them to `search_similar_movies()` for pre-filtering.
+- [x] Task: Verify all unit tests pass and code coverage is >80%.
+- [~] Task: Conductor - User Manual Verification 'Phase 2: Implementation' (Protocol in workflow.md)
 
 ## Phase 3: Integration & Final Validation
 - [ ] Task: Verify the end-to-end flow by running the vector service and making recommendation requests.

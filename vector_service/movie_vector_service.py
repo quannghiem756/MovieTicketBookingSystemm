@@ -89,6 +89,20 @@ def fetch_movies_from_api():
         logger.error(f"Error fetching movies from API: {e}")
         return []
 
+def get_now_showing_ids():
+    """Fetch only movie IDs that have showtimes today from the main API"""
+    try:
+        response = requests.get(f"{MOVIE_API_URL}/now-showing")
+        if response.status_code == 200:
+            movies = response.json().get('movies', [])
+            return [str(movie.get('id')) for movie in movies]
+        else:
+            logger.warning(f"Failed to fetch now-showing movies: {response.status_code}")
+            return []
+    except Exception as e:
+        logger.error(f"Error fetching now-showing IDs: {e}")
+        return []
+
 def create_movie_text(movie):
     """Create a text representation of a movie for vectorization"""
     return " ".join([
@@ -199,8 +213,8 @@ def build_vector_index():
         logger.error(f"Error creating vector store: {e}")
         return False
 
-def search_similar_movies(query, top_k=10):
-    """Search for similar movies based on the query using LangChain ChromaDB with rate limiting"""
+def search_similar_movies(query, top_k=10, filter_ids=None):
+    """Search for similar movies based on the query using LangChain ChromaDB with optional filtering by IDs"""
     global vector_store
 
     if vector_store is None:
@@ -211,8 +225,20 @@ def search_similar_movies(query, top_k=10):
     time.sleep(0.05)
 
     try:
+        # Prepare filter if filter_ids is provided
+        # Note: In ChromaDB via LangChain, we can use the 'filter' parameter for metadata filtering,
+        # but for specific IDs we might need to use the underlying collection directly or pre-filter.
+        # LangChain's similarity_search doesn't natively support an 'ids' list in all versions.
+        # A common way is to use a metadata filter if 'id' is in metadata.
+        
+        search_kwargs = {"k": top_k}
+        if filter_ids:
+            # If filtering by IDs, we use metadata filtering
+            # ChromaDB metadata filtering format: {"id": {"$in": filter_ids}}
+            search_kwargs["filter"] = {"id": {"$in": filter_ids}}
+
         # Use LangChain's similarity_search method
-        docs = vector_store.similarity_search(query, k=top_k)
+        docs = vector_store.similarity_search(query, **search_kwargs)
 
         # Format results to match the original function's output
         formatted_results = []
@@ -522,8 +548,29 @@ def get_recommendations():
                     'message': f'Found {len(upcoming_movies)} upcoming movies'
                 })
 
-        # For other intents, proceed with normal recommendation logic
-        results = search_similar_movies(query, top_k=10)
+                # For other intents (primarily movie_recommendation), proceed with normal recommendation logic
+        # FETCH ONLY SHOWING MOVIE IDs for pre-filtering
+        showing_movie_ids = get_now_showing_ids()
+
+        if not showing_movie_ids:
+            # If no movies are showing, return the popular fallback immediately or empty list
+            popular_movies = get_popular_movies(limit=5)
+            message = "There are no movies with showtimes available today, but here are some popular movies you might enjoy!"
+            if language == 'vi':
+                message = "Không có phim nào có lịch chiếu hôm nay, nhưng đây là một số phim phổ biến mà bạn có thể thích!"
+
+            return jsonify({
+                'query': query,
+                'recommendations': popular_movies,
+                'total': len(popular_movies),
+                'source': 'no_showtimes_today',
+                'intent': intent,
+                'language': language,
+                'message': message
+            })
+
+        # Search with filter_ids to only get movies showing today
+        results = search_similar_movies(query, top_k=10, filter_ids=showing_movie_ids)
         relevant_movies = [result['movie'] for result in results]
 
         # Vague query detection or no results

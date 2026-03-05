@@ -10,7 +10,7 @@ A comprehensive Movie Ticket Booking System with a Node.js backend, React fronte
 
 ## Core Goals
 - **Seamless Booking Experience:** Provide a unified booking flow across web and mobile platforms (**CineBook app**), including digital ticket generation with QR codes for future kiosk integration.
-- **AI-Driven Personalization:** Leverage a vector-based recommendation service with automatic data synchronization to provide users with tailored and up-to-date movie suggestions.
+- **AI-Driven Personalization:** Leverage a vector-based recommendation service with automatic data synchronization to provide users with tailored, up-to-date, and showtime-aware movie suggestions.
 - **Operational Efficiency:** Empower administrators with intuitive tools for managing complex schedules, theater layouts, and content.
 
 ## Key Features
@@ -25,7 +25,8 @@ A comprehensive Movie Ticket Booking System with a Node.js backend, React fronte
 - **Promotional Coupons:** Ability to apply discount codes during checkout for reduced ticket prices.
 - **Email Notifications & Verification:** Automated HTML emails for booking confirmations (with scannable QR codes) and OTP-based email verification for registration and password resets, with proactive redirection and automatic OTP resend for unverified users attempting to login.
 - **Secure Payments & QR Tickets:** Integration with MoMo E-Wallet for secure transactions, a dedicated mobile booking confirmation screen mirroring the web experience, and generation of digital tickets with secure QR codes for on-site validation.
-- **AI Recommendation Chatbot:** An intelligent assistant for personalized movie suggestions with strict grounding to prevent hallucinations and full bilingual support (English/Vietnamese). **Accessible via a persistent Floating Action Button (FAB) on mobile.**
+- **AI Recommendation Chatbot:** An intelligent assistant for personalized movie suggestions with strict grounding to prevent hallucinations, showtime-aware filtering for immediate actionability, and full bilingual support (English/Vietnamese). **Accessible via a persistent Floating Action Button (FAB) on mobile.**
+
 - **User Profiles:** Management of personal information, **Google OAuth login**, and access to a detailed booking history.
 - **Secure Sessions:** Implementation of database-backed refresh tokens with rotation, concurrency-safe grace periods, and HttpOnly cookies for enhanced security and reliability.
 - **Multi-language Support:** Full bilingual support (English/Vietnamese) across web and mobile, with a mandatory language selection on first mobile app launch.

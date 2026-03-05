@@ -626,7 +626,7 @@ const MovieDetails = () => {
                               textTransform: 'none'
                             }}
                           >
-                            {isClosed ? 'Closed' : t('movieDetails.select')}
+                            {isClosed ? t('movieDetails.close') : t('movieDetails.select')}
                           </Button>
                         </span>
                       </Tooltip>

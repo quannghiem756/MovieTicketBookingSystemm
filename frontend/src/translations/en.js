@@ -59,6 +59,7 @@ const en = {
   'movieDetails.synopsis': 'Synopsis',
   'movieDetails.showtimes': 'Showtimes',
   'movieDetails.noShowtimes': 'No showtimes available for this movie.',
+  'movieDetails.close': 'Closed',
   'movieDetails.select': 'Select',
   'movieDetails.watchTrailer': 'Watch Trailer',
   'movieDetails.trailer': 'Trailer',

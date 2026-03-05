@@ -48,6 +48,7 @@ const vi = {
   'movieDetails.synopsis': 'Tóm tắt',
   'movieDetails.showtimes': 'Lịch chiếu',
   'movieDetails.noShowtimes': 'Không có lịch chiếu cho phim này.',
+  'movieDetails.close': 'Đã đóng',
   'movieDetails.select': 'Chọn',
   'movieDetails.watchTrailer': 'Xem trailer',
   'movieDetails.trailer': 'Trailer',

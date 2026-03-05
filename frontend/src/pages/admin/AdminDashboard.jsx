@@ -587,7 +587,7 @@ const AdminDashboard = () => {
                 </Box>
               </Stack>
 
-              <Box sx={{ mt: 4, textAlign: 'center' }}>
+              {/* <Box sx={{ mt: 4, textAlign: 'center' }}>
                 <Button
                   variant="outlined"
                   component={Link}
@@ -607,7 +607,7 @@ const AdminDashboard = () => {
                 >
                   {t('admin.dashboard.viewReports')}
                 </Button>
-              </Box>
+              </Box> */}
             </CardContent>
           </Card>
         </Box>

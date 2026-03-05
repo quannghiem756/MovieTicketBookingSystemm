@@ -56,6 +56,8 @@ export default {
     bookFor: 'Book for %{time}',
     durationUnit: 'min',
     formats: 'Formats',
+    all: 'All',
+    allFormats: 'All Formats',
   },
   news: {
     title: 'News & Promotions',

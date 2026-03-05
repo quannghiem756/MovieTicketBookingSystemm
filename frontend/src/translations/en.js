@@ -66,7 +66,9 @@ const en = {
   'movieDetails.releaseDate': 'Release Date:',
   'movieDetails.overview': 'Overview',
   'movieDetails.actor': 'Actor',
+  'movieDetails.format': 'Format: ',
   'movieDetails.selectDate': 'Select Date',
+  'movieDetails.selectFormat': 'Select Format',
   'movieDetails.availableShowtimes': 'Available Showtimes',
   'movieDetails.selectShowtimeDate': 'Select Showtime Date',
 

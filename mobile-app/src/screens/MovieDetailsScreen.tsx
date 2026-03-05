@@ -20,6 +20,8 @@ const MovieDetailsScreen = ({ route, navigation }: any) => {
   const [movie, setMovie] = useState<any>(null);
   const [showtimes, setShowtimes] = useState<any[]>([]);
   const [selectedShowtime, setSelectedShowtime] = useState<any>(null);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedFormat, setSelectedFormat] = useState<string>('all');
   const [loading, setLoading] = useState(true);
   const [playing, setPlaying] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -37,6 +39,12 @@ const MovieDetailsScreen = ({ route, navigation }: any) => {
     try {
       const data = await getFutureShowtimesByMovieId(movieId);
       setShowtimes(data);
+      
+      if (data && data.length > 0) {
+        const dates = data.map((st: any) => new Date(st.showDate).toLocaleDateString('en-CA'));
+        const earliest = dates.sort()[0];
+        setSelectedDate(earliest);
+      }
     } catch (error) {
       console.error('Error fetching showtimes:', error);
     } finally {
@@ -49,6 +57,7 @@ const MovieDetailsScreen = ({ route, navigation }: any) => {
     setRefreshing(true);
     fetchMovie();
     fetchShowtimes();
+    setSelectedFormat('all');
   }, [fetchMovie, fetchShowtimes]);
 
   useFocusEffect(
@@ -57,6 +66,16 @@ const MovieDetailsScreen = ({ route, navigation }: any) => {
       fetchShowtimes();
     }, [fetchMovie, fetchShowtimes])
   );
+
+  const dateOptions = Array.from(new Set(showtimes.map(st => new Date(st.showDate).toLocaleDateString('en-CA')))).sort();
+  const formatOptions = Array.from(new Set(showtimes.map(st => st.format))).sort();
+
+  const filteredShowtimes = showtimes.filter(st => {
+    const showDateStr = new Date(st.showDate).toLocaleDateString('en-CA');
+    const matchesDate = !selectedDate || showDateStr === selectedDate;
+    const matchesFormat = selectedFormat === 'all' || st.format === selectedFormat;
+    return matchesDate && matchesFormat;
+  });
 
   const getImageUrl = (url: string) => {
     if (!url) return undefined;
@@ -145,35 +164,86 @@ const MovieDetailsScreen = ({ route, navigation }: any) => {
         <Divider style={styles.divider} />
 
         <Title style={styles.sectionTitle}>{t('movies.showtimes')}</Title>
-        <View style={styles.showtimeContainer}>
-          {showtimes.length > 0 ? (
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {showtimes.map((st) => (
-                <TouchableOpacity
-                  key={st.id}
-                  style={[
-                    styles.showtimeItem,
-                    selectedShowtime?.id === st.id && styles.selectedShowtime,
-                    { borderColor: theme.colors.outline }
-                  ]}
-                  onPress={() => setSelectedShowtime(st)}
+        
+        {showtimes.length > 0 ? (
+          <View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterScroll}>
+              <Chip
+                selected={selectedDate === null}
+                onPress={() => setSelectedDate(null)}
+                style={styles.filterChip}
+                selectedColor="#fff"
+              >
+                {t('movies.all')}
+              </Chip>
+              {dateOptions.map(date => (
+                <Chip
+                  key={date}
+                  selected={selectedDate === date}
+                  onPress={() => setSelectedDate(date)}
+                  style={styles.filterChip}
+                  selectedColor="#fff"
                 >
-                  <Text style={[styles.showtimeDate, selectedShowtime?.id === st.id && styles.selectedText]}>
-                    {new Date(st.showDate).toLocaleDateString(locale === 'vi' ? 'vi-VN' : 'en-GB', { day: '2-digit', month: '2-digit' })}
-                  </Text>
-                  <Text style={[styles.showtimeTime, selectedShowtime?.id === st.id && styles.selectedText]}>
-                    {st.showTime}
-                  </Text>
-                  <Text style={[styles.showtimeFormat, selectedShowtime?.id === st.id && styles.selectedText]}>
-                    {st.format}
-                  </Text>
-                </TouchableOpacity>
+                  {new Date(date).toLocaleDateString(locale === 'vi' ? 'vi-VN' : 'en-GB', { day: '2-digit', month: '2-digit' })}
+                </Chip>
               ))}
             </ScrollView>
-          ) : (
-            <Text style={{ color: '#666' }}>{t('movies.noShowtimes')}</Text>
-          )}
-        </View>
+
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterScroll}>
+              <Chip
+                selected={selectedFormat === 'all'}
+                onPress={() => setSelectedFormat('all')}
+                style={styles.filterChip}
+                selectedColor="#fff"
+              >
+                {t('movies.allFormats')}
+              </Chip>
+              {formatOptions.map(format => (
+                <Chip
+                  key={format}
+                  selected={selectedFormat === format}
+                  onPress={() => setSelectedFormat(format)}
+                  style={styles.filterChip}
+                  selectedColor="#fff"
+                >
+                  {format}
+                </Chip>
+              ))}
+            </ScrollView>
+
+            <View style={styles.showtimeContainer}>
+              {filteredShowtimes.length > 0 ? (
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  {filteredShowtimes.map((st) => (
+                    <TouchableOpacity
+                      key={st.id}
+                      style={[
+                        styles.showtimeItem,
+                        selectedShowtime?.id === st.id && styles.selectedShowtime,
+                        { borderColor: theme.colors.outline }
+                      ]}
+                      onPress={() => setSelectedShowtime(st)}
+                    >
+                      <Text style={[styles.showtimeDate, selectedShowtime?.id === st.id && styles.selectedText]}>
+                        {new Date(st.showDate).toLocaleDateString(locale === 'vi' ? 'vi-VN' : 'en-GB', { day: '2-digit', month: '2-digit' })}
+                      </Text>
+                      <Text style={[styles.showtimeTime, selectedShowtime?.id === st.id && styles.selectedText]}>
+                        {st.showTime}
+                      </Text>
+                      <Text style={[styles.showtimeFormat, selectedShowtime?.id === st.id && styles.selectedText]}>
+                        {st.format}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              ) : (
+                <Text style={{ color: '#666', paddingVertical: 10 }}>{t('movies.noShowtimes')}</Text>
+              )}
+            </View>
+          </View>
+        ) : (
+          <Text style={{ color: '#666' }}>{t('movies.noShowtimes')}</Text>
+        )}
 
         <Divider style={styles.divider} />
 
@@ -264,6 +334,13 @@ const styles = StyleSheet.create({
   genreText: {
     fontSize: 12,
     color: '#d32f2f',
+  },
+  filterScroll: {
+    marginBottom: 10,
+  },
+  filterChip: {
+    marginRight: 8,
+    backgroundColor: '#1e1e1e',
   },
   showtimeContainer: {
     marginVertical: 10,

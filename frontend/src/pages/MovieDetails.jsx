@@ -98,7 +98,8 @@ const MovieDetails = () => {
   const [tabValue, setTabValue] = useState(0);
   const [trailerOpen, setTrailerOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
-  const { t } = useTranslation();
+  const [selectedFormat, setSelectedFormat] = useState('all');
+  const { t, language } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -149,37 +150,17 @@ const MovieDetails = () => {
         ]);
         setMovie(movieResponse.data);
 
-        // Filter showtimes by selected date if available
-        let filteredShowtimes = futureShowtimesResponse.data || [];
-        // if (selectedDate) {
-        //   const dateStr = selectedDate.toLocaleDateString('en-CA'); // Format: YYYY-MM-DD
-        //   console.log('Filtering showtimes for date:', dateStr);
-        //   filteredShowtimes = filteredShowtimes.filter(st =>
-        //     new Date(st.showDate).toLocaleDateString('en-CA') === dateStr
-        //   );
-        // } 
-        // else {
-        //   // If no selected date, default to today's showtimes
-        //   const today = new Date();
-        //   today.setHours(0, 0, 0, 0); // Set to start of today
-        //   console.log('Defaulting to today:', today);
-        //   setSelectedDate(today);
-        //   // const dateStr = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
-        //   const dateStr = today.toLocaleDateString('en-CA');
+        const allFetchedShowtimes = futureShowtimesResponse.data || [];
+        setShowtimes(allFetchedShowtimes);
 
-        //   filteredShowtimes = filteredShowtimes.filter(st =>
-        //     new Date(st.showDate).toLocaleDateString('en-CA') === dateStr
-        //   );
-        //   console.log('Filtered showtimes for today:', filteredShowtimes);
-        // }
-        if (filteredShowtimes.length > 0 && !selectedDate){
-          const dates = filteredShowtimes.map(st => new Date(st.showDate).toLocaleDateString('en-CA'));
+        if (allFetchedShowtimes.length > 0) {
+          const dates = allFetchedShowtimes.map(st => new Date(st.showDate).toLocaleDateString('en-CA'));
           const earliest = dates.sort()[0];
-    
-          // Set state to a Date object created from that string
           setSelectedDate(new Date(earliest));
-          setShowtimes(filteredShowtimes);
+        } else {
+          setSelectedDate(null);
         }
+        setSelectedFormat('all');
        
       } catch (error) {
         console.error('Error fetching movie details:', error);
@@ -189,11 +170,24 @@ const MovieDetails = () => {
     };
     
     fetchMovieDetails();
-  }, [id, selectedDate]);
+  }, [id]);
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
+
+  const filteredShowtimes = showtimes.filter(st => {
+    const showDateStr = new Date(st.showDate).toLocaleDateString('en-CA');
+    const selectedDateStr = selectedDate ? selectedDate.toLocaleDateString('en-CA') : null;
+    
+    const matchesDate = !selectedDateStr || showDateStr === selectedDateStr;
+    const matchesFormat = selectedFormat === 'all' || st.format === selectedFormat;
+    
+    return matchesDate && matchesFormat;
+  });
+
+  const formatOptions = Array.from(new Set(showtimes.map(st => st.format))).sort();
+  const dateOptions = Array.from(new Set(showtimes.map(st => new Date(st.showDate).toLocaleDateString('en-CA')))).sort();
 
   if (loading) {
     return (
@@ -503,7 +497,7 @@ const MovieDetails = () => {
             {t('movieDetails.availableShowtimes')}
           </Typography>
 
-          {/* Date Filter Section */}
+          {/* Filters Section */}
           <Box sx={{
             mb: 3,
             display: 'flex',
@@ -512,6 +506,7 @@ const MovieDetails = () => {
             gap: 2,
             px: { xs: 0, md: 2 }
           }}>
+            {/* Date Filter */}
             <FormControl
               variant="outlined"
               sx={{
@@ -536,20 +531,44 @@ const MovieDetails = () => {
                 }}
               >
                 <MenuItem value="all">{t('common.all')}</MenuItem>
-                {Array.from(new Set(showtimes.map(st => new Date(st.showDate).toLocaleDateString('en-CA'))))
-                  .sort()
-                  .map(date => (
+                {dateOptions.map(date => (
                     <MenuItem key={date} value={date}>
-                      {new Date(date).toLocaleDateString('vi-VN')}
+                      {new Date(date).toLocaleDateString(language === 'vi' ? 'vi-VN' : 'en-US')}
                     </MenuItem>
                   ))}
               </Select>
             </FormControl>
+
+            {/* Format Filter */}
+            <FormControl
+              variant="outlined"
+              sx={{
+                minWidth: 200,
+                maxWidth: 300
+              }}
+            >
+              <InputLabel id="select-format-label">
+                {t('movieDetails.selectFormat')}
+              </InputLabel>
+              <Select
+                labelId="select-format-label"
+                value={selectedFormat}
+                label={t('movieDetails.selectFormat')}
+                onChange={(e) => setSelectedFormat(e.target.value)}
+              >
+                <MenuItem value="all">{t('common.all')}</MenuItem>
+                {formatOptions.map(format => (
+                  <MenuItem key={format} value={format}>
+                    {format}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Box>
 
-          {showtimes && showtimes.length > 0 ? (
+          {filteredShowtimes && filteredShowtimes.length > 0 ? (
             <Grid container spacing={3}>
-              {showtimes.map((showtime) => {
+              {filteredShowtimes.map((showtime) => {
                 const isClosed = showtime.status === 'Closed';
                 return (
                 <Grid item key={showtime.id} xs={12} sm={6} md={4}>
@@ -575,13 +594,13 @@ const MovieDetails = () => {
                       </Stack>
 
                       <Typography variant="body1" gutterBottom>
-                        <strong>{t('movieDetails.time')}:</strong> {showtime.showTime}
+                        <strong>{t('movieDetails.time')}</strong> {showtime.showTime}
                       </Typography>
                       <Typography variant="body2" color="text.secondary" gutterBottom>
-                        <strong>{t('movieDetails.format')}:</strong> {showtime.format}
+                        <strong>{t('movieDetails.format')}</strong> {showtime.format}
                       </Typography>
                       <Typography variant="body2" color="text.secondary" gutterBottom>
-                        <strong>{t('movieDetails.language')}:</strong> {showtime.language}
+                        <strong>{t('movieDetails.language')}</strong> {showtime.language}
                       </Typography>
                       <Typography variant="h6" fontWeight="bold" color="primary.main" sx={{ mt: 1 }}>
                         {t('movieDetails.price')}: {formatCurrency(showtime.price)}

@@ -60,6 +60,7 @@ const vi = {
   'movieDetails.language': 'Ngôn ngữ: ',
   'movieDetails.price': 'Giá vé: ',
   'movieDetails.selectDate': 'Chọn ngày',
+  'movieDetails.selectFormat': 'Chọn định dạng',
   'movieDetails.availableShowtimes': 'Lịch chiếu có sẵn',
   'movieDetails.selectShowtimeDate': 'Chọn ngày chiếu',
 

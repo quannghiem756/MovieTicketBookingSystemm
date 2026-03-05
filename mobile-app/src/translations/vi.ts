@@ -56,6 +56,8 @@ export default {
     bookFor: 'Đặt suất %{time}',
     durationUnit: 'phút',
     formats: 'Định dạng',
+    all: 'Tất cả',
+    allFormats: 'Tất cả định dạng',
   },
   news: {
     title: 'Tin tức & Khuyến mãi',

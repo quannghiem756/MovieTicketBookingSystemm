@@ -1,8 +1,8 @@
 # Implementation Plan: Showtime-Aware Recommendation Filter
 
 ## Phase 1: Research & Setup
-- [ ] Task: Research Backend API logic for `/api/movies/now-showing` to confirm it only returns movies with showtimes today.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Research & Setup' (Protocol in workflow.md)
+- [x] Task: Research Backend API logic for `/api/movies/now-showing` to confirm it only returns movies with showtimes today.
+- [~] Task: Conductor - User Manual Verification 'Phase 1: Research & Setup' (Protocol in workflow.md)
 
 ## Phase 2: Implementation (TDD)
 - [ ] Task: Create unit tests for showtime-aware filtering in `vector_service/tests/test_showtime_filter.py`.

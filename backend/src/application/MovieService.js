@@ -1,5 +1,6 @@
 // Movie service
 const Movie = require('../domain/Movie');
+const VectorSyncService = require('../infrastructure/VectorSyncService');
 
 class MovieService {
   constructor(movieRepository) {
@@ -23,7 +24,15 @@ class MovieService {
       movieData.formats || ['2D']
     );
 
-    return await this.movieRepository.create(movie);
+    const createdMovie = await this.movieRepository.create(movie);
+    
+    // Sync with vector service (async, don't await if we don't want to block, 
+    // but here we might want to ensure it's triggered)
+    if (createdMovie) {
+      VectorSyncService.syncMovieUpsert(createdMovie);
+    }
+    
+    return createdMovie;
   }
 
   async getMovieById(id) {
@@ -59,11 +68,23 @@ class MovieService {
       movieData.formats
     );
 
-    return await this.movieRepository.update(id, movie);
+    const updatedMovie = await this.movieRepository.update(id, movie);
+    
+    if (updatedMovie) {
+      VectorSyncService.syncMovieUpsert(updatedMovie);
+    }
+    
+    return updatedMovie;
   }
 
   async deleteMovie(id) {
-    return await this.movieRepository.delete(id);
+    const result = await this.movieRepository.delete(id);
+    
+    if (result) {
+      VectorSyncService.syncMovieDelete(id);
+    }
+    
+    return result;
   }
 }
 

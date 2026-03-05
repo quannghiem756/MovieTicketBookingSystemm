@@ -10,7 +10,7 @@ A comprehensive Movie Ticket Booking System with a Node.js backend, React fronte
 
 ## Core Goals
 - **Seamless Booking Experience:** Provide a unified booking flow across web and mobile platforms (**CineBook app**), including digital ticket generation with QR codes for future kiosk integration.
-- **AI-Driven Personalization:** Leverage a vector-based recommendation service to provide users with tailored movie suggestions.
+- **AI-Driven Personalization:** Leverage a vector-based recommendation service with automatic data synchronization to provide users with tailored and up-to-date movie suggestions.
 - **Operational Efficiency:** Empower administrators with intuitive tools for managing complex schedules, theater layouts, and content.
 
 ## Key Features
@@ -31,7 +31,7 @@ A comprehensive Movie Ticket Booking System with a Node.js backend, React fronte
 - **Multi-language Support:** Full bilingual support (English/Vietnamese) across web and mobile, with a mandatory language selection on first mobile app launch.
 
 ### Admin Panel
-- **Catalog Management:** Full CRUD operations for movies, including poster image uploads and theater configuration.
+- **Catalog Management:** Full CRUD operations for movies with automatic vector database synchronization, including poster image uploads and theater configuration.
 - **Scheduling & Theater Config:** Tools for defining showtimes and configuring theater seat maps.
 - **Dashboard & Analytics:** Overview of bookings and sales performance.
 - **User & News Management:** Administration of user accounts and publishing of cinema-related news and promotions.

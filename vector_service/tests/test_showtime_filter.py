@@ -100,12 +100,39 @@ class TestShowtimeFilter(unittest.TestCase):
         mock_popular.return_value = [{'id': 'popular1', 'title': 'Popular Movie'}]
 
         response = self.app.post('/recommend', 
-            data=json.dumps({'query': 'action movies'}),
+            data=json.dumps({'query': 'find some good action movies'}),
             content_type='application/json'
         )
         
         data = json.loads(response.data)
         
+        self.assertEqual(data['source'], 'no_showtimes_today')
+        self.assertEqual(len(data['recommendations']), 1)
+        self.assertEqual(data['recommendations'][0]['id'], 'popular1')
+
+    @patch('movie_vector_service.requests.get')
+    @patch('movie_vector_service.get_popular_movies')
+    @patch('movie_vector_service.classify_query_intent')
+    def test_recommend_backend_failure(self, mock_classify, mock_popular, mock_get):
+        # Mock intent
+        mock_classify.return_value = ('movie_recommendation', 'en')
+        
+        # Mock backend failure
+        mock_response = MagicMock()
+        mock_response.status_code = 500
+        mock_get.return_value = mock_response
+        
+        # Mock popular movies
+        mock_popular.return_value = [{'id': 'popular1', 'title': 'Popular Movie'}]
+
+        response = self.app.post('/recommend', 
+            data=json.dumps({'query': 'find some good action movies'}),
+            content_type='application/json'
+        )
+        
+        data = json.loads(response.data)
+        
+        # Should fallback to popular because get_now_showing_ids() returns [] on failure
         self.assertEqual(data['source'], 'no_showtimes_today')
         self.assertEqual(len(data['recommendations']), 1)
         self.assertEqual(data['recommendations'][0]['id'], 'popular1')

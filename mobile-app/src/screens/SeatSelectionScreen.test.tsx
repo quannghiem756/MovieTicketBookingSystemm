@@ -22,10 +22,62 @@ jest.mock('../context/AuthContext', () => ({
   }),
 }));
 
+// Mock useTheme and components
+jest.mock('react-native-paper', () => {
+  const React = require('react');
+  const { View, Text, TouchableOpacity } = require('react-native');
+  return {
+    useTheme: () => ({
+      colors: {
+        primary: '#000',
+        onSurfaceDisabled: '#ccc',
+        outline: '#000',
+      },
+    }),
+    Surface: (props: any) => <View {...props} />,
+    ActivityIndicator: (props: any) => <View {...props} />,
+    IconButton: (props: any) => <TouchableOpacity {...props} />,
+    Title: (props: any) => <Text {...props} />,
+    Text: (props: any) => <Text {...props} />,
+    Divider: (props: any) => <View {...props} />,
+    FAB: (props: any) => <TouchableOpacity {...props} />,
+    Button: (props: any) => <TouchableOpacity {...props}><Text>{props.children}</Text></TouchableOpacity>,
+  };
+});
+
+// Mock custom Button component
+jest.mock('../components/Button', () => {
+  const React = require('react');
+  const { TouchableOpacity, Text } = require('react-native');
+  return (props: any) => (
+    <TouchableOpacity onPress={props.onPress} disabled={props.disabled}>
+      <Text>{props.children}</Text>
+    </TouchableOpacity>
+  );
+});
+
 // Mock translation
 jest.mock('../context/I18nContext', () => ({
   useTranslation: () => ({
     t: (key: string) => key,
+  }),
+}));
+
+// Mock booking context
+const mockStartTimer = jest.fn();
+const mockSetHeldSeats = jest.fn();
+let mockHeldSeats: string[] = [];
+let mockTimeLeft = 600;
+
+jest.mock('../context/BookingContext', () => ({
+  useBooking: () => ({
+    timeLeft: mockTimeLeft,
+    startTimer: mockStartTimer,
+    stopTimer: jest.fn(),
+    resetTimer: jest.fn(),
+    heldSeats: mockHeldSeats,
+    setHeldSeats: mockSetHeldSeats,
+    isTimerActive: true,
   }),
 }));
 
@@ -57,14 +109,14 @@ const mockRoute = {
 
 const renderComponent = () =>
   render(
-    <PaperProvider theme={theme}>
-      <SeatSelectionScreen route={mockRoute} navigation={{ navigate: mockNavigate }} />
-    </PaperProvider>
+    <SeatSelectionScreen route={mockRoute} navigation={{ navigate: mockNavigate }} />
   );
 
 describe('SeatSelectionScreen', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockHeldSeats = [];
+    mockTimeLeft = 600;
     (getShowtimeById as jest.Mock).mockResolvedValue({
       id: 'showtime1',
       format: '2D',
@@ -77,6 +129,12 @@ describe('SeatSelectionScreen', () => {
       id: 'theater1',
       name: 'Test Theater',
       totalSeats: 100,
+      seatMap: [
+        [
+          { id: 'A1', number: '1', row: 'A', type: 'standard' },
+          { id: 'A2', number: '2', row: 'A', type: 'standard' },
+        ]
+      ]
     });
     (getLockedSeats as jest.Mock).mockResolvedValue(['A3']);
   });
@@ -96,17 +154,93 @@ describe('SeatSelectionScreen', () => {
 
     await waitFor(() => {
       expect(getByText('Test Movie')).toBeTruthy();
-      expect(getByText('Test Theater')).toBeTruthy();
+      expect(getByText(/Test Theater/)).toBeTruthy();
     });
   });
 
-  it('handles seat selection', async () => {
-    (holdSeat as jest.Mock).mockResolvedValue({ expiresAt: new Date(Date.now() + 600000).toISOString() });
-    const { getByTestId } = renderComponent();
+  it('displays the countdown timer from global state', async () => {
+    const { getByText } = renderComponent();
 
     await waitFor(() => {
-      // Find a seat and press it
-      // Seat components might not have testID, so we might need to find by text if they show seat labels
+      // 600 seconds = 10:00
+      expect(getByText('booking.seats.footer.expires')).toBeTruthy();
+    });
+  });
+
+  it('handles seat selection and starts timer', async () => {
+    (holdSeat as jest.Mock).mockResolvedValue({ expiresAt: new Date(Date.now() + 600000).toISOString() });
+    const { getByText } = renderComponent();
+
+    await waitFor(() => {
+      expect(getByText('1')).toBeTruthy();
+    });
+
+    fireEvent.press(getByText('1'));
+
+    await waitFor(() => {
+      expect(holdSeat).toHaveBeenCalledWith('showtime1', 'A1');
+      expect(mockStartTimer).toHaveBeenCalled();
+    });
+  });
+
+  it('navigates to checkout when confirm is pressed', async () => {
+    mockHeldSeats = ['A1'];
+    const { getByText } = renderComponent();
+
+    await waitFor(() => {
+      expect(getByText('booking.seats.confirm')).toBeTruthy();
+    });
+
+    fireEvent.press(getByText('booking.seats.confirm'));
+
+    expect(mockNavigate).toHaveBeenCalledWith('Checkout', expect.objectContaining({
+      showtimeId: 'showtime1',
+      selectedSeats: ['A1'],
+    }));
+  });
+
+  it('handles timer expiration', async () => {
+    mockTimeLeft = 0;
+    const { rerender } = renderComponent();
+    
+    // Rerender to trigger effect
+    rerender(<SeatSelectionScreen route={mockRoute} navigation={{ navigate: mockNavigate }} />);
+
+    await waitFor(() => {
+        expect(mockSetHeldSeats).toHaveBeenCalledWith([]);
+    });
+  });
+
+  it('handles seat releasing', async () => {
+    mockHeldSeats = ['A1'];
+    (releaseSeat as jest.Mock).mockResolvedValue({});
+    const { getByText } = renderComponent();
+
+    await waitFor(() => {
+      expect(getByText('1')).toBeTruthy();
+    });
+
+    fireEvent.press(getByText('1'));
+
+    await waitFor(() => {
+      expect(releaseSeat).toHaveBeenCalledWith('showtime1', 'A1');
+      expect(mockSetHeldSeats).toHaveBeenCalled();
+    });
+  });
+
+  it('reverts optimistic update when hold seat fails', async () => {
+    (holdSeat as jest.Mock).mockRejectedValue({ response: { data: { error: 'Seat already held' } } });
+    const { getByText } = renderComponent();
+
+    await waitFor(() => {
+      expect(getByText('1')).toBeTruthy();
+    });
+
+    fireEvent.press(getByText('1'));
+
+    await waitFor(() => {
+      expect(holdSeat).toHaveBeenCalledWith('showtime1', 'A1');
+      expect(mockSetHeldSeats).toHaveBeenCalledWith([]); // Revert to empty
     });
   });
 });

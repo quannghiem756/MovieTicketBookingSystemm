@@ -23,9 +23,9 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: SeatSelectionScreen Refactoring' (Protocol in workflow.md) 748b6bd
 
 ## Phase 3: Checkout Screen Integration & Banner
-- [ ] Task: Create `TimerBanner` component in `mobile-app/src/components/TimerBanner.tsx`
-    - [ ] Design a non-intrusive banner using `react-native-paper` Surface.
-    - [ ] Display MM:SS format for `timeLeft`.
+- [x] Task: Create `TimerBanner` component in `mobile-app/src/components/TimerBanner.tsx` 0817dbe
+    - [x] Design a non-intrusive banner using `react-native-paper` Surface.
+    - [x] Display MM:SS format for `timeLeft`.
 - [ ] Task: Integrate `TimerBanner` into `CheckoutScreen.tsx`
     - [ ] Display banner at the top of the scroll view.
     - [ ] Implement auto-redirection logic: `if (timeLeft <= 0) navigation.goBack()`.

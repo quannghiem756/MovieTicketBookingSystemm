@@ -83,7 +83,7 @@ const CheckoutScreen = ({ route, navigation }: any) => {
         showtimeId,
         userId: user.id,
         seatIds: selectedSeats,
-        totalPrice: total,
+        totalPrice: subtotal,
         couponCode: couponApplied ? couponCode : undefined
       };
       

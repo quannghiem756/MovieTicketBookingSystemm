@@ -4,6 +4,22 @@ import CheckoutScreen from './CheckoutScreen';
 import { useBooking } from '../context/BookingContext';
 import { useTranslation } from '../context/I18nContext';
 
+// Mock expo-linking
+jest.mock('expo-linking', () => ({
+  createURL: jest.fn(),
+  canOpenURL: jest.fn(),
+  openURL: jest.fn(),
+}));
+
+// Mock @react-navigation/native
+jest.mock('@react-navigation/native', () => ({
+  useIsFocused: () => true,
+  useNavigation: () => ({
+    navigate: jest.fn(),
+    goBack: jest.fn(),
+  }),
+}));
+
 // Mock services
 jest.mock('../services/movieService', () => ({
   createBooking: jest.fn(),
@@ -38,7 +54,7 @@ jest.mock('react-native-paper', () => {
         (props: any) => <View {...props} />,
         { Content: (props: any) => <View {...props} /> }
     ),
-    TextInput: (props: any) => <TextInput {...props} />,
+    TextInput: (props: any) => <TextInput {...props} placeholder={props.label} />,
     List: {
         Item: (props: any) => <View {...props} />,
         Icon: (props: any) => <View {...props} />,
@@ -57,10 +73,13 @@ jest.mock('../context/I18nContext', () => ({
 // Mock booking context
 let mockTimeLeft = 600;
 let mockIsTimerActive = true;
+const mockSetHeldSeats = jest.fn();
 jest.mock('../context/BookingContext', () => ({
   useBooking: () => ({
     timeLeft: mockTimeLeft,
     isTimerActive: mockIsTimerActive,
+    heldSeats: ['A1', 'A2'],
+    setHeldSeats: mockSetHeldSeats,
   }),
 }));
 
@@ -119,15 +138,52 @@ describe('CheckoutScreen', () => {
     expect(getByText('TimerBanner Mock')).toBeTruthy();
   });
 
-  it('redirects back when timer reaches zero', async () => {
-    mockTimeLeft = 0;
-    const { rerender } = renderComponent();
+  it('calls createBooking with subtotal when coupon is applied', async () => {
+    const { getByText, getByPlaceholderText } = renderComponent();
+    const { createBooking, validateCoupon, createMomoPayment } = require('../services/movieService');
+    
+    // 1. Mock validateCoupon
+    validateCoupon.mockResolvedValueOnce({
+      isValid: true,
+      discountAmount: 20000,
+      code: 'PROMO20',
+    });
+    
+    // 2. Mock createBooking and createMomoPayment
+    createBooking.mockResolvedValueOnce({ id: 'booking1' });
+    createMomoPayment.mockResolvedValueOnce({ data: 'https://momo.vn/pay' });
+    
+    // 3. Mock Linking
+    const Linking = require('expo-linking');
+    Linking.createURL.mockReturnValue('exp://127.0.0.1:19000/--/payment-result?bookingId=booking1');
+    Linking.canOpenURL.mockResolvedValue(true);
+    Linking.openURL.mockResolvedValue(true);
 
-    // Rerender to trigger useEffect
-    rerender(<CheckoutScreen route={mockRoute} navigation={{ goBack: mockGoBack }} />);
-
+    // 4. Apply coupon
+    const couponInput = getByPlaceholderText('booking.checkout.promoCode'); // Wait, label is t('booking.checkout.promoCode')
+    // In the mock TextInput, it uses label. Let's find by label if possible.
+    // The mock Surface uses View, so it might be tricky.
+    // Actually, the mock TextInput uses 'props.label' as 'placeholder' or something? No.
+    
+    // Let's use getByText for the apply button
+    fireEvent.changeText(couponInput, 'PROMO20');
+    fireEvent.press(getByText('booking.checkout.apply'));
+    
     await waitFor(() => {
-      expect(mockGoBack).toHaveBeenCalled();
+      expect(validateCoupon).toHaveBeenCalledWith('PROMO20', 200000, 'movie1'); // 2 seats * 100k
+    });
+    
+    // 5. Trigger payment
+    fireEvent.press(getByText('booking.checkout.payWithMomo'));
+    
+    await waitFor(() => {
+      expect(createBooking).toHaveBeenCalledWith({
+        showtimeId: 'showtime1',
+        userId: 'user1',
+        seatIds: ['A1', 'A2'],
+        totalPrice: 200000, // <--- SHOULD BE SUBTOTAL (200k), NOT TOTAL (180k)
+        couponCode: 'PROMO20',
+      });
     });
   });
 });

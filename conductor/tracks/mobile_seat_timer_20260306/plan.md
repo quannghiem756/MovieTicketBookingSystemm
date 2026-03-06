@@ -12,7 +12,7 @@
 - [x] Task: Wrap the application with `BookingProvider` in `mobile-app/App.tsx`. 5357de3
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Shared State & Timer Logic' (Protocol in workflow.md) 5357de3
 
-## Phase 2: SeatSelectionScreen Refactoring
+## Phase 2: SeatSelectionScreen Refactoring [checkpoint: 748b6bd]
 - [x] Task: Create failing tests for SeatSelectionScreen refactoring fb96ea5
     - [x] Verify it uses the global timer state.
     - [x] Verify it calls `startTimer` upon successful seat hold.
@@ -20,7 +20,7 @@
     - [x] Remove local `timeLeft` and `timerRef`.
     - [x] Replace with `useBooking()` context calls.
 - [x] Task: Verify refactored `SeatSelectionScreen` with automated tests. fb96ea5
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: SeatSelectionScreen Refactoring' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: SeatSelectionScreen Refactoring' (Protocol in workflow.md) 748b6bd
 
 ## Phase 3: Checkout Screen Integration & Banner
 - [ ] Task: Create `TimerBanner` component in `mobile-app/src/components/TimerBanner.tsx`

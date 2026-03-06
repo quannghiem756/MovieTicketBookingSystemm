@@ -49,6 +49,6 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Frontend/Mobile: Ensure the timer persists through the checkout screen. Provide a clear warning before the redirect that the seat hold is only valid for a specific duration.**
+- [x] **Track: Frontend/Mobile: Ensure the timer persists through the checkout screen. Provide a clear warning before the redirect that the seat hold is only valid for a specific duration.**
 *Link: [./tracks/mobile_seat_timer_20260306/](./tracks/mobile_seat_timer_20260306/)*
 

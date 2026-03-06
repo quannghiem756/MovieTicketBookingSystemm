@@ -44,5 +44,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Payment Flow & Seat Selection Timeout Optimization**
+- [~] **Track: Payment Flow & Seat Selection Timeout Optimization**
 *Link: [./tracks/payment_flow_analysis_20260306/](./tracks/payment_flow_analysis_20260306/)*

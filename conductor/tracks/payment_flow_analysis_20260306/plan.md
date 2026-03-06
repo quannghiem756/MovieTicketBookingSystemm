@@ -3,15 +3,15 @@
 ## Phase 1: Research & Discovery
 Investigate the current implementation of seat holding and how it interacts with the payment process.
 
-- [ ] Task: Backend - Trace seat-hold lifecycle (Mongoose models/Socket.io events)
-    - [ ] Identify where the 10-minute timer is started.
-    - [ ] Verify the mechanism for releasing seats (e.g., `setTimeout` or cron).
-- [ ] Task: Frontend - Analyze timer display and payment redirect
-    - [ ] Locate the timer component in the React app.
-    - [ ] Trace the redirection logic to MoMo.
-- [ ] Task: MoMo Integration - Verify callback handling
-    - [ ] Trace the backend webhook for MoMo payments.
-    - [ ] Confirm how the system handles delayed payment confirmations.
+- [x] Task: Backend - Trace seat-hold lifecycle (Mongoose models/Socket.io events) 3488cfa
+    - [x] Identify where the 10-minute timer is started.
+    - [x] Verify the mechanism for releasing seats (e.g., `setTimeout` or cron).
+- [x] Task: Frontend - Analyze timer display and payment redirect 3488cfa
+    - [x] Locate the timer component in the React app.
+    - [x] Trace the redirection logic to MoMo.
+- [x] Task: MoMo Integration - Verify callback handling 3488cfa
+    - [x] Trace the backend webhook for MoMo payments.
+    - [x] Confirm how the system handles delayed payment confirmations.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Research & Discovery' (Protocol in workflow.md)
 
 ## Phase 2: Backend Implementation (Grace Period)

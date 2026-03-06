@@ -248,7 +248,7 @@ const MovieDetailsScreen = ({ route, navigation }: any) => {
         <Divider style={styles.divider} />
 
         <Title style={styles.sectionTitle}>{t('movies.synopsis')}</Title>
-        <Paragraph style={styles.description}>{movie.description}</Paragraph>
+        <Paragraph style={styles.description}>{movie.synopsis}</Paragraph>
 
         <Divider style={styles.divider} />
 

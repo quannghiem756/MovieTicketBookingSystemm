@@ -1,16 +1,16 @@
 # Implementation Plan: Mobile Seat-Hold Timer Persistence & Warning
 
-## Phase 1: Shared State & Timer Logic
-- [ ] Task: Create `BookingContext` and `BookingProvider` in `mobile-app/src/context/BookingContext.tsx`
-    - [ ] Define state: `timeLeft`, `isTimerActive`, `heldSeats`.
-    - [ ] Implement `startTimer(seconds)`, `stopTimer()`, `resetTimer()`, `setHeldSeats(seats)`.
-    - [ ] Use `setInterval` to decrement `timeLeft` globally.
-- [ ] Task: Write tests for `BookingContext` in `mobile-app/src/context/BookingContext.test.tsx`
-    - [ ] Verify `timeLeft` decrements every second.
-    - [ ] Verify `stopTimer` correctly halts the countdown.
-    - [ ] Verify state is shared correctly.
-- [ ] Task: Wrap the application with `BookingProvider` in `mobile-app/App.tsx`.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Shared State & Timer Logic' (Protocol in workflow.md)
+## Phase 1: Shared State & Timer Logic [checkpoint: 5357de3]
+- [x] Task: Create `BookingContext` and `BookingProvider` in `mobile-app/src/context/BookingContext.tsx` 5357de3
+    - [x] Define state: `timeLeft`, `isTimerActive`, `heldSeats`.
+    - [x] Implement `startTimer(seconds)`, `stopTimer()`, `resetTimer()`, `setHeldSeats(seats)`.
+    - [x] Use `setInterval` to decrement `timeLeft` globally.
+- [x] Task: Write tests for `BookingContext` in `mobile-app/src/context/BookingContext.test.tsx` 5357de3
+    - [x] Verify `timeLeft` decrements every second.
+    - [x] Verify `stopTimer` correctly halts the countdown.
+    - [x] Verify state is shared correctly.
+- [x] Task: Wrap the application with `BookingProvider` in `mobile-app/App.tsx`. 5357de3
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Shared State & Timer Logic' (Protocol in workflow.md) 5357de3
 
 ## Phase 2: SeatSelectionScreen Refactoring
 - [ ] Task: Create failing tests for `SeatSelectionScreen` refactoring

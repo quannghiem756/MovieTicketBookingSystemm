@@ -247,6 +247,14 @@ class MongoBookingRepository extends BookingRepository {
     return result !== null;
   }
 
+  async deletePendingBooking(userId, showtimeId) {
+    return await BookingModel.findOneAndDelete({
+      userId,
+      showtimeId,
+      status: { $in: ['pending', 'held'] }
+    });
+  }
+
   async findLockedSeats(showtimeId) {
     // Find all bookings that lock seats:
     // 1. Confirmed/Paid bookings

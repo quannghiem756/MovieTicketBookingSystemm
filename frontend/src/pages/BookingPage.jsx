@@ -39,6 +39,7 @@ import {
   createMomoPayment,
   holdSeat,
   releaseSeat,
+  releaseAllSeats,
   getLockedSeats,
   getBookingsByUserId,
   validateCoupon
@@ -198,12 +199,29 @@ const BookingPage = () => {
   useEffect(() => {
     if (timeLeft === null || timeLeft <= 0) {
       if (timeLeft === 0) {
-         // Timer expired
-         setError(t('booking.sessionExpired'));
-         setSelectedSeats([]);
-         setTimeLeft(null);
-         // Refresh locked seats to ensure consistent state
-         getLockedSeats(showtimeId).then(res => setLockedSeats(res.data || [])).catch(console.error);
+        const handleExpire = async () => {
+          // Timer expired
+          setError(t('booking.sessionExpired'));
+          
+          try {
+            await releaseAllSeats(showtimeId);
+          } catch (e) {
+            console.error("Failed to release seats on expire", e);
+          }
+
+          setSelectedSeats([]);
+          setTimeLeft(null);
+          
+          // Refresh locked seats to ensure consistent state
+          try {
+            const res = await getLockedSeats(showtimeId);
+            setLockedSeats(res.data || []);
+          } catch (e) {
+            console.error("Failed to fetch locked seats after expire", e);
+          }
+        };
+        
+        handleExpire();
       }
       return;
     }
@@ -1056,7 +1074,7 @@ const BookingPage = () => {
                     <Box component="img" src="https://mcdn.coolmate.me/image/October2024/mceclip1_171.png" alt="MoMo" sx={{ height: 24, mr: 1 }} />
                     Ví điện tử MoMo
                   </Button>
-                  <Button
+                  {/* <Button
                     variant={paymentMethod === 'cash' ? 'contained' : 'outlined'}
                     onClick={() => setPaymentMethod('cash')}
                     sx={{
@@ -1070,7 +1088,7 @@ const BookingPage = () => {
                   >
                     <LocalCafe sx={{ mr: 1 }} />
                     {t('booking.cash')}
-                  </Button>
+                  </Button> */}
                 </Box>
               </Box>
 

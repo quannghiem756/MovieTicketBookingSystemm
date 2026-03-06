@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, Alert } from 'react-native';
 import * as Linking from 'expo-linking';
 import { Text, Title, useTheme, Surface, Divider, List, TextInput, ActivityIndicator, IconButton, Card } from 'react-native-paper';
+import { useIsFocused } from '@react-navigation/native';
 import { useTranslation } from '../context/I18nContext';
-import { createBooking, validateCoupon, createMomoPayment } from '../services/movieService';
+import { createBooking, validateCoupon, createMomoPayment, releaseAllSeats } from '../services/movieService';
 import { useAuth } from '../context/AuthContext';
 import { useBooking } from '../context/BookingContext';
 import TimerBanner from '../components/TimerBanner';
@@ -24,7 +25,8 @@ const CheckoutScreen = ({ route, navigation }: any) => {
   const { t , locale} = useTranslation();
   const theme = useTheme();
   const { user } = useAuth();
-  const { timeLeft, isTimerActive } = useBooking();
+  const { timeLeft, isTimerActive, setHeldSeats, heldSeats } = useBooking();
+  const isFocused = useIsFocused();
   
   const [couponCode, setCouponCode] = useState('');
   const [discount, setDiscount] = useState(0);
@@ -33,11 +35,24 @@ const CheckoutScreen = ({ route, navigation }: any) => {
   const [validatingCoupon, setValidatingCoupon] = useState(false);
 
   useEffect(() => {
-    if (isTimerActive && timeLeft <= 0) {
-      Alert.alert(t('booking.seats.timerExpired'), t('booking.seats.timerExpiredMsg'));
-      navigation.goBack();
+    if (timeLeft <= 0 && isFocused && heldSeats.length > 0) {
+      handleTimerExpire();
     }
-  }, [isTimerActive, timeLeft]);
+  }, [timeLeft, isFocused, heldSeats.length]);
+
+  const handleTimerExpire = async () => {
+    setHeldSeats([]); // Clear immediately to avoid multiple alerts
+    try {
+      await releaseAllSeats(showtimeId);
+    } catch (e) {
+      console.error('Error releasing seats:', e);
+    }
+    Alert.alert(
+      t('booking.seats.timerExpired'), 
+      t('booking.seats.timerExpiredMsg'),
+      [{ text: 'OK', onPress: () => navigation.goBack() }]
+    );
+  };
 
   const subtotal = selectedSeats.length * pricePerSeat;
   const total = subtotal - discount;

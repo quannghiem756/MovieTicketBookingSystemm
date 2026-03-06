@@ -2,11 +2,12 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Alert } from 'react-native';
 import { Text, Title, useTheme, ActivityIndicator, Divider, Surface, IconButton } from 'react-native-paper';
 import { useTranslation } from '../context/I18nContext';
-import { getShowtimeById, getTheaterById, getLockedSeats, holdSeat, releaseSeat, getBookingsByUserId } from '../services/movieService';
-import { useFocusEffect } from '@react-navigation/native';
+import { getShowtimeById, getTheaterById, getLockedSeats, holdSeat, releaseSeat, getBookingsByUserId, releaseAllSeats } from '../services/movieService';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { io, Socket } from 'socket.io-client';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthContext';
+import { useBooking } from '../context/BookingContext';
 import Button from '../components/Button';
 import Constants from 'expo-constants';
 
@@ -16,18 +17,23 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
   const { showtimeId, movieTitle, movieId } = route.params;
   const { t } = useTranslation();
   const theme = useTheme();
+  const isFocused = useIsFocused();
   
   const { user } = useAuth();
+  const { 
+    timeLeft, 
+    startTimer, 
+    heldSeats, 
+    setHeldSeats, 
+    isTimerActive 
+  } = useBooking();
   
   const [showtime, setShowtime] = useState<any>(null);
   const [theater, setTheater] = useState<any>(null);
   const [lockedSeats, setLockedSeats] = useState<string[]>([]);
-  const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
-  const [timeLeft, setTimeLeft] = useState<number>(0);
   
   const socketRef = useRef<Socket | null>(null);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     fetchInitialData();
@@ -38,7 +44,6 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
         socketRef.current.emit('leave_showtime', showtimeId);
         socketRef.current.disconnect();
       }
-      if (timerRef.current) clearInterval(timerRef.current);
     };
   }, [showtimeId]);
 
@@ -50,34 +55,22 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
   );
 
   useEffect(() => {
-    if (selectedSeats.length > 0) {
-      if (!timerRef.current) {
-        // ... (rest of the timer logic)
-        setTimeLeft(600); // 10 minutes default
-        timerRef.current = setInterval(() => {
-          setTimeLeft(prev => {
-            if (prev <= 1) {
-              clearInterval(timerRef.current!);
-              timerRef.current = null;
-              handleTimerExpire();
-              return 0;
-            }
-            return prev - 1;
-          });
-        }, 1000);
-      }
-    } else {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-        timerRef.current = null;
-        setTimeLeft(0);
-      }
+    if (timeLeft <= 0 && isFocused && heldSeats.length > 0) {
+      handleTimerExpire();
     }
-  }, [selectedSeats]);
+  }, [timeLeft, isFocused, heldSeats.length]);
 
-  const handleTimerExpire = () => {
+  const handleTimerExpire = async () => {
+    setHeldSeats([]); // Clear immediately to avoid multiple alerts
     Alert.alert(t('booking.seats.timerExpired'), t('booking.seats.timerExpiredMsg'));
-    setSelectedSeats([]);
+    try {
+      await releaseAllSeats(showtimeId);
+    } catch (error) {
+      console.error('Error releasing seats on timer expire:', error);
+    }
+    // Refresh locked seats to ensure UI is up to date
+    const locked = await getLockedSeats(showtimeId);
+    setLockedSeats(locked);
   };
 
   const fetchInitialData = async () => {
@@ -99,13 +92,13 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
           b.showtimeId === showtimeId && (b.status === 'held' || b.status === 'pending')
         );
         if (currentHold) {
-          setSelectedSeats(currentHold.seatIds);
+          setHeldSeats(currentHold.seatIds);
           // Set timer based on expiry if available
           if (currentHold.expiresAt) {
             const expiry = new Date(currentHold.expiresAt).getTime();
             const now = new Date().getTime();
             const diff = Math.floor((expiry - now) / 1000);
-            if (diff > 0) setTimeLeft(diff);
+            if (diff > 0) startTimer(diff);
           }
         }
       }
@@ -144,56 +137,55 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
   };
 
   const toggleSeat = async (seatId: string) => {
-    if (lockedSeats.includes(seatId) && !selectedSeats.includes(seatId)) {
+    if (lockedSeats.includes(seatId) && !heldSeats.includes(seatId)) {
       return; // Seat is taken
     }
 
-    const isSelected = selectedSeats.includes(seatId);
-    
+    const isSelected = heldSeats.includes(seatId);
+
     try {
       if (isSelected) {
         // Optimistic update
-        setSelectedSeats(prev => prev.filter(id => id !== seatId));
+        setHeldSeats(heldSeats.filter(id => id !== seatId));
         await releaseSeat(showtimeId, seatId);
       } else {
-        if (selectedSeats.length >= 8) {
+        if (heldSeats.length >= 8) {
           Alert.alert(t('booking.seats.limitReached'), t('booking.seats.limitReachedMsg'));
           return;
         }
-        
+
         // Optimistic update
-        setSelectedSeats(prev => [...prev, seatId]);
-        
+        setHeldSeats([...heldSeats, seatId]);
+
         try {
           const res = await holdSeat(showtimeId, seatId);
-          setTimeLeft(600); // Reset timer to 10 minutes on new hold
-          
+          startTimer(600); // Reset timer to 10 minutes on new hold
+
           // Sync timer if backend provides expiresAt
           if (res && res.expiresAt) {
             const expiry = new Date(res.expiresAt).getTime();
             const now = new Date().getTime();
-            const diff = Math.floor((expiry - now) / 1000);
-            if (diff > 0) setTimeLeft(diff);
+            const diff = Math.floor((expiry - now) / 1000); 
+            if (diff > 0) startTimer(diff);
           }
         } catch (err: any) {
           // Revert optimistic update on failure
-          setSelectedSeats(prev => prev.filter(id => id !== seatId));
+          setHeldSeats(heldSeats.filter(id => id !== seatId));
           throw err; // Re-throw to be caught by outer catch
         }
       }
     } catch (error: any) {
       Alert.alert(t('common.error'), error.response?.data?.error || t('booking.seats.errorUpdate'));
-      
+
       // Refresh state to ensure consistency
       const locked = await getLockedSeats(showtimeId);
       setLockedSeats(locked);
     }
   };
-
   const handleConfirm = () => {
     navigation.navigate('Checkout', {
       showtimeId,
-      selectedSeats,
+      selectedSeats: heldSeats,
       movieTitle,
       movieId,
       pricePerSeat: showtime.price,
@@ -216,7 +208,7 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
   const SEAT_MARGIN = 4;
 
   const getSeatColor = (seat: any) => {
-    if (selectedSeats.includes(seat.id)) return '#4caf50'; // success.main (Green)
+    if (heldSeats.includes(seat.id)) return '#4caf50'; // success.main (Green)
     if (lockedSeats.includes(seat.id) || seat.isDisabled) return '#757575'; // grey.600
     
     switch (seat.type) {
@@ -262,7 +254,7 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
                       }
 
                       const seatId = seat.id;
-                      const isSelected = selectedSeats.includes(seatId);
+                      const isSelected = heldSeats.includes(seatId);
                       const isLocked = lockedSeats.includes(seatId) || seat.isDisabled;
                       const bgColor = getSeatColor(seat);
                       
@@ -330,20 +322,20 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
 
       <Surface style={styles.footer}>
         <View style={styles.footerInfo}>
-          <Text style={styles.selectedCount}>{t('booking.seats.footer.selected', { count: selectedSeats.length })}</Text>
+          <Text style={styles.selectedCount}>{t('booking.seats.footer.selected', { count: heldSeats.length })}</Text>
           {timeLeft > 0 && (
             <Text style={styles.timerText}>
               {t('booking.seats.footer.expires', { time: `${Math.floor(timeLeft / 60)}:${(timeLeft % 60).toString().padStart(2, '0')}` })}
             </Text>
           )}
           <Title style={styles.totalPrice}>
-            {(selectedSeats.length * showtime.price).toLocaleString()} VND
+            {(heldSeats.length * showtime.price).toLocaleString()} VND
           </Title>
         </View>
         <Button
           mode="contained"
           onPress={handleConfirm}
-          disabled={selectedSeats.length === 0}
+          disabled={heldSeats.length === 0}
           style={styles.confirmButton}
         >
           {t('booking.seats.confirm')}

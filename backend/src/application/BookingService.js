@@ -285,6 +285,17 @@ class BookingService {
     return updatedBooking;
   }
 
+  async releaseAllSeats(userId, showtimeId) {
+    const deletedBooking = await this.bookingRepository.deletePendingBooking(userId, showtimeId);
+    if (!deletedBooking) return null;
+    
+    return { 
+      status: 'deleted', 
+      seatIds: deletedBooking.seatIds,
+      showtimeId: deletedBooking.showtimeId 
+    };
+  }
+
   async getLockedSeats(showtimeId) {
     return await this.bookingRepository.findLockedSeats(showtimeId);
   }

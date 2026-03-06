@@ -226,7 +226,7 @@ const PaymentResult = () => {
                         {t('booking.confirmation.total')}
                       </Typography>
                       <Typography variant="h5" color="primary.main" sx={{ fontWeight: 700 }}>
-                        ${booking.totalPrice?.toFixed(2) || booking.totalPrice}
+                        {booking.totalPrice?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) || booking.totalPrice}
                       </Typography>
                     </Box>
                   </Box>

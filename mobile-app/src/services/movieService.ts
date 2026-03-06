@@ -65,6 +65,11 @@ export const releaseSeat = async (showtimeId: string, seatId: string) => {
   return response.data;
 };
 
+export const releaseAllSeats = async (showtimeId: string) => {
+  const response = await api.post('/bookings/release-all', { showtimeId });
+  return response.data;
+};
+
 export const getLockedSeats = async (showtimeId: string) => {
   const response = await api.get(`/bookings/locked-seats/${showtimeId}`);
   return response.data;

@@ -53,6 +53,7 @@ router.patch('/:id/manual-redeem', authenticate, authorizeStaff, (req, res) => b
 // Seat holding routes
 router.post('/hold', authenticate, seatHoldLimiter, (req, res) => bookingController.holdSeat(req, res));
 router.post('/release', authenticate, (req, res) => bookingController.releaseSeat(req, res));
+router.post('/release-all', authenticate, (req, res) => bookingController.releaseAllSeats(req, res));
 router.get('/locked-seats/:showtimeId', (req, res) => bookingController.getLockedSeats(req, res));
 
 module.exports = router;

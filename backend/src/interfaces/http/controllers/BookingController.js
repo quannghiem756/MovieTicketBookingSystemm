@@ -139,6 +139,27 @@ class BookingController {
     }
   }
 
+  async releaseAllSeats(req, res) {
+    try {
+      const { showtimeId } = req.body;
+      const userId = req.user.id;
+      const result = await this.bookingService.releaseAllSeats(userId, showtimeId);
+      
+      if (result && result.status === 'deleted') {
+        const io = req.app.get('io');
+        if (io) {
+          result.seatIds.forEach(seatId => {
+            io.to(showtimeId).emit('seat_released', { seatId });
+          });
+        }
+      }
+
+      res.json(result || { message: 'Seats released' });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
+
   async getLockedSeats(req, res) {
     try {
       const { showtimeId } = req.params;

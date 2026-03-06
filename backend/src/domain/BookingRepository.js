@@ -39,6 +39,10 @@ class BookingRepository {
     throw new Error('Method not implemented');
   }
 
+  async deletePendingBooking(userId, showtimeId) {
+    throw new Error('Method not implemented');
+  }
+
   async countByUserAndCoupon(userId, couponCode) {
     throw new Error('Method not implemented');
   }

@@ -34,7 +34,7 @@
     - [x] Verify auto-redirection occurs when `timeLeft` reaches zero.
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Checkout Screen Integration & Banner' (Protocol in workflow.md) 4a56cf5
 
-## Phase 4: Localization & Final Polish
-- [ ] Task: Add bilingual translations for timer-related labels in `en.ts` and `vi.ts`
-- [ ] Task: Final end-to-end verification of the booking flow.
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Localization & Final Polish' (Protocol in workflow.md)
+## Phase 4: Localization & Final Polish [checkpoint: 6a5f9a8]
+- [x] Task: Add bilingual translations for timer-related labels in `en.ts` and `vi.ts` fb96ea5
+- [x] Task: Final end-to-end verification of the booking flow. b1487df
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Localization & Final Polish' (Protocol in workflow.md) 6a5f9a8

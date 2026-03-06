@@ -26,12 +26,12 @@
 - [x] Task: Create `TimerBanner` component in `mobile-app/src/components/TimerBanner.tsx` 0817dbe
     - [x] Design a non-intrusive banner using `react-native-paper` Surface.
     - [x] Display MM:SS format for `timeLeft`.
-- [ ] Task: Integrate `TimerBanner` into `CheckoutScreen.tsx`
-    - [ ] Display banner at the top of the scroll view.
-    - [ ] Implement auto-redirection logic: `if (timeLeft <= 0) navigation.goBack()`.
-- [ ] Task: Write tests for `CheckoutScreen` timer integration
-    - [ ] Verify the banner appears when a timer is active.
-    - [ ] Verify auto-redirection occurs when `timeLeft` reaches zero.
+- [x] Task: Integrate `TimerBanner` into `CheckoutScreen.tsx` 6ee551d
+    - [x] Display banner at the top of the scroll view.
+    - [x] Implement auto-redirection logic: `if (timeLeft <= 0) navigation.goBack()`.
+- [x] Task: Write tests for `CheckoutScreen` timer integration 6ee551d
+    - [x] Verify the banner appears when a timer is active.
+    - [x] Verify auto-redirection occurs when `timeLeft` reaches zero.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Checkout Screen Integration & Banner' (Protocol in workflow.md)
 
 ## Phase 4: Localization & Final Polish

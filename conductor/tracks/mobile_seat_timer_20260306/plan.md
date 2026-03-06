@@ -22,7 +22,7 @@
 - [x] Task: Verify refactored `SeatSelectionScreen` with automated tests. fb96ea5
 - [x] Task: Conductor - User Manual Verification 'Phase 2: SeatSelectionScreen Refactoring' (Protocol in workflow.md) 748b6bd
 
-## Phase 3: Checkout Screen Integration & Banner
+## Phase 3: Checkout Screen Integration & Banner [checkpoint: 4a56cf5]
 - [x] Task: Create `TimerBanner` component in `mobile-app/src/components/TimerBanner.tsx` 0817dbe
     - [x] Design a non-intrusive banner using `react-native-paper` Surface.
     - [x] Display MM:SS format for `timeLeft`.
@@ -32,7 +32,7 @@
 - [x] Task: Write tests for `CheckoutScreen` timer integration 6ee551d
     - [x] Verify the banner appears when a timer is active.
     - [x] Verify auto-redirection occurs when `timeLeft` reaches zero.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Checkout Screen Integration & Banner' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Checkout Screen Integration & Banner' (Protocol in workflow.md) 4a56cf5
 
 ## Phase 4: Localization & Final Polish
 - [ ] Task: Add bilingual translations for timer-related labels in `en.ts` and `vi.ts`

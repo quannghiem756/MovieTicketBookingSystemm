@@ -8,6 +8,7 @@ import { AuthProvider, useAuth } from './src/context/AuthContext';
 import { I18nProvider, useTranslation } from './src/context/I18nContext';
 import LanguageSelectionModal from './src/components/LanguageSelectionModal';
 import { ChatbotProvider, useChatbot } from './src/context/ChatbotContext';
+import { BookingProvider } from './src/context/BookingContext';
 import ChatbotModal from './src/components/ChatbotModal';
 import ChatbotFAB from './src/components/ChatbotFAB';
 
@@ -39,9 +40,11 @@ export default function App() {
       <PaperProvider theme={theme}>
         <I18nProvider>
           <AuthProvider>
-            <ChatbotProvider>
-              <AppContent />
-            </ChatbotProvider>
+            <BookingProvider>
+              <ChatbotProvider>
+                <AppContent />
+              </ChatbotProvider>
+            </BookingProvider>
           </AuthProvider>
         </I18nProvider>
       </PaperProvider>

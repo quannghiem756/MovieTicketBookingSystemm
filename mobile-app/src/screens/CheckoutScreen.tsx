@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, Alert } from 'react-native';
 import * as Linking from 'expo-linking';
 import { Text, Title, useTheme, Surface, Divider, List, TextInput, ActivityIndicator, IconButton, Card } from 'react-native-paper';
 import { useTranslation } from '../context/I18nContext';
 import { createBooking, validateCoupon, createMomoPayment } from '../services/movieService';
 import { useAuth } from '../context/AuthContext';
+import { useBooking } from '../context/BookingContext';
+import TimerBanner from '../components/TimerBanner';
 import Button from '../components/Button';
 
 const CheckoutScreen = ({ route, navigation }: any) => {
@@ -22,12 +24,20 @@ const CheckoutScreen = ({ route, navigation }: any) => {
   const { t , locale} = useTranslation();
   const theme = useTheme();
   const { user } = useAuth();
+  const { timeLeft, isTimerActive } = useBooking();
   
   const [couponCode, setCouponCode] = useState('');
   const [discount, setDiscount] = useState(0);
   const [couponApplied, setCouponApplied] = useState(false);
   const [loading, setLoading] = useState(false);
   const [validatingCoupon, setValidatingCoupon] = useState(false);
+
+  useEffect(() => {
+    if (isTimerActive && timeLeft <= 0) {
+      Alert.alert(t('booking.seats.timerExpired'), t('booking.seats.timerExpiredMsg'));
+      navigation.goBack();
+    }
+  }, [isTimerActive, timeLeft]);
 
   const subtotal = selectedSeats.length * pricePerSeat;
   const total = subtotal - discount;
@@ -100,6 +110,8 @@ const CheckoutScreen = ({ route, navigation }: any) => {
         <IconButton icon="chevron-left" onPress={() => navigation.goBack()} />
         <Title style={styles.headerTitle}>{t('booking.checkout.title')}</Title>
       </Surface>
+
+      <TimerBanner />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <Card style={styles.summaryCard}>

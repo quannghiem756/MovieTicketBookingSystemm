@@ -24,9 +24,11 @@ import {
 import {
   Delete,
   Add,
-  Edit
+  Edit,
+  VerifiedUser
 } from '@mui/icons-material';
 import UserFormModal from './components/UserFormModal';
+import { Chip } from '@mui/material';
 
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);
@@ -34,6 +36,8 @@ const AdminUsers = () => {
   const [error, setError] = useState(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
+  const [verifyDialogOpen, setVerifyDialogOpen] = useState(false);
+  const [userToVerify, setUserToVerify] = useState(null);
   const [formOpen, setFormOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const { t } = useTranslation();
@@ -102,6 +106,34 @@ const AdminUsers = () => {
     setUserToDelete(null);
   };
 
+  const handleVerifyClick = (user) => {
+    setUserToVerify(user);
+    setVerifyDialogOpen(true);
+  };
+
+  const handleVerifyConfirm = async () => {
+    if (!userToVerify) return;
+
+    try {
+      await api.put(`/users/${userToVerify.id}`, { ...userToVerify, isVerified: true });
+      setUsers(users.map(user => 
+        user.id === userToVerify.id ? { ...user, isVerified: true } : user
+      ));
+      setVerifyDialogOpen(false);
+      setUserToVerify(null);
+      alert(t('admin.users.verifySuccess'));
+    } catch (err) {
+      alert(t('admin.users.verifyError'));
+      setVerifyDialogOpen(false);
+      setUserToVerify(null);
+    }
+  };
+
+  const handleVerifyCancel = () => {
+    setVerifyDialogOpen(false);
+    setUserToVerify(null);
+  };
+
   if (loading) return (
     <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
       <CircularProgress />
@@ -139,6 +171,7 @@ const AdminUsers = () => {
               <TableCell>{t('admin.users.table.role')}</TableCell>
               <TableCell>{t('admin.users.table.phone')}</TableCell>
               <TableCell>{t('admin.users.table.loyaltyPoints')}</TableCell>
+              <TableCell>{t('admin.users.table.isVerified')}</TableCell>
               <TableCell>{t('admin.users.table.actions')}</TableCell>
             </TableRow>
           </TableHead>
@@ -174,7 +207,26 @@ const AdminUsers = () => {
                   </Typography>
                 </TableCell>
                 <TableCell>
+                  <Chip
+                    label={user.isVerified ? t('admin.users.verified') : t('admin.users.unverified')}
+                    color={user.isVerified ? 'success' : 'warning'}
+                    size="small"
+                    variant="outlined"
+                  />
+                </TableCell>
+                <TableCell>
                   <Box sx={{ display: 'flex', gap: 1 }}>
+                    {!user.isVerified && (
+                      <Button
+                        variant="outlined"
+                        color="success"
+                        size="small"
+                        startIcon={<VerifiedUser />}
+                        onClick={() => handleVerifyClick(user)}
+                      >
+                        {t('admin.users.verify')}
+                      </Button>
+                    )}
                     <Button
                       variant="outlined"
                       color="primary"
@@ -208,6 +260,30 @@ const AdminUsers = () => {
         onSubmit={handleFormSubmit}
         initialData={selectedUser}
       />
+
+      {/* Verify Confirmation Dialog */}
+      <Dialog
+        open={verifyDialogOpen}
+        onClose={handleVerifyCancel}
+        aria-labelledby="verify-dialog-title"
+      >
+        <DialogTitle id="verify-dialog-title">
+          {t('admin.users.verifyConfirm')}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {userToVerify && `${t('admin.users.verifyMessage')} "${userToVerify.name}"?`}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleVerifyCancel} color="primary">
+            {t('admin.users.cancel')}
+          </Button>
+          <Button onClick={handleVerifyConfirm} color="success" variant="contained">
+            {t('admin.users.verify')}
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       {/* Delete Confirmation Dialog */}
       <Dialog

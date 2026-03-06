@@ -178,11 +178,14 @@ def build_vector_index():
 
     # Prepare documents with metadata for LangChain
     documents = []
+    ids = []
     for i, movie in enumerate(movies):
+        movie_id = str(movie.get('id'))
+        ids.append(movie_id)
         doc = Document(
             page_content=movie_texts[i],
             metadata={
-                'id': str(movie.get('id')),
+                'id': movie_id,
                 'title': movie.get('title', ''),
                 'director': movie.get('director', ''),
                 'cast': ', '.join(movie.get('cast', [])),
@@ -202,6 +205,7 @@ def build_vector_index():
         # Create the vector store from documents
         vector_store = Chroma.from_documents(
             documents=documents,
+            ids=ids,
             embedding=embeddings,
             persist_directory="./chroma_data",
             collection_name="movies"
@@ -285,6 +289,29 @@ def health_check():
 @app.route('/rebuild-index', methods=['POST'])
 def rebuild_index():
     """Rebuild the vector index from the movie database"""
+    global vector_store, movies_data, movie_ids
+    
+    logger.info("Starting clean rebuild of vector index...")
+    
+    # 1. Clear existing data and collection to avoid duplicates
+    try:
+        if vector_store is not None:
+            try:
+                vector_store.delete_collection()
+                logger.info("Existing collection deleted for rebuild")
+            except Exception as e:
+                logger.warning(f"Note: Could not delete collection (might not exist): {e}")
+        
+        # Clear in-memory caches
+        movies_data = []
+        movie_ids = []
+        
+        # Re-initialize empty store
+        initialize_chroma()
+    except Exception as e:
+        logger.error(f"Error during rebuild cleanup: {e}")
+
+    # 2. Rebuild from scratch
     success = build_vector_index()
     if success:
         return jsonify({'status': 'success', 'message': 'Vector index rebuilt successfully'})

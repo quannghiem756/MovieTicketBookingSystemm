@@ -16,8 +16,8 @@
 - [x] Task: Verify all tests pass in the backend and check code coverage. [020298b]
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Node.js Backend Integration' (Protocol in workflow.md) [020298b]
 
-## Phase 3: End-to-End System Verification
-- [ ] Task: Perform manual end-to-end verification by creating, updating, and deleting a movie via the Admin API.
-- [ ] Task: Verify the AI chatbot accurately retrieves updated movie information.
-- [ ] Task: Verify logs in both backend and vector service show successful sync events.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: End-to-End System Verification' (Protocol in workflow.md)
+## Phase 3: End-to-End System Verification [checkpoint: 7c9751a]
+- [x] Task: Perform manual end-to-end verification by creating, updating, and deleting a movie via the Admin API. [7c9751a]
+- [x] Task: Verify the AI chatbot accurately retrieves updated movie information. [7c9751a]
+- [x] Task: Verify logs in both backend and vector service show successful sync events. [7c9751a]
+- [x] Task: Conductor - User Manual Verification 'Phase 3: End-to-End System Verification' (Protocol in workflow.md) [7c9751a]

@@ -1,4 +1,4 @@
-# Implementation Plan: Fix Chatbot Button Overlapping Navigation Bar
+    # Implementation Plan: Fix Chatbot Button Overlapping Navigation Bar
 
 ## Phase 1: Analysis and Setup
 - [ ] Task: Conductor - User Manual Verification 'Analysis and Setup' (Protocol in workflow.md)

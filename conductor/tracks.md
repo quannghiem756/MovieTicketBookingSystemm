@@ -41,3 +41,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Modify the movie vector service to only recommend movies that have showtimes today.**
 *Link: [./tracks/showtime_aware_recommendation_20260305/](./tracks/showtime_aware_recommendation_20260305/)*
+
+---
+
+- [ ] **Track: Payment Flow & Seat Selection Timeout Optimization**
+*Link: [./tracks/payment_flow_analysis_20260306/](./tracks/payment_flow_analysis_20260306/)*

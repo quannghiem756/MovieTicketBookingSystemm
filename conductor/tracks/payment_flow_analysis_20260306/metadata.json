@@ -1,0 +1,8 @@
+{
+  "track_id": "payment_flow_analysis_20260306",
+  "type": "investigation",
+  "status": "new",
+  "created_at": "2026-03-06T00:00:00Z",
+  "updated_at": "2026-03-06T00:00:00Z",
+  "description": "could you take a look at my system and analyze the payment flow. Currently i make a time limit on seat selection but i dont know if the time limit got transfer to the payment process aswell"
+}

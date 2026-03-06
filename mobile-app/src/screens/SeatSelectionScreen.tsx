@@ -23,6 +23,7 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
   const { 
     timeLeft, 
     startTimer, 
+    stopTimer,
     heldSeats, 
     setHeldSeats, 
     isTimerActive 
@@ -92,13 +93,21 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
           b.showtimeId === showtimeId && (b.status === 'held' || b.status === 'pending')
         );
         if (currentHold) {
-          setHeldSeats(currentHold.seatIds);
-          // Set timer based on expiry if available
+          // Sync timer if backend provides expiresAt
           if (currentHold.expiresAt) {
             const expiry = new Date(currentHold.expiresAt).getTime();
             const now = new Date().getTime();
             const diff = Math.floor((expiry - now) / 1000);
-            if (diff > 0) startTimer(diff);
+            if (diff > 0) {
+              startTimer(diff);
+              setHeldSeats(currentHold.seatIds);
+            } else {
+              // If already expired, don't set seats and release them
+              releaseAllSeats(showtimeId).catch(console.error);
+            }
+          } else {
+            setHeldSeats(currentHold.seatIds);
+            startTimer(600);
           }
         }
       }
@@ -146,7 +155,11 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
     try {
       if (isSelected) {
         // Optimistic update
-        setHeldSeats(heldSeats.filter(id => id !== seatId));
+        const newSeats = heldSeats.filter(id => id !== seatId);
+        setHeldSeats(newSeats);
+        if (newSeats.length === 0) {
+          stopTimer();
+        }
         await releaseSeat(showtimeId, seatId);
       } else {
         if (heldSeats.length >= 8) {
@@ -154,12 +167,15 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
           return;
         }
 
+        // Start timer immediately to prevent "expired" alert during await
+        if (!isTimerActive) {
+          startTimer(600);
+        }
         // Optimistic update
         setHeldSeats([...heldSeats, seatId]);
 
         try {
           const res = await holdSeat(showtimeId, seatId);
-          startTimer(600); // Reset timer to 10 minutes on new hold
 
           // Sync timer if backend provides expiresAt
           if (res && res.expiresAt) {
@@ -167,10 +183,16 @@ const SeatSelectionScreen = ({ route, navigation }: any) => {
             const now = new Date().getTime();
             const diff = Math.floor((expiry - now) / 1000); 
             if (diff > 0) startTimer(diff);
+          } else {
+            startTimer(600); // Reset timer to 10 minutes on new hold if no expiry from backend
           }
         } catch (err: any) {
           // Revert optimistic update on failure
-          setHeldSeats(heldSeats.filter(id => id !== seatId));
+          const revertedSeats = heldSeats.filter(id => id !== seatId);
+          setHeldSeats(revertedSeats);
+          if (revertedSeats.length === 0) {
+            stopTimer();
+          }
           throw err; // Re-throw to be caught by outer catch
         }
       }

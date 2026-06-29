@@ -1,6 +1,6 @@
 # Movie Ticket Booking System
 
-This is a comprehensive Movie Ticket Booking System with the following components:
+Movie Ticket Booking System with the following components:
 
 1. Backend API (Node.js + Express + MongoDB)
 2. Frontend Website (React.js)
@@ -16,8 +16,8 @@ This is a comprehensive Movie Ticket Booking System with the following component
 
 ## System Features
 
-Based on the blueprint, the system includes:
-- Multi-channel booking (Website, Mobile App, Chatbot, Kiosk)
+The system includes:
+- Multi-channel booking (Website, Mobile App, Chatbot)
 - Movie management
 - Showtime scheduling
 - Theater management with seat customization
